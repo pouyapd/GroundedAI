@@ -1,0 +1,10 @@
+# Evaluation reports
+
+* `published/`: reports referenced by the documentation and shown in the dashboard. Each run
+  writes three files with the same id: `.json` (full report, including per-question rows),
+  `.md` (summary) and `.csv` (per-question rows). They are measured outputs; do not edit them.
+* `local/`: scratch output of local runs (git-ignored). Copy a report to `published/` only
+  when it should become part of the record.
+
+Every report records the dataset name, version and fingerprint, the configuration, the
+hardware, the power source, the package versions and a list of limitations.

@@ -1,0 +1,26 @@
+Aldervale Systems Finance FAQ
+Last updated May 2025. Maintained by the Finance Help Team.
+
+How long does it take to get my expenses reimbursed?
+Approved expense claims are paid with the next payment run. Reimbursements are paid within 10 working days after the claim has been approved by the line manager.
+
+What is the nightly hotel limit?
+The nightly hotel limit is €120 in all cities. Bookings above this amount must be explained in the comment field of the claim.
+
+Which tool do I use for expense claims?
+All claims are entered in LedgerLeaf, the company expense tool. Photos of receipts can be uploaded from the LedgerLeaf mobile app.
+
+What if I lost a receipt?
+If a receipt is lost, complete the lost receipt declaration form FIN-07. The form can be used for expenses of up to €50 per claim. Lost receipts for higher amounts cannot be reimbursed.
+
+How are expenses in foreign currencies converted?
+When an expense was not paid with a company card, Finance converts it using the European Central Bank reference rate of the transaction date.
+
+Can I get an advance for a long trip?
+Employees travelling for more than two weeks can request a cash advance of up to €500. The advance is deducted from the next expense claim.
+
+Who approves training costs?
+Training and conference fees are approved by the line manager when they are below €1,000. Higher amounts need approval from the head of department and the learning team.
+
+How do I report a payment problem?
+Open a ticket in the internal service desk and choose the category "Finance - Payments". The Finance Help Team answers tickets within two working days.

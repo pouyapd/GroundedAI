@@ -1,0 +1,21 @@
+Orion ML Platform - Data Retention Standard
+
+Purpose
+
+This standard defines how long the Orion ML platform keeps different kinds of data. Data is deleted automatically when its retention period ends, unless a legal hold applies.
+
+Retention periods
+
+Application logs are retained for 30 days. Audit logs, which record who accessed or changed data, are retained for 1 year. Backups are kept for 90 days and are encrypted with AES-256. Monitoring metrics are aggregated to hourly values after 14 days and kept for 13 months.
+
+Training data and models
+
+Training datasets are kept for 2 years after the model that used them has been retired, so that results can be reproduced if questions arise. Model artefacts in the registry are kept for as long as the model is in production and for 2 years afterwards.
+
+Customer data
+
+Personal data of customers is deleted within 30 days after the end of the customer contract. Deletion requests from individuals are processed within 14 days. Anonymised data may be kept for statistics without a time limit.
+
+Legal hold
+
+The legal team can place a legal hold on data that is relevant to a dispute. Data under legal hold is not deleted until the hold is lifted.

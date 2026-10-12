@@ -1,0 +1,28 @@
+{
+  "title": "Retrieval benchmark (full profile: local sentence-transformers models)",
+  "chunking": {"chunk_size": 400, "chunk_overlap": 60},
+  "k_values": [1, 3, 5, 10],
+  "candidate_k": 30,
+  "rerank_candidates": 20,
+  "bootstrap": {"samples": 2000, "seed": 13},
+  "baseline": "A-lexical-bm25",
+  "embedders": {
+    "hashing": {"provider": "hashing", "model": "v1", "dim": 384},
+    "bge-small": {
+      "provider": "sentence-transformers",
+      "model": "BAAI/bge-small-en-v1.5",
+      "dim": 384,
+      "query_prefix": "Represent this sentence for searching relevant passages: "
+    },
+    "minilm": {"provider": "sentence-transformers", "model": "sentence-transformers/all-MiniLM-L6-v2", "dim": 384}
+  },
+  "configurations": [
+    {"name": "A-lexical-bm25", "mode": "lexical", "description": "SQLite FTS5 BM25 with Porter stemming"},
+    {"name": "B0-dense-hashing", "mode": "dense", "embedder": "hashing", "description": "Feature-hashing vectors (sanity baseline, not semantic)"},
+    {"name": "B1-dense-bge-small", "mode": "dense", "embedder": "bge-small", "description": "BAAI/bge-small-en-v1.5 with query instruction"},
+    {"name": "B2-dense-minilm", "mode": "dense", "embedder": "minilm", "description": "sentence-transformers/all-MiniLM-L6-v2"},
+    {"name": "C1-hybrid-rrf-bge-small", "mode": "hybrid", "embedder": "bge-small", "fusion": "rrf", "rrf_k": 60, "alpha": 0.5, "description": "Reciprocal rank fusion of BM25 and bge-small"},
+    {"name": "C2-hybrid-weighted-bge-small", "mode": "hybrid", "embedder": "bge-small", "fusion": "weighted", "alpha": 0.5, "description": "Min-max normalised score fusion (alpha 0.5)"},
+    {"name": "D1-hybrid-rrf-bge-small+rerank", "mode": "hybrid", "embedder": "bge-small", "fusion": "rrf", "rrf_k": 60, "alpha": 0.5, "reranker": "cross-encoder/ms-marco-MiniLM-L-6-v2", "description": "C1 followed by a cross-encoder reranker over the top 20"}
+  ]
+}

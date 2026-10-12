@@ -1,0 +1,25 @@
+Orion ML Platform - Incident Response Runbook
+
+Severity levels
+
+SEV1 means a customer-facing outage or data loss. The on-call engineer is paged immediately, and a SEV1 incident must be acknowledged within 5 minutes. SEV2 means degraded service for customers, for example slow predictions or a failing batch job; a SEV2 incident must be acknowledged within 15 minutes. SEV3 means an internal problem without customer impact, and it is handled on the next business day.
+
+Roles
+
+Every SEV1 and SEV2 incident has an incident commander, who coordinates the response and decides on escalation. The incident commander is not necessarily the engineer who fixes the problem. A communications lead keeps stakeholders informed.
+
+Communication
+
+For SEV1 incidents the public status page is updated at least every 30 minutes until the incident is resolved. For SEV2 incidents the status page is updated when the impact or the expected resolution time changes.
+
+Rollback
+
+If a new release causes the incident, roll back first and investigate later. Run orionctl rollback --to <release> with the last known good release tag. After the rollback, confirm that the prediction error rate has returned to its normal level.
+
+Model and data alerts
+
+A model drift alert is raised when the population stability index (PSI) of an input feature is above 0.2. If the feature store lags more than 10 minutes behind its source, a SEV3 incident is opened automatically.
+
+After the incident
+
+A written postmortem is required within 5 business days for every SEV1 and SEV2 incident. Postmortems are blameless and list follow-up actions with owners and due dates.

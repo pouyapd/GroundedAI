@@ -1,0 +1,107 @@
+{
+  "name": "groundedai-synthetic-v1",
+  "version": "1.0.0",
+  "license": "MIT (same as the repository). All documents are synthetic and describe fictional organisations.",
+  "description": "Synthetic corpus and question set for testing retrieval, grounded answering, abstention, conflicting evidence and prompt injection. Written for this project; it does not contain real company, personal or copyrighted text.",
+  "created": "2026-10-11",
+  "documents": [
+    {
+      "key": "aldervale-travel-policy",
+      "file": "corpus/aldervale-travel-policy.txt",
+      "title": "Aldervale Systems Travel and Expense Policy",
+      "sha256": "a7d46ba57dc233b0cae405329422f36fbfe28e6a88452e90712fbc48490a8646",
+      "description": "Company travel policy; hotel limits deliberately conflict with the finance FAQ."
+    },
+    {
+      "key": "aldervale-finance-faq",
+      "file": "corpus/aldervale-finance-faq.txt",
+      "title": "Aldervale Systems Finance FAQ",
+      "sha256": "4387b8a12e1602a6f9dc126042a1362d6de6eaa1810eb986365053b490ff25c3",
+      "description": "FAQ with a hotel limit that contradicts the travel policy."
+    },
+    {
+      "key": "aldervale-remote-work",
+      "file": "corpus/aldervale-remote-work.md",
+      "title": "Aldervale Remote Work Guidelines",
+      "sha256": "9a08b9d5f4263abcdb263de79177c9383e60f832b36133931bdec28e0515d6ac",
+      "description": "Markdown document; contains outdated password advice that conflicts with the security standard."
+    },
+    {
+      "key": "aldervale-leave-policy",
+      "file": "corpus/aldervale-leave-policy.txt",
+      "title": "Aldervale Systems Leave and Holiday Policy",
+      "sha256": "d328f7aaaa1c7cbd7d902808dcb12a51b9a07eee2d33f106de0582b0de997a91",
+      "description": "Leave rules; says nothing about contractors."
+    },
+    {
+      "key": "aldervale-it-security-standard",
+      "file": "corpus/aldervale-it-security-standard.txt",
+      "title": "Aldervale Systems IT Security Standard",
+      "sha256": "b2ddc6d05ee1524491cbc715dc76729302d2ee8ad3a5463021a4ac0b852f3b7d",
+      "description": "Password, device and phishing rules."
+    },
+    {
+      "key": "aldervale-supplier-onboarding",
+      "file": "corpus/aldervale-supplier-onboarding.txt",
+      "title": "Aldervale Procurement: Supplier Onboarding Notes",
+      "sha256": "6f80d70afe5089633deb2f787efbce19cbf17bf89c85955b6e212a0c8a91102d",
+      "description": "Contains a planted prompt-injection paragraph."
+    },
+    {
+      "key": "solvane-sx5-manual",
+      "file": "corpus/solvane-sx5-manual.pdf",
+      "title": "Solvane SX-5 Hybrid Inverter - Installation and Service Manual",
+      "sha256": "dc0238afb5c1153455642da9084f2a16aebae9ccbb7c08eba1c22c8f1bcaf80a",
+      "description": "Four-page PDF generated from source/solvane-sx5-manual.txt; error codes test exact lexical matching."
+    },
+    {
+      "key": "brindlewick-water-faq",
+      "file": "corpus/brindlewick-water-faq.txt",
+      "title": "Brindlewick Water District - Customer Questions and Answers",
+      "sha256": "bcee98dbd52e4be372ae418be7f26f4c6ecf98fbb49833671b867ab3d7732920",
+      "description": "Utility customer FAQ."
+    },
+    {
+      "key": "brindlewick-cycling-club",
+      "file": "corpus/brindlewick-cycling-club.txt",
+      "title": "Brindlewick Cycling Club - Ride Rules for Members",
+      "sha256": "b165ea8ecdc5a4f7df122704926dfc92474f2653631463dffac76df300134f79",
+      "description": "Shares the town name with other documents (ambiguity tests)."
+    },
+    {
+      "key": "brindlewick-greenhouse-guide",
+      "file": "corpus/brindlewick-greenhouse-guide.txt",
+      "title": "Brindlewick Community Greenhouse - Volunteer Guide",
+      "sha256": "4c96db53c74d824dfee935d2c045ce83bf13d25004d2b132957d693b45331fa5",
+      "description": "Contains a planted prompt-injection sentence."
+    },
+    {
+      "key": "brindlewick-makerspace-policy",
+      "file": "corpus/brindlewick-makerspace-policy.txt",
+      "title": "Brindlewick Library Makerspace - Equipment Policy",
+      "sha256": "1f2f905244ceb4fb8a1b94f9b49715474872e9b29d79b8629d7fb22dda608a7f",
+      "description": "Equipment rules."
+    },
+    {
+      "key": "orion-incident-runbook",
+      "file": "corpus/orion-incident-runbook.txt",
+      "title": "Orion ML Platform - Incident Response Runbook",
+      "sha256": "936dc912fe498b7df8c0d96a030f08fc5491166831628f84e656578e91a493fe",
+      "description": "Incident severities and procedures."
+    },
+    {
+      "key": "orion-data-retention",
+      "file": "corpus/orion-data-retention.txt",
+      "title": "Orion ML Platform - Data Retention Standard",
+      "sha256": "f4a8882e37c12e7aa8c27115d00839cca716235ee7fcb44961c232046e043448",
+      "description": "Retention periods (many similar numbers)."
+    },
+    {
+      "key": "tessera-api-limits",
+      "file": "corpus/tessera-api-limits.txt",
+      "title": "Tessera Public API - Rate Limits and Errors",
+      "sha256": "943a27c7d8b1a126c555252ecb0fcd60fd4f74c58a7e5a06b8cb39b73301cb9b",
+      "description": "API quotas and error handling."
+    }
+  ]
+}
