@@ -23,6 +23,7 @@ cd backend
 ruff check groundedai tests && ruff format --check groundedai tests
 ruff check --config pyproject.toml ../scripts ../tools ../evaluation/scripts
 mypy                                    # strict mode
+mypy --platform linux                   # on Windows: also check what CI (Linux) sees
 pytest                                  # default suite: offline, no models, no API keys
 pytest --cov                            # with coverage
 
@@ -75,3 +76,4 @@ The GitHub Actions results are recorded in `docs/DEPLOYMENT_STATUS.md`.
 | The static demo showed wrong recorded answers without saying they were wrong | `compareWithExpected` tests; the demo shows the dataset's expected result next to each recording |
 | The dataset fingerprint included raw line endings, so a manifest written on Windows (CRLF) gave a different fingerprint from a clone (LF) | `test_fingerprint_does_not_depend_on_line_endings`, `test_fingerprint_changes_when_a_question_changes`; report and export writers now write LF |
 | `ruff` sorted imports differently from the repository root and from `backend/` | `known-first-party = ["groundedai"]`; CI lints `scripts/` and `tools/` with the project rules |
+| Strict mypy passed on Windows but failed in CI on Linux: the Windows registry lookup (`winreg`) is untyped there | the lookup sits behind a literal `sys.platform == "win32"` check; `mypy --platform` win32, linux and darwin are clean |

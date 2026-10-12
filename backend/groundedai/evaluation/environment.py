@@ -9,6 +9,7 @@ from __future__ import annotations
 import ctypes
 import os
 import platform
+import sys
 from importlib import metadata
 from pathlib import Path
 from typing import Any
@@ -38,7 +39,8 @@ PACKAGES = (
 
 
 def cpu_name() -> str:
-    if _is_windows():
+    # A literal sys.platform check: mypy then type-checks winreg on Windows and skips it elsewhere.
+    if sys.platform == "win32":
         try:
             import winreg
 
@@ -49,12 +51,13 @@ def cpu_name() -> str:
             return str(value).strip()
         except OSError:
             return platform.processor() or "unknown"
-    cpuinfo = Path("/proc/cpuinfo")
-    if cpuinfo.is_file():
-        for line in cpuinfo.read_text(errors="ignore").splitlines():
-            if line.lower().startswith("model name"):
-                return line.split(":", 1)[1].strip()
-    return platform.processor() or platform.machine() or "unknown"
+    else:
+        cpuinfo = Path("/proc/cpuinfo")
+        if cpuinfo.is_file():
+            for line in cpuinfo.read_text(errors="ignore").splitlines():
+                if line.lower().startswith("model name"):
+                    return line.split(":", 1)[1].strip()
+        return platform.processor() or platform.machine() or "unknown"
 
 
 def total_ram_gb() -> float | None:
