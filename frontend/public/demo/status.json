@@ -1,0 +1,49 @@
+{
+ "version": "0.1.0",
+ "environment": "development",
+ "demo_mode": true,
+ "auth_required": false,
+ "database_backend": "sqlite",
+ "embedding": {
+  "provider": "sentence-transformers",
+  "model": "sentence-transformers:BAAI/bge-small-en-v1.5",
+  "is_llm": null,
+  "available": true,
+  "detail": "Loaded."
+ },
+ "generation": {
+  "provider": "extractive-demo",
+  "model": "extractive-demo-v1",
+  "is_llm": false,
+  "available": true,
+  "detail": "Deterministic extractive demo (not an LLM)."
+ },
+ "reranker": {
+  "provider": "none",
+  "model": null,
+  "is_llm": null,
+  "available": null,
+  "detail": "Disabled."
+ },
+ "retrieval_defaults": {
+  "mode": "hybrid",
+  "fusion": "rrf",
+  "top_k": 5,
+  "candidate_k": 20,
+  "rrf_k": 60,
+  "hybrid_alpha": 0.5,
+  "chunk_size": 400,
+  "chunk_overlap": 60
+ },
+ "limits": {
+  "max_upload_bytes": 10485760,
+  "allowed_extensions": [
+   ".pdf",
+   ".txt",
+   ".md"
+  ],
+  "max_pdf_pages": 300,
+  "max_question_chars": 1000,
+  "rate_limit_query_per_minute": null
+ }
+}

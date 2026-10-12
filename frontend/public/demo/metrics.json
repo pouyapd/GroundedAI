@@ -1,0 +1,243 @@
+{
+ "uptime_s": 13.3,
+ "documents_by_status": {
+  "pending": 0,
+  "processing": 0,
+  "ready": 14,
+  "failed": 0
+ },
+ "documents_total": 14,
+ "chunks_total": 87,
+ "queries_total": 10,
+ "queries_window_hours": 24,
+ "queries_in_window": 10,
+ "queries_by_status": {
+  "answered": 5,
+  "insufficient_evidence": 5
+ },
+ "abstention_rate": 0.5,
+ "citation_valid_rate": 1.0,
+ "latency_ms": {
+  "total": {
+   "n": 10,
+   "mean": 22.031,
+   "p50": 18.706,
+   "p95": 42.026,
+   "max": 42.026
+  },
+  "retrieval": {
+   "n": 10,
+   "mean": 17.347,
+   "p50": 14.941,
+   "p95": 26.248,
+   "max": 26.248
+  },
+  "generation": {
+   "n": 10,
+   "mean": 3.587,
+   "p50": 2.416,
+   "p95": 13.724,
+   "max": 13.724
+  }
+ },
+ "hourly": [
+  {
+   "hour": "2026-10-11T20:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-11T21:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-11T22:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-11T23:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T00:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T01:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T02:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T03:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T04:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T05:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T06:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T07:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T08:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T09:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T10:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T11:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T12:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T13:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T14:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T15:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T16:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T17:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T18:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T19:00:00+00:00",
+   "queries": 10,
+   "answered": 5,
+   "abstained": 5,
+   "failed": 0
+  }
+ ],
+ "http_requests_total": 0,
+ "http_server_errors_total": 0,
+ "process_counters": [
+  {
+   "name": "documents_registered",
+   "labels": {},
+   "value": 14
+  },
+  {
+   "name": "ingestions",
+   "labels": {
+    "outcome": "ready"
+   },
+   "value": 14
+  },
+  {
+   "name": "queries",
+   "labels": {
+    "status": "answered"
+   },
+   "value": 5
+  },
+  {
+   "name": "queries",
+   "labels": {
+    "status": "insufficient_evidence"
+   },
+   "value": 5
+  }
+ ]
+}

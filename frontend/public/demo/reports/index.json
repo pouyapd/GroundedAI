@@ -1,0 +1,28 @@
+{
+ "items": [
+  {
+   "id": "generation-huggingface-local-groundedai-synthetic-v1-20261012T145859Z",
+   "kind": "generation",
+   "title": "Answer evaluation: huggingface-local (Qwen/Qwen2.5-0.5B-Instruct)",
+   "generated_at": "2026-10-12T14:58:59+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1
+  },
+  {
+   "id": "generation-extractive-demo-groundedai-synthetic-v1-20261011T182213Z",
+   "kind": "generation",
+   "title": "Answer evaluation: extractive-demo (extractive-demo-v1)",
+   "generated_at": "2026-10-11T18:22:13+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1
+  },
+  {
+   "id": "retrieval-groundedai-synthetic-v1-20261011T141404Z",
+   "kind": "retrieval",
+   "title": "Retrieval benchmark (full profile: local sentence-transformers models)",
+   "generated_at": "2026-10-11T14:14:04+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 7
+  }
+ ]
+}
