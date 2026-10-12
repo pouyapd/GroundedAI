@@ -37,7 +37,7 @@ the next session: what is done, what was verified, and what is left.
 
 | Check | Result |
 |---|---|
-| Backend tests (`pytest --cov`, offline) | 219 passed, 6 skipped (PostgreSQL tests without a database URL); coverage 91% |
+| Backend tests (`pytest --cov`, offline) | 221 passed, 6 skipped (PostgreSQL tests without a database URL); coverage 91% |
 | PostgreSQL 16.2 + pgvector 0.6.2 (`scripts/dev_postgres.py`) | 6 passed |
 | `ruff`, `ruff format`, `mypy --strict` | clean (75 source files type-checked) |
 | Front end: Vitest, ESLint, `tsc -b`, `build`, `build:demo` | 25 passed; clean; both builds succeed |

@@ -43,7 +43,8 @@ OUT_DIR = REPO_ROOT / "frontend" / "public" / "demo"
 
 def write_json(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    text = json.dumps(data, indent=1, ensure_ascii=False) + "\n"
+    path.write_text(text, encoding="utf-8", newline="\n")
 
 
 def expectation(question: EvalQuestion, answer: str | None) -> dict[str, Any]:

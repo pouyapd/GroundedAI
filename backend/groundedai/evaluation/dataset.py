@@ -114,9 +114,11 @@ def load_dataset(root: Path, *, verify_hashes: bool = True) -> EvalDataset:
         raise DatasetError(f"{root} is not a dataset directory")
     manifest = DatasetManifest.model_validate_json(manifest_path.read_text(encoding="utf-8"))
 
+    # The two metadata files are hashed with LF line endings: a manifest rewritten on Windows
+    # (CRLF) must give the same fingerprint as a fresh clone. Documents are hashed as stored.
     digest = hashlib.sha256()
-    digest.update(manifest_path.read_bytes())
-    digest.update(questions_path.read_bytes())
+    digest.update(manifest_path.read_bytes().replace(b"\r\n", b"\n"))
+    digest.update(questions_path.read_bytes().replace(b"\r\n", b"\n"))
 
     keys = set()
     for document in manifest.documents:

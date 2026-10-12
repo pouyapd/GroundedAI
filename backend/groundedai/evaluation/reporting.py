@@ -158,8 +158,10 @@ def write_report(report: dict[str, Any], out_dir: Path) -> dict[str, Path]:
         "markdown": out_dir / f"{report_id}.md",
         "csv": out_dir / f"{report_id}.csv",
     }
-    paths["json"].write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
-    paths["markdown"].write_text(render_markdown(report), encoding="utf-8")
+    # LF on every platform, so reports written on Windows match the repository.
+    report_json = json.dumps(report, indent=2, ensure_ascii=False)
+    paths["json"].write_text(report_json, encoding="utf-8", newline="\n")
+    paths["markdown"].write_text(render_markdown(report), encoding="utf-8", newline="\n")
     rows = report.get("per_query", [])
     if rows:
         fieldnames: list[str] = []

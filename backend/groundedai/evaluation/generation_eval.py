@@ -51,7 +51,8 @@ class CheckpointMismatchError(ValueError):
 def _load_checkpoint(path: Path, config: dict[str, Any]) -> dict[str, dict[str, Any]]:
     if not path.is_file():
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps({"_config": config}, ensure_ascii=False) + "\n", "utf-8")
+        header = json.dumps({"_config": config}, ensure_ascii=False) + "\n"
+        path.write_text(header, "utf-8", newline="\n")
         return {}
     lines = [line for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     header = json.loads(lines[0]) if lines else {}
@@ -70,7 +71,7 @@ def _load_checkpoint(path: Path, config: dict[str, Any]) -> dict[str, dict[str, 
 
 
 def _append_checkpoint(path: Path, row: dict[str, Any]) -> None:
-    with path.open("a", encoding="utf-8") as handle:
+    with path.open("a", encoding="utf-8", newline="\n") as handle:
         handle.write(json.dumps(row, ensure_ascii=False) + "\n")
         handle.flush()
         os.fsync(handle.fileno())

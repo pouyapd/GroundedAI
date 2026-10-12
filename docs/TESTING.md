@@ -38,7 +38,7 @@ npm run lint && npm run typecheck && npm test && npm run build
 
 | Check | Result |
 |---|---|
-| `pytest --cov` (default suite, run from `backend/` as in CI) | 219 passed, 6 skipped (the 6 PostgreSQL tests, no database URL set); line coverage 91% |
+| `pytest --cov` (default suite, run from `backend/` as in CI) | 221 passed, 6 skipped (the 6 PostgreSQL tests, no database URL set); line coverage 91% |
 | `pytest -m postgres` via `scripts/dev_postgres.py` (PostgreSQL 16.2, pgvector 0.6.2) | 6 passed |
 | `ruff check`, `ruff format --check` (`groundedai`, `tests`, `scripts`, `tools`, `evaluation/scripts`) | clean |
 | `mypy` (strict, 75 files) | no issues |
@@ -73,4 +73,5 @@ The GitHub Actions results are recorded in `docs/DEPLOYMENT_STATUS.md`.
 | A visually hidden table header escaped its scroll container and widened the page on phones | checked in the browser at 390 px; `.table-wrap` is positioned |
 | The "not an LLM" badge under an answer did not wrap and widened the page on phones by 6 px | checked in the browser at 390 px for all ten recorded answers |
 | The static demo showed wrong recorded answers without saying they were wrong | `compareWithExpected` tests; the demo shows the dataset's expected result next to each recording |
+| The dataset fingerprint included raw line endings, so a manifest written on Windows (CRLF) gave a different fingerprint from a clone (LF) | `test_fingerprint_does_not_depend_on_line_endings`, `test_fingerprint_changes_when_a_question_changes`; report and export writers now write LF |
 | `ruff` sorted imports differently from the repository root and from `backend/` | `known-first-party = ["groundedai"]`; CI lints `scripts/` and `tools/` with the project rules |

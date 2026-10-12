@@ -207,7 +207,7 @@ against a real server. Counts and the latest results: [docs/TESTING.md](docs/TES
 
 | Verified | Not verified |
 |---|---|
-| 219 backend tests (offline, SQLite) and 25 front-end tests; ruff and strict mypy clean | Ollama with a real model (the client is tested against a fake Ollama server; Ollama is not installed on the development machine) |
+| 221 backend tests (offline, SQLite) and 25 front-end tests; ruff and strict mypy clean | Ollama with a real model (the client is tested against a fake Ollama server; Ollama is not installed on the development machine) |
 | PostgreSQL 16 + pgvector: migrations, all retrieval modes, cascade delete (bundled local server) | the Docker image on the development machine (it is built and smoke-tested only in CI; see [docs/DEPLOYMENT_STATUS.md](docs/DEPLOYMENT_STATUS.md)) |
 | retrieval benchmark: 7 configurations, deterministic metrics, published report | retrieval quality on real or larger document collections |
 | answer evaluation with the extractive baseline and with Qwen2.5-0.5B-Instruct (transformers, CPU) | larger models; any LLM-as-judge or human evaluation |

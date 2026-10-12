@@ -157,7 +157,8 @@ def save_svg(fig: plt.Figure, out: Path) -> None:
     fig.savefig(out, transparent=True, metadata={"Date": None})
     plt.close(fig)
     lines = out.read_text(encoding="utf-8").splitlines()  # matplotlib leaves trailing spaces
-    out.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")
+    text = "\n".join(line.rstrip() for line in lines) + "\n"
+    out.write_text(text, encoding="utf-8", newline="\n")
 
 
 def banner(theme: str) -> None:

@@ -6,12 +6,20 @@ deterministic metrics. No judge model is used. All numbers below come from repor
 
 ## Dataset
 
-`evaluation/datasets/groundedai-synthetic-v1` (fingerprint `5a04e91e09086368`): 14 synthetic
+`evaluation/datasets/groundedai-synthetic-v1` (fingerprint `fa56ebd64e3b1eee`): 14 synthetic
 documents about fictional organisations (12 text, 1 Markdown, 1 four-page PDF) and 56 questions
 in eight categories: factual (30), multi-chunk (5), synthesis across documents (3), unanswerable
 (7), out of scope (3), ambiguous (3), conflicting evidence (2) and planted prompt injection (3).
 43 questions have evidence annotations. See the dataset README for the format and its
 limitations.
+
+The three published reports record the fingerprint `5a04e91e09086368` for the same files. They
+were run on Windows, where `manifest.json` had CRLF line endings, and the fingerprint then
+included those raw bytes; a clone has LF line endings and computed `fa56ebd64e3b1eee`. The
+fingerprint now ignores line endings in the two metadata files (regression test
+`test_fingerprint_does_not_depend_on_line_endings`). Recomputing the old value from the
+committed files with the manifest converted to CRLF gives `5a04e91e09086368` again, so the
+reports were made on this exact dataset. The reports themselves are left unchanged.
 
 ## Metrics
 

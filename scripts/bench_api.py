@@ -111,7 +111,7 @@ def main() -> int:
     }
     print(json.dumps(report, indent=2))
     if args.out:
-        args.out.write_text(json.dumps(report, indent=2), encoding="utf-8")
+        args.out.write_text(json.dumps(report, indent=2), encoding="utf-8", newline="\n")
     return 0
 
 

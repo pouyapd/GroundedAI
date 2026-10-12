@@ -128,7 +128,8 @@ def build_manifest() -> None:
         }
         for key, file, title, description in DOCUMENTS
     ]
-    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", "utf-8")
+    text = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
+    manifest_path.write_text(text, "utf-8", newline="\n")  # LF: part of the dataset fingerprint
 
 
 if __name__ == "__main__":

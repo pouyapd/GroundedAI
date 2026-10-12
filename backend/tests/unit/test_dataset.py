@@ -40,6 +40,23 @@ def _copy(tmp_path: Path) -> Path:
     return target
 
 
+def test_fingerprint_does_not_depend_on_line_endings(tmp_path: Path) -> None:
+    root = _copy(tmp_path)
+    before = load_dataset(root).fingerprint
+    for name in ("manifest.json", "questions.jsonl"):
+        path = root / name
+        path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
+    assert load_dataset(root).fingerprint == before
+
+
+def test_fingerprint_changes_when_a_question_changes(tmp_path: Path) -> None:
+    root = _copy(tmp_path)
+    before = load_dataset(root).fingerprint
+    questions = root / "questions.jsonl"
+    questions.write_bytes(questions.read_bytes().replace(b"daily", b"weekly", 1))
+    assert load_dataset(root).fingerprint != before
+
+
 def test_tampered_document_fails_hash_check(tmp_path: Path) -> None:
     root = _copy(tmp_path)
     path = root / "corpus" / "tessera-api-limits.txt"
