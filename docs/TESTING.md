@@ -49,7 +49,8 @@ npm run lint && npm run typecheck && npm test && npm run build
 | `pip-audit` (prod, dev and ML locks) | no known vulnerabilities (the CPU-only torch wheel is skipped: not on PyPI) |
 | `npm audit` | 0 vulnerabilities |
 | `docker compose config` (with and without the `llm` profile) | valid |
-| Docker image build | **not run locally** (no image downloads on this machine); runs in CI |
+| Docker image build | **not run locally** (no image downloads on this machine); built and smoke-tested in CI |
+| GitHub Actions on the pull request | all 7 jobs passed (details in `docs/DEPLOYMENT_STATUS.md`) |
 | UI in a browser (live app and static demo) | 390 px and 1280 px wide: no horizontal scrolling on any tab or recorded answer; chart text at its designed size (viewBox width equals rendered width) |
 
 The GitHub Actions results are recorded in `docs/DEPLOYMENT_STATUS.md`.

@@ -43,6 +43,7 @@ the next session: what is done, what was verified, and what is left.
 | Front end: Vitest, ESLint, `tsc -b`, `build`, `build:demo` | 25 passed; clean; both builds succeed |
 | `pip-audit` (prod, dev, ML locks), `npm audit` | no known vulnerabilities (CPU torch wheel not auditable: not on PyPI) |
 | `docker compose config` | valid |
+| GitHub Actions (Linux, pull request #1) | all 7 jobs passed, including the Docker build and smoke test |
 | Browser checks (live app and static demo, 390 px and 1280 px) | no horizontal scrolling; chart text at its designed size |
 | Retrieval benchmark (published report, 2026-10-11) | 7 configurations; hybrid RRF did not beat BM25 (paired 95% intervals include 0) |
 | Answer evaluation, extractive baseline (2026-10-11) | behaviour accuracy 0.660; evidence coverage 0.663 |
