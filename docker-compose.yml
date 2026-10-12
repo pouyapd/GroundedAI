@@ -1,0 +1,66 @@
+# GroundedAI local stack: PostgreSQL + pgvector and the API/UI.
+#
+#   cp .env.example .env            # then set POSTGRES_PASSWORD (and GROUNDEDAI_API_KEY if needed)
+#   docker compose up --build       # http://127.0.0.1:8000
+#
+# Optional local LLM (downloads the Ollama image; the model is pulled only when you ask):
+#   docker compose --profile llm up --build
+#   docker compose exec ollama ollama pull qwen2.5:1.5b
+#   (and set GROUNDEDAI_GENERATION_PROVIDER=ollama, GROUNDEDAI_OLLAMA_BASE_URL=http://ollama:11434 in .env)
+#
+# Ports are bound to 127.0.0.1 only. To expose the service beyond this machine, set
+# GROUNDEDAI_ENV=production and a GROUNDEDAI_API_KEY, and put a TLS reverse proxy in front.
+
+name: groundedai
+
+services:
+  db:
+    image: pgvector/pgvector:0.8.7-pg16-bookworm
+    environment:
+      POSTGRES_USER: groundedai
+      POSTGRES_DB: groundedai
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U groundedai -d groundedai"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      args:
+        INSTALL_ML: ${INSTALL_ML:-false}
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      GROUNDEDAI_DATABASE_URL: postgresql+psycopg://groundedai:${POSTGRES_PASSWORD}@db:5432/groundedai
+      GROUNDEDAI_CORS_ORIGINS: http://127.0.0.1:8000,http://localhost:8000
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - appdata:/data
+      - hfcache:/models/huggingface
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:0.40.3
+    profiles: ["llm"]
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "127.0.0.1:11434:11434"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  appdata:
+  hfcache:
+  ollama:
