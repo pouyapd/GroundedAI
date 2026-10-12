@@ -1,0 +1,57 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+.venv-*/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# --- Node / frontend ---
+node_modules/
+frontend/dist/
+frontend/coverage/
+*.tsbuildinfo
+
+# --- Runtime data (databases, uploads, local model caches) ---
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+.pgdata/
+models/
+*.safetensors
+*.gguf
+*.bin
+*.onnx
+*.pt
+
+# --- Evaluation scratch output (committed reports live in evaluation/reports/published) ---
+evaluation/reports/local/
+
+# --- Secrets and local configuration ---
+.env
+.env.*
+!.env.example
+!frontend/.env.demo
+*.pem
+*.key
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

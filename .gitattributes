@@ -1,0 +1,5 @@
+# Normalise text files to LF so dataset hashes match on every platform.
+* text=auto eol=lf
+*.pdf binary
+*.png binary
+*.ico binary
