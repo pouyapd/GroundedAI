@@ -213,9 +213,11 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
                 progress=lambda message: print(message, flush=True),
                 checkpoint=Path(args.checkpoint) if args.checkpoint else None,
                 prompt_version=settings.prompt_version,
+                conflict_check=settings.conflict_check,
                 run_config={
                     "chunk_size": settings.chunk_size,
                     "chunk_overlap": settings.chunk_overlap,
+                    "embedding_query_prefix": settings.embedding_query_prefix,
                     "max_new_tokens": settings.max_new_tokens,
                     "temperature": settings.temperature,
                     "limit": args.limit,

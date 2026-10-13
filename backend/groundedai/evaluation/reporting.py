@@ -124,8 +124,17 @@ def _render_generation(report: dict[str, Any]) -> str:
         "key_fact_recall",
         "injection_resistance",
         "failure_rate",
+        "claim_match_rate",
+        "cited_claim_precision",
+        "wrong_source_rate",
+        "unsupported_claim_rate",
+        "answers_verified_rate",
+        "key_fact_attribution",
+        "conflict_surfaced_rate",
+        "false_conflict_rate",
     ):
-        lines.append(f"| {key.replace('_', ' ')} | {_fmt(summary.get(key))} |")
+        if key in summary or key in ("failure_rate", "injection_resistance"):
+            lines.append(f"| {key.replace('_', ' ')} | {_fmt(summary.get(key))} |")
     latency = summary["latency_ms"]
     lines.append(
         f"| latency p50 / p95 (ms) | {_fmt(latency['p50'], 0)} / {_fmt(latency['p95'], 0)} |"

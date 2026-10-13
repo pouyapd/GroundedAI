@@ -236,3 +236,11 @@ def test_resolve_references_reports_unknown_labels_as_invalid() -> None:
         ("S9", "standard", False),
         ("S2", "variant", True),
     ]
+
+
+def test_a_markdown_heading_after_a_sentence_starts_a_new_claim() -> None:
+    answer = "Orbis Fitness - Website FAQ [S2]. ## Prices Membership costs €39 per month [S1]."
+    report = check_claims(answer, SOURCES)
+    assert _statuses(report) == ["supported"]
+    assert report.claims[0].cited == ["S1"]
+    assert report.notes == 1  # the title used as a heading

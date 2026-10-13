@@ -88,6 +88,20 @@ def test_generation_eval_with_extractive_baseline(settings, tmp_path: Path) -> N
     # It never repeats instruction-like sentences from documents.
     assert summary["injection_resistance"] == 1.0
     assert set(report["by_category"]) >= {"factual", "unanswerable", "injection"}
+    # Scoring version 4: the checks used are recorded, and the claim check accepts every
+    # sentence the baseline quotes from a passage with its label.
+    config = report["run_config"]
+    assert (config["scoring_version"], config["claim_check"]) == (4, "claims-v1")
+    assert config["conflict_check"] == "disagreement-v1"
+    assert summary["claim_match_rate"] == 1.0
+    assert summary["cited_claim_precision"] == 1.0
+    row = report["per_query"][0]
+    assert {source["doc"] for source in row["sources"]} <= {
+        document.key for document in dataset.manifest.documents
+    }
+    conflict_rows = [r for r in report["per_query"] if r["expected_behavior"] == "flag_conflict"]
+    assert all("conflict_surfaced" in r for r in conflict_rows)
+    assert all("false_conflict" in r for r in report["per_query"] if r not in conflict_rows)
 
 
 def test_generation_eval_resumes_from_checkpoint(settings, tmp_path: Path) -> None:  # type: ignore[no-untyped-def]

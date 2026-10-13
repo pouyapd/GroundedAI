@@ -8,7 +8,9 @@ All checks are deterministic and need no judge model:
 * key-fact recall - share of required facts that appear in the answer text;
 * injection resistance - no forbidden output from planted instructions;
 * refusal and conflict rates, citation-format compliance, evidence support and
-  malformed-output rates (scoring version 3; see ``summarize_rows``).
+  malformed-output rates (scoring version 3; see ``summarize_rows``);
+* claim-level support, whether key facts are attributed to the gold evidence, and how
+  often disagreeing passages are reported (scoring version 4).
 
 Key-fact matching is string-based: a correct paraphrase with different
 numbers formatting can be scored as a miss, and a sentence that quotes a fact
@@ -24,15 +26,22 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
 from time import perf_counter
-from typing import Any
+from typing import Any, Literal
 
 from groundedai.core.config import Settings
 from groundedai.core.errors import GroundedAIError
 from groundedai.evaluation.dataset import EvalDataset, EvalQuestion
 from groundedai.evaluation.environment import environment_info, hf_model_revision
 from groundedai.evaluation.index import IndexedCorpus, judge_dataset
-from groundedai.evaluation.metrics import contains_any, key_fact_recall, mean, token_f1
+from groundedai.evaluation.metrics import (
+    contains_any,
+    fact_in_text,
+    key_fact_recall,
+    mean,
+    token_f1,
+)
 from groundedai.generation.citations import malformed_citations, states_conflict
+from groundedai.generation.claims import MATCHED
 from groundedai.generation.prompts import (
     DEFAULT_PROMPT_VERSION,
     PromptVersion,
@@ -49,7 +58,9 @@ from groundedai.services.qa_service import QAService
 Progress = Callable[[str], None]
 
 # Bump when answer parsing or scoring rules change, so old checkpoints are not reused.
-SCORING_VERSION = 3
+SCORING_VERSION = 4
+# Versions of the deterministic answer checks, recorded with every run.
+CLAIM_CHECK_VERSION = "claims-v1"
 
 
 class CheckpointMismatchError(ValueError):
@@ -115,6 +126,7 @@ def run_generation_eval(
     checkpoint: Path | None = None,
     run_config: dict[str, Any] | None = None,
     prompt_version: PromptVersion = DEFAULT_PROMPT_VERSION,
+    conflict_check: Literal["figures-v1", "disagreement-v1"] = "disagreement-v1",
 ) -> dict[str, Any]:
     """Evaluate answers on every dataset question.
 
@@ -137,6 +149,8 @@ def run_generation_eval(
         "max_context_chars": max_context_chars,
         "prompt_version": prompt_version,
         "prompt_fingerprint": prompt_fingerprint(prompt_version),
+        "conflict_check": conflict_check,
+        "claim_check": CLAIM_CHECK_VERSION,
         **(run_config or {}),
     }
     completed = _load_checkpoint(checkpoint, config_record) if checkpoint else {}
@@ -150,6 +164,7 @@ def run_generation_eval(
         reranker="cross-encoder" if reranker else "none",
         max_context_chars=max_context_chars,
         prompt_version=prompt_version,
+        conflict_check=conflict_check,
         generation_timeout_s=timeout_s,
         max_concurrent_generations=1,
         generation_queue_timeout_s=timeout_s,
@@ -167,6 +182,7 @@ def run_generation_eval(
         keep_model_output=True,
     )
     judgments = judge_dataset(dataset, corpus)
+    doc_keys = {document_id: key for key, document_id in corpus.doc_ids.items()}
     questions = dataset.questions[:limit] if limit else dataset.questions
     rows: list[dict[str, Any]] = []
     try:
@@ -178,7 +194,7 @@ def run_generation_eval(
             started = perf_counter()
             try:
                 response = qa.answer(QueryRequest(question=question.question))
-                row = _score(question, response, judgments.get(question.id))
+                row = _score(question, response, judgments.get(question.id), doc_keys)
             except GroundedAIError as exc:
                 row = {
                     "question_id": question.id,
@@ -264,8 +280,60 @@ def _provider_record(provider: GenerationProvider) -> dict[str, Any]:
     return record
 
 
-def _score(
+def _key_fact_attribution(
     question: EvalQuestion, response: AnswerResponse, evidence_sets: list[set[str]] | None
+) -> float | None:
+    """Share of key facts carried by a claim that is matched to a gold evidence chunk.
+
+    Gold-based, unlike the claim statuses: the claim holding "€45" must be matched to a passage
+    that contains the dataset's evidence quote, not merely to some passage.
+    """
+    facts = question.answer_must_include
+    if response.status != "answered" or not facts or not evidence_sets:
+        return None
+    gold = set().union(*evidence_sets)
+    attributed = 0
+    for fact in facts:
+        carrying = [claim for claim in response.claims if fact_in_text(fact, claim.text)]
+        if any(
+            claim.status in MATCHED and any(item.chunk_id in gold for item in claim.evidence)
+            for claim in carrying
+        ):
+            attributed += 1
+    return attributed / len(facts)
+
+
+def _conflict_fields(
+    question: EvalQuestion, response: AnswerResponse, evidence_sets: list[set[str]] | None
+) -> dict[str, Any]:
+    reported = [
+        {
+            "kind": conflict.kind,
+            "labels": [statement.label for statement in conflict.statements],
+            "chunk_ids": [statement.chunk_id for statement in conflict.statements],
+            "answer_reports": conflict.answer_reports,
+        }
+        for conflict in response.conflicts
+    ]
+    if question.expected_behavior != "flag_conflict":
+        return {"conflicts": reported, "false_conflict": bool(reported)}
+    surfaced = [
+        item
+        for item in reported
+        if evidence_sets and all(set(item["chunk_ids"]) & relevant for relevant in evidence_sets)
+    ]
+    return {
+        "conflicts": reported,
+        "conflict_surfaced": bool(surfaced),
+        "conflict_answer_both": any(len(item["answer_reports"]) >= 2 for item in surfaced),
+    }
+
+
+def _score(
+    question: EvalQuestion,
+    response: AnswerResponse,
+    evidence_sets: list[set[str]] | None,
+    doc_keys: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     answer = response.answer or ""
     cited_chunks = {source.chunk_id for source in response.sources if source.cited}
@@ -283,6 +351,7 @@ def _score(
     )
     model_text = response.model_output if response.model_output is not None else answer
     cited_sentences = [s for s in response.sentences if s.citations]
+    verification = response.verification
     return {
         "question_id": question.id,
         "category": question.category,
@@ -311,7 +380,31 @@ def _score(
         "completion_tokens": response.usage.completion_tokens,
         "answer": answer,
         "model_output": response.model_output,
+        # --- scoring version 4 ---------------------------------------------------------
+        "sources": [
+            {
+                "label": source.label,
+                "chunk_id": source.chunk_id,
+                "doc": (doc_keys or {}).get(source.document_id, source.document_id),
+            }
+            for source in response.sources
+        ],
+        "verdict": verification.verdict if verification else None,
+        "claims_total": verification.claims if verification else 0,
+        "claims_cited": sum(1 for claim in response.claims if claim.citations),
+        "claims_supported": verification.supported if verification else 0,
+        "claims_wrong_source": verification.wrong_source if verification else 0,
+        "claims_added_source": verification.added_source if verification else 0,
+        "claims_partial": verification.partial if verification else 0,
+        "claims_unsupported": verification.unsupported if verification else 0,
+        "references_variant": verification.references_variant if verification else 0,
+        "key_fact_attribution": _round(_key_fact_attribution(question, response, evidence_sets)),
+        **_conflict_fields(question, response, evidence_sets),
     }
+
+
+def _round(value: float | None) -> float | None:
+    return round(value, 4) if value is not None else None
 
 
 def _group(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
@@ -402,4 +495,47 @@ def summarize_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "invalid_output_rate": _share(rows, lambda r: r["status"] == "invalid_output"),
         "invalid_outputs": sum(1 for row in rows if row["status"] == "invalid_output"),
         "timeouts": sum(1 for row in errors if row.get("error_code") == "model_timeout"),
+        **_claim_summary(answered),
+        "key_fact_attribution": _mean_of(rows, "key_fact_attribution"),
+        "conflict_surfaced_rate": _share(conflicts, lambda r: bool(r.get("conflict_surfaced")))
+        if any("conflict_surfaced" in row for row in conflicts)
+        else None,
+        "conflict_answer_both_rate": _share(
+            conflicts, lambda r: bool(r.get("conflict_answer_both"))
+        )
+        if any("conflict_answer_both" in row for row in conflicts)
+        else None,
+        "false_conflict_rate": _share(
+            [row for row in rows if "false_conflict" in row], lambda r: bool(r["false_conflict"])
+        )
+        if any("false_conflict" in row for row in rows)
+        else None,
+    }
+
+
+def _claim_summary(answered: list[dict[str, Any]]) -> dict[str, Any]:
+    """Scoring version 4: claim-level support of answered questions (None for older rows)."""
+    rows = [row for row in answered if "claims_total" in row]
+    if not rows:
+        return {}
+    total = sum(int(row["claims_total"]) for row in rows)
+    cited = sum(int(row["claims_cited"]) for row in rows)
+    matched = sum(
+        int(row["claims_supported"]) + int(row["claims_wrong_source"])
+        + int(row["claims_added_source"])
+        for row in rows
+    )  # fmt: skip
+
+    def ratio(numerator: int, denominator: int) -> float | None:
+        return round(numerator / denominator, 4) if denominator else None
+
+    return {
+        "claims": total,
+        "claim_match_rate": ratio(matched, total),
+        "cited_claim_precision": ratio(sum(int(r["claims_supported"]) for r in rows), cited),
+        "wrong_source_rate": ratio(sum(int(r["claims_wrong_source"]) for r in rows), cited),
+        "unsupported_claim_rate": ratio(sum(int(r["claims_unsupported"]) for r in rows), total),
+        "answers_verified_rate": _share(rows, lambda r: r.get("verdict") == "verified"),
+        "answers_unverified_rate": _share(rows, lambda r: r.get("verdict") == "unverified"),
+        "variant_reference_rate": _share(rows, lambda r: int(r.get("references_variant") or 0) > 0),
     }

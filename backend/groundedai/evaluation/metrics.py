@@ -120,17 +120,18 @@ def token_f1(prediction: str, reference: str) -> float:
     return 2 * precision * recall / (precision + recall)
 
 
+def fact_in_text(fact: str, text: str) -> bool:
+    """Whether one key fact ('|'-separated alternatives) occurs in ``text``."""
+    normalized = _normalize_answer(text)
+    alternatives = [_normalize_answer(option) for option in fact.split("|")]
+    return any(option and option in normalized for option in alternatives)
+
+
 def key_fact_recall(answer: str, facts: Sequence[str]) -> float | None:
     """Fraction of key facts present in the answer; each fact may list '|' alternatives."""
     if not facts:
         return None
-    normalized = _normalize_answer(answer)
-    found = 0
-    for fact in facts:
-        alternatives = [_normalize_answer(option) for option in fact.split("|")]
-        if any(option and option in normalized for option in alternatives):
-            found += 1
-    return found / len(facts)
+    return sum(1 for fact in facts if fact_in_text(fact, answer)) / len(facts)
 
 
 def contains_any(answer: str, phrases: Sequence[str]) -> bool:

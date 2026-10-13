@@ -79,6 +79,7 @@ _VARIANT_PAREN_WORD_RE = re.compile(
 _MENTION_RE = re.compile(r"\b[Ss]ources?\s+(?P<labels>S?\d+(?:\s*(?:,|and)\s*S?\d+)*)\b")
 _TITLE_BRACKET_RE = re.compile(r"\[(?P<inner>[^\[\]\n]{3,200})\]")
 _PREFIX_LABEL_RE = re.compile(r"(\[S\d+(?:,\s*S\d+)*\])\s*:\s*")
+_HEADING_AFTER_SENTENCE_RE = re.compile(r"(?<=[.!?\]])[ \t]+(?=#{1,6}\s)")
 _ADJACENT_MARKERS_RE = re.compile(r"\[(S\d+(?:,\s*S\d+)*)\]\s*\[(?=S\d)")
 _OPENS_WITH_MARKER_RE = re.compile(r"^\s*\[S\d+(?:,\s*S\d+)*\]")
 _MARKER_AT_START_RE = re.compile(
@@ -299,6 +300,8 @@ def _assign_labels(text: str) -> list[tuple[str, list[str]]]:
     reporting verb ("[S2] states that ...") belongs to that sentence. Otherwise a label that
     opens a sentence belongs to the previous one ("Fact one. [S1] Fact two. [S2]").
     """
+    # A Markdown heading starts a new sentence even when it follows on the same line.
+    text = _HEADING_AFTER_SENTENCE_RE.sub("\n\n", text)
     previous = None
     while previous != text:  # "[S1][S2]" -> "[S1, S2]"
         previous = text
