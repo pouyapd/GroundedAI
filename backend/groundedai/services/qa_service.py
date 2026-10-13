@@ -32,6 +32,7 @@ from groundedai.core.errors import (
     ProviderTimeout,
     ServerBusy,
 )
+from groundedai.core.quantities import figure_present, read_quantities
 from groundedai.core.text import content_tokens, normalize_whitespace, split_sentences
 from groundedai.generation.citations import (
     ParsedAnswer,
@@ -42,6 +43,7 @@ from groundedai.generation.citations import (
 from groundedai.generation.claims import ClaimReport, EvidenceSource, check_claims
 from groundedai.generation.conflicts import find_figure_conflicts
 from groundedai.generation.context import AssembledContext, assemble_context, format_documents
+from groundedai.generation.disagreement import Disagreement, find_disagreements
 from groundedai.generation.prompts import answer_prompt, format_notes
 from groundedai.generation.providers import GenerationProvider, translate_provider_error
 from groundedai.generation.safety import detect_injection
@@ -57,6 +59,8 @@ from groundedai.schemas.query import (
     ChunkScoresOut,
     CitationCheckOut,
     ClaimOut,
+    ConflictOut,
+    ConflictStatementOut,
     EvidenceOut,
     ProviderOut,
     QueryRequest,
@@ -231,6 +235,60 @@ def verification_warnings(report: ClaimReport) -> list[str]:
         warnings.append(
             "The answer repeats instruction-like text from a source; it is not treated as a fact."
         )
+    return warnings
+
+
+def conflicts_out(
+    disagreements: Sequence[Disagreement], context: AssembledContext, answer: str | None
+) -> list[ConflictOut]:
+    """Structured disagreements, with which side(s) the answer reports."""
+    blocks = context.labels
+    answer_figures = read_quantities(answer).quantities if answer else []
+    result = []
+    for disagreement in disagreements:
+        statements = []
+        reported = []
+        for statement in (disagreement.first, disagreement.second):
+            chunk = blocks[statement.label].chunk
+            statements.append(
+                ConflictStatementOut(
+                    label=statement.label,
+                    chunk_id=chunk.chunk_id,
+                    document_id=chunk.document_id,
+                    document_title=chunk.document_title,
+                    page_start=chunk.page_start,
+                    page_end=chunk.page_end,
+                    quote=statement.sentence,
+                    quote_start=statement.start,
+                    quote_end=statement.end,
+                    values=statement.value_texts(),
+                    denies_requirement=statement.denies,
+                    dates=list(statement.dates),
+                )
+            )
+            if any(figure_present(value, answer_figures) for value in statement.values):
+                reported.append(statement.label)
+        result.append(
+            ConflictOut(
+                kind=disagreement.kind,
+                statements=statements,
+                explanation=disagreement.explanation(),
+                answer_reports=reported,
+            )
+        )
+    return result
+
+
+def one_sided_warnings(conflicts: Sequence[ConflictOut]) -> list[str]:
+    warnings = []
+    for conflict in conflicts:
+        labels = [statement.label for statement in conflict.statements]
+        if len(conflict.answer_reports) == 1:
+            other = [label for label in labels if label not in conflict.answer_reports]
+            warnings.append(
+                f"The answer gives only the value from {conflict.answer_reports[0]}; "
+                f"{', '.join(other)} states a different one (see the disagreement below)."
+            )
     return warnings
 
 
@@ -441,10 +499,16 @@ class QAService:
         if any(block.truncated for block in context.sources):
             warnings.append("The top passage was shortened to fit the context limit.")
         notes: list[str] = []
+        disagreements: list[Disagreement] = []
+        if self.settings.conflict_check == "disagreement-v1":
+            disagreements = find_disagreements(question, context.sources)
+            warnings.extend(disagreement.explanation() for disagreement in disagreements)
         if self.settings.prompt_version != "answer-v1":  # answer-v1 is kept as published
-            for conflict in find_figure_conflicts(question, context.sources):
-                warnings.append(conflict.warning())
-                notes.append(conflict.note())
+            if self.settings.conflict_check == "figures-v1":
+                for conflict in find_figure_conflicts(question, context.sources):
+                    warnings.append(conflict.warning())
+                    notes.append(conflict.note())
+            notes.extend(disagreement.note() for disagreement in disagreements)
             for label, flags in injection_flags.items():
                 if flags:
                     notes.append(
@@ -485,6 +549,7 @@ class QAService:
                 answer=None,
                 sources=self._sources(context, injection_flags, None, question),
                 sentences=[],
+                conflicts=conflicts_out(disagreements, context, None),
                 citation_check=CitationCheckOut(
                     cited=[],
                     valid=[],
@@ -513,6 +578,10 @@ class QAService:
         claims = claims_out(report, context) if report else []
         if report:
             warnings.extend(verification_warnings(report))
+        conflicts = conflicts_out(
+            disagreements, context, None if parsed.is_abstention else parsed.text
+        )
+        warnings.extend(one_sided_warnings(conflicts))
         status: AnswerStatus = "insufficient_evidence" if parsed.is_abstention else "answered"
         answer: str | None = parsed.text
         abstention_reason = parsed.abstention_reason
@@ -546,6 +615,7 @@ class QAService:
             ],
             claims=claims,
             verification=verification_out(report) if report else None,
+            conflicts=conflicts,
             unverified_answer=unverified_answer,
             citation_check=CitationCheckOut(
                 cited=parsed.check.cited,

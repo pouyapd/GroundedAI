@@ -186,11 +186,54 @@ def test_conflicting_figures_are_flagged_and_noted_for_the_model(make_settings) 
         response = services.qa.answer(
             QueryRequest(question="What is the hotel limit per night in capital cities?")
         )
-        assert any("state different figures" in warning for warning in response.warnings)
+        (conflict,) = response.conflicts
+        assert conflict.kind == "conflict"
+        assert sorted(value for s in conflict.statements for value in s.values) == [
+            "EUR 120",
+            "EUR 140",
+        ]
+        for statement in conflict.statements:
+            source = next(item for item in response.sources if item.label == statement.label)
+            assert source.text[statement.quote_start : statement.quote_end] == statement.quote
+        assert conflict.answer_reports == ["S1"] or conflict.answer_reports == ["S2"]
+        assert any("disagree" in warning for warning in response.warnings)
+        assert any("gives only the value from" in warning for warning in response.warnings)
         human = str(model.seen[0][1].content)
         assert "Application note: sources [S" in human
         assert "state different figures" in human
         assert human.index("Application note") < human.index("<question>")
+    finally:
+        services.close()
+
+
+def test_the_published_figure_check_can_still_be_selected(make_settings) -> None:  # type: ignore[no-untyped-def]
+    settings = make_settings(prompt_version="answer-v2", conflict_check="figures-v1")
+    model = RecordingChatModel(seen=[])
+    services = _services_with(settings, model)
+    services.ingestion.ingest_bytes("faq.txt", None, FAQ_TEXT.encode())
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="What is the hotel limit per night in capital cities?")
+        )
+        assert response.conflicts == []
+        assert any("state different figures" in warning for warning in response.warnings)
+        assert "state different figures" in str(model.seen[0][1].content)
+    finally:
+        services.close()
+
+
+def test_an_answer_reporting_both_sides_gets_no_one_sided_warning(make_settings) -> None:  # type: ignore[no-untyped-def]
+    reply = "The travel policy says EUR 140 [S1], but the FAQ says EUR 120 [S2]."
+    model = RecordingChatModel(seen=[], reply=reply)
+    services = _services_with(make_settings(prompt_version="answer-v2"), model)
+    services.ingestion.ingest_bytes("faq.txt", None, FAQ_TEXT.encode())
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="What is the hotel limit per night in capital cities?")
+        )
+        (conflict,) = response.conflicts
+        assert sorted(conflict.answer_reports) == ["S1", "S2"]
+        assert not any("gives only the value" in warning for warning in response.warnings)
     finally:
         services.close()
 

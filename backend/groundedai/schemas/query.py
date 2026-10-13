@@ -162,6 +162,35 @@ class VerificationOut(BaseModel):
     method: str
 
 
+class ConflictStatementOut(BaseModel):
+    label: str
+    chunk_id: str
+    document_id: str
+    document_title: str
+    page_start: int | None = None
+    page_end: int | None = None
+    quote: str = Field(description="The sentence that states the value")
+    quote_start: int = Field(description="Character offset of the quote in the source's `text`")
+    quote_end: int
+    values: list[str] = Field(description="The values it states, as written")
+    denies_requirement: bool = Field(description='It says there is none ("no fixed schedule")')
+    dates: list[str] = Field(description="Dates that say when it applies, if any")
+
+
+class ConflictOut(BaseModel):
+    kind: Literal["conflict", "different_dates"] = Field(
+        description=(
+            "conflict: different values with nothing that separates them, or a requirement and "
+            "its denial; different_dates: different values that apply to different dates"
+        )
+    )
+    statements: list[ConflictStatementOut]
+    explanation: str
+    answer_reports: list[str] = Field(
+        default_factory=list, description="Labels whose value the answer states"
+    )
+
+
 class CitationCheckOut(BaseModel):
     cited: list[str]
     valid: list[str]
@@ -205,6 +234,10 @@ class AnswerResponse(BaseModel):
         description="Every factual sentence checked against every retrieved passage",
     )
     verification: VerificationOut | None = None
+    conflicts: list[ConflictOut] = Field(
+        default_factory=list,
+        description="Retrieved passages that disagree about what was asked (never resolved)",
+    )
     unverified_answer: str | None = Field(
         default=None,
         description=(

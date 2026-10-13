@@ -150,7 +150,7 @@ _IRREGULAR = {
 # Question words that only ask for the value ("how many", "how long"); left out when a
 # figure-only claim ("€260") is read as the answer to the question.
 _FILLER_TEXT = "much many long often far soon quickly large big old maximum minimum exact exactly"
-_QUESTION_FILLERS = frozenset(_FILLER_TEXT.split())
+QUESTION_FILLERS = frozenset(_FILLER_TEXT.split())
 _NUMBER_TOKENS = frozenset(NUMBER_WORDS) | {"once", "twice", "thrice"}
 # Words that talk about the sources or link sentences. They are left out of a claim's words
 # (not out of the passages), so "[S2] provides more detailed information, stating that X" is
@@ -357,7 +357,7 @@ def _words(text: str) -> set[str]:
     }
 
 
-def _claim_words(text: str) -> set[str]:
+def claim_words(text: str) -> set[str]:
     return {
         claim_stem(token)
         for token in tokenize(text)
@@ -498,7 +498,7 @@ def clauses_of(text: str, figures: list[Quantity]) -> list[tuple[set[str], list[
         start = text.find(part, offset)
         end = start + len(part)
         offset = end
-        part_words = _claim_words(part)
+        part_words = claim_words(part)
         part_figures = [f for f in figures if start <= f.start < end]
         if len(part_words) < MIN_CLAUSE_WORDS and not part_figures:
             return []  # a fragment, not a clause: judge the sentence as a whole
@@ -574,7 +574,7 @@ def check_claims(
         if text.endswith(":") and not figures:
             notes += 1  # "Data retention periods are as follows:"
             continue
-        words = _claim_words(text)
+        words = claim_words(text)
         if not words and not figures:
             notes += 1
             continue
@@ -590,7 +590,7 @@ def check_claims(
             # that match the question best, not merely somewhere in a passage.
             if windows is None:
                 windows = _sentence_windows(sources)
-            words = _claim_words(question) - {claim_stem(word) for word in _QUESTION_FILLERS}
+            words = claim_words(question) - {claim_stem(word) for word in QUESTION_FILLERS}
             pool = _answer_windows(words, required, *windows)
             claim = _judge(display, words, required, cited, pool)
         else:

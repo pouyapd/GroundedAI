@@ -103,6 +103,13 @@ class Settings(BaseSettings):
         default="answer-v2",
         description="Answer prompt; answer-v1 reproduces the reports published before 2026-10-13.",
     )
+    conflict_check: Literal["figures-v1", "disagreement-v1"] = Field(
+        default="disagreement-v1",
+        description=(
+            "Check for passages that disagree; figures-v1 reproduces the reports published on "
+            "2026-10-13."
+        ),
+    )
     unverified_answers: Literal["label", "withhold"] = Field(
         default="label",
         description=(
