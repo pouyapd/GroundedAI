@@ -16,8 +16,8 @@ ran **locally on the owner's laptop**:
 | GPU | Intel Iris Xe (integrated); no CUDA GPU, so everything runs on the CPU |
 | Disk | 31.8 GB free on C: at the start of the work |
 | Python / Node | Python 3.12.7, Node 24.19.0, npm 11.17.0 |
-| Docker | CLI 29.4.1 installed; the daemon was not running at the start, and no images were pulled (see below) |
-| Ollama | Not installed; no Ollama models present |
+| Docker | Docker Desktop installed (engine 29.4.1); not running at the start. Used once on 2026-10-13 to verify the Compose stack (see below) |
+| Ollama | Not installed at the start. On 2026-10-13 the portable Ollama 0.40.3 build and `qwen2.5:1.5b` were used for the real-LLM checks (see below) |
 | Network | System-wide HTTP proxy variables set (see “Proxy” below) |
 
 Laptop power matters for latency numbers: every report records the power source. The
@@ -35,8 +35,16 @@ published retrieval benchmark ran on mains power. Runs made on battery are label
   `--system-site-packages` so that it reuses the PyTorch 2.10 (CPU) already installed for the
   owner's other projects. It added sentence-transformers, transformers and their small
   dependencies only (237 MB in total).
-* **No Docker images pulled.** The Dockerfile and Compose file are validated with
-  `docker compose config` locally; the image itself is built in GitHub Actions.
+* **Docker only when needed, and cleaned up.** Until 2026-10-12 the Dockerfile and Compose file
+  were only validated with `docker compose config`, and the image was built in GitHub Actions.
+  On 2026-10-13 the full stack was started once to verify it (pgvector image 631 MB, API image
+  469 MB); afterwards the containers, volumes and both images were removed and Docker Desktop
+  was stopped.
+* **Ollama without installing it.** For the real-LLM checks the portable Ollama 0.40.3 zip
+  (1.47 GB, SHA-256 checked against the release) was unpacked into a temporary folder and run
+  bound to `127.0.0.1` only, with its model store in the same folder: no installer, service,
+  autostart or PATH change. `qwen2.5:1.5b` (986 MB) was the only model pulled, after estimating
+  its needs (about 1.5 GB of memory, 10–25 s per answer); measured: 1.3 GB and 10 s median.
 * **PostgreSQL without Docker.** Postgres tests ran against a throwaway server from the
   `pgserver` wheel (12.8 MB, PostgreSQL 16.2 + pgvector 0.6.2), started and removed by
   `scripts/dev_postgres.py`.

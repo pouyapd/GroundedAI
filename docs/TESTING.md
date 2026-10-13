@@ -5,7 +5,7 @@
 | Layer | Location | What it covers |
 |---|---|---|
 | Unit | `backend/tests/unit` | text utilities, upload validation, PDF/text parsing, chunking, embeddings, fusion, citations and support checks, context assembly, injection heuristics, extractive generator, evaluation metrics, configuration, rate limiter, metrics registry, dataset integrity, CLI |
-| Integration | `backend/tests/integration` | Alembic migrations (upgrade, downgrade, schema matches models), ingestion lifecycle (failure, retry, re-ingest, delete without orphans, crash recovery), SQLite search and hybrid retrieval, reranking, QA service failure modes (timeout, busy, provider errors, invalid citations, hallucinated numbers), LangChain retriever adapter, Ollama integration against a fake Ollama HTTP server, evaluation runners on the bundled dataset |
+| Integration | `backend/tests/integration` | Alembic migrations (upgrade, downgrade, schema matches models), ingestion lifecycle (failure, retry, re-ingest, delete without orphans, crash recovery), SQLite search and hybrid retrieval, reranking, QA service failure modes (timeout, busy, provider errors, invalid citations, hallucinated numbers, citation-marker-only replies), what reaches the model (documents only as data, conflict and injection notes, answer-v1 unchanged), LangChain retriever adapter, Ollama integration against a fake Ollama HTTP server (including model digest and server version), evaluation runners on the bundled dataset |
 | PostgreSQL | `backend/tests/integration/test_postgres.py` | migrations with pgvector/tsvector/HNSW, all retrieval modes, hostile queries, cascade delete (runs when `GROUNDEDAI_TEST_POSTGRES_URL` is set) |
 | API | `backend/tests/api` | every endpoint, status codes, error shape, validation, size limits, API key, rate limiting, CORS, security headers, request ids, OpenAPI paths, metrics, evaluation runs |
 | End to end | `backend/tests/e2e` | upload PDF → ask → cited answer with page → abstention → delete → metrics, through HTTP only |
@@ -35,23 +35,25 @@ cd frontend
 npm run lint && npm run typecheck && npm test && npm run build
 ```
 
-## Results recorded on 2026-10-12 (development laptop, Windows 11, Python 3.12.7, Node 24.19.0)
+## Results recorded on 2026-10-13 (development laptop, Windows 11, Python 3.12.7, Node 24.19.0)
 
 | Check | Result |
 |---|---|
-| `pytest --cov` (default suite, run from `backend/` as in CI) | 221 passed, 6 skipped (the 6 PostgreSQL tests, no database URL set); line coverage 91% |
+| `pytest --cov` (default suite, run from `backend/` as in CI) | 266 passed, 6 skipped (the 6 PostgreSQL tests, no database URL set); line coverage 91% |
+| — of which `tests/unit` / `tests/integration` / `tests/api` / `tests/e2e` | 162 / 62 (+6 skipped) / 41 / 1 passed |
 | `pytest -m postgres` via `scripts/dev_postgres.py` (PostgreSQL 16.2, pgvector 0.6.2) | 6 passed |
 | `ruff check`, `ruff format --check` (`groundedai`, `tests`, `scripts`, `tools`, `evaluation/scripts`) | clean |
-| `mypy` (strict, 75 files) | no issues |
-| `vitest` | 25 passed |
+| `mypy` (strict, 76 files), also with `--platform linux` | no issues |
+| `vitest` | 53 passed (6 files) |
 | `eslint`, `tsc -b` | clean |
 | `npm run build`, `npm run build:demo` | succeeded |
-| `pip-audit` (prod, dev and ML locks) | no known vulnerabilities (the CPU-only torch wheel is skipped: not on PyPI) |
-| `npm audit` | 0 vulnerabilities |
 | `docker compose config` (with and without the `llm` profile) | valid |
-| Docker image build | **not run locally** (no image downloads on this machine); built and smoke-tested in CI |
-| GitHub Actions on the pull request | all 7 jobs passed (details in `docs/DEPLOYMENT_STATUS.md`) |
-| UI in a browser (live app and static demo) | 390 px and 1280 px wide: no horizontal scrolling on any tab or recorded answer; chart text at its designed size (viewBox width equals rendered width) |
+| Docker Compose stack on Windows (Docker Desktop, engine 29.4.1, Compose 5.1.3) | built (about 16 min), both services healthy; 3 documents ingested (one a 4-page PDF); questions in lexical, dense and hybrid mode reached the API with the right mode; a page-cited, grounded answer; the conflict check fired; data and metrics kept after an API restart; `down -v` removed containers and volumes |
+| Real Ollama inference (0.40.3, qwen2.5:1.5b) | through the API and the browser UI, and the 56-question evaluation (0 errors, 0 timeouts) |
+| Dataset fingerprint and reproducibility | fingerprint `fa56ebd64e3b1eee` on Windows and in CI; the retrieval benchmark rerun and the extractive answer rerun match the published reports exactly |
+| UI in a browser (live app and static demo) | every control checked at 390 px and 1280 px; no horizontal scrolling ([UI_CONTROL_AUDIT.md](UI_CONTROL_AUDIT.md)) |
+| `pip-audit` (prod, dev and ML locks), `npm audit` | run on 2026-10-12: no known vulnerabilities (CPU-only torch not auditable); no dependency changed since |
+| GitHub Actions | last run on `5cd6d3f` (2026-10-12): all 7 jobs passed. The commits after it are local and not pushed, so CI has **not** run on them |
 
 The GitHub Actions results are recorded in `docs/DEPLOYMENT_STATUS.md`.
 
@@ -76,5 +78,11 @@ The GitHub Actions results are recorded in `docs/DEPLOYMENT_STATUS.md`.
 | The "not an LLM" badge under an answer did not wrap and widened the page on phones by 6 px | checked in the browser at 390 px for all ten recorded answers |
 | The static demo showed wrong recorded answers without saying they were wrong | `compareWithExpected` tests; the demo shows the dataset's expected result next to each recording |
 | The dataset fingerprint included raw line endings, so a manifest written on Windows (CRLF) gave a different fingerprint from a clone (LF) | `test_fingerprint_does_not_depend_on_line_endings`, `test_fingerprint_changes_when_a_question_changes`; report and export writers now write LF |
+| Static demo: Hybrid/Lexical/Dense and the passage selector were disabled without a visible state; the diagnostics box had no effect | `interactions.test.tsx`, `demo.test.ts`, `demo-data.test.ts` |
+| Navigation depended on assigning `location.hash` before switching the view | `still switches pages when the hosting frame blocks history changes` |
+| Switching tabs lost the Ask page's answer and settings | `keeps the answer and settings on the Ask page after visiting another tab` |
+| A refusal that carried a citation ("The sources do not provide … [S5]") counted as an answer | `test_refusals_that_carry_a_citation_are_refusals` (and the hedged-answer counter-cases) |
+| A passage or title could pose as another source with `[S3]` | `test_v2_passages_cannot_pose_as_another_source`, `test_v2_titles_cannot_open_prompt_blocks` |
+| The tag neutraliser missed `<sources>` | `test_sources_wrapper_tag_is_neutralised` |
 | `ruff` sorted imports differently from the repository root and from `backend/` | `known-first-party = ["groundedai"]`; CI lints `scripts/` and `tools/` with the project rules |
 | Strict mypy passed on Windows but failed in CI on Linux: the Windows registry lookup (`winreg`) is untyped there | the lookup sits behind a literal `sys.platform == "win32"` check; `mypy --platform` win32, linux and darwin are clean |

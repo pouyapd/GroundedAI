@@ -10,7 +10,7 @@ below are optional. None is downloaded automatically: use `scripts/download_mode
 | `sentence-transformers/all-MiniLM-L6-v2` | Dense embeddings (384 dims) | ~90 MB (175 MB cache incl. extra formats) | Apache-2.0 | No query prefix |
 | `cross-encoder/ms-marco-MiniLM-L-6-v2` | Reranker | ~90 MB | Apache-2.0 | Trained on MS MARCO; check the MS MARCO data terms before commercial use |
 | `Qwen/Qwen2.5-0.5B-Instruct` | Generation via transformers (`huggingface-local`) | ~1 GB | Apache-2.0 | Fast on CPU but weak at following the citation format (see evaluation) |
-| `qwen2.5:1.5b` (Ollama, Q4) | Generation via Ollama (default Ollama model in the settings) | ~1 GB | Apache-2.0 (Qwen2.5-1.5B-Instruct) | Recommended starting point for 16 GB CPU machines; **not measured in this repository** |
+| `qwen2.5:1.5b` (Ollama, Q4_K_M, digest `65ec06548149`) | Generation via Ollama (default Ollama model in the settings) | 986 MB on disk; about 1.3 GB in memory with a 4096-token context | Apache-2.0 (Qwen2.5-1.5B-Instruct) | Measured on 2026-10-13 with Ollama 0.40.3: 10 s per answer (median) on an i7-1255U without a GPU; gets most facts right but rarely uses the `[S#]` citation format (see `docs/EVALUATION.md`) |
 
 Other Ollama models work by setting `GROUNDEDAI_OLLAMA_MODEL`. Check each model's licence;
 some Qwen2.5 sizes and other model families use more restrictive licences.

@@ -1,12 +1,58 @@
 {
  "items": [
   {
+   "id": "retrieval-groundedai-synthetic-v1-20261013T121455Z",
+   "kind": "retrieval",
+   "title": "Retrieval benchmark (full profile: local sentence-transformers models)",
+   "generated_at": "2026-10-13T12:14:55+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 7,
+   "prompt_version": null
+  },
+  {
+   "id": "generation-huggingface-local-groundedai-synthetic-v1-20261013T121258Z",
+   "kind": "generation",
+   "title": "Answer evaluation: huggingface-local (Qwen/Qwen2.5-0.5B-Instruct)",
+   "generated_at": "2026-10-13T12:12:58+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v2"
+  },
+  {
+   "id": "generation-ollama-groundedai-synthetic-v1-20261013T113618Z",
+   "kind": "generation",
+   "title": "Answer evaluation: ollama (qwen2.5:1.5b)",
+   "generated_at": "2026-10-13T11:36:18+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v2"
+  },
+  {
+   "id": "generation-ollama-groundedai-synthetic-v1-20261013T112505Z",
+   "kind": "generation",
+   "title": "Answer evaluation: ollama (qwen2.5:1.5b)",
+   "generated_at": "2026-10-13T11:25:05+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v1"
+  },
+  {
+   "id": "generation-extractive-demo-groundedai-synthetic-v1-20261013T111342Z",
+   "kind": "generation",
+   "title": "Answer evaluation: extractive-demo (extractive-demo-v1)",
+   "generated_at": "2026-10-13T11:13:42+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v2"
+  },
+  {
    "id": "generation-huggingface-local-groundedai-synthetic-v1-20261012T145859Z",
    "kind": "generation",
    "title": "Answer evaluation: huggingface-local (Qwen/Qwen2.5-0.5B-Instruct)",
    "generated_at": "2026-10-12T14:58:59+00:00",
    "dataset": "groundedai-synthetic-v1",
-   "n_configurations": 1
+   "n_configurations": 1,
+   "prompt_version": "answer-v1"
   },
   {
    "id": "generation-extractive-demo-groundedai-synthetic-v1-20261011T182213Z",
@@ -14,7 +60,8 @@
    "title": "Answer evaluation: extractive-demo (extractive-demo-v1)",
    "generated_at": "2026-10-11T18:22:13+00:00",
    "dataset": "groundedai-synthetic-v1",
-   "n_configurations": 1
+   "n_configurations": 1,
+   "prompt_version": "answer-v1"
   },
   {
    "id": "retrieval-groundedai-synthetic-v1-20261011T141404Z",
@@ -22,7 +69,8 @@
    "title": "Retrieval benchmark (full profile: local sentence-transformers models)",
    "generated_at": "2026-10-11T14:14:04+00:00",
    "dataset": "groundedai-synthetic-v1",
-   "n_configurations": 7
+   "n_configurations": 7,
+   "prompt_version": null
   }
  ]
 }

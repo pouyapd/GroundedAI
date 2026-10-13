@@ -56,11 +56,17 @@ already sent by the UI and honoured by `/api/v1/query`. That path had no API tes
 | Recorded / example questions | A, B | tests: clicking asks that question; demo shows the expected result next to the recording |
 | "Ask again with …" notice | A, B | tests: appears after a settings change and re-asks with the new settings |
 | Theme | A, B | test: cycles system → light → dark and sets `data-theme`; browser in both builds |
-| Documents: upload, list, chunks, re-ingest, delete | A; C in the demo | existing API and end-to-end tests; browser, live: upload of a text file → Ready → Chunks shows the text → Hide → Re-ingest → Ready. Demo: upload form and row actions hidden, banner explains why (test) |
+| Documents: upload, list, chunks, re-ingest, delete | A; C in the demo | existing API and end-to-end tests; browser, live: upload of a text file → Ready → Chunks shows the text → Hide → Re-ingest → Ready → Delete (asks "Delete … and its chunks?", list goes from 15 to 14). Demo: upload form and row actions hidden, banner explains why (test) |
 | Evaluation: report selector, Show table / Show chart | A, B | existing tests; browser in both builds |
 | Evaluation: "Evaluate this instance" | A; C in the demo | shown only against a live server |
 | Operations: Refresh and 15 s auto-refresh | A; C in the demo | Refresh hidden in the demo (test); the snapshot banner explains it |
 | Loading, empty, error, backend-unavailable states | A, B | tests: loading line during a request, empty documents state, API-unreachable banner, model-unavailable banner and error |
+
+With a real language model: the live app was also run with `qwen2.5:1.5b` through Ollama. In the
+browser the loading state showed while the model ran (about 6 s), and the answer carried the
+provider and model, real token counts, the retrieval line ("Hybrid retrieval · 5 of up to 5
+passages used") and, because the model wrote no `[S#]` label, the "Not grounded" badge with
+"Treat it as unverified" (`docs/screenshots/ask-ollama-light.png`).
 
 ## Limits of this audit
 

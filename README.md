@@ -50,12 +50,15 @@ evidence). Intel i7-1255U laptop, no GPU, mains power. Small sample: read the in
   each with a valid citation (for "What is the capital of Australia?" it quoted a sentence about
   hotel limits in capital cities). This is why GroundedAI reports citation validity, sentence
   support and abstention behaviour separately.
-- **A small local LLM is not reliable enough here, and the evaluation shows why.**
-  Qwen2.5-0.5B-Instruct (CPU, greedy decoding) refused every question it should have refused, but
-  it also refused 29 answerable ones even when the evidence was ranked first. When it did answer,
-  it often cited a document title instead of a `[S#]` label, so only 1 of its 10 answers was fully
-  grounded. Across two complete runs its text was byte-identical for all 52 answers that both
-  runs recorded.
+- **A revised prompt stopped wrong refusals; citations are still the weak point.** With the
+  original prompt, Qwen2.5-0.5B refused 29 answerable questions although retrieval had found the
+  evidence. The `answer-v2` prompt, developed on a separate 25-question development set, was then
+  frozen and run once on the evaluation set. With it, the configured model `qwen2.5:1.5b`
+  (Ollama, CPU) answered all 43 answerable questions and found 94% of the key facts (v1: 84% and
+  77%; both differences have paired 95% intervals above zero). It also refused fewer of the
+  questions it should refuse (7 of 10, v1: 9 of 10), found neither of the two conflicts, and put
+  a valid `[S#]` citation on only 13 of its 49 answers, so the UI marks most of its answers
+  "not grounded".
 
 | Retrieval configuration (n = 43) | Recall@5 | MRR | nDCG@5 | p50 latency |
 |---|:---:|:---:|:---:|:---:|
@@ -64,13 +67,18 @@ evidence). Intel i7-1255U laptop, no GPU, mains power. Small sample: read the in
 | Hybrid RRF (BM25 + bge-small) | **0.965** [0.91, 1.00] | 0.915 [0.84, 0.98] | 0.920 [0.85, 0.97] | 84 ms |
 | Hybrid RRF + cross-encoder rerank | 0.942 [0.88, 0.99] | 0.920 [0.85, 0.98] | 0.917 [0.84, 0.98] | 810 ms |
 
-| Answer evaluation (56 questions) | Behaviour accuracy | Abstention recall / precision | Grounded answers | Evidence coverage | Key-fact recall | p50 latency |
+| Answer evaluation (56 questions) | Correct behaviour | Answerable answered | Correct refusals | Key-fact recall | Citation format followed | p50 latency |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|
-| Extractive baseline (not an LLM) | 0.660 | 0.50 / 0.28 | 38 of 38 | 0.663 | 0.558 | 37 ms |
-| Qwen2.5-0.5B-Instruct (transformers, CPU) | 0.377 | 1.00 / 0.24 | 1 of 10 | 0.023 | 0.163 | 32 s |
+| Extractive baseline (not an LLM) | 0.660 | 30 of 43 | 5 of 10 | 0.558 | 100% | < 0.1 s |
+| Qwen2.5-0.5B, prompt v1 (transformers) | 0.340 † | 8 of 43 | 10 of 10 | 0.163 | 13% | 32 s |
+| Qwen2.5-0.5B, prompt v2 | 0.528 | 21 of 43 | 7 of 10 | 0.302 | 8% | 38 s |
+| qwen2.5:1.5b, prompt v1 (Ollama, Q4_K_M) | 0.830 | 36 of 43 | 9 of 10 | 0.767 | 30% | 11 s |
+| **qwen2.5:1.5b, prompt v2** (default Ollama setup) | **0.906** | **43 of 43** | 7 of 10 | **0.942** | 27% | 10 s |
 
-*Hybrid RRF retrieval with bge-small for both. "Grounded" means every sentence has a valid citation
-and passes the lexical support check. Ollama models were not evaluated.*
+*Hybrid RRF retrieval with bge-small, top 5 passages, greedy decoding, Intel i7-1255U, no GPU,
+mains power. "Correct behaviour" counts an expected answer as correct even if its content is
+wrong; key-fact recall measures content. Neither conflict question was handled correctly by any
+configuration. † The published 0.377, re-scored with the current refusal rule.*
 
 Full tables, metric definitions and failure analysis: [docs/EVALUATION.md](docs/EVALUATION.md).
 
@@ -85,7 +93,8 @@ flowchart LR
   RET --> DB[("SQLite FTS5 + vectors  or  PostgreSQL + pgvector")]
   SVC --> GEN["LangChain: prompt → chat model"]
   GEN --> LLM["extractive demo · Ollama · transformers"]
-  SVC --> CHK["Citation check · sentence support · injection flags"]
+  SVC --> PRE["Before generation: figure-conflict check · injection flags → notes to the model"]
+  SVC --> CHK["After generation: citation check · sentence support · refusal detection"]
 ```
 
 1. **Ingest.** Uploads are validated (type, size, magic bytes, encoding), parsed with page
@@ -95,10 +104,14 @@ flowchart LR
    run in parallel and are fused with Reciprocal Rank Fusion. Every result carries its lexical
    rank, dense rank, fused and rerank scores, matched terms and timings.
 3. **Generate.** A LangChain chain sends the policy and the numbered passages as separate
-   messages. If nothing relevant is retrieved, no model is called and the answer says so.
+   messages, using a versioned prompt (`answer-v2` by default; `answer-v1` reproduces the earlier
+   reports). Two cheap checks run first and are passed to the model as notes: passages from
+   different documents that state different figures, and passages with instruction-like text.
+   If nothing relevant is retrieved, no model is called and the answer says so.
 4. **Check.** Each `[S#]` label must match a passage the model received; each sentence is checked
    against its cited text (missing words, invented numbers); instruction-like text in retrieved
-   documents is flagged; abstentions are recognised even when a small model misspells them.
+   documents is flagged; refusals are recognised even when a small model misspells them or adds a
+   citation; a reply with only citation markers is reported as invalid, not as an answer.
 5. **Measure.** The same pipeline runs offline over a versioned dataset and writes JSON, CSV and
    Markdown reports with bootstrap intervals and the hardware and power source.
 
@@ -108,20 +121,23 @@ guidance; it never switches to a different model on its own. Design decisions:
 
 ## Screenshots
 
-Recorded from the running application with the sample corpus, bge-small embeddings and the
-extractive demo generator (which the UI labels as "not an LLM").
+Taken from the running application with the sample corpus and bge-small embeddings.
 
-| Ask: checked citation and an injection warning | Evaluation dashboard |
+| Ask, with qwen2.5:1.5b through Ollama: a correct answer without a citation, flagged as unverified | Ask, extractive demo generator: checked citation and an injection warning |
 |---|---|
-| ![Ask view with a cited answer, sentence check and a warning about a retrieved document that contains planted instructions](docs/screenshots/ask-light.png) | ![Evaluation dashboard with Recall@5, MRR and nDCG@5 per configuration, 95% intervals and latency](docs/screenshots/evaluation-light.png) |
+| ![Ask view with an Ollama qwen2.5:1.5b answer that is correct but has no citation; the badge says Not grounded and a warning says to treat it as unverified](docs/screenshots/ask-ollama-light.png) | ![Ask view with a cited answer, sentence check and a warning about a retrieved document that contains planted instructions](docs/screenshots/ask-light.png) |
+| **Evaluation: qwen2.5:1.5b with the answer-v2 prompt** | **Evaluation: retrieval benchmark** |
+| ![Evaluation dashboard for the qwen2.5:1.5b answer-v2 report: 91% correct behaviour, 70% correct refusals, 94% key-fact recall, 27% citation format followed, and results by category](docs/screenshots/evaluation-ollama-light.png) | ![Evaluation dashboard with Recall@5, MRR and nDCG@5 per configuration, 95% intervals and latency](docs/screenshots/evaluation-light.png) |
 | **Documents (dark theme)** | **Operations on a phone** |
 | ![Documents table with status, pages and chunks](docs/screenshots/documents-dark.png) | ![Operations page at phone width](docs/screenshots/operations-mobile-dark.png) |
 
-A static, read-only version of the UI can be built with `npm run build:demo`. It replays ten
-recorded answers (five with the behaviour the dataset expects, five known failures) and shows the
-dataset's expected result next to each, together with the published reports; nothing is
-generated live. See
-[docs/DEPLOYMENT_STATUS.md](docs/DEPLOYMENT_STATUS.md) for where it is hosted.
+A static, read-only version of the UI can be built with `npm run build:demo`. Ten dataset
+questions (five where the extractive generator behaves as expected, five known failures) were
+recorded with every retrieval mode and passage count, so the Hybrid / Lexical / Dense and
+passage controls replay the recording made with exactly that setting, and each answer shows the
+dataset's expected result. The published reports are included; nothing is generated live. See
+[docs/DEPLOYMENT_STATUS.md](docs/DEPLOYMENT_STATUS.md) for where it is hosted and
+[docs/UI_CONTROL_AUDIT.md](docs/UI_CONTROL_AUDIT.md) for how every control was checked.
 
 ## Quick start
 
@@ -152,15 +168,22 @@ and point GroundedAI at them:
 pip install --extra-index-url https://download.pytorch.org/whl/cpu -r backend/requirements/ml.txt
 pip install --no-deps -e backend
 python scripts/download_models.py --preset recommended      # bge-small + reranker, asks first
-ollama pull qwen2.5:1.5b                                    # https://ollama.com
+ollama pull qwen2.5:1.5b                                    # https://ollama.com, about 1 GB
 export GROUNDEDAI_GENERATION_PROVIDER=ollama GROUNDEDAI_EMBEDDING_PROVIDER=sentence-transformers
 export GROUNDEDAI_EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
 export GROUNDEDAI_EMBEDDING_QUERY_PREFIX="Represent this sentence for searching relevant passages: "
 groundedai serve
 ```
 
+Verified on the development laptop with Ollama 0.40.3 and `qwen2.5:1.5b` (Q4_K_M, digest
+`65ec06548149`): about 1.3 GB of memory for the model runner and 10 s per answer (median) on an
+i7-1255U without a GPU. The prompt can be switched with `GROUNDEDAI_PROMPT_VERSION`
+(`answer-v2`, default, or `answer-v1`).
+
 Docker (PostgreSQL + pgvector + API/UI): `cp .env.example .env`, set `POSTGRES_PASSWORD`, then
-`docker compose up --build`. Details: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md),
+`docker compose up --build` (verified on Windows with Docker Desktop: build, health checks,
+ingestion, questions in all three retrieval modes, restart with data kept, and shutdown).
+Details: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md),
 [docs/MODELS.md](docs/MODELS.md), [docs/RESOURCE_PROFILE.md](docs/RESOURCE_PROFILE.md).
 
 ## API
@@ -183,7 +206,8 @@ JSON and Prometheus metrics; health and readiness. Reference with a recorded exa
 groundedai eval retrieval --config evaluation/configs/retrieval_offline.json   # no models, ~5 s
 HF_HUB_OFFLINE=1 groundedai eval retrieval --config evaluation/configs/retrieval_full.json
 groundedai eval generation --provider extractive-demo
-groundedai eval generation --provider huggingface-local --checkpoint data/qwen.jsonl   # resumable
+groundedai eval generation --provider ollama --model qwen2.5:1.5b --checkpoint data/q15.jsonl  # resumable
+python scripts/compare_generation_reports.py BASE.json OTHER.json   # paired bootstrap intervals
 ```
 
 The dataset files are hash-checked before every run, and each report records the dataset
@@ -200,18 +224,20 @@ python scripts/dev_postgres.py -- python -m pytest backend/tests -m postgres   #
 ```
 
 Unit, integration, API, security and end-to-end tests run on SQLite with deterministic providers;
-the Ollama client is tested against a fake Ollama HTTP server; PostgreSQL + pgvector tests run
-against a real server. Counts and the latest results: [docs/TESTING.md](docs/TESTING.md).
+in the test suite the Ollama client talks to a fake Ollama HTTP server (real Ollama inference was
+checked separately, see below); PostgreSQL + pgvector tests run against a real server. Counts and
+the latest results: [docs/TESTING.md](docs/TESTING.md).
 
 ## What is verified and what is not
 
 | Verified | Not verified |
 |---|---|
-| 221 backend tests (offline, SQLite) and 25 front-end tests; ruff and strict mypy clean; all CI jobs pass on Linux (Python 3.12 and 3.13) | Ollama with a real model (the client is tested against a fake Ollama server; Ollama is not installed on the development machine) |
-| PostgreSQL 16 + pgvector: migrations, all retrieval modes, cascade delete (bundled local server) | the full Compose stack running (the Docker image is built and smoke-tested in CI, not run on the development machine; see [docs/DEPLOYMENT_STATUS.md](docs/DEPLOYMENT_STATUS.md)) |
-| retrieval benchmark: 7 configurations, deterministic metrics, published report | retrieval quality on real or larger document collections |
-| answer evaluation with the extractive baseline and with Qwen2.5-0.5B-Instruct (transformers, CPU) | larger models; any LLM-as-judge or human evaluation |
-| UI at desktop and phone width, light and dark, against the running API | multi-user operation, load beyond a single client, production hosting |
+| 266 backend tests (offline, SQLite) and 53 front-end tests; ruff and strict mypy clean (Windows and Linux targets) | CI on the latest commits: they are local and have not been pushed; CI last passed on `5cd6d3f` |
+| PostgreSQL 16 + pgvector: migrations, all retrieval modes, cascade delete (bundled local server) | retrieval and answer quality on real or larger document collections |
+| real Ollama inference (0.40.3, qwen2.5:1.5b) through the API, the UI and a 56-question evaluation | larger models; any LLM-as-judge or human evaluation |
+| the full Docker Compose stack on Windows: build, health, ingestion, questions, restart, shutdown | the Ollama service inside Compose (`--profile llm`); Ollama ran natively instead |
+| retrieval benchmark rerun reproduces every published metric and interval exactly | a statistically supported advantage of hybrid retrieval over BM25 (none was found) |
+| every UI control, live and in the static demo, at desktop and phone width ([audit](docs/UI_CONTROL_AUDIT.md)) | the private claude.ai preview as rendered for a signed-in viewer (checked through its files and a local sandboxed copy) |
 
 ## Technology
 
@@ -242,8 +268,12 @@ docs/                 architecture · API · evaluation · security · deploymen
 - The evaluation dataset is small, synthetic and lexically easy; it cannot show where dense
   retrieval helps, and its numbers do not transfer to other domains.
 - The support check is lexical: a cited, "supported" sentence can still be wrong.
-- Prompt injection is reduced (separate messages, neutralised tags, pattern flags), not
-  eliminated. See [docs/SECURITY.md](docs/SECURITY.md).
+- The local models tested here are small (0.5B and 1.5B). qwen2.5:1.5b usually gives the right
+  fact but rarely cites it in the required form, and it answers some questions it should refuse.
+- The figure-conflict check is a weak heuristic: on the evaluation set it found neither conflict
+  and raised two false alarms ([details](docs/EVALUATION.md#the-figure-conflict-check)).
+- Prompt injection is reduced (separate messages, neutralised tags and labels, pattern flags,
+  a note to the model), not eliminated. See [docs/SECURITY.md](docs/SECURITY.md).
 - No OCR, tables or images; English-focused tokenisation.
 - Single-tenant: one API key, no per-user document permissions. Rate limits and in-process
   metrics are per process.

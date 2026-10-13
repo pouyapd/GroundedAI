@@ -1,4 +1,4 @@
 {
- "exported_at": "2026-10-12 21:08 UTC",
+ "exported_at": "2026-10-13 12:55 UTC",
  "note": "Answers were recorded from GroundedAI running locally with the extractive demo generator extractive-demo-v1, which is not an LLM, and sentence-transformers:BAAI/bge-small-en-v1.5 embeddings, then replayed verbatim. Benchmark reports are real measurements from the published report files."
 }
