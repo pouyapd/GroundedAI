@@ -38,7 +38,7 @@ from groundedai.generation.prompts import (
     PromptVersion,
     prompt_fingerprint,
 )
-from groundedai.generation.providers import GenerationProvider
+from groundedai.generation.providers import GenerationProvider, ollama_model_info
 from groundedai.observability.metrics import MetricsRegistry, summarize
 from groundedai.persistence.search import SqliteSearchBackend
 from groundedai.retrieval.engine import RetrievalEngine
@@ -200,7 +200,7 @@ def run_generation_eval(
             f"generation-{provider.name}-{dataset.manifest.name}-{generated:%Y%m%dT%H%M%SZ}"
         ),
         "kind": "generation",
-        "title": f"Answer evaluation: {provider.name} ({provider.model})",
+        "title": f"Answer evaluation: {provider.name} ({provider.model}, {prompt_version})",
         "generated_at": generated.isoformat(timespec="seconds"),
         "measured": True,
         "dataset": {
@@ -209,14 +209,7 @@ def run_generation_eval(
             "fingerprint": dataset.fingerprint,
             "questions_evaluated": len(questions),
         },
-        "provider": {
-            "name": provider.name,
-            "model": provider.model,
-            "is_llm": provider.is_llm,
-            "revision": hf_model_revision(provider.model)
-            if provider.name == "huggingface-local"
-            else None,
-        },
+        "provider": _provider_record(provider),
         "retrieval": {
             "mode": retrieval_mode,
             "fusion": fusion if retrieval_mode == "hybrid" else None,
@@ -249,6 +242,26 @@ def run_generation_eval(
             ]
         ),
     }
+
+
+def _provider_record(provider: GenerationProvider) -> dict[str, Any]:
+    """Model identity for the report: a Hugging Face commit, or the Ollama model digest."""
+    record: dict[str, Any] = {
+        "name": provider.name,
+        "model": provider.model,
+        "is_llm": provider.is_llm,
+        "revision": None,
+    }
+    if provider.name == "huggingface-local":
+        record["revision"] = hf_model_revision(provider.model)
+    elif provider.name == "ollama":
+        base_url = getattr(provider.chat_model, "base_url", None)
+        info = ollama_model_info(str(base_url), provider.model) if base_url else None
+        if info:
+            record["revision"] = info["digest"]
+            record["quantization"] = info["quantization"]
+            record["runtime"] = f"ollama {info['server_version']}"
+    return record
 
 
 def _score(

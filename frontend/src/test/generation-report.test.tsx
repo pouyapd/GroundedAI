@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { App } from "../App";
 import type { GenerationReport } from "../api/types";
-import { invalidCount } from "../pages/EvaluationPage";
+import { invalidCount, promptLabel, reportOptionLabel } from "../pages/EvaluationPage";
 import { fakeApi } from "./fixtures";
 
 const SUMMARY = {
@@ -44,6 +44,26 @@ describe("generation report", () => {
     expect(invalidCount({ n: 2, answered: 3, abstained: 0, errors: 0 })).toBe(0);
   });
 
+  it("names the prompt so two runs of the same model can be told apart", () => {
+    const item = { id: "x", kind: "generation", title: "Answer evaluation: ollama (qwen2.5:1.5b)", generated_at: null, dataset: null, n_configurations: 1 };
+    expect(reportOptionLabel({ ...item, prompt_version: "answer-v2" })).toMatch(/^Answer evaluation: ollama \(qwen2\.5:1\.5b\) · answer-v2 · /);
+    expect(reportOptionLabel({ ...item, title: "Answer evaluation: ollama (qwen2.5:1.5b, answer-v2)", prompt_version: "answer-v2" })).not.toMatch(/answer-v2\) · answer-v2/);
+    expect(promptLabel({})).toBe("answer-v1");
+    expect(promptLabel({ prompt_version: "answer-v2", run_config: { prompt_fingerprint: "e928c4235d03" } })).toBe("answer-v2 (e928c4235d03)");
+  });
+
+  it("shows the scoring-version-3 measures only when the report has them", async () => {
+    window.location.hash = "evaluation";
+    const v3 = { ...REPORT, prompt_version: "answer-v2", summary: { ...SUMMARY, answer_rate_answerable: 1, incorrect_refusal_rate: 0, citation_format_compliance: 0.265, evidence_support_rate: 0.722 } };
+    const api = fakeApi({
+      listReports: vi.fn().mockResolvedValue([{ id: "generation-test", kind: "generation", title: REPORT.title, generated_at: REPORT.generated_at, dataset: "x", n_configurations: 1, prompt_version: "answer-v2" }]),
+      getReport: vi.fn().mockResolvedValue(v3),
+    });
+    render(<App api={api} />);
+    expect(await screen.findByText("Wrong refusals (answerable)")).toBeInTheDocument();
+    expect(screen.getByText(/prompt answer-v2/)).toBeInTheDocument();
+  });
+
   it("shows invalid outputs, latency and readable category names", async () => {
     window.location.hash = "evaluation";
     const api = fakeApi({
@@ -58,5 +78,7 @@ describe("generation report", () => {
     expect(screen.getByText("multi chunk")).toBeInTheDocument();
     expect(screen.getByText("out of scope")).toBeInTheDocument();
     expect(screen.queryByText("Baseline, not a language model")).not.toBeInTheDocument();
+    expect(screen.queryByText("Wrong refusals (answerable)")).not.toBeInTheDocument(); // old report: no v3 fields
+    expect(screen.getByText(/prompt answer-v1/)).toBeInTheDocument();
   });
 });

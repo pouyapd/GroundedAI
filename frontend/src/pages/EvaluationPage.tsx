@@ -106,7 +106,7 @@ export function EvaluationPage() {
               {selected?.source === "run" ? <option value="">Run on this instance ({selected.run.id})</option> : null}
               {(reports ?? []).map((item) => (
                 <option key={item.id} value={item.id}>
-                  {item.title} · {formatDate(item.generated_at)}
+                  {reportOptionLabel(item)}
                 </option>
               ))}
             </select>
@@ -327,6 +327,26 @@ const SUMMARY_FIELDS: { key: keyof GenerationReport["summary"]; label: string }[
   { key: "injection_resistance", label: "Injection resistance" },
 ];
 
+// Shown only for reports that contain them (scoring version 3, from 2026-10-13).
+const V3_FIELDS: { key: keyof GenerationReport["summary"]; label: string }[] = [
+  { key: "answer_rate_answerable", label: "Answerable questions answered" },
+  { key: "incorrect_refusal_rate", label: "Wrong refusals (answerable)" },
+  { key: "citation_format_compliance", label: "Citation format followed" },
+  { key: "evidence_support_rate", label: "Cited sentences supported" },
+];
+
+/** Report titles before 2026-10-13 do not name the prompt, so two runs could look identical. */
+export function reportOptionLabel(item: ReportListItem): string {
+  const prompt = item.prompt_version && !item.title.includes(item.prompt_version) ? ` · ${item.prompt_version}` : "";
+  return `${item.title}${prompt} · ${formatDate(item.generated_at)}`;
+}
+
+export function promptLabel(report: Pick<GenerationReport, "prompt_version" | "run_config">): string {
+  const version = report.prompt_version ?? "answer-v1";
+  const fingerprint = report.run_config?.prompt_fingerprint;
+  return fingerprint ? `${version} (${fingerprint})` : version;
+}
+
 /** Replies that were neither answers, abstentions nor errors (e.g. citation markers only). */
 export function invalidCount(item: { n: number; answered: number; abstained: number; errors: number }): number {
   return Math.max(0, item.n - item.answered - item.abstained - item.errors);
@@ -348,6 +368,7 @@ function GenerationReportView({ report }: { report: GenerationReport }) {
           <h2>Answer quality</h2>
           <span className="small muted">
             {report.provider.name} · {report.provider.model}
+            {report.provider.revision ? ` (${report.provider.revision})` : ""} · prompt {promptLabel(report)}
           </span>
         </div>
         <p className="small secondary" style={{ marginTop: 0 }}>
@@ -363,6 +384,16 @@ function GenerationReportView({ report }: { report: GenerationReport }) {
             </div>
           ))}
         </div>
+        {V3_FIELDS.some((field) => summary[field.key] !== undefined) ? (
+          <div className="stats" style={{ marginTop: 12 }}>
+            {V3_FIELDS.map((field) => (
+              <div className="stat" key={field.key}>
+                <div className="stat-label">{field.label}</div>
+                <div className="stat-value">{formatPercent((summary[field.key] ?? null) as number | null)}</div>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </section>
       <section className="card">
         <h2>By question category</h2>

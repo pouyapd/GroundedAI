@@ -8,6 +8,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, Path, Query
 
 from groundedai.api.deps import ServicesDep, rate_limit, require_api_key
 from groundedai.core.errors import NotFound
+from groundedai.evaluation.reporting import report_prompt_version
 from groundedai.persistence.db import session_scope
 from groundedai.persistence.repositories import EvaluationRunRepository
 from groundedai.schemas.evaluation import (
@@ -39,6 +40,7 @@ def list_reports(services: ServicesDep) -> ReportList:
                 n_configurations=len(report.get("configurations", []))
                 if report["kind"] == "retrieval"
                 else 1,
+                prompt_version=report_prompt_version(report),
             )
         )
     return ReportList(items=items)

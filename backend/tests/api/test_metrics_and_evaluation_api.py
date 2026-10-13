@@ -54,6 +54,27 @@ def test_published_reports_are_listed(client_factory, tmp_path: Path) -> None:  
     assert client.get("/api/v1/evaluations/reports/..%2F..%2Fsecret").status_code in (404, 422)
 
 
+def test_report_list_shows_the_prompt_version(client_factory, tmp_path: Path) -> None:  # type: ignore[no-untyped-def]
+    published = tmp_path / "evaluation" / "reports" / "published"
+    published.mkdir(parents=True)
+    base = {"kind": "generation", "title": "Answer evaluation", "dataset": {"name": "tiny"}}
+    reports = {
+        "generation-old": {**base, "generated_at": "2026-10-12T00:00:00+00:00"},
+        "generation-new": {
+            **base,
+            "generated_at": "2026-10-13T00:00:00+00:00",
+            "prompt_version": "answer-v2",
+        },
+    }
+    for report_id, report in reports.items():
+        payload = json.dumps({"report_id": report_id, **report})
+        (published / f"{report_id}.json").write_text(payload, encoding="utf-8")
+    client = client_factory(evaluation_dir=tmp_path / "evaluation")
+    items = {i["id"]: i for i in client.get("/api/v1/evaluations/reports").json()["items"]}
+    assert items["generation-new"]["prompt_version"] == "answer-v2"
+    assert items["generation-old"]["prompt_version"] == "answer-v1"  # before versions were recorded
+
+
 def test_evaluation_run_lifecycle(client_factory) -> None:  # type: ignore[no-untyped-def]
     client = client_factory(evaluation_dir=REPO_ROOT / "evaluation")
     created = client.post("/api/v1/evaluations/runs", json={})

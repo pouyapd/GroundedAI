@@ -27,7 +27,7 @@ sys.path.insert(0, str(REPO_ROOT / "backend"))
 from groundedai.core.config import get_settings  # noqa: E402
 from groundedai.evaluation.dataset import EvalQuestion, load_dataset  # noqa: E402
 from groundedai.evaluation.metrics import key_fact_recall  # noqa: E402
-from groundedai.evaluation.reporting import list_reports  # noqa: E402
+from groundedai.evaluation.reporting import list_reports, report_prompt_version  # noqa: E402
 from groundedai.persistence.db import session_scope  # noqa: E402
 from groundedai.persistence.repositories import DocumentRepository  # noqa: E402
 from groundedai.schemas.documents import DocumentOut  # noqa: E402
@@ -191,6 +191,7 @@ def main() -> int:
                 "n_configurations": len(report.get("configurations", []))
                 if report["kind"] == "retrieval"
                 else 1,
+                "prompt_version": report_prompt_version(report),
             }
         )
     write_json(OUT_DIR / "reports" / "index.json", {"items": index})

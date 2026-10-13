@@ -17,7 +17,7 @@ from typing import Any, ClassVar
 import pytest
 
 from groundedai.core.errors import ProviderUnavailable
-from groundedai.generation.providers import check_generation_provider
+from groundedai.generation.providers import check_generation_provider, ollama_model_info
 from groundedai.schemas.query import QueryRequest
 from groundedai.services.container import build_services
 from tests.conftest import TRAVEL_TEXT
@@ -43,7 +43,18 @@ class FakeOllama(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         if self.path == "/api/tags":
-            self._json(200, {"models": [{"name": name, "model": name} for name in self.models]})
+            models = [
+                {
+                    "name": name,
+                    "model": name,
+                    "digest": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+                    "details": {"quantization_level": "Q4_K_M"},
+                }
+                for name in self.models
+            ]
+            self._json(200, {"models": models})
+        elif self.path == "/api/version":
+            self._json(200, {"version": "0.40.3"})
         else:
             self._json(404, {"error": "not found"})
 
@@ -172,3 +183,10 @@ def test_status_check(make_settings, fake_ollama: str) -> None:  # type: ignore[
         make_settings(generation_provider="ollama", ollama_base_url=_closed_port_url())
     )
     assert not down.available
+
+
+def test_model_digest_and_server_version_are_read_for_reports(fake_ollama: str) -> None:
+    info = ollama_model_info(fake_ollama, MODEL)
+    assert info == {"digest": "65ec06548149", "quantization": "Q4_K_M", "server_version": "0.40.3"}
+    assert ollama_model_info(fake_ollama, "missing-model") is None
+    assert ollama_model_info(_closed_port_url(), MODEL) is None

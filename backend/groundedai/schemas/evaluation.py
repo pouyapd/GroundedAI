@@ -51,6 +51,9 @@ class ReportListItem(BaseModel):
     generated_at: str | None = None
     dataset: str | None = None
     n_configurations: int
+    prompt_version: str | None = Field(
+        default=None, description="Answer prompt of a generation report; null for retrieval"
+    )
 
 
 class ReportList(BaseModel):

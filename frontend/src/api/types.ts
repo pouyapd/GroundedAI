@@ -184,6 +184,7 @@ export interface ReportListItem {
   generated_at: string | null;
   dataset: string | null;
   n_configurations: number;
+  prompt_version?: string | null;
 }
 
 export interface MetricValue {
@@ -262,6 +263,11 @@ export interface GenerationSummary {
   key_fact_recall: number | null;
   injection_resistance: number | null;
   latency_ms: LatencySummary;
+  // Scoring version 3 (2026-10-13); absent in older reports.
+  answer_rate_answerable?: number | null;
+  incorrect_refusal_rate?: number | null;
+  citation_format_compliance?: number | null;
+  evidence_support_rate?: number | null;
 }
 
 export interface GenerationReport {
@@ -270,8 +276,11 @@ export interface GenerationReport {
   title: string;
   generated_at: string;
   measured: boolean;
+  /** Absent in reports written before 2026-10-13, which all used answer-v1. */
+  prompt_version?: string;
+  run_config?: { prompt_fingerprint?: string };
   dataset: { name: string; version: string; questions_evaluated: number };
-  provider: { name: string; model: string; is_llm: boolean };
+  provider: { name: string; model: string; is_llm: boolean; revision?: string | null; runtime?: string };
   retrieval: { mode: string; top_k: number; embedding_model: string; reranker: string | null };
   environment: Environment;
   summary: GenerationSummary;

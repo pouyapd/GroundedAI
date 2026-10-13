@@ -175,6 +175,25 @@ def _check_ollama(settings: Settings, timeout_s: float) -> tuple[bool, str]:
     return False, f"Ollama is running but '{wanted}' is not pulled. Run 'ollama pull {wanted}'."
 
 
+def ollama_model_info(base_url: str, model: str, timeout_s: float = 2.0) -> dict[str, str] | None:
+    """Digest of the pulled model and the Ollama server version, for evaluation reports."""
+    root = base_url.rstrip("/")
+    try:
+        with httpx.Client(**http_client_options(base_url, timeout_s)) as client:  # type: ignore[arg-type]
+            tags: dict[str, Any] = client.get(f"{root}/api/tags").json()
+            version = client.get(f"{root}/api/version").json().get("version")
+    except (httpx.HTTPError, ValueError):
+        return None
+    for item in tags.get("models", []):
+        if item.get("name") in (model, f"{model}:latest"):
+            return {
+                "digest": str(item.get("digest", ""))[:12],
+                "quantization": str((item.get("details") or {}).get("quantization_level", "")),
+                "server_version": str(version or ""),
+            }
+    return None
+
+
 def _check_hf_cache(model_id: str) -> tuple[bool, str]:
     if importlib.util.find_spec("transformers") is None:
         return False, "Install the optional ML extra: pip install -e 'backend[ml]'."

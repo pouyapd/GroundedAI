@@ -179,6 +179,15 @@ def write_report(report: dict[str, Any], out_dir: Path) -> dict[str, Path]:
     return paths
 
 
+def report_prompt_version(report: dict[str, Any]) -> str | None:
+    """Prompt of an answer-evaluation report; reports written before versions were recorded
+    (before 2026-10-13) all used answer-v1."""
+    if report.get("kind") != "generation":
+        return None
+    config = report.get("run_config") or {}
+    return str(report.get("prompt_version") or config.get("prompt_version") or "answer-v1")
+
+
 def list_reports(directory: Path) -> list[dict[str, Any]]:
     if not directory.is_dir():
         return []
