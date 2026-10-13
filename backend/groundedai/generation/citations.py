@@ -156,6 +156,27 @@ def _keep_labels(match: re.Match[str]) -> str:
     return match.group(1).strip().rstrip(".") + ". "
 
 
+_LABEL_NOTE_RE = re.compile(
+    r"^\W*(?:S\d+(?:\W+S\d+)*)\W+(?:also )?(?:does|do) not "
+    r"(?:contain|provide|mention|include|state|say|specify|cover|address|give|offer)\b",
+    re.IGNORECASE,
+)
+
+
+def is_source_note(sentence: str) -> bool:
+    """Whether a sentence only says what a source does or does not contain.
+
+    "[S2] does not provide additional information about the stipend." is a remark about the
+    sources, not a factual claim, so the claim check leaves it out.
+    """
+    plain = _BRACKETED_RE.sub(lambda match: match.group(1), sentence)
+    if _LABEL_NOTE_RE.search(plain):
+        return True
+    text = strip_citations(sentence)
+    refusal = bool(_REFUSAL_SENTENCE_RE.search(text) or _ABSTENTION_PHRASES.search(text))
+    return refusal and not extract_numbers(text)
+
+
 def states_conflict(text: str) -> bool:
     """Whether the text says that sources disagree (lexical check)."""
     return bool(_CONFLICT_STATEMENT_RE.search(strip_citations(text)))

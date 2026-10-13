@@ -103,6 +103,14 @@ class Settings(BaseSettings):
         default="answer-v2",
         description="Answer prompt; answer-v1 reproduces the reports published before 2026-10-13.",
     )
+    unverified_answers: Literal["label", "withhold"] = Field(
+        default="label",
+        description=(
+            "What to do when no statement of the answer matches a retrieved passage: 'label' "
+            "returns it marked as unverified; 'withhold' returns insufficient_evidence and puts "
+            "the model's text in unverified_answer."
+        ),
+    )
     max_concurrent_generations: int = Field(default=2, ge=1, le=64)
     generation_queue_timeout_s: float = Field(default=5.0, ge=0)
 

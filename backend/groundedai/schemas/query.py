@@ -97,6 +97,10 @@ class SourceOut(BaseModel):
         description="Instruction-like patterns found in this source (treated as data)"
     )
     scores: ChunkScoresOut
+    supports_claims: list[int] = Field(
+        default_factory=list,
+        description="Indices into `claims` of the claims this passage is evidence for",
+    )
 
 
 class SentenceOut(BaseModel):
@@ -105,6 +109,57 @@ class SentenceOut(BaseModel):
     support: Literal["supported", "partial", "unsupported", "uncited"]
     token_recall: float | None = None
     unsupported_numbers: list[str]
+
+
+ClaimStatusField = Literal["supported", "wrong_source", "added_source", "partial", "unsupported"]
+VerdictField = Literal["verified", "partially_verified", "unverified", "not_applicable"]
+
+
+class EvidenceOut(BaseModel):
+    label: str = Field(description="Label of the passage, as in `sources`")
+    chunk_id: str
+    document_id: str
+    document_title: str
+    page_start: int | None = None
+    page_end: int | None = None
+    quote: str = Field(description="The sentence(s) of the passage that carry the claim")
+    quote_start: int = Field(description="Character offset of the quote in the source's `text`")
+    quote_end: int
+
+
+class ClaimOut(BaseModel):
+    text: str = Field(description="The claim, without citation markers or attribution phrases")
+    citations: list[str] = Field(
+        description="Labels the model attached to the claim, in any citation form"
+    )
+    status: ClaimStatusField = Field(
+        description=(
+            "supported: the cited passage contains it; wrong_source: the cited passage does not, "
+            "another retrieved passage does; added_source: the model cited nothing and a "
+            "retrieved passage contains it; partial: some words match; unsupported: no "
+            "retrieved passage contains its figures and most of its words"
+        )
+    )
+    evidence: list[EvidenceOut]
+    missing_figures: list[str] = Field(description="Figures that no retrieved passage states")
+    word_overlap: float
+    flags: list[str] = Field(description="instruction_text: the claim repeats an instruction")
+
+
+class VerificationOut(BaseModel):
+    verdict: VerdictField
+    claims: int
+    supported: int
+    wrong_source: int
+    added_source: int
+    partial: int
+    unsupported: int
+    notes: int = Field(description="Sentences about the sources themselves, not checked")
+    references_standard: int = Field(description="Citations written as [S#]")
+    references_variant: int = Field(
+        description="Citations written another way ([Source 1], (S1), a document title)"
+    )
+    method: str
 
 
 class CitationCheckOut(BaseModel):
@@ -142,7 +197,21 @@ class AnswerResponse(BaseModel):
     abstention_reason: str | None = None
     grounding: Literal["grounded", "partially_grounded", "ungrounded"] | None = None
     sources: list[SourceOut]
-    sentences: list[SentenceOut]
+    sentences: list[SentenceOut] = Field(
+        description="Strict [S#] sentence check (kept for comparison with earlier reports)"
+    )
+    claims: list[ClaimOut] = Field(
+        default_factory=list,
+        description="Every factual sentence checked against every retrieved passage",
+    )
+    verification: VerificationOut | None = None
+    unverified_answer: str | None = Field(
+        default=None,
+        description=(
+            "The model's answer when it was withheld because no statement could be matched to "
+            "a passage (setting GROUNDEDAI_UNVERIFIED_ANSWERS=withhold)"
+        ),
+    )
     citation_check: CitationCheckOut
     warnings: list[str]
     provider: ProviderOut

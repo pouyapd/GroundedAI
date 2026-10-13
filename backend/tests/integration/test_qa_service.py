@@ -26,7 +26,7 @@ from groundedai.persistence.db import session_scope
 from groundedai.persistence.models import QueryEventRow
 from groundedai.schemas.query import QueryRequest
 from groundedai.services.container import Services, build_services
-from tests.conftest import INJECTION_TEXT, TRAVEL_TEXT
+from tests.conftest import INJECTION_TEXT, TRAVEL_TEXT, SettingsFactory
 
 
 def _services_with(settings: Settings, chat_model: BaseChatModel) -> Services:
@@ -357,3 +357,93 @@ def test_question_text_is_not_stored(services: Services) -> None:
     services.qa.answer(QueryRequest(question=secret))
     event = _events(services)[0]
     assert "NIGHTJAR" not in repr(vars(event))
+
+
+# ---------------------------------------------------------------- claim check
+def test_uncited_answer_gets_the_passage_that_supports_it(settings: Settings) -> None:
+    model = FakeListChatModel(responses=["The hotel limit is EUR 140 per night in capital cities."])
+    services = _services_with(settings, model)
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        assert response.grounding == "ungrounded"  # the strict [S#] check is unchanged
+        (claim,) = response.claims
+        assert claim.status == "added_source"
+        evidence = claim.evidence[0]
+        source = next(s for s in response.sources if s.label == evidence.label)
+        assert source.text[evidence.quote_start : evidence.quote_end] == evidence.quote
+        assert "EUR 140" in evidence.quote
+        assert evidence.document_title == source.document_title
+        assert source.supports_claims == [0]
+        assert response.verification is not None
+        assert response.verification.verdict == "verified"
+        assert response.verification.added_source == 1
+        assert any("gave no citation" in warning for warning in response.warnings)
+    finally:
+        services.close()
+
+
+def test_variant_citation_is_resolved_and_counted(settings: Settings) -> None:
+    model = FakeListChatModel(responses=["[Source 1]: The hotel limit is EUR 140 per night."])
+    services = _services_with(settings, model)
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        assert response.citation_check.cited == []  # not a valid [S#] citation
+        assert [claim.status for claim in response.claims] == ["supported"]
+        assert response.claims[0].citations == ["S1"]
+        assert response.verification is not None
+        assert response.verification.references_variant == 1
+    finally:
+        services.close()
+
+
+def test_invented_figure_makes_the_answer_unverified(settings: Settings) -> None:
+    model = FakeListChatModel(responses=["The hotel limit is EUR 999 per night [S1]."])
+    services = _services_with(settings, model)
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        assert response.status == "answered"  # default: label, do not withhold
+        assert response.claims[0].status == "unsupported"
+        assert response.claims[0].missing_figures == ["EUR 999"]
+        assert response.verification is not None
+        assert response.verification.verdict == "unverified"
+        assert any("Treat the answer as unsupported" in w for w in response.warnings)
+    finally:
+        services.close()
+
+
+def test_unverified_answer_can_be_withheld(make_settings: SettingsFactory) -> None:
+    settings = make_settings(unverified_answers="withhold")
+    model = FakeListChatModel(responses=["The hotel limit is EUR 999 per night [S1]."])
+    services = _services_with(settings, model)
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        assert response.status == "insufficient_evidence"
+        assert response.answer is None
+        assert response.unverified_answer == "The hotel limit is EUR 999 per night [S1]."
+        assert "withheld" in (response.abstention_reason or "")
+        assert response.claims[0].status == "unsupported"
+    finally:
+        services.close()
+
+
+def test_supported_answer_is_not_withheld(make_settings: SettingsFactory) -> None:
+    settings = make_settings(unverified_answers="withhold")
+    model = FakeListChatModel(responses=["The hotel limit is EUR 140 per night [S1]."])
+    services = _services_with(settings, model)
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        assert response.status == "answered"
+        assert response.unverified_answer is None
+    finally:
+        services.close()
+
+
+def test_abstention_has_no_claims(settings: Settings) -> None:
+    model = FakeListChatModel(responses=["INSUFFICIENT_EVIDENCE: nothing about contractors."])
+    services = _services_with(settings, model)
+    try:
+        response = services.qa.answer(QueryRequest(question="contractor leave days hotel"))
+        assert response.claims == []
+        assert response.verification is None
+    finally:
+        services.close()

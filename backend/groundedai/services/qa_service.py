@@ -39,6 +39,7 @@ from groundedai.generation.citations import (
     parse_answer,
     strip_citations,
 )
+from groundedai.generation.claims import ClaimReport, EvidenceSource, check_claims
 from groundedai.generation.conflicts import find_figure_conflicts
 from groundedai.generation.context import AssembledContext, assemble_context, format_documents
 from groundedai.generation.prompts import answer_prompt, format_notes
@@ -52,8 +53,11 @@ from groundedai.retrieval.engine import RetrievalEngine
 from groundedai.retrieval.types import RetrievalDiagnostics, RetrievalRequest, RetrievedChunk
 from groundedai.schemas.query import (
     AnswerResponse,
+    AnswerStatus,
     ChunkScoresOut,
     CitationCheckOut,
+    ClaimOut,
+    EvidenceOut,
     ProviderOut,
     QueryRequest,
     RetrievalDiagnosticsOut,
@@ -64,6 +68,7 @@ from groundedai.schemas.query import (
     SourceOut,
     TimingsOut,
     UsageOut,
+    VerificationOut,
 )
 
 logger = logging.getLogger(__name__)
@@ -74,6 +79,11 @@ LOCAL_COST_NOTE = (
     "Local inference: no per-token API charge. Hardware and electricity costs are not included."
 )
 DEMO_COST_NOTE = "Extractive demo generator: no language model was called."
+CLAIM_CHECK_METHOD = (
+    "Lexical: a claim counts as supported when one retrieved passage states all of its figures "
+    "and at least 70% of its content words (document titles excluded). Meaning, negation and "
+    "paraphrase are not checked."
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -132,6 +142,96 @@ def best_excerpt(text: str, reference: str) -> str:
             best, best_score = sentence, score
     excerpt = best or normalize_whitespace(text)
     return excerpt if len(excerpt) <= EXCERPT_CHARS else excerpt[: EXCERPT_CHARS - 1] + "…"
+
+
+def evidence_sources(context: AssembledContext) -> list[EvidenceSource]:
+    return [
+        EvidenceSource(block.label, block.chunk.document_title, block.text)
+        for block in context.sources
+    ]
+
+
+def claims_out(report: ClaimReport, context: AssembledContext) -> list[ClaimOut]:
+    blocks = context.labels
+    result = []
+    for claim in report.claims:
+        evidence = []
+        for quote in claim.evidence:
+            chunk = blocks[quote.label].chunk
+            evidence.append(
+                EvidenceOut(
+                    label=quote.label,
+                    chunk_id=chunk.chunk_id,
+                    document_id=chunk.document_id,
+                    document_title=chunk.document_title,
+                    page_start=chunk.page_start,
+                    page_end=chunk.page_end,
+                    quote=quote.quote,
+                    quote_start=quote.start,
+                    quote_end=quote.end,
+                )
+            )
+        result.append(
+            ClaimOut(
+                text=claim.text,
+                citations=claim.cited,
+                status=claim.status,
+                evidence=evidence,
+                missing_figures=claim.missing_figures,
+                word_overlap=claim.word_overlap,
+                flags=claim.flags,
+            )
+        )
+    return result
+
+
+def verification_out(report: ClaimReport) -> VerificationOut:
+    return VerificationOut(
+        verdict=report.verdict,
+        claims=len(report.claims),
+        supported=report.count("supported"),
+        wrong_source=report.count("wrong_source"),
+        added_source=report.count("added_source"),
+        partial=report.count("partial"),
+        unsupported=report.count("unsupported"),
+        notes=report.notes,
+        references_standard=sum(1 for ref in report.references if ref.form == "standard"),
+        references_variant=report.variant_references,
+        method=CLAIM_CHECK_METHOD,
+    )
+
+
+def verification_warnings(report: ClaimReport) -> list[str]:
+    """Plain-language warnings for what the claim check found."""
+    total = len(report.claims)
+    unmatched = report.count("partial") + report.count("unsupported")
+    wrong, added = report.count("wrong_source"), report.count("added_source")
+    warnings = []
+    if report.verdict == "unverified":
+        warnings.append(
+            f"None of the {total} statement(s) in the answer could be matched to a retrieved "
+            "passage. Treat the answer as unsupported."
+        )
+    elif unmatched:
+        warnings.append(
+            f"{unmatched} of {total} statements could not be matched to a retrieved passage; "
+            "they are marked in the claim check."
+        )
+    if wrong:
+        warnings.append(
+            f"For {wrong} statement(s) the model cited a passage that does not contain it; "
+            "the passage that does is shown instead."
+        )
+    if added:
+        warnings.append(
+            f"The model gave no citation for {added} statement(s); GroundedAI found the "
+            "passages that contain them."
+        )
+    if any("instruction_text" in claim.flags for claim in report.claims):
+        warnings.append(
+            "The answer repeats instruction-like text from a source; it is not treated as a fact."
+        )
+    return warnings
 
 
 class QAService:
@@ -407,21 +507,33 @@ class QAService:
                 "The model cited sources that were not provided: "
                 f"{', '.join(parsed.check.invalid)}. Those citations are invalid."
             )
-        if not parsed.is_abstention and parsed.grounding == "ungrounded":
-            warnings.append("The answer is not backed by valid citations. Treat it as unverified.")
-        unsupported = [s for s in parsed.sentences if s.support == "unsupported"]
-        if unsupported and not parsed.is_abstention:
-            warnings.append(
-                f"{len(unsupported)} sentence(s) are not supported by the cited text "
-                "(lexical check)."
+        report = (
+            None if parsed.is_abstention else check_claims(raw, evidence_sources(context), question)
+        )
+        claims = claims_out(report, context) if report else []
+        if report:
+            warnings.extend(verification_warnings(report))
+        status: AnswerStatus = "insufficient_evidence" if parsed.is_abstention else "answered"
+        answer: str | None = parsed.text
+        abstention_reason = parsed.abstention_reason
+        unverified_answer = None
+        if (
+            report
+            and report.verdict == "unverified"
+            and self.settings.unverified_answers == "withhold"
+        ):
+            status, answer, unverified_answer = "insufficient_evidence", None, parsed.text
+            abstention_reason = (
+                "No statement in the model's answer could be matched to the retrieved passages, "
+                "so it was withheld."
             )
 
         return AnswerResponse(
-            status="insufficient_evidence" if parsed.is_abstention else "answered",
-            answer=parsed.text,
-            abstention_reason=parsed.abstention_reason,
+            status=status,
+            answer=answer,
+            abstention_reason=abstention_reason,
             grounding=parsed.grounding,
-            sources=self._sources(context, injection_flags, parsed, question),
+            sources=self._sources(context, injection_flags, parsed, question, claims),
             sentences=[
                 SentenceOut(
                     text=sentence.text,
@@ -432,6 +544,9 @@ class QAService:
                 )
                 for sentence in parsed.sentences
             ],
+            claims=claims,
+            verification=verification_out(report) if report else None,
+            unverified_answer=unverified_answer,
             citation_check=CitationCheckOut(
                 cited=parsed.check.cited,
                 valid=parsed.check.valid,
@@ -512,7 +627,13 @@ class QAService:
         injection_flags: dict[str, list[str]],
         parsed: ParsedAnswer | None,
         question: str,
+        claims: Sequence[ClaimOut] = (),
     ) -> list[SourceOut]:
+        supports: dict[str, list[int]] = {}
+        for index, claim in enumerate(claims):
+            for evidence in claim.evidence:
+                if index not in supports.setdefault(evidence.label, []):
+                    supports[evidence.label].append(index)
         cited_by: dict[str, list[str]] = {}
         if parsed is not None:
             for sentence in parsed.sentences:
@@ -536,6 +657,7 @@ class QAService:
                     truncated=block.truncated,
                     injection_flags=injection_flags.get(block.label, []),
                     scores=scores_out(chunk),
+                    supports_claims=supports.get(block.label, []),
                 )
             )
         return sources
