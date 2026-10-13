@@ -9,6 +9,7 @@ from __future__ import annotations
 import ctypes
 import os
 import platform
+import subprocess
 import sys
 from importlib import metadata
 from pathlib import Path
@@ -137,7 +138,35 @@ def environment_info() -> dict[str, Any]:
         "gpu_used": False,
         "power_source": power_source(),
         "packages": package_versions(),
+        "code": code_version(),
     }
+
+
+def code_version() -> dict[str, Any] | None:
+    """Git commit of the source tree and whether it had uncommitted changes (no paths)."""
+    root = Path(__file__).resolve().parents[3]
+    if not (root / ".git").exists():
+        return None
+    try:
+        commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"],  # noqa: S607
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=True,
+        ).stdout.strip()
+        status = subprocess.run(
+            ["git", "status", "--porcelain", "--untracked-files=no"],  # noqa: S607
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=True,
+        ).stdout
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return {"commit": commit[:12], "uncommitted_changes": bool(status.strip())}
 
 
 def hf_model_revision(model_id: str) -> str | None:

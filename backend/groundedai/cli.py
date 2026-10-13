@@ -175,6 +175,8 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
 
     base = get_settings()
     overrides: dict[str, Any] = {"generation_provider": args.provider}
+    if args.prompt_version:
+        overrides["prompt_version"] = args.prompt_version
     if args.model:
         key = "ollama_model" if args.provider == "ollama" else "hf_generation_model"
         overrides[key] = args.model
@@ -210,6 +212,7 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
                 limit=args.limit,
                 progress=lambda message: print(message, flush=True),
                 checkpoint=Path(args.checkpoint) if args.checkpoint else None,
+                prompt_version=settings.prompt_version,
                 run_config={
                     "chunk_size": settings.chunk_size,
                     "chunk_overlap": settings.chunk_overlap,
@@ -292,6 +295,12 @@ def build_parser() -> argparse.ArgumentParser:
     generation.add_argument("--top-k", type=int, default=5)
     generation.add_argument("--rerank", action="store_true")
     generation.add_argument("--limit", type=int, default=None)
+    generation.add_argument(
+        "--prompt-version",
+        choices=["answer-v1", "answer-v2"],
+        default=None,
+        help="answer prompt (default: GROUNDEDAI_PROMPT_VERSION or answer-v2)",
+    )
     generation.add_argument("--timeout", type=float, default=300.0)
     generation.add_argument("--dataset-dir", default=None)
     generation.add_argument("--out", default="evaluation/reports/local")

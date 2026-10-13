@@ -1,0 +1,58 @@
+{
+  "name": "groundedai-dev-v1",
+  "version": "1.0.0",
+  "license": "MIT (same as the repository). All documents are synthetic and describe fictional organisations.",
+  "description": "Development set for prompt and pipeline iteration. It shares no documents or questions with groundedai-synthetic-v1, which is kept for reported results only.",
+  "created": "2026-10-13",
+  "documents": [
+    {
+      "key": "kestrel-rail-compensation",
+      "file": "corpus/kestrel-rail-compensation.txt",
+      "title": "Kestrel Valley Rail - Delay Compensation and Refunds",
+      "sha256": "1ef5d4af80b8293f9105b36514d4966ee01ca30897b93ffb47a53dc6aa0760e3",
+      "description": "Rail policy (2026); its 28-day claim window deliberately conflicts with the 2024 FAQ."
+    },
+    {
+      "key": "kestrel-rail-passenger-faq",
+      "file": "corpus/kestrel-rail-passenger-faq.txt",
+      "title": "Kestrel Valley Rail - Passenger FAQ (2024 edition)",
+      "sha256": "a267829998831b54fe64eff7e97f9058e7b16a09df4ef97f96aaa089834d6ee7",
+      "description": "Older FAQ that says 14 days for delay claims."
+    },
+    {
+      "key": "fenwick-library-borrowing",
+      "file": "corpus/fenwick-library-borrowing.md",
+      "title": "Fenwick Public Library - Borrowing Rules",
+      "sha256": "9c485e7c261fe2ddc908a350bc4feb3f551b5918fc65f14403c571bb59ce1e4d",
+      "description": "Markdown document; says items can be renewed three times."
+    },
+    {
+      "key": "fenwick-library-quick-guide",
+      "file": "corpus/fenwick-library-quick-guide.txt",
+      "title": "Fenwick Public Library - Quick Guide for New Members",
+      "sha256": "58150efde41fa481970f37569c800261815889cc00f0ec5f66a2dfa4d048fe45",
+      "description": "Leaflet that says items can be renewed twice."
+    },
+    {
+      "key": "halden-coworking-membership",
+      "file": "corpus/halden-coworking-membership.txt",
+      "title": "Halden Coworking - Membership Guide",
+      "sha256": "6cd925358dc91cc22b3d401d30e6d2d1c4be65dfe6126394e94603016ce21eeb",
+      "description": "Membership prices and rules."
+    },
+    {
+      "key": "halden-community-board",
+      "file": "corpus/halden-community-board.txt",
+      "title": "Halden Coworking - Community Board Posts",
+      "sha256": "e6a673ee4b0c489231b6b53292087486e928d619759f3f7c5c98d95bc1d50421",
+      "description": "Contains planted prompt-injection text."
+    },
+    {
+      "key": "quillon-support-policy",
+      "file": "corpus/quillon-support-policy.txt",
+      "title": "Quillon Software - Support Policy",
+      "sha256": "c9b9c675125763ed022142165d67a0f023840dd87c6fd050ca5c80b88ae64620",
+      "description": "Software support terms."
+    }
+  ]
+}

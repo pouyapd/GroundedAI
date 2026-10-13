@@ -1,0 +1,13 @@
+Quillon Software - Support Policy
+
+Response times
+On the Standard plan, support requests receive a first response within 2 business days. On the Priority plan, the first response arrives within 4 business hours, and critical incidents are handled around the clock.
+
+Supported versions
+Quillon fixes security issues in the current major version and the previous major version. Version 7 reaches end of support on 31 December 2027.
+
+Data export
+Customers can export all their data in CSV or JSON format from the Settings page at any time, including after cancelling, for 60 days.
+
+Refunds
+Annual subscriptions can be refunded in full within 30 days of purchase.

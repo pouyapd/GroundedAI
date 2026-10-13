@@ -149,3 +149,7 @@ class AnswerResponse(BaseModel):
     timings: TimingsOut
     usage: UsageOut
     retrieval: RetrievalDiagnosticsOut | None = None
+    model_output: str | None = Field(
+        default=None,
+        description="The model's raw text. Filled only in evaluation runs, for error analysis.",
+    )

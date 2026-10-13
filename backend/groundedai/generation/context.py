@@ -9,15 +9,22 @@ from dataclasses import dataclass, field
 
 from langchain_core.documents import Document
 
+from groundedai.generation.prompts import DEFAULT_PROMPT_VERSION, PromptVersion
 from groundedai.retrieval.types import RetrievedChunk
 
-_TAG_LIKE = re.compile(r"<\s*/?\s*(source|question|system|assistant|instructions?)\b", re.I)
+_TAG_LIKE = re.compile(r"<\s*/?\s*(sources?|question|system|assistant|instructions?)\b", re.I)
+_LABEL_LIKE = re.compile(r"\[\s*(S\d+)\s*\]", re.I)
 MIN_TRUNCATED_CHARS = 200
 
 
 def neutralize_tags(text: str) -> str:
     """Stop retrieved text from opening/closing prompt blocks (``<source>`` etc.)."""
     return _TAG_LIKE.sub(lambda match: match.group(0).replace("<", "‹"), text)
+
+
+def neutralize_labels(text: str) -> str:
+    """Stop retrieved text from posing as another source: ``[S3]`` becomes ``(S3)``."""
+    return _LABEL_LIKE.sub(lambda match: f"({match.group(1)})", text)
 
 
 def page_label(page_start: int | None, page_end: int | None) -> str:
@@ -41,6 +48,7 @@ class AssembledContext:
     sources: list[SourceBlock]
     text: str
     dropped_chunk_ids: list[str] = field(default_factory=list)
+    style: PromptVersion = DEFAULT_PROMPT_VERSION
 
     @property
     def labels(self) -> dict[str, SourceBlock]:
@@ -62,14 +70,20 @@ class AssembledContext:
         ]
 
 
-def format_source(label: str, title: str, pages: str, body: str) -> str:
+def format_source(
+    label: str, title: str, pages: str, body: str, style: PromptVersion = DEFAULT_PROMPT_VERSION
+) -> str:
+    if style != "answer-v1":
+        title = neutralize_labels(title)  # a title cannot pose as a citation label either
     attributes = f'id="{label}" title="{html.escape(title, quote=True)}"'
     if pages:
         attributes += f' pages="{pages}"'
     return f"<source {attributes}>\n{body}\n</source>"
 
 
-def format_documents(documents: Sequence[Document]) -> str:
+def format_documents(
+    documents: Sequence[Document], style: PromptVersion = DEFAULT_PROMPT_VERSION
+) -> str:
     """Render LangChain documents (from :meth:`AssembledContext.as_documents`)."""
     return "\n\n".join(
         format_source(
@@ -77,12 +91,17 @@ def format_documents(documents: Sequence[Document]) -> str:
             str(doc.metadata["document_title"]),
             str(doc.metadata.get("pages") or ""),
             doc.page_content,
+            style,
         )
         for doc in documents
     )
 
 
-def assemble_context(chunks: Sequence[RetrievedChunk], max_chars: int) -> AssembledContext:
+def assemble_context(
+    chunks: Sequence[RetrievedChunk],
+    max_chars: int,
+    style: PromptVersion = DEFAULT_PROMPT_VERSION,
+) -> AssembledContext:
     """Label chunks S1..Sn in rank order until the character budget is used.
 
     The top chunk is truncated rather than dropped when it alone exceeds the
@@ -94,8 +113,10 @@ def assemble_context(chunks: Sequence[RetrievedChunk], max_chars: int) -> Assemb
     for chunk in chunks:
         label = f"S{len(blocks) + 1}"
         body = neutralize_tags(chunk.text)
+        if style != "answer-v1":
+            body = neutralize_labels(body)
         pages = page_label(chunk.page_start, chunk.page_end)
-        overhead = len(format_source(label, chunk.document_title, pages, "")) + 2
+        overhead = len(format_source(label, chunk.document_title, pages, "", style)) + 2
         truncated = False
         if used + overhead + len(body) > max_chars:
             room = max_chars - used - overhead
@@ -112,7 +133,8 @@ def assemble_context(chunks: Sequence[RetrievedChunk], max_chars: int) -> Assemb
             block.chunk.document_title,
             page_label(block.chunk.page_start, block.chunk.page_end),
             block.text,
+            style,
         )
         for block in blocks
     )
-    return AssembledContext(sources=blocks, text=text, dropped_chunk_ids=dropped)
+    return AssembledContext(sources=blocks, text=text, dropped_chunk_ids=dropped, style=style)

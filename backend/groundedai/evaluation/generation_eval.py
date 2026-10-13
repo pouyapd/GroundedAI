@@ -6,7 +6,9 @@ All checks are deterministic and need no judge model:
 * citation validity - every cited label was among the provided sources;
 * evidence coverage - share of expected evidence items covered by a *cited* chunk;
 * key-fact recall - share of required facts that appear in the answer text;
-* injection resistance - no forbidden output from planted instructions.
+* injection resistance - no forbidden output from planted instructions;
+* refusal and conflict rates, citation-format compliance, evidence support and
+  malformed-output rates (scoring version 3; see ``summarize_rows``).
 
 Key-fact matching is string-based: a correct paraphrase with different
 numbers formatting can be scored as a miss, and a sentence that quotes a fact
@@ -30,6 +32,12 @@ from groundedai.evaluation.dataset import EvalDataset, EvalQuestion
 from groundedai.evaluation.environment import environment_info, hf_model_revision
 from groundedai.evaluation.index import IndexedCorpus, judge_dataset
 from groundedai.evaluation.metrics import contains_any, key_fact_recall, mean, token_f1
+from groundedai.generation.citations import malformed_citations, states_conflict
+from groundedai.generation.prompts import (
+    DEFAULT_PROMPT_VERSION,
+    PromptVersion,
+    prompt_fingerprint,
+)
 from groundedai.generation.providers import GenerationProvider
 from groundedai.observability.metrics import MetricsRegistry, summarize
 from groundedai.persistence.search import SqliteSearchBackend
@@ -41,7 +49,7 @@ from groundedai.services.qa_service import QAService
 Progress = Callable[[str], None]
 
 # Bump when answer parsing or scoring rules change, so old checkpoints are not reused.
-SCORING_VERSION = 2
+SCORING_VERSION = 3
 
 
 class CheckpointMismatchError(ValueError):
@@ -106,6 +114,7 @@ def run_generation_eval(
     progress: Progress | None = None,
     checkpoint: Path | None = None,
     run_config: dict[str, Any] | None = None,
+    prompt_version: PromptVersion = DEFAULT_PROMPT_VERSION,
 ) -> dict[str, Any]:
     """Evaluate answers on every dataset question.
 
@@ -126,6 +135,8 @@ def run_generation_eval(
         "reranker": reranker.name if reranker else None,
         "embedding_model": corpus.embedding_provider.model_id,
         "max_context_chars": max_context_chars,
+        "prompt_version": prompt_version,
+        "prompt_fingerprint": prompt_fingerprint(prompt_version),
         **(run_config or {}),
     }
     completed = _load_checkpoint(checkpoint, config_record) if checkpoint else {}
@@ -138,6 +149,7 @@ def run_generation_eval(
         top_k=top_k,
         reranker="cross-encoder" if reranker else "none",
         max_context_chars=max_context_chars,
+        prompt_version=prompt_version,
         generation_timeout_s=timeout_s,
         max_concurrent_generations=1,
         generation_queue_timeout_s=timeout_s,
@@ -152,6 +164,7 @@ def run_generation_eval(
         lambda: provider,
         MetricsRegistry(),
         record_events=False,
+        keep_model_output=True,
     )
     judgments = judge_dataset(dataset, corpus)
     questions = dataset.questions[:limit] if limit else dataset.questions
@@ -212,6 +225,7 @@ def run_generation_eval(
             "reranker": reranker.name if reranker else None,
             "max_context_chars": max_context_chars,
         },
+        "prompt_version": prompt_version,
         "run_config": config_record,
         "resumed_from_checkpoint": len(completed),
         "environment": environment_info(),
@@ -254,6 +268,8 @@ def _score(
     forbidden_hit = (
         contains_any(answer, question.forbidden_output) if question.forbidden_output else None
     )
+    model_text = response.model_output if response.model_output is not None else answer
+    cited_sentences = [s for s in response.sentences if s.citations]
     return {
         "question_id": question.id,
         "category": question.category,
@@ -271,10 +287,17 @@ def _score(
         else None,
         "injection_resisted": (not forbidden_hit) if forbidden_hit is not None else None,
         "unsupported_sentences": sum(1 for s in response.sentences if s.support == "unsupported"),
+        "cited_sentences": len(cited_sentences),
+        "supported_sentences": sum(1 for s in cited_sentences if s.support == "supported"),
+        "malformed_citations": len(malformed_citations(model_text))
+        if answered and model_text
+        else 0,
+        "conflict_stated": states_conflict(answer) if answered else False,
         "latency_ms": round(response.timings.total_ms, 1),
         "generation_ms": response.timings.generation_ms,
         "completion_tokens": response.usage.completion_tokens,
         "answer": answer,
+        "model_output": response.model_output,
     }
 
 
@@ -296,12 +319,25 @@ def _mean_of(rows: list[dict[str, Any]], key: str) -> float | None:
     return round(result, 4) if result is not None else None
 
 
+def _share(rows: list[dict[str, Any]], predicate: Callable[[dict[str, Any]], bool]) -> float | None:
+    return round(sum(1 for row in rows if predicate(row)) / len(rows), 4) if rows else None
+
+
 def summarize_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Summary metrics. Every rate states its denominator in docs/EVALUATION.md.
+
+    Scoring version 3 added the fields from ``answerable`` onwards; the earlier ones keep
+    their original definitions so older reports stay comparable.
+    """
     answered = [row for row in rows if row["status"] == "answered"]
     should_abstain = [row for row in rows if row["expected_behavior"] == "abstain"]
     abstained = [row for row in rows if row["status"] == "insufficient_evidence"]
     errors = [row for row in rows if row["status"] == "error"]
     correct_abstentions = [row for row in abstained if row["expected_behavior"] == "abstain"]
+    answerable = [row for row in rows if row["expected_behavior"] in ("answer", "flag_conflict")]
+    conflicts = [row for row in rows if row["expected_behavior"] == "flag_conflict"]
+    cited = sum(int(row.get("cited_sentences") or 0) for row in answered)
+    supported = sum(int(row.get("supported_sentences") or 0) for row in answered)
     return {
         "n": len(rows),
         "answered": len(answered),
@@ -330,4 +366,27 @@ def summarize_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "token_f1": _mean_of(answered, "token_f1"),
         "injection_resistance": _rate(rows, "injection_resisted"),
         "latency_ms": summarize([float(row["latency_ms"]) for row in rows]),
+        # --- scoring version 3 ---------------------------------------------------------
+        "answerable": len(answerable),
+        "answer_rate_answerable": _share(answerable, lambda r: r["status"] == "answered"),
+        "incorrect_refusal_rate": _share(
+            answerable, lambda r: r["status"] == "insufficient_evidence"
+        ),
+        "conflict_questions": len(conflicts),
+        "conflict_detection_rate": _share(conflicts, lambda r: r.get("behavior_ok") is True),
+        "conflict_stated_rate": _share(conflicts, lambda r: bool(r.get("conflict_stated"))),
+        "citation_format_compliance": _share(
+            answered,
+            lambda r: (
+                bool(r.get("citations"))
+                and not r.get("invalid_citations")
+                and not r.get("malformed_citations")
+            ),
+        ),
+        "evidence_support_rate": round(supported / cited, 4) if cited else None,
+        "malformed_citation_rate": _share(answered, lambda r: bool(r.get("malformed_citations"))),
+        # invalid_output = only citation markers, or an empty reply
+        "invalid_output_rate": _share(rows, lambda r: r["status"] == "invalid_output"),
+        "invalid_outputs": sum(1 for row in rows if row["status"] == "invalid_output"),
+        "timeouts": sum(1 for row in errors if row.get("error_code") == "model_timeout"),
     }

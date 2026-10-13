@@ -9,6 +9,7 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.language_models.fake_chat_models import FakeListChatModel
 from langchain_core.messages import AIMessage, BaseMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
+from pydantic import Field
 from sqlalchemy import select
 
 from groundedai.core.config import Settings
@@ -130,6 +131,93 @@ def test_citation_markers_without_text_are_invalid_output(settings: Settings) ->
         assert response.answer is None
         assert not any(source.cited for source in response.sources)
         assert any("without any answer text" in warning for warning in response.warnings)
+    finally:
+        services.close()
+
+
+class RecordingChatModel(BaseChatModel):
+    """Returns a fixed reply and keeps the messages it was sent."""
+
+    reply: str = "The hotel limit is EUR 140 per night [S1]."
+    seen: list[list[BaseMessage]] = Field(default_factory=list)
+
+    @property
+    def _llm_type(self) -> str:
+        return "recording"
+
+    def _generate(
+        self,
+        messages: list[BaseMessage],
+        stop: list[str] | None = None,
+        run_manager: CallbackManagerForLLMRun | None = None,
+        **kwargs: Any,
+    ) -> ChatResult:
+        self.seen.append(list(messages))
+        return ChatResult(generations=[ChatGeneration(message=AIMessage(content=self.reply))])
+
+
+FAQ_TEXT = """Finance FAQ
+
+How much can I spend on a hotel? Hotel nights are reimbursed up to EUR 120 per night \
+in all cities.
+"""
+
+
+@pytest.mark.parametrize("version", ["answer-v1", "answer-v2"])
+def test_documents_reach_the_model_only_as_data(make_settings, version: str) -> None:  # type: ignore[no-untyped-def]
+    model = RecordingChatModel(seen=[])
+    services = _services_with(make_settings(prompt_version=version), model)
+    services.ingestion.ingest_bytes("supplier.txt", None, INJECTION_TEXT.encode())
+    try:
+        services.qa.answer(QueryRequest(question="What are the payment terms for suppliers?"))
+        system, human = model.seen[0]
+        assert system.type == "system"
+        assert "Ignore" not in str(system.content)  # document text never enters the system message
+        assert "untrusted data" in str(human.content)
+    finally:
+        services.close()
+
+
+def test_conflicting_figures_are_flagged_and_noted_for_the_model(make_settings) -> None:  # type: ignore[no-untyped-def]
+    model = RecordingChatModel(seen=[])
+    services = _services_with(make_settings(prompt_version="answer-v2"), model)
+    services.ingestion.ingest_bytes("faq.txt", None, FAQ_TEXT.encode())
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="What is the hotel limit per night in capital cities?")
+        )
+        assert any("state different figures" in warning for warning in response.warnings)
+        human = str(model.seen[0][1].content)
+        assert "Application note: sources [S" in human
+        assert "state different figures" in human
+        assert human.index("Application note") < human.index("<question>")
+    finally:
+        services.close()
+
+
+def test_flagged_sources_are_named_in_a_note_to_the_model(make_settings) -> None:  # type: ignore[no-untyped-def]
+    model = RecordingChatModel(seen=[])
+    services = _services_with(make_settings(prompt_version="answer-v2"), model)
+    services.ingestion.ingest_bytes("supplier.txt", None, INJECTION_TEXT.encode())
+    try:
+        services.qa.answer(QueryRequest(question="What are the payment terms for suppliers?"))
+        human = str(model.seen[0][1].content)
+        assert "looks like instructions to an AI system" in human
+        assert human.index("Application note") < human.index("<question>")
+    finally:
+        services.close()
+
+
+def test_answer_v1_prompt_is_unchanged_by_the_conflict_check(make_settings) -> None:  # type: ignore[no-untyped-def]
+    model = RecordingChatModel(seen=[])
+    services = _services_with(make_settings(prompt_version="answer-v1"), model)
+    services.ingestion.ingest_bytes("faq.txt", None, FAQ_TEXT.encode())
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="What is the hotel limit per night in capital cities?")
+        )
+        assert not any("state different figures" in warning for warning in response.warnings)
+        assert "Application note" not in str(model.seen[0][1].content)
     finally:
         services.close()
 

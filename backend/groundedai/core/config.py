@@ -99,6 +99,10 @@ class Settings(BaseSettings):
     max_new_tokens: int = Field(default=384, ge=16, le=4096)
     temperature: float = Field(default=0.0, ge=0.0, le=2.0)
     max_context_chars: int = Field(default=6000, ge=500, le=200_000)
+    prompt_version: Literal["answer-v1", "answer-v2"] = Field(
+        default="answer-v2",
+        description="Answer prompt; answer-v1 reproduces the reports published before 2026-10-13.",
+    )
     max_concurrent_generations: int = Field(default=2, ge=1, le=64)
     generation_queue_timeout_s: float = Field(default=5.0, ge=0)
 

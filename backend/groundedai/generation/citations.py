@@ -43,6 +43,27 @@ _ABSTENTION_PHRASES = re.compile(
 _LEADING_ABSTENTION_RE = re.compile(
     r"^(?:\s*\[[^\]\n]{0,200}\])*\s*\[?\s*insuff?i?c?ient[\s_-]*evidence\b", re.IGNORECASE
 )
+# A first sentence that only says the sources lack the answer. Citations are stripped first,
+# so "Sources [S1] and [S3] do not provide ..." reads "Sources and do not provide ...".
+_REFUSAL_SENTENCE_RE = re.compile(
+    r"\b(?:the )?(?:provided |given )?sources?(?: \w+){0,3} (?:do|does) not (?:contain|provide|"
+    r"mention|include|state|say|specify|cover|address|give)\b"
+    r"|\b(?:does|do) not (?:explicitly |specifically |directly |clearly )?(?:state|mention|say|"
+    r"specify)\b"
+    r"|^\W*no (?:relevant |sufficient |specific )?(?:evidence|information)\b",
+    re.IGNORECASE,
+)
+_BRACKETED_RE = re.compile(r"\[([^\[\]\n]{2,200})\]")
+# Wording that says sources disagree. Used to score conflict questions; a lexical check,
+# so "the sources conflict" counts even if the two values are then reported wrongly.
+_CONFLICT_STATEMENT_RE = re.compile(
+    r"\b(?:disagree\w*|conflict\w*|contradict\w*|inconsisten\w*|discrepanc\w*)\b"
+    r"|\b(?:sources?|documents?|policies|they) (?:differ|give different|state different|"
+    r"say different)\b"
+    r"|\bbut (?:another|the other|a second"
+    r"|the (?:\w+ ){0,3}(?:faq|guide|policy|document|source))\b",
+    re.IGNORECASE,
+)
 
 SupportLabel = Literal["supported", "partial", "unsupported", "uncited"]
 GroundingLabel = Literal["grounded", "partially_grounded", "ungrounded"]
@@ -92,6 +113,52 @@ def labels_in(text: str) -> list[str]:
             if normalized not in labels:
                 labels.append(normalized)
     return labels
+
+
+def malformed_citations(text: str) -> list[str]:
+    """Bracketed text used like a citation that is not an ``[S#]`` label.
+
+    Small models often cite a document title (``[Travel Policy]``) instead of its label.
+    Such brackets are not counted as citations; this lists them so the failure is visible.
+    Bracketed abstention markers ("[Insufficient evidence: ...]") are not citations and are
+    left out.
+    """
+    found = []
+    for match in _BRACKETED_RE.finditer(text):
+        if CITATION_RE.fullmatch(match.group(0)):
+            continue
+        inner = match.group(1).strip()
+        if ABSTAIN_MARKER in inner.upper() or _ABSTENTION_PHRASES.search(inner):
+            continue
+        found.append(inner)
+    return found
+
+
+def opens_with_refusal(text: str) -> bool:
+    """Whether the reply's first sentence is a refusal, even if it carries a citation.
+
+    Small models write "The sources do not provide information about X. [S5]". The citation
+    used to make this count as an answer. A first sentence that states a figure is treated as
+    a (hedged) answer instead: "The date is not mentioned, but claims take 28 days [S1]."
+    """
+    sentences = split_answer_sentences(_BRACKETED_RE.sub(_keep_labels, text.strip()))
+    if not sentences:
+        return False
+    first = strip_citations(sentences[0])
+    refusal = bool(_REFUSAL_SENTENCE_RE.search(first) or _ABSTENTION_PHRASES.search(first))
+    return refusal and not extract_numbers(first)
+
+
+def _keep_labels(match: re.Match[str]) -> str:
+    """Unwrap bracketed non-label text ("[No evidence]" -> "No evidence."), keep [S#] labels."""
+    if CITATION_RE.fullmatch(match.group(0)):
+        return match.group(0)
+    return match.group(1).strip().rstrip(".") + ". "
+
+
+def states_conflict(text: str) -> bool:
+    """Whether the text says that sources disagree (lexical check)."""
+    return bool(_CONFLICT_STATEMENT_RE.search(strip_citations(text)))
 
 
 def strip_citations(text: str) -> str:
@@ -156,7 +223,9 @@ def parse_answer(raw: str, sources: Mapping[str, str]) -> ParsedAnswer:
     # A reply that *opens* with an abstention marker (after any bracketed labels or titles)
     # is an abstention even if it also cites sources, e.g. "[S1][S4]\nInsufficient evidence: ...".
     leading = _LEADING_ABSTENTION_RE.match(text)
-    phrase_abstention = not valid and bool(_ABSTENTION_PHRASES.search(text))
+    phrase_abstention = (not valid and bool(_ABSTENTION_PHRASES.search(text))) or (
+        opens_with_refusal(text)
+    )
     if explicit_abstention or leading or phrase_abstention:
         if explicit_abstention:
             tail = text[marker_index + len(ABSTAIN_MARKER) :]

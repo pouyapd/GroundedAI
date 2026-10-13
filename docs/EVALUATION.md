@@ -62,6 +62,30 @@ Citation validity and the support check are deliberately separate: a citation ca
 label exists) while the sentence is wrong or useless. The support check is lexical and cannot
 judge meaning.
 
+### Answers: measures added in scoring version 3 (2026-10-13)
+
+The definitions above are unchanged. These were added; `scripts/compare_generation_reports.py`
+recomputes them for older reports from their stored per-question rows (where a field was not
+stored, the measure is shown as missing rather than estimated).
+
+| Measure | Definition (denominator) |
+|---|---|
+| Answer rate, answerable | answered ÷ questions that expect an answer or a conflict statement (43) |
+| Incorrect refusal rate | refused ÷ the same 43 questions |
+| Correct abstention rate | refused ÷ questions that should be refused (10); same as abstention recall |
+| Conflict detection | conflict questions answered with both conflicting sources cited ÷ conflict questions (2) |
+| Conflict stated | conflict questions whose answer says the sources disagree (lexical check) ÷ conflict questions |
+| Citation-format compliance | answers with at least one valid `[S#]`, no invalid label and no bracketed non-label "citation" (e.g. a document title) ÷ answers |
+| Evidence support | cited sentences labelled "supported" by the lexical check ÷ cited sentences in answers |
+| Malformed citations | answers containing a bracketed non-label citation ÷ answers |
+| Invalid output rate | replies with only citation markers or no text ÷ all questions |
+| Timeouts | errors with code `model_timeout` |
+
+Two cautions apply to all of them. "Answered when an answer was expected" counts as correct
+behaviour even if the answer is wrong; key-fact recall and evidence support are the measures of
+content. And with 43 answerable, 10 should-refuse and 2 conflict questions, differences of a few
+questions are within noise; comparisons below use paired bootstrap intervals.
+
 ## Results: retrieval
 
 Report `retrieval-groundedai-synthetic-v1-20261011T141404Z` (2026-10-11, mains power).
