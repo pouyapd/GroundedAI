@@ -211,6 +211,17 @@ code,
   gap: 20px;
 }
 
+/* A page kept mounted while hidden (Ask) lays out like the main grid. */
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
+.page[hidden] {
+  display: none;
+}
+
 .page-title {
   margin: 0;
   font-size: 1.35rem;
@@ -297,9 +308,32 @@ code,
   background: var(--surface-2);
 }
 
-.btn:disabled {
+.btn:disabled,
+.segmented button:disabled,
+.chip:disabled,
+select:disabled,
+textarea:disabled,
+input:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+/* A short status line with an action, e.g. "settings changed: ask again". */
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 0.9rem;
+}
+
+.notice > span {
+  min-width: 0;
 }
 
 .btn-primary {

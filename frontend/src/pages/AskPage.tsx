@@ -1,17 +1,23 @@
 import { useEffect, useState, type FormEvent } from "react";
 
-import { findRecorded, StaticDemoApi, type RecordedAnswers } from "../api/demo";
+import { findRecorded, findRecording, StaticDemoApi, type RecordedAnswers } from "../api/demo";
 import type { AnswerResponse, RetrievalMode } from "../api/types";
 import { AnswerView } from "../components/AnswerView";
 import { ErrorBanner } from "../components/ErrorBanner";
 import { Loading } from "../components/Banner";
 import { useApp } from "../context";
 
-const MODES: { value: RetrievalMode; label: string }[] = [
-  { value: "hybrid", label: "Hybrid" },
-  { value: "lexical", label: "Lexical" },
-  { value: "dense", label: "Dense" },
+export const MODES: { value: RetrievalMode; label: string; description: string }[] = [
+  {
+    value: "hybrid",
+    label: "Hybrid",
+    description: "BM25 keyword search and embedding search, combined with reciprocal rank fusion.",
+  },
+  { value: "lexical", label: "Lexical", description: "BM25 keyword search only (no embeddings)." },
+  { value: "dense", label: "Dense", description: "Embedding similarity search only (no keyword matching)." },
 ];
+
+const TOP_K_VALUES = [3, 5, 8, 10];
 
 const LIVE_EXAMPLES = [
   "What does error code E07 mean on the SX-5 inverter?",
@@ -19,6 +25,18 @@ const LIVE_EXAMPLES = [
   "What are the payment terms for Aldervale suppliers?",
   "How many vacation days do contractors receive at Aldervale?",
 ];
+
+/** The settings a displayed answer was produced with. */
+interface AskedWith {
+  question: string;
+  mode: RetrievalMode;
+  topK: number;
+  diagnostics: boolean;
+}
+
+export function modeLabel(mode: RetrievalMode): string {
+  return MODES.find((item) => item.value === mode)?.label ?? mode;
+}
 
 export function AskPage() {
   const { api, status } = useApp();
@@ -29,7 +47,7 @@ export function AskPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const [response, setResponse] = useState<AnswerResponse | null>(null);
-  const [asked, setAsked] = useState("");
+  const [asked, setAsked] = useState<AskedWith | null>(null);
   const [recorded, setRecorded] = useState<RecordedAnswers | null>(null);
 
   const isDemo = api instanceof StaticDemoApi;
@@ -43,12 +61,14 @@ export function AskPage() {
   const trimmed = question.trim();
   const tooShort = trimmed.length < 3;
   const tooLong = trimmed.length > maxChars;
+  const topKValues = isDemo && recorded ? recorded.top_k_values : TOP_K_VALUES;
 
   async function ask(text: string) {
+    const settings: AskedWith = { question: text, mode, topK, diagnostics };
     setLoading(true);
     setError(null);
     setResponse(null);
-    setAsked(text);
+    setAsked(settings);
     try {
       setResponse(
         await api.query({ question: text, retrieval_mode: mode, top_k: topK, include_diagnostics: diagnostics }),
@@ -62,10 +82,14 @@ export function AskPage() {
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
-    if (!tooShort && !tooLong) void ask(trimmed);
+    if (!tooShort && !tooLong && !loading) void ask(trimmed);
   }
 
   const examples = isDemo ? (recorded?.items.map((item) => item.question) ?? []) : LIVE_EXAMPLES;
+  const settingsChanged =
+    asked !== null && !loading && (asked.mode !== mode || asked.topK !== topK || asked.diagnostics !== diagnostics);
+  const recordedItem = isDemo && recorded && asked ? findRecorded(recorded, asked.question) : undefined;
+  const recording = recordedItem && asked ? findRecording(recordedItem, asked.mode, asked.topK) : undefined;
 
   return (
     <>
@@ -105,8 +129,8 @@ export function AskPage() {
                   key={item.value}
                   type="button"
                   aria-pressed={mode === item.value}
+                  title={item.description}
                   onClick={() => setMode(item.value)}
-                  disabled={isDemo}
                 >
                   {item.label}
                 </button>
@@ -115,8 +139,8 @@ export function AskPage() {
           </div>
           <div className="field" style={{ minWidth: 100 }}>
             <label htmlFor="topk">Passages</label>
-            <select id="topk" value={topK} onChange={(event) => setTopK(Number(event.target.value))} disabled={isDemo}>
-              {[3, 5, 8, 10].map((value) => (
+            <select id="topk" value={topK} onChange={(event) => setTopK(Number(event.target.value))}>
+              {topKValues.map((value) => (
                 <option key={value} value={value}>
                   {value}
                 </option>
@@ -131,6 +155,13 @@ export function AskPage() {
             {loading ? <span className="spinner" /> : null} Ask question
           </button>
         </div>
+        <p className="small secondary" style={{ margin: "8px 0 0" }} id="mode-description">
+          {MODES.find((item) => item.value === mode)?.description} Up to {topK} passages go to the{" "}
+          {status?.generation.is_llm ? "language model" : "answer generator"}.
+          {isDemo
+            ? " Static demo: each combination of mode and passage count replays a recording made with exactly that setting."
+            : ""}
+        </p>
         {examples.length > 0 ? (
           <div style={{ marginTop: 16 }}>
             <p className="small secondary" style={{ margin: "0 0 6px" }}>
@@ -142,6 +173,7 @@ export function AskPage() {
                   key={example}
                   type="button"
                   className="chip"
+                  disabled={loading}
                   onClick={() => {
                     setQuestion(example);
                     void ask(example);
@@ -155,13 +187,26 @@ export function AskPage() {
         ) : null}
       </form>
 
+      {settingsChanged && asked ? (
+        <div className="notice" role="status">
+          <span>
+            The answer below used {modeLabel(asked.mode)} retrieval with {asked.topK} passages
+            {asked.diagnostics ? "" : ", without diagnostics"}. Your settings have changed.
+          </span>
+          <button type="button" className="btn btn-small" onClick={() => void ask(asked.question)}>
+            Ask again with {modeLabel(mode)}, {topK} passages
+          </button>
+        </div>
+      ) : null}
       {loading ? <Loading label="Retrieving passages and generating an answer" /> : null}
       {error ? <ErrorBanner error={error} /> : null}
-      {response ? (
+      {response && asked ? (
         <AnswerView
           response={response}
+          askedWith={{ mode: asked.mode, topK: asked.topK }}
           recordedNote={isDemo && recorded ? `${recorded.note} Recorded ${recorded.recorded_at}.` : undefined}
-          expected={isDemo && recorded ? findRecorded(recorded, asked)?.expected : undefined}
+          expected={recordedItem?.expected}
+          keyFactRecall={recording?.key_fact_recall ?? null}
         />
       ) : null}
     </>

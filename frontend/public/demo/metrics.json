@@ -1,5 +1,5 @@
 {
- "uptime_s": 13.3,
+ "uptime_s": 76.4,
  "documents_by_status": {
   "pending": 0,
   "processing": 0,
@@ -8,53 +8,39 @@
  },
  "documents_total": 14,
  "chunks_total": 87,
- "queries_total": 10,
+ "queries_total": 120,
  "queries_window_hours": 24,
- "queries_in_window": 10,
+ "queries_in_window": 120,
  "queries_by_status": {
-  "answered": 5,
-  "insufficient_evidence": 5
+  "answered": 59,
+  "insufficient_evidence": 61
  },
- "abstention_rate": 0.5,
+ "abstention_rate": 0.5083,
  "citation_valid_rate": 1.0,
  "latency_ms": {
   "total": {
-   "n": 10,
-   "mean": 22.031,
-   "p50": 18.706,
-   "p95": 42.026,
-   "max": 42.026
+   "n": 120,
+   "mean": 24.219,
+   "p50": 26.775,
+   "p95": 40.569,
+   "max": 105.732
   },
   "retrieval": {
-   "n": 10,
-   "mean": 17.347,
-   "p50": 14.941,
-   "p95": 26.248,
-   "max": 26.248
+   "n": 120,
+   "mean": 19.361,
+   "p50": 21.791,
+   "p95": 36.382,
+   "max": 100.31
   },
   "generation": {
-   "n": 10,
-   "mean": 3.587,
-   "p50": 2.416,
-   "p95": 13.724,
-   "max": 13.724
+   "n": 120,
+   "mean": 3.322,
+   "p50": 3.097,
+   "p95": 4.093,
+   "max": 17.875
   }
  },
  "hourly": [
-  {
-   "hour": "2026-10-11T20:00:00+00:00",
-   "queries": 0,
-   "answered": 0,
-   "abstained": 0,
-   "failed": 0
-  },
-  {
-   "hour": "2026-10-11T21:00:00+00:00",
-   "queries": 0,
-   "answered": 0,
-   "abstained": 0,
-   "failed": 0
-  },
   {
    "hour": "2026-10-11T22:00:00+00:00",
    "queries": 0,
@@ -204,9 +190,23 @@
   },
   {
    "hour": "2026-10-12T19:00:00+00:00",
-   "queries": 10,
-   "answered": 5,
-   "abstained": 5,
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T20:00:00+00:00",
+   "queries": 0,
+   "answered": 0,
+   "abstained": 0,
+   "failed": 0
+  },
+  {
+   "hour": "2026-10-12T21:00:00+00:00",
+   "queries": 120,
+   "answered": 59,
+   "abstained": 61,
    "failed": 0
   }
  ],
@@ -230,14 +230,14 @@
    "labels": {
     "status": "answered"
    },
-   "value": 5
+   "value": 59
   },
   {
    "name": "queries",
    "labels": {
     "status": "insufficient_evidence"
    },
-   "value": 5
+   "value": 61
   }
  ]
 }

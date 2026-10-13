@@ -19,8 +19,26 @@ const TABS = [
 type TabId = (typeof TABS)[number]["id"];
 
 function tabFromHash(): TabId {
-  const value = window.location.hash.replace(/^#\/?/, "");
+  let value = "";
+  try {
+    value = window.location.hash.replace(/^#\/?/, "");
+  } catch {
+    // An embedding frame may hide the location; start on the first tab.
+  }
   return (TABS.find((tab) => tab.id === value)?.id ?? "ask") as TabId;
+}
+
+/**
+ * Records the tab in the address bar so it can be bookmarked and Back works. The view is
+ * switched by React state before this runs, so a frame that blocks or ignores history
+ * changes (as some embedding hosts do) cannot stop navigation.
+ */
+function rememberTab(id: TabId): void {
+  try {
+    if (window.location.hash !== `#${id}`) window.history.pushState(null, "", `#${id}`);
+  } catch {
+    // History is unavailable here; the tab still changes.
+  }
 }
 
 export function createDefaultApi(): Api {
@@ -78,7 +96,11 @@ export function App({ api: injected }: { api?: Api }) {
   useEffect(() => {
     const onHash = () => setTab(tabFromHash());
     window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
+    window.addEventListener("popstate", onHash);
+    return () => {
+      window.removeEventListener("hashchange", onHash);
+      window.removeEventListener("popstate", onHash);
+    };
   }, []);
 
   const contextValue = useMemo(
@@ -102,8 +124,8 @@ export function App({ api: injected }: { api?: Api }) {
                 className="tab"
                 aria-current={tab === item.id ? "page" : undefined}
                 onClick={() => {
-                  window.location.hash = item.id;
                   setTab(item.id);
+                  rememberTab(item.id);
                 }}
               >
                 {item.label}
@@ -116,7 +138,13 @@ export function App({ api: injected }: { api?: Api }) {
                 API key
               </button>
             ) : null}
-            <button type="button" className="btn btn-small" onClick={cycleTheme} aria-label={`Theme: ${theme}`}>
+            <button
+              type="button"
+              className="btn btn-small"
+              onClick={cycleTheme}
+              aria-label={`Theme: ${theme}`}
+              title="Switch between the system theme, light and dark"
+            >
               Theme: {theme}
             </button>
           </div>
@@ -138,7 +166,10 @@ export function App({ api: injected }: { api?: Api }) {
             The key is kept in this browser tab only (session storage) and sent in the X-API-Key header.
           </Banner>
         ) : null}
-        {tab === "ask" ? <AskPage /> : null}
+        {/* Ask stays mounted so its answer and settings survive a visit to another tab. */}
+        <div className="page" hidden={tab !== "ask"}>
+          <AskPage />
+        </div>
         {tab === "documents" ? <DocumentsPage /> : null}
         {tab === "evaluation" ? <EvaluationPage /> : null}
         {tab === "operations" ? <OperationsPage /> : null}

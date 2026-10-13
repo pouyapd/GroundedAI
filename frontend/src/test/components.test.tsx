@@ -72,7 +72,6 @@ describe("AnswerView", () => {
           behavior: "abstain",
           reference_answer: null,
           notes: "General knowledge; not in the documents.",
-          key_fact_recall: null,
         }}
       />,
     );
@@ -80,6 +79,11 @@ describe("AnswerView", () => {
     expect(screen.getByText("It answered, but the dataset expects a refusal.")).toBeInTheDocument();
     expect(screen.getByText(/General knowledge; not in the documents\./)).toBeInTheDocument();
     expect(screen.getByText(/category out of scope/)).toBeInTheDocument();
+  });
+
+  it("states which retrieval settings produced the answer", () => {
+    render(<AnswerView response={ANSWER} askedWith={{ mode: "lexical", topK: 8 }} />);
+    expect(screen.getByText("Lexical (BM25) retrieval · 2 of up to 8 passages used")).toBeInTheDocument();
   });
 
   it("expands the full passage on demand", async () => {

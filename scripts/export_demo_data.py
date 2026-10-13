@@ -38,6 +38,11 @@ from groundedai.services.container import build_services  # noqa: E402
 # Working examples first, then the known failure modes (wrong abstention, conflict not flagged,
 # and a confident answer to an out-of-scope question that still has a valid citation).
 DEMO_QUESTIONS = ["q013", "q054", "q016", "q031", "q039", "q046", "q052", "q009", "q025", "q055"]
+# Every question is recorded with every retrieval mode and passage count offered in the UI, so
+# those controls replay a real recording made with exactly that setting.
+DEMO_MODES = ["hybrid", "lexical", "dense"]
+DEMO_TOP_K = [3, 5, 8, 10]
+DEFAULTS = {"retrieval_mode": "hybrid", "top_k": 5}
 OUT_DIR = REPO_ROOT / "frontend" / "public" / "demo"
 
 
@@ -47,17 +52,20 @@ def write_json(path: Path, data: Any) -> None:
     path.write_text(text, encoding="utf-8", newline="\n")
 
 
-def expectation(question: EvalQuestion, answer: str | None) -> dict[str, Any]:
+def expectation(question: EvalQuestion) -> dict[str, Any]:
     """The dataset's expected result, shown next to the recording so failures are visible."""
-    recall = key_fact_recall(answer, question.answer_must_include) if answer else None
     return {
         "question_id": question.id,
         "category": question.category,
         "behavior": question.expected_behavior,
         "reference_answer": question.reference_answer,
         "notes": question.notes,
-        "key_fact_recall": round(recall, 4) if recall is not None else None,
     }
+
+
+def fact_recall(question: EvalQuestion, answer: str | None) -> float | None:
+    recall = key_fact_recall(answer, question.answer_must_include) if answer else None
+    return round(recall, 4) if recall is not None else None
 
 
 def main() -> int:
@@ -95,18 +103,40 @@ def main() -> int:
             items = []
             for question_id in DEMO_QUESTIONS:
                 question = questions[question_id]
-                response = services.qa.answer(
-                    QueryRequest(question=question.question, include_diagnostics=True)
-                )
-                answer = response.answer if response.status == "answered" else None
+                recordings = []
+                for mode in DEMO_MODES:
+                    for top_k in DEMO_TOP_K:
+                        response = services.qa.answer(
+                            QueryRequest(
+                                question=question.question,
+                                retrieval_mode=mode,  # type: ignore[arg-type]
+                                top_k=top_k,
+                                include_diagnostics=True,
+                            )
+                        )
+                        answer = response.answer if response.status == "answered" else None
+                        recordings.append(
+                            {
+                                "retrieval_mode": mode,
+                                "top_k": top_k,
+                                "key_fact_recall": fact_recall(question, answer),
+                                "response": response.model_dump(mode="json"),
+                            }
+                        )
+                statuses = {
+                    f"{r['retrieval_mode']}/{r['top_k']}": r["response"]["status"]
+                    for r in recordings
+                }
+                default = statuses["hybrid/5"]
+                changed = {key: value for key, value in statuses.items() if value != default}
+                print(f"{question_id}: hybrid/5 {default}; differs: {changed or 'none'}")
                 items.append(
                     {
                         "question": question.question,
-                        "response": response.model_dump(mode="json"),
-                        "expected": expectation(question, answer),
+                        "expected": expectation(question),
+                        "recordings": recordings,
                     }
                 )
-                print(f"{question_id}: {response.status}")
 
             with session_scope(services.session_factory) as session:
                 rows, total = DocumentRepository(session).page(offset=0, limit=100)
@@ -129,7 +159,17 @@ def main() -> int:
         f"Answers were recorded from GroundedAI running locally with {kind} and "
         f"{embedding} embeddings, then replayed verbatim."
     )
-    write_json(OUT_DIR / "answers.json", {"recorded_at": exported_at, "note": note, "items": items})
+    write_json(
+        OUT_DIR / "answers.json",
+        {
+            "recorded_at": exported_at,
+            "note": note,
+            "modes": DEMO_MODES,
+            "top_k_values": DEMO_TOP_K,
+            "defaults": DEFAULTS,
+            "items": items,
+        },
+    )
     write_json(
         OUT_DIR / "documents.json", {"items": documents, "total": total, "offset": 0, "limit": 100}
     )

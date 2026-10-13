@@ -41,9 +41,11 @@ export function OperationsPage() {
             and timings only; the question text is not stored.
           </p>
         </div>
-        <button type="button" className="btn btn-small" onClick={load}>
-          Refresh
-        </button>
+        {api.mode === "live" ? (
+          <button type="button" className="btn btn-small" onClick={load}>
+            Refresh
+          </button>
+        ) : null}
       </div>
 
       {api.mode === "static-demo" ? (

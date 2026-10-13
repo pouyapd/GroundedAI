@@ -1,8 +1,59 @@
 import socket
 
+import pytest
 from fastapi.testclient import TestClient
 
-from tests.conftest import INJECTION_TEXT, TRAVEL_TEXT, upload
+from tests.conftest import INJECTION_TEXT, SECURITY_TEXT, TRAVEL_TEXT, upload
+
+
+@pytest.mark.parametrize("mode", ["lexical", "dense", "hybrid"])
+def test_query_uses_the_requested_retrieval_mode(client: TestClient, mode: str) -> None:
+    """The mode chosen in the UI must reach retrieval, not just change a label."""
+    upload(client, "travel.txt", TRAVEL_TEXT.encode())
+    upload(client, "security.txt", SECURITY_TEXT.encode())
+    body = client.post(
+        "/api/v1/query",
+        json={
+            "question": "What is the hotel limit per night?",
+            "retrieval_mode": mode,
+            "include_diagnostics": True,
+        },
+    ).json()
+    diagnostics = body["retrieval"]
+    assert diagnostics["mode"] == mode
+    if mode == "lexical":
+        assert diagnostics["lexical_candidates"] > 0
+        assert diagnostics["dense_candidates"] == 0
+        assert diagnostics["embedding_model"] is None
+    elif mode == "dense":
+        assert diagnostics["dense_candidates"] > 0
+        assert diagnostics["lexical_candidates"] == 0
+    else:
+        assert diagnostics["lexical_candidates"] > 0
+        assert diagnostics["dense_candidates"] > 0
+        assert diagnostics["fusion"] == "rrf"
+    assert body["sources"], mode
+
+
+def test_query_passage_count_limits_the_sources(client: TestClient) -> None:
+    upload(client, "travel.txt", TRAVEL_TEXT.encode())
+    upload(client, "security.txt", SECURITY_TEXT.encode())
+
+    def sources(top_k: int) -> int:
+        request = {"question": "hotel limit, passwords", "retrieval_mode": "dense", "top_k": top_k}
+        body = client.post("/api/v1/query", json=request).json()
+        return len(body["sources"])
+
+    assert sources(1) == 1
+    assert sources(2) == 2
+
+
+def test_query_returns_diagnostics_only_when_requested(client: TestClient) -> None:
+    upload(client, "travel.txt", TRAVEL_TEXT.encode())
+    question = {"question": "What is the hotel limit per night?"}
+    assert client.post("/api/v1/query", json=question).json()["retrieval"] is None
+    with_diagnostics = client.post("/api/v1/query", json={**question, "include_diagnostics": True})
+    assert with_diagnostics.json()["retrieval"]["mode"] == "hybrid"
 
 
 def test_query_returns_grounded_answer(client: TestClient) -> None:
