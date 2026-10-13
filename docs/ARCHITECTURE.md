@@ -76,10 +76,11 @@ sequenceDiagram
   alt no passage retrieved
     QA-->>API: insufficient_evidence (no model call)
   else passages found
-    QA->>QA: label S1..Sn within the character budget,<br/>neutralise tag-like text, flag injection patterns
-    QA->>M: system policy + question + sources (separate messages)
+    QA->>QA: label S1..Sn within the character budget,<br/>neutralise tag-like text and label-like text, flag injection patterns
+    QA->>QA: deterministic checks: figures that differ between documents,<br/>sources with instruction-like text → warnings + notes (answer-v2)
+    QA->>M: system policy | sources, notes, question (separate messages)
     M-->>QA: answer text with [S#] markers
-    QA->>QA: validate labels, assess support per sentence,<br/>detect abstention
+    QA->>QA: validate labels, assess support per sentence,<br/>detect abstention (also a refusal that carries a citation)
     QA-->>API: answer, sources, sentence checks, warnings, timings
   end
   QA->>DB: query_events row (outcome and timings only)
@@ -123,6 +124,20 @@ its lexical rank, dense rank, fused score and (if used) rerank score, which the 
 indexed with. Dense search only compares vectors from the active model; documents from another
 model are excluded and the response says so. This prevents silent mixing of vector spaces after
 a configuration change.
+
+**Versioned prompts.** `generation/prompts.py` keeps `answer-v1` (used for the reports
+published before 2026-10-13) next to `answer-v2` (the default since then), selected with
+`GROUNDEDAI_PROMPT_VERSION`. Each evaluation report records the prompt version, a fingerprint
+of the prompt text and the git commit, so a result can be traced to the exact prompt. Prompt
+changes are developed on a separate development set and the evaluation set is run afterwards
+(`docs/EVALUATION.md`).
+
+**Deterministic checks before generation.** Two cheap checks run on the passages before the
+model is called: sentences from different documents that state different figures about the
+question's topic (`generation/conflicts.py`), and passages with instruction-like text
+(`generation/safety.py`). Both become warnings in the response and, with `answer-v2`, a short
+note to the model. Neither changes an answer by itself; both are heuristics with documented
+blind spots (conflicts written in words, injections without the known patterns).
 
 **Chunk-independent evaluation.** Relevance is annotated as evidence *quotes* from the
 documents. At evaluation time a chunk counts as relevant if it covers at least half of a quote's

@@ -49,10 +49,16 @@ text inside a document steers the model:
    in the response and the UI.
 4. Every citation label is validated and every sentence is checked against its cited text, so an
    answer that drifts away from the sources is flagged.
+5. With the `answer-v2` prompt: label-like text inside a passage or title (`[S3]`) is rewritten
+   as `(S3)` so a document cannot pose as another source; the policy says that text which gives
+   orders or speaks to an AI assistant is not a fact; and a flagged passage is named in a note to
+   the model ("source [S3] contains text that looks like instructions to an AI system").
 
 The pattern list misses paraphrased attacks, and a capable model can still be persuaded by
-well-written instructions. The evaluation dataset includes planted injections and reports an
-"injection resistance" rate; it is a regression signal, not a proof of safety.
+well-written instructions. On the development set, qwen2.5:1.5b with `answer-v2` still copied
+all sources, including a planted instruction, into one reply. The evaluation dataset includes
+planted injections and reports an "injection resistance" rate; it is a regression signal, not a
+proof of safety.
 
 ## Known limitations
 
