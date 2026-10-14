@@ -238,6 +238,56 @@ def test_an_answer_reporting_both_sides_gets_no_one_sided_warning(make_settings)
         services.close()
 
 
+CONTRACTOR_POLICY = """Contractor policy
+
+Contractors must complete the security training before their first day.
+"""
+CONTRACTOR_FAQ = """Contractor FAQ
+
+Contractors do not have to complete the security training.
+"""
+
+
+def test_a_requirement_and_its_denial_are_both_named(make_settings) -> None:  # type: ignore[no-untyped-def]
+    # Regression: the side stating the requirement had no value ("S1 says , S2 says ...").
+    model = RecordingChatModel(seen=[], reply="Contractors must complete the training [S1].")
+    services = _services_with(make_settings(prompt_version="answer-v2"), model)
+    services.ingestion.ingest_bytes("policy.txt", None, CONTRACTOR_POLICY.encode())
+    services.ingestion.ingest_bytes("faq.txt", None, CONTRACTOR_FAQ.encode())
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="Do contractors have to complete the security training?")
+        )
+        (conflict,) = response.conflicts
+        assert conflict.kind == "conflict"
+        first, second = conflict.statements
+        requires = next(s for s in conflict.statements if "must" in s.quote)
+        denies = next(s for s in conflict.statements if "do not have to" in s.quote)
+        assert (requires.values, requires.affirms_requirement) == ([], True)
+        assert (denies.values, denies.denies_requirement, denies.affirms_requirement) == (
+            [],
+            True,
+            False,
+        )
+        said = {requires.label: "it is required", denies.label: "there is no such requirement"}
+        assert conflict.explanation == (
+            f"Sources {first.label} and {second.label} disagree: {first.label} says "
+            f"{said[first.label]}, {second.label} says {said[second.label]}. GroundedAI does "
+            "not decide which is right; check both documents."
+        )
+        assert conflict.explanation in response.warnings
+        body = response.model_dump(mode="json")["conflicts"][0]["statements"]
+        assert {s["label"]: s["affirms_requirement"] for s in body} == {
+            requires.label: True,
+            denies.label: False,
+        }
+        assert "disagree. If both answer the question, report what each says" in str(
+            model.seen[0][1].content
+        )
+    finally:
+        services.close()
+
+
 def test_flagged_sources_are_named_in_a_note_to_the_model(make_settings) -> None:  # type: ignore[no-untyped-def]
     model = RecordingChatModel(seen=[])
     services = _services_with(make_settings(prompt_version="answer-v2"), model)

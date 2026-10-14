@@ -150,6 +150,8 @@ export interface ConflictStatementOut {
   quote_end: number;
   values: string[];
   denies_requirement: boolean;
+  /** Absent in recordings made before 2026-10-14's fix. */
+  affirms_requirement?: boolean;
   dates: string[];
 }
 

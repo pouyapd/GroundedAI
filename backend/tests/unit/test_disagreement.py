@@ -91,8 +91,41 @@ def test_a_requirement_and_its_denial_are_a_conflict() -> None:
         chunk(2, "newsletter", "Bikes no longer need to be registered with the porter."),
     )
     assert found.kind == "conflict"
-    assert "no such requirement" in found.explanation()
+    # Regression: the side that states the requirement was printed as "S1 says ,".
+    assert found.explanation() == (
+        "Sources S1 and S2 disagree: S1 says it is required, S2 says there is no such "
+        "requirement. GroundedAI does not decide which is right; check both documents."
+    )
+    assert (found.first.values, found.first.affirms, found.first.denies) == ((), True, False)
+    assert (found.second.values, found.second.denies) == ((), True)
     assert "report what each says" in found.note()
+
+
+def test_a_requirement_stated_second_is_still_named() -> None:
+    (found,) = check(
+        "Do contractors have to complete the security training?",
+        chunk(1, "faq", "Contractors do not have to complete the security training."),
+        chunk(2, "policy", "Contractors must complete the security training before day one."),
+    )
+    assert found.explanation() == (
+        "Sources S1 and S2 disagree: S1 says there is no such requirement, S2 says it is "
+        "required. GroundedAI does not decide which is right; check both documents."
+    )
+    assert (found.second.values, found.second.affirms) == ((), True)
+    # "do not have to" contains "have to" but is a denial, not a requirement.
+    assert (found.first.denies, found.first.affirms) == (True, False)
+
+
+def test_a_value_is_named_before_a_requirement() -> None:
+    (found,) = check(
+        "How often must the fire alarm be tested?",
+        chunk(1, "manual", "The fire alarm must be tested every 6 months."),
+        chunk(2, "memo", "The fire alarm is not on a fixed schedule for testing."),
+    )
+    # The first side states a value and a requirement; its value is what the reader needs.
+    assert found.explanation().startswith(
+        "Sources S1 and S2 disagree: S1 says every 6 months, S2 says there is no such requirement."
+    )
 
 
 def test_a_fixed_interval_and_no_fixed_schedule_are_a_conflict() -> None:

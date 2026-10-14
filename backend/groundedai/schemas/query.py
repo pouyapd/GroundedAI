@@ -174,6 +174,9 @@ class ConflictStatementOut(BaseModel):
     quote_end: int
     values: list[str] = Field(description="The values it states, as written")
     denies_requirement: bool = Field(description='It says there is none ("no fixed schedule")')
+    affirms_requirement: bool = Field(
+        default=False, description='It says something is required ("must", "is required")'
+    )
     dates: list[str] = Field(description="Dates that say when it applies, if any")
 
 

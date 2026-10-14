@@ -1,6 +1,14 @@
-import type { ConflictOut } from "../api/types";
+import type { ConflictOut, ConflictStatementOut } from "../api/types";
 import { Badge } from "./Badge";
 import { EvidenceQuote } from "./ClaimCheck";
+
+/** What one side states: its values, or whether it says something is (not) required. */
+function statedValue(statement: ConflictStatementOut): string {
+  if (statement.values.length > 0) return statement.values.join(", ");
+  if (statement.denies_requirement) return "not required";
+  if (statement.affirms_requirement) return "required";
+  return "no value stated";
+}
 
 /** Retrieved passages that disagree. Both sides are shown; nothing is resolved. */
 export function Disagreements({ conflicts, onCite }: { conflicts: ConflictOut[]; onCite: (label: string) => void }) {
@@ -26,9 +34,7 @@ export function Disagreements({ conflicts, onCite }: { conflicts: ConflictOut[];
                   onCite={onCite}
                 />
                 <p className="small secondary claim-note">
-                  {statement.denies_requirement && statement.values.length === 0
-                    ? "Says there is no such requirement."
-                    : `Value: ${statement.values.join(", ")}`}
+                  {`Value: ${statedValue(statement)}`}
                   {statement.dates.length > 0 ? ` · Dates: ${statement.dates.join("; ")}` : ""}
                   {conflict.answer_reports.includes(statement.label) ? " · The answer reports this value." : ""}
                 </p>

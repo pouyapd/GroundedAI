@@ -164,9 +164,18 @@ class Statement:
     focus: int  # asked words it contains
     qualifiers: dict[str, frozenset[str]] = field(default_factory=dict)
     dates: tuple[str, ...] = ()
+    affirms: bool = False  # "must", "is required"
 
     def value_texts(self) -> list[str]:
         return [value.text for value in self.values]
+
+    def stance(self) -> str:
+        """What the statement says about the asked property, for the explanation."""
+        if self.values:
+            return ", ".join(self.value_texts())
+        if self.denies:
+            return "there is no such requirement"
+        return "it is required"  # a statement without a value either denies or affirms
 
 
 @dataclass(frozen=True, slots=True)
@@ -180,9 +189,7 @@ class Disagreement:
         return self.first.label, self.second.label
 
     def _side(self, statement: Statement) -> str:
-        if statement.denies and not statement.values:
-            return f"{statement.label} says there is no such requirement"
-        return f"{statement.label} says {', '.join(statement.value_texts())}"
+        return f"{statement.label} says {statement.stance()}"
 
     def explanation(self) -> str:
         if self.kind == "different_dates":
@@ -276,7 +283,10 @@ def _statements(question: str, focus: set[str], sources: Sequence[SourceBlock]) 
                 and (kinds is None or quantity.kind in kinds)
             )
             denies = bool(_NEGATED_REQUIREMENT_RE.search(sentence))
-            affirms = bool(_AFFIRMED_REQUIREMENT_RE.search(sentence))
+            # "do not have to" contains "have to": a requirement counts only outside a denial.
+            affirms = bool(
+                _AFFIRMED_REQUIREMENT_RE.search(_NEGATED_REQUIREMENT_RE.sub(" ", sentence))
+            )
             if not values and not denies and not affirms:
                 continue
             span = find_normalized_span(block.text, sentence) or (0, 0)
@@ -298,6 +308,7 @@ def _statements(question: str, focus: set[str], sources: Sequence[SourceBlock]) 
                         if words & names
                     },
                     dates=tuple(match.group(0) for match in _SCOPED_DATE_RE.finditer(sentence)),
+                    affirms=affirms,
                 )
             )
     return statements

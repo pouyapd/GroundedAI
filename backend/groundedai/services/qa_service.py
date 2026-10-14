@@ -263,6 +263,7 @@ def conflicts_out(
                     quote_end=statement.end,
                     values=statement.value_texts(),
                     denies_requirement=statement.denies,
+                    affirms_requirement=statement.affirms,
                     dates=list(statement.dates),
                 )
             )

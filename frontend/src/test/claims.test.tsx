@@ -95,6 +95,41 @@ describe("claim check in the answer view", () => {
     expect(within(panel).getByText(/Value: €120 · Dates: updated May 2025/)).toBeInTheDocument();
   });
 
+  it("names both sides when one passage requires something and the other says it is not required", () => {
+    // Regression: the requiring side was shown as "S1 says ," and "Value:" with nothing after it.
+    const explanation =
+      "Sources S1 and S2 disagree: S1 says it is required, S2 says there is no such requirement. GroundedAI does not decide which is right; check both documents.";
+    const side = { ...EVIDENCE, quote_start: 0, values: [], dates: [] };
+    const requirement: AnswerResponse = {
+      ...CHECKED,
+      conflicts: [
+        {
+          kind: "conflict",
+          explanation,
+          answer_reports: [],
+          statements: [
+            { ...side, label: "S1", quote: "Contractors must complete the security training.", quote_end: 48, denies_requirement: false, affirms_requirement: true },
+            {
+              ...side,
+              label: "S2",
+              document_id: "doc_y",
+              document_title: "Contractor FAQ",
+              quote: "Contractors do not have to complete the security training.",
+              quote_end: 58,
+              denies_requirement: true,
+              affirms_requirement: false,
+            },
+          ],
+        },
+      ],
+    };
+    render(<AnswerView response={requirement} />);
+    const panel = screen.getByRole("region", { name: "Retrieved passages that disagree" });
+    expect(within(panel).getByText(explanation)).toBeInTheDocument();
+    const values = within(panel).getAllByText(/^Value:/).map((element) => element.textContent);
+    expect(values).toEqual(["Value: required", "Value: not required"]);
+  });
+
   it("scrolls to a source when its label in a quote is clicked", async () => {
     const scroll = vi.fn();
     Element.prototype.scrollIntoView = scroll;

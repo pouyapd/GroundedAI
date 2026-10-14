@@ -138,8 +138,9 @@ Field meanings:
   (figures and words, not meaning).
 * `conflicts[]` (added 2026-10-14): passages from different documents that disagree about what was
   asked. `kind` is `conflict` or `different_dates`; each of the two `statements` has its quote,
-  values, dates and whether it denies a requirement; `answer_reports` lists the labels whose value
-  the answer states. Nothing is resolved.
+  values, dates, whether it denies a requirement (`denies_requirement`, "do not have to") and
+  whether it states one (`affirms_requirement`, "must"; a "have to" inside a denial does not
+  count); `answer_reports` lists the labels whose value the answer states. Nothing is resolved.
 * `sources[].supports_claims` (added 2026-10-14): indices of the claims a passage is evidence for.
 * `unverified_answer`: set only with `GROUNDEDAI_UNVERIFIED_ANSWERS=withhold`, when no statement
   could be matched to a passage and the answer was therefore returned as `insufficient_evidence`.
