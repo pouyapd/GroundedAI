@@ -1,6 +1,69 @@
 {
  "items": [
   {
+   "id": "generation-extractive-demo-groundedai-synthetic-v1-20261014T074532Z",
+   "kind": "generation",
+   "title": "Answer evaluation: extractive-demo (extractive-demo-v1, answer-v2)",
+   "generated_at": "2026-10-14T07:45:32+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v2"
+  },
+  {
+   "id": "generation-extractive-demo-groundedai-synthetic-v1-20261014T074459Z",
+   "kind": "generation",
+   "title": "Answer evaluation: extractive-demo (extractive-demo-v1, answer-v2)",
+   "generated_at": "2026-10-14T07:44:59+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v2"
+  },
+  {
+   "id": "generation-extractive-demo-groundedai-synthetic-v1-20261014T074413Z",
+   "kind": "generation",
+   "title": "Answer evaluation: extractive-demo (extractive-demo-v1, answer-v2)",
+   "generated_at": "2026-10-14T07:44:13+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v2"
+  },
+  {
+   "id": "retrieval-groundedai-synthetic-v1-20261014T074322Z",
+   "kind": "retrieval",
+   "title": "Retrieval benchmark at the application's default settings (800/120-character chunks, 20 candidates)",
+   "generated_at": "2026-10-14T07:43:22+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 5,
+   "prompt_version": null
+  },
+  {
+   "id": "revalidated-generation-huggingface-local-groundedai-synthetic-v1-20261013T121258Z-20261014T074126Z",
+   "kind": "generation",
+   "title": "Recorded outputs re-checked: huggingface-local (Qwen/Qwen2.5-0.5B-Instruct, answer-v2)",
+   "generated_at": "2026-10-14T07:41:26+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v2"
+  },
+  {
+   "id": "revalidated-generation-ollama-groundedai-synthetic-v1-20261013T113618Z-20261014T074112Z",
+   "kind": "generation",
+   "title": "Recorded outputs re-checked: ollama (qwen2.5:1.5b, answer-v2)",
+   "generated_at": "2026-10-14T07:41:12+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v2"
+  },
+  {
+   "id": "revalidated-generation-ollama-groundedai-synthetic-v1-20261013T112505Z-20261014T074058Z",
+   "kind": "generation",
+   "title": "Recorded outputs re-checked: ollama (qwen2.5:1.5b, answer-v1)",
+   "generated_at": "2026-10-14T07:40:58+00:00",
+   "dataset": "groundedai-synthetic-v1",
+   "n_configurations": 1,
+   "prompt_version": "answer-v1"
+  },
+  {
    "id": "retrieval-groundedai-synthetic-v1-20261013T121455Z",
    "kind": "retrieval",
    "title": "Retrieval benchmark (full profile: local sentence-transformers models)",
