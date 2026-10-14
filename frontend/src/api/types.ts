@@ -69,6 +69,8 @@ export interface SourceOut {
   truncated: boolean;
   injection_flags: string[];
   scores: ChunkScores;
+  /** Indices into `claims` of the claims this passage is evidence for (absent before 2026-10-14). */
+  supports_claims?: number[];
 }
 
 export type SupportLabel = "supported" | "partial" | "unsupported" | "uncited";
@@ -97,6 +99,67 @@ export interface RetrievalDiagnostics {
 export type AnswerStatus = "answered" | "insufficient_evidence" | "invalid_output";
 export type Grounding = "grounded" | "partially_grounded" | "ungrounded";
 
+export type ClaimStatus = "supported" | "wrong_source" | "added_source" | "partial" | "unsupported";
+export type Verdict = "verified" | "partially_verified" | "unverified" | "not_applicable";
+
+export interface EvidenceOut {
+  label: string;
+  chunk_id: string;
+  document_id: string;
+  document_title: string;
+  page_start: number | null;
+  page_end: number | null;
+  quote: string;
+  quote_start: number;
+  quote_end: number;
+}
+
+export interface ClaimOut {
+  text: string;
+  citations: string[];
+  status: ClaimStatus;
+  evidence: EvidenceOut[];
+  missing_figures: string[];
+  word_overlap: number;
+  flags: string[];
+}
+
+export interface VerificationOut {
+  verdict: Verdict;
+  claims: number;
+  supported: number;
+  wrong_source: number;
+  added_source: number;
+  partial: number;
+  unsupported: number;
+  notes: number;
+  references_standard: number;
+  references_variant: number;
+  method: string;
+}
+
+export interface ConflictStatementOut {
+  label: string;
+  chunk_id: string;
+  document_id: string;
+  document_title: string;
+  page_start: number | null;
+  page_end: number | null;
+  quote: string;
+  quote_start: number;
+  quote_end: number;
+  values: string[];
+  denies_requirement: boolean;
+  dates: string[];
+}
+
+export interface ConflictOut {
+  kind: "conflict" | "different_dates";
+  statements: ConflictStatementOut[];
+  explanation: string;
+  answer_reports: string[];
+}
+
 export interface AnswerResponse {
   status: AnswerStatus;
   answer: string | null;
@@ -123,6 +186,11 @@ export interface AnswerResponse {
     cost_note: string;
   };
   retrieval: RetrievalDiagnostics | null;
+  // Claim and disagreement checks (2026-10-14); absent in older recordings.
+  claims?: ClaimOut[];
+  verification?: VerificationOut | null;
+  conflicts?: ConflictOut[];
+  unverified_answer?: string | null;
 }
 
 export interface ComponentStatus {
@@ -268,6 +336,16 @@ export interface GenerationSummary {
   incorrect_refusal_rate?: number | null;
   citation_format_compliance?: number | null;
   evidence_support_rate?: number | null;
+  // Scoring version 4 (2026-10-14); absent in older reports.
+  claims?: number;
+  claim_match_rate?: number | null;
+  cited_claim_precision?: number | null;
+  wrong_source_rate?: number | null;
+  unsupported_claim_rate?: number | null;
+  answers_verified_rate?: number | null;
+  key_fact_attribution?: number | null;
+  conflict_surfaced_rate?: number | null;
+  false_conflict_rate?: number | null;
 }
 
 export interface GenerationReport {
@@ -278,7 +356,15 @@ export interface GenerationReport {
   measured: boolean;
   /** Absent in reports written before 2026-10-13, which all used answer-v1. */
   prompt_version?: string;
-  run_config?: { prompt_fingerprint?: string };
+  run_config?: { prompt_fingerprint?: string; conflict_check?: string; claim_check?: string };
+  /** Present when recorded model outputs were replayed through later checks (no model run). */
+  revalidation?: {
+    source_report_id: string;
+    source_generated_at: string;
+    model_run: false;
+    model_input_changed: string[];
+    note: string;
+  };
   dataset: { name: string; version: string; questions_evaluated: number };
   provider: { name: string; model: string; is_llm: boolean; revision?: string | null; runtime?: string };
   retrieval: { mode: string; top_k: number; embedding_model: string; reranker: string | null };

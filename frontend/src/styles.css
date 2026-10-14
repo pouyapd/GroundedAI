@@ -924,3 +924,67 @@ th.num {
   color: var(--text-3);
   font-size: 0.82rem;
 }
+
+/* ---------------------------------------------------------------- claim check */
+.claim-list {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  display: grid;
+  gap: 12px;
+  font-size: 0.92rem;
+}
+
+.claim-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: baseline;
+}
+
+.claim-head .badge {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.claim-note {
+  margin: 4px 0 0;
+}
+
+.evidence {
+  margin: 6px 0 0;
+  padding: 6px 10px;
+  border-left: 3px solid var(--border);
+  background: var(--surface-2);
+  border-radius: 0 6px 6px 0;
+  display: grid;
+  gap: 2px;
+  overflow-wrap: anywhere;
+}
+
+.evidence-source {
+  font-size: 0.8rem;
+  color: var(--text-2);
+}
+
+.disagreements {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.disagreement {
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--warning-soft);
+}
+
+.disagreement p {
+  margin: 6px 0 0;
+}
+
+.disagreement-sides {
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}

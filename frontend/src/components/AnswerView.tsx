@@ -3,12 +3,19 @@ import { useMemo, useState } from "react";
 import { compareWithExpected, type RecordedExpectation } from "../api/demo";
 import type { AnswerResponse, RetrievalMode } from "../api/types";
 import { formatMs } from "../lib/format";
-import { AnswerStatusBadge, Badge, SupportBadge } from "./Badge";
+import { AnswerStatusBadge, Badge, SupportBadge, VerdictBadge } from "./Badge";
 import { Banner } from "./Banner";
 import { CitedText } from "./CitedText";
+import { ClaimCheck } from "./ClaimCheck";
+import { Disagreements } from "./Disagreements";
 import { SourceCard } from "./SourceCard";
 
 const MODE_NAMES: Record<RetrievalMode, string> = { hybrid: "Hybrid", lexical: "Lexical (BM25)", dense: "Dense" };
+const GROUNDING_TEXT = {
+  grounded: "every sentence cited",
+  partially_grounded: "some sentences cited",
+  ungrounded: "no valid citations",
+} as const;
 
 function ExpectedResult({
   expected,
@@ -69,8 +76,13 @@ export function AnswerView({
 }) {
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const validLabels = useMemo(() => new Set(response.citation_check.valid), [response]);
-  const cited = response.sources.filter((source) => source.cited);
-  const uncited = response.sources.filter((source) => !source.cited);
+  const claims = response.claims ?? [];
+  const conflicts = response.conflicts ?? [];
+  const verification = response.verification ?? null;
+  const isEvidence = (source: AnswerResponse["sources"][number]) =>
+    source.cited || (source.supports_claims?.length ?? 0) > 0;
+  const cited = response.sources.filter(isEvidence);
+  const uncited = response.sources.filter((source) => !isEvidence(source));
   const showCite = (label: string) => {
     setHighlighted(label);
     document.getElementById(`source-${label}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -80,7 +92,11 @@ export function AnswerView({
     <section className="card" aria-labelledby="answer-heading">
       <div className="card-header">
         <h2 id="answer-heading">Answer</h2>
-        <AnswerStatusBadge status={response.status} grounding={response.grounding} />
+        {response.status === "answered" && verification ? (
+          <VerdictBadge verdict={verification.verdict} />
+        ) : (
+          <AnswerStatusBadge status={response.status} grounding={response.grounding} />
+        )}
       </div>
 
       {recordedNote ? (
@@ -103,6 +119,14 @@ export function AnswerView({
       {response.status === "invalid_output" ? (
         <p className="answer-text">The model returned no usable answer. The retrieved passages are listed below.</p>
       ) : null}
+      {response.status === "insufficient_evidence" && response.unverified_answer ? (
+        <details style={{ marginTop: 10 }}>
+          <summary>Show the withheld answer (none of its statements was found in the sources)</summary>
+          <p className="small secondary">{response.unverified_answer}</p>
+        </details>
+      ) : null}
+
+      {conflicts.length > 0 ? <Disagreements conflicts={conflicts} onCite={showCite} /> : null}
 
       {expected ? <ExpectedResult expected={expected} response={response} keyFactRecall={keyFactRecall} /> : null}
 
@@ -119,6 +143,11 @@ export function AnswerView({
         ) : (
           <Badge tone="info">Demo generator: extractive sentence selection, not an LLM</Badge>
         )}
+        {response.status === "answered" && verification && response.grounding ? (
+          <span title="Strict check of the model's own [S#] citations, as in earlier reports">
+            model citations: {GROUNDING_TEXT[response.grounding]}
+          </span>
+        ) : null}
         <span>retrieval {formatMs(response.timings.retrieval_ms)}</span>
         <span>generation {formatMs(response.timings.generation_ms)}</span>
         <span>total {formatMs(response.timings.total_ms)}</span>
@@ -141,11 +170,15 @@ export function AnswerView({
         </div>
       ) : null}
 
+      {verification && claims.length > 0 ? (
+        <ClaimCheck claims={claims} verification={verification} onCite={showCite} />
+      ) : null}
+
       {response.sentences.length > 0 ? (
         <details style={{ marginTop: 16 }}>
           <summary>
-            Sentence-level check ({response.citation_check.sentences_cited} of {response.citation_check.sentences_total}{" "}
-            sentences cited)
+            {verification ? "Strict [S#] check, as in earlier reports" : "Sentence-level check"} (
+            {response.citation_check.sentences_cited} of {response.citation_check.sentences_total} sentences cited)
           </summary>
           <p className="small muted">
             Citation validity is exact: every label must match a provided source. Support is a word and number overlap
@@ -173,7 +206,7 @@ export function AnswerView({
 
       {cited.length > 0 ? (
         <div style={{ marginTop: 20 }}>
-          <h3>Cited sources</h3>
+          <h3>{verification ? "Passages used as evidence" : "Cited sources"}</h3>
           <div className="source-list">
             {cited.map((source) => (
               <SourceCard key={source.label} source={source} highlighted={highlighted === source.label} />
@@ -184,7 +217,9 @@ export function AnswerView({
 
       {uncited.length > 0 ? (
         <details style={{ marginTop: 16 }} open={cited.length === 0}>
-          <summary>Retrieved but not cited ({uncited.length})</summary>
+          <summary>
+            {verification ? "Other retrieved passages" : "Retrieved but not cited"} ({uncited.length})
+          </summary>
           <div className="source-list" style={{ marginTop: 10 }}>
             {uncited.map((source) => (
               <SourceCard key={source.label} source={source} highlighted={highlighted === source.label} />

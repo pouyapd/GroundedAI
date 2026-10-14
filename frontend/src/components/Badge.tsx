@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import type { AnswerStatus, DocumentStatus, Grounding, SupportLabel } from "../api/types";
+import type { AnswerStatus, ClaimStatus, DocumentStatus, Grounding, SupportLabel, Verdict } from "../api/types";
 import { AlertIcon, CheckIcon, ClockIcon, CrossIcon, InfoIcon, MinusIcon } from "./icons";
 
 type Tone = "good" | "warning" | "critical" | "info" | "neutral";
@@ -51,6 +51,35 @@ export function AnswerStatusBadge({ status, grounding }: { status: AnswerStatus;
   if (grounding === "grounded") return <Badge tone="good">Grounded in sources</Badge>;
   if (grounding === "partially_grounded") return <Badge tone="warning">Partly grounded</Badge>;
   return <Badge tone="critical">Not grounded</Badge>;
+}
+
+/** Whether the answer's statements were found in the retrieved passages (claim check). */
+export function VerdictBadge({ verdict }: { verdict: Verdict }) {
+  switch (verdict) {
+    case "verified":
+      return <Badge tone="good">Every statement found in the sources</Badge>;
+    case "partially_verified":
+      return <Badge tone="warning">Some statements not found in the sources</Badge>;
+    case "unverified":
+      return <Badge tone="critical">Not found in the sources</Badge>;
+    default:
+      return <Badge tone="neutral">No statements to check</Badge>;
+  }
+}
+
+export function ClaimStatusBadge({ status }: { status: ClaimStatus }) {
+  switch (status) {
+    case "supported":
+      return <Badge tone="good">Supported by the cited passage</Badge>;
+    case "wrong_source":
+      return <Badge tone="warning">Cited the wrong passage</Badge>;
+    case "added_source":
+      return <Badge tone="info">Found in a passage, not cited</Badge>;
+    case "partial":
+      return <Badge tone="warning">Partly found</Badge>;
+    default:
+      return <Badge tone="critical">Not found in the sources</Badge>;
+  }
 }
 
 export function SupportBadge({ support }: { support: SupportLabel }) {

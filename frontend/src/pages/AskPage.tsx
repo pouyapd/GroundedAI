@@ -158,6 +158,9 @@ export function AskPage() {
         <p className="small secondary" style={{ margin: "8px 0 0" }} id="mode-description">
           {MODES.find((item) => item.value === mode)?.description} Up to {topK} passages go to the{" "}
           {status?.generation.is_llm ? "language model" : "answer generator"}.
+          {mode !== "lexical" && status?.embedding.provider === "hashing"
+            ? " This server uses the hashing embedder, which matches words, not meaning."
+            : ""}
           {isDemo
             ? " Static demo: each combination of mode and passage count replays a recording made with exactly that setting."
             : ""}

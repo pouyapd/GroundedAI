@@ -335,6 +335,15 @@ const V3_FIELDS: { key: keyof GenerationReport["summary"]; label: string }[] = [
   { key: "evidence_support_rate", label: "Cited sentences supported" },
 ];
 
+const V4_FIELDS: { key: keyof GenerationReport["summary"]; label: string }[] = [
+  { key: "claim_match_rate", label: "Statements found in a passage" },
+  { key: "cited_claim_precision", label: "Model citations pointing to the right passage" },
+  { key: "answers_verified_rate", label: "Answers with every statement found" },
+  { key: "key_fact_attribution", label: "Key facts traced to the gold evidence" },
+  { key: "conflict_surfaced_rate", label: "Conflict questions: both sides shown" },
+  { key: "false_conflict_rate", label: "Other questions: false disagreement" },
+];
+
 /** Report titles before 2026-10-13 do not name the prompt, so two runs could look identical. */
 export function reportOptionLabel(item: ReportListItem): string {
   const prompt = item.prompt_version && !item.title.includes(item.prompt_version) ? ` · ${item.prompt_version}` : "";
@@ -357,6 +366,15 @@ function GenerationReportView({ report }: { report: GenerationReport }) {
   return (
     <>
       <ReportHeader report={report} origin="published" />
+      {report.revalidation ? (
+        <Banner tone="info" title="Recorded outputs re-checked: the model was not run">
+          The raw outputs recorded in report {report.revalidation.source_report_id} were passed through the current
+          checks. Latency and token counts are those of the original run.
+          {report.revalidation.model_input_changed.length > 0
+            ? ` For ${report.revalidation.model_input_changed.join(", ")} the current pipeline would send the model a different note, so a new run could answer differently.`
+            : ""}
+        </Banner>
+      ) : null}
       {!report.provider.is_llm ? (
         <Banner tone="info" title="Baseline, not a language model">
           These results describe the deterministic extractive demo generator. They show how the pipeline and the checks
@@ -393,6 +411,24 @@ function GenerationReportView({ report }: { report: GenerationReport }) {
               </div>
             ))}
           </div>
+        ) : null}
+        {V4_FIELDS.some((field) => summary[field.key] !== undefined) ? (
+          <>
+            <h3 style={{ marginTop: 16 }}>Claim and disagreement checks</h3>
+            <p className="small secondary" style={{ marginTop: 0 }}>
+              Every statement of an answer compared with every retrieved passage (words and figures, not meaning);
+              key facts traced to the dataset's evidence; disagreeing passages reported on the two conflict
+              questions and wrongly reported elsewhere.
+            </p>
+            <div className="stats">
+              {V4_FIELDS.map((field) => (
+                <div className="stat" key={field.key}>
+                  <div className="stat-label">{field.label}</div>
+                  <div className="stat-value">{formatPercent((summary[field.key] ?? null) as number | null)}</div>
+                </div>
+              ))}
+            </div>
+          </>
         ) : null}
       </section>
       <section className="card">
