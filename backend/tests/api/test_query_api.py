@@ -146,3 +146,50 @@ def test_unknown_document_filter_is_404(client: TestClient) -> None:
         "/api/v1/query", json={"question": "hotel limit", "document_ids": ["doc_" + "a" * 20]}
     )
     assert response.status_code == 404
+
+
+FAQ_TEXT = """Finance FAQ
+
+How much can I spend on a hotel? Hotel nights are reimbursed up to EUR 120 per night \
+in all cities.
+"""
+
+
+def test_query_returns_the_claim_check_with_exact_quotes(client: TestClient) -> None:
+    upload(client, "travel.txt", TRAVEL_TEXT.encode())
+    body = client.post(
+        "/api/v1/query", json={"question": "What is the daily meal allowance?"}
+    ).json()
+    assert body["status"] == "answered"
+    assert body["verification"]["verdict"] == "verified"
+    assert body["verification"]["method"].startswith("Lexical")
+    claim = body["claims"][0]
+    assert claim["status"] == "supported"
+    evidence = claim["evidence"][0]
+    source = next(s for s in body["sources"] if s["label"] == evidence["label"])
+    assert source["text"][evidence["quote_start"] : evidence["quote_end"]] == evidence["quote"]
+    assert source["supports_claims"] == [0]
+    assert evidence["document_id"] == source["document_id"]
+
+
+def test_query_reports_disagreeing_documents_with_both_quotes(client: TestClient) -> None:
+    upload(client, "travel.txt", TRAVEL_TEXT.encode())
+    upload(client, "faq.txt", FAQ_TEXT.encode())
+    body = client.post(
+        "/api/v1/query", json={"question": "What is the hotel limit per night in capital cities?"}
+    ).json()
+    (conflict,) = body["conflicts"]
+    assert conflict["kind"] == "conflict"
+    assert sorted(value for s in conflict["statements"] for value in s["values"]) == [
+        "EUR 120",
+        "EUR 140",
+    ]
+    assert len({s["document_id"] for s in conflict["statements"]}) == 2
+    assert any("disagree" in warning for warning in body["warnings"])
+
+
+def test_query_without_disagreement_has_no_conflicts(client: TestClient) -> None:
+    upload(client, "travel.txt", TRAVEL_TEXT.encode())
+    upload(client, "security.txt", SECURITY_TEXT.encode())
+    body = client.post("/api/v1/query", json={"question": "How long must passwords be?"}).json()
+    assert body["conflicts"] == []
