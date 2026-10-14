@@ -1,0 +1,569 @@
+{
+  "report_id": "conflict-cases-20261014T073843Z",
+  "kind": "conflict_cases",
+  "title": "Disagreement check on the held-out cases (groundedai-conflicts-v1)",
+  "generated_at": "2026-10-14T07:38:43+00:00",
+  "code_version": "cd9748c69b1b",
+  "dataset": {
+    "name": "groundedai-conflicts-v1",
+    "version": "1.0.0",
+    "cases_sha256": "256eaad3e44a8f8a9d4bd3b25e8c440dbf55e6e191417db9a7b97a465f442a12",
+    "classes": {
+      "conflict": 10,
+      "temporal": 6,
+      "context": 6,
+      "agreement": 4,
+      "incomplete": 4
+    }
+  },
+  "summary": {
+    "cases": 30,
+    "disagreement_cases": 16,
+    "found": 12,
+    "classified": 12,
+    "no_disagreement_cases": 14,
+    "false_alarms": 0,
+    "figures_v1_found": 6,
+    "figures_v1_false_alarms": 3,
+    "by_class": {
+      "conflict": {
+        "cases": 10,
+        "found": 8,
+        "classified": 8,
+        "figures_v1_found": 2
+      },
+      "temporal": {
+        "cases": 6,
+        "found": 4,
+        "classified": 4,
+        "figures_v1_found": 4
+      },
+      "context": {
+        "cases": 6,
+        "false_alarms": 0,
+        "figures_v1_false_alarms": 3
+      },
+      "agreement": {
+        "cases": 4,
+        "false_alarms": 0,
+        "figures_v1_false_alarms": 0
+      },
+      "incomplete": {
+        "cases": 4,
+        "false_alarms": 0,
+        "figures_v1_false_alarms": 0
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "c01",
+      "class": "conflict",
+      "question": "How much is the monthly membership fee at Orbis Fitness?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "conflict",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": false
+    },
+    {
+      "id": "c02",
+      "class": "conflict",
+      "question": "How many people can join a guided tour at the Harlow Museum?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "conflict",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": false
+    },
+    {
+      "id": "c03",
+      "class": "conflict",
+      "question": "How long is the loan period for e-books at Marrow Lane Library?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "conflict",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": false
+    },
+    {
+      "id": "c04",
+      "class": "conflict",
+      "question": "Do visitors have to sign in at reception in the Calder Building?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "conflict",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": false
+    },
+    {
+      "id": "c05",
+      "class": "conflict",
+      "question": "What time does the Westbrook pool open on weekdays?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "conflict",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": false
+    },
+    {
+      "id": "c06",
+      "class": "conflict",
+      "question": "What discount do members get on classes at Pine Hollow Studio?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "conflict",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [
+        [
+          "S1",
+          "S2"
+        ]
+      ],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": true
+    },
+    {
+      "id": "c07",
+      "class": "conflict",
+      "question": "How often must the air filters be replaced in the Tamsin Court flats?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "conflict",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": false
+    },
+    {
+      "id": "c08",
+      "class": "conflict",
+      "question": "What is the checked baggage weight limit in Economy on Brightwing Air?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [],
+      "figures_v1": [
+        [
+          "S1",
+          "S2"
+        ]
+      ],
+      "found": false,
+      "classified": false,
+      "figures_v1_found": true
+    },
+    {
+      "id": "c09",
+      "class": "conflict",
+      "question": "How long do customers have to request a refund from Lumen Software?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "found": false,
+      "classified": false,
+      "figures_v1_found": false
+    },
+    {
+      "id": "c10",
+      "class": "conflict",
+      "question": "How often should the smoke alarm batteries be replaced at Greyfield Hostel?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "conflict",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": false
+    },
+    {
+      "id": "t01",
+      "class": "temporal",
+      "question": "How much does parking cost per hour in the Ostend Street garage?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "different_dates",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [
+        [
+          "S1",
+          "S2"
+        ]
+      ],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": true
+    },
+    {
+      "id": "t02",
+      "class": "temporal",
+      "question": "What are the visiting hours at St Ansel Hospital?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "found": false,
+      "classified": false,
+      "figures_v1_found": false
+    },
+    {
+      "id": "t03",
+      "class": "temporal",
+      "question": "What is the annual fee for the Corvid Cloud backup service?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "different_dates",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [
+        [
+          "S1",
+          "S2"
+        ]
+      ],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": true
+    },
+    {
+      "id": "t04",
+      "class": "temporal",
+      "question": "What is the fine for returning a book late at Ashby Library?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "different_dates",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [
+        [
+          "S1",
+          "S2"
+        ]
+      ],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": true
+    },
+    {
+      "id": "t05",
+      "class": "temporal",
+      "question": "How much does a day ticket cost at Kelso Gardens?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [
+        {
+          "kind": "different_dates",
+          "labels": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "figures_v1": [
+        [
+          "S1",
+          "S2"
+        ]
+      ],
+      "found": true,
+      "classified": true,
+      "figures_v1_found": true
+    },
+    {
+      "id": "t06",
+      "class": "temporal",
+      "question": "How large can a single uploaded file be on the Vellum file service?",
+      "expected_pair": [
+        "S1",
+        "S2"
+      ],
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "found": false,
+      "classified": false,
+      "figures_v1_found": false
+    },
+    {
+      "id": "x01",
+      "class": "context",
+      "question": "How much is admission at the Harlow Museum?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "x02",
+      "class": "context",
+      "question": "How much storage is included in a Nimbus Notes plan?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [
+        [
+          "S1",
+          "S2"
+        ]
+      ],
+      "false_alarm": false,
+      "figures_v1_false_alarm": true
+    },
+    {
+      "id": "x03",
+      "class": "context",
+      "question": "When does the Brookfield library close?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "x04",
+      "class": "context",
+      "question": "How long does delivery take from the Tolland Supply web shop?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [
+        [
+          "S1",
+          "S2"
+        ]
+      ],
+      "false_alarm": false,
+      "figures_v1_false_alarm": true
+    },
+    {
+      "id": "x05",
+      "class": "context",
+      "question": "From what age can members use the Redfern gym on their own?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "x06",
+      "class": "context",
+      "question": "How many parking spaces are there on the Elmstead campus?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [
+        [
+          "S1",
+          "S2"
+        ]
+      ],
+      "false_alarm": false,
+      "figures_v1_false_alarm": true
+    },
+    {
+      "id": "a01",
+      "class": "agreement",
+      "question": "How long do customers have to return an item to Fairlight Home?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "a02",
+      "class": "agreement",
+      "question": "When is the Quarry Hill helpline open?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "a03",
+      "class": "agreement",
+      "question": "How many sessions per week can a member book at Larkspur Climbing?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "a04",
+      "class": "agreement",
+      "question": "How large is the deposit for a Saltmarsh Lofts apartment?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "i01",
+      "class": "incomplete",
+      "question": "How large is the deposit at Wren House?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "i02",
+      "class": "incomplete",
+      "question": "What late fee does Cobalt Print charge on overdue invoices?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "i03",
+      "class": "incomplete",
+      "question": "How much does it cost to rent a bike in Port Ellis?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    },
+    {
+      "id": "i04",
+      "class": "incomplete",
+      "question": "What time does the Amberly farm shop open?",
+      "expected_pair": null,
+      "disagreement_v1": [],
+      "figures_v1": [],
+      "false_alarm": false,
+      "figures_v1_false_alarm": false
+    }
+  ],
+  "limitations": [
+    "30 cases written by the same author as the check; small counts, no intervals.",
+    "The cases test the check on its own, with the passages given; retrieval is not involved."
+  ]
+}
