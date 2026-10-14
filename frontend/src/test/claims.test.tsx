@@ -198,3 +198,12 @@ describe("scoring version 4 in the evaluation page", () => {
     expect(screen.getByText("Other questions: false disagreement")).toBeInTheDocument();
   });
 });
+
+describe("warnings next to the disagreement panel", () => {
+  it("does not repeat a disagreement's explanation in the warning list", () => {
+    const explanation = CHECKED.conflicts?.[0]?.explanation ?? "";
+    render(<AnswerView response={{ ...CHECKED, warnings: [explanation, "Another warning."] }} />);
+    expect(screen.getAllByText(explanation)).toHaveLength(1);
+    expect(screen.getByText("Another warning.")).toBeInTheDocument();
+  });
+});

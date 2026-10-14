@@ -81,6 +81,8 @@ export function AnswerView({
   const verification = response.verification ?? null;
   const isEvidence = (source: AnswerResponse["sources"][number]) =>
     source.cited || (source.supports_claims?.length ?? 0) > 0;
+  // Disagreements are shown in their own panel; do not repeat their explanation as a warning.
+  const warnings = response.warnings.filter((warning) => !conflicts.some((item) => item.explanation === warning));
   const cited = response.sources.filter(isEvidence);
   const uncited = response.sources.filter((source) => !isEvidence(source));
   const showCite = (label: string) => {
@@ -158,11 +160,11 @@ export function AnswerView({
         ) : null}
       </div>
 
-      {response.warnings.length > 0 ? (
+      {warnings.length > 0 ? (
         <div style={{ marginTop: 14 }}>
           <Banner tone="warning" title="Check before relying on this answer">
             <ul className="warnings">
-              {response.warnings.map((warning) => (
+              {warnings.map((warning) => (
                 <li key={warning}>{warning}</li>
               ))}
             </ul>
