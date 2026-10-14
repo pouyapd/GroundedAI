@@ -81,6 +81,27 @@ stored, the measure is shown as missing rather than estimated).
 | Invalid output rate | replies with only citation markers or no text ÷ all questions |
 | Timeouts | errors with code `model_timeout` |
 
+### Answers: measures added in scoring version 4 (2026-10-14)
+
+Earlier definitions are unchanged. These use the claim check (every factual sentence compared with
+every retrieved passage; see `generation/claims.py`) and the disagreement check
+(`generation/disagreement.py`).
+
+| Measure | Definition (denominator) |
+|---|---|
+| Statements found in a passage (claim match) | statements supported by their citation, by another passage (wrong source) or by a passage the model did not cite ÷ statements in answers |
+| Model citations pointing to the right passage (cited-claim precision) | cited statements whose cited passage supports them ÷ statements the model cited |
+| Wrong-source rate | cited statements supported only by another passage ÷ statements the model cited |
+| Unsupported-statement rate | statements no passage supports ÷ statements in answers |
+| Answers with every statement found | answers whose verdict is "verified" ÷ answers |
+| Key facts traced to the gold evidence | per answerable question: key facts carried by a statement that is matched to a chunk containing the dataset's evidence quote ÷ key facts; averaged over answered questions |
+| Conflict questions: both sides shown | conflict questions for which a reported disagreement covers a chunk of each evidence item ÷ conflict questions (2) |
+| Other questions: false disagreement | other questions with any reported disagreement ÷ other questions (54) |
+
+The first five are lexical self-consistency measures (they compare the answer with the passages,
+not with a gold answer); the key-fact measure uses the dataset's evidence. A "found" statement can
+still be wrong or beside the question.
+
 Two cautions apply to all of them. "Answered when an answer was expected" counts as correct
 behaviour even if the answer is wrong; key-fact recall and evidence support are the measures of
 content. And with 43 answerable, 10 should-refuse and 2 conflict questions, differences of a few
@@ -324,7 +345,7 @@ evaluation set was run once with the frozen version.
 On the development set, answer-v2 with qwen2.5:1.5b had known weaknesses that also appeared on
 the evaluation set: worse citation formatting than v1 and fewer correct refusals.
 
-### The figure-conflict check
+### The figure-conflict check (published 2026-10-13, replaced on 2026-10-14)
 
 `generation/conflicts.py` flags sentences from different documents that state different figures
 on the question's topic. `scripts/analyze_conflict_check.py` measures it over all 56 questions
@@ -335,6 +356,29 @@ and the question says "per night": the two sentences share too few words after s
 is a conflict without competing figures, which this check cannot see. On the development set it
 did catch one of the two conflicts (28 vs 14 days). The check is a weak heuristic: its warnings
 are shown as "may disagree; check both", and it should not be relied on to find conflicts.
+
+### 2026-10-14: claim check, disagreement check and scoring version 4
+
+No language model was run (the Ollama files had been deleted). Full audit, method and known
+issues: [RELIABILITY_AUDIT.md](RELIABILITY_AUDIT.md). In short:
+
+- **Recorded outputs re-checked.** The raw outputs of the three 2026-10-13 model runs were
+  replayed through the current checks (`scripts/revalidate_recorded_answers.py`), after verifying
+  that the rebuilt passages reproduce every recorded status, citation, grounding and coverage
+  value. qwen2.5:1.5b with answer-v2: 116 of 118 statements found in a passage, 47 of 49 answers
+  fully matched, 90% of key facts traced to the gold evidence, model citations pointing to the right
+  passage 88%; strict `[S#]` grounding unchanged at 14%. Reports:
+  `evaluation/reports/published/revalidated-*`.
+- **Disagreement check.** On 30 held-out cases committed before the check existed:
+  12 of 16 disagreements found with the right kind, 0 false alarms in 14 cases (published figure
+  check: 6 found, 3 false alarms). On the evaluation set: q052 surfaced, q053 missed, one false
+  alarm (q050). Report: `evaluation/reports/conflicts/`.
+- **Extractive baseline per retrieval mode** (current pipeline): correct behaviour 0.660 and
+  evidence coverage 0.663 in every mode; the q052 disagreement is surfaced with dense and hybrid
+  retrieval, not with BM25 (its top 5 lack the second document).
+- **Retrieval at the application's defaults** (800/120-character chunks, 20 candidates): BM25
+  Recall@5 1.000, MRR 0.985; the shipped hybrid default with hashing vectors 0.977 / 0.950; hybrid
+  with bge-small 1.000 / 0.959. No retrieval setting was changed.
 
 ## Reproducing
 
@@ -365,6 +409,12 @@ groundedai eval generation --provider ollama --model qwen2.5:1.5b \
 python scripts/compare_generation_reports.py BASELINE.json OTHER.json [MORE.json ...]
 # how often the figure-conflict check fires (no model needed)
 python scripts/analyze_conflict_check.py --mode hybrid
+
+# 2026-10-14 (no language model needed)
+HF_HUB_OFFLINE=1 groundedai eval retrieval --config evaluation/configs/retrieval_app_defaults.json
+groundedai eval generation --provider extractive-demo --mode lexical   # also dense, hybrid
+python scripts/revalidate_recorded_answers.py evaluation/reports/published/generation-ollama-groundedai-synthetic-v1-20261013T113618Z.json
+python scripts/evaluate_conflict_cases.py          # held-out cases; refuses an edited case file
 ```
 
 Every answer report records the prompt version and a fingerprint of its text, the git commit

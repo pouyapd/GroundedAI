@@ -123,7 +123,26 @@ Field meanings:
   `partially_grounded`, or `ungrounded`.
 * `citation_check.invalid`: labels the model cited that were not among its sources.
 * `sentences[].support`: lexical check of each sentence against its cited sources;
-  `unsupported_numbers` lists numbers that do not appear in the cited text.
+  `unsupported_numbers` lists numbers that do not appear in the cited text. This is the strict
+  `[S#]` check, kept for comparison with earlier reports.
+* `claims[]` (added 2026-10-14): every factual sentence, compared with every retrieved passage.
+  `status` is `supported` (the cited passage contains it), `wrong_source` (the cited passage does
+  not, another does), `added_source` (no citation; a passage contains it), `partial` or
+  `unsupported`. `citations` lists the labels the model attached in any form (`[S1]`,
+  `[Source 1]`, `(S1)`, a bracketed title). `evidence[]` gives the passage label, document, page,
+  chunk and the exact `quote` with `quote_start`/`quote_end` offsets into that source's `text`.
+  `missing_figures` names figures that no passage states; `flags` contains `instruction_text`
+  when the statement repeats an instruction from a source.
+* `verification` (added 2026-10-14): `verdict` (`verified`, `partially_verified`, `unverified`,
+  `not_applicable`), counts per status, citation forms, and the method. The check is lexical
+  (figures and words, not meaning).
+* `conflicts[]` (added 2026-10-14): passages from different documents that disagree about what was
+  asked. `kind` is `conflict` or `different_dates`; each of the two `statements` has its quote,
+  values, dates and whether it denies a requirement; `answer_reports` lists the labels whose value
+  the answer states. Nothing is resolved.
+* `sources[].supports_claims` (added 2026-10-14): indices of the claims a passage is evidence for.
+* `unverified_answer`: set only with `GROUNDEDAI_UNVERIFIED_ANSWERS=withhold`, when no statement
+  could be matched to a passage and the answer was therefore returned as `insufficient_evidence`.
 * `provider.is_llm`: `false` for the extractive demo generator.
 
 Retrieval only:

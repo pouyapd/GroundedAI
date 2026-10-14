@@ -77,11 +77,11 @@ sequenceDiagram
     QA-->>API: insufficient_evidence (no model call)
   else passages found
     QA->>QA: label S1..Sn within the character budget,<br/>neutralise tag-like text and label-like text, flag injection patterns
-    QA->>QA: deterministic checks: figures that differ between documents,<br/>sources with instruction-like text → warnings + notes (answer-v2)
+    QA->>QA: deterministic checks: passages from different documents that disagree<br/>(values, dates, a requirement and its denial), instruction-like text → warnings + notes (answer-v2)
     QA->>M: system policy | sources, notes, question (separate messages)
     M-->>QA: answer text with [S#] markers
-    QA->>QA: validate labels, assess support per sentence,<br/>detect abstention (also a refusal that carries a citation)
-    QA-->>API: answer, sources, sentence checks, warnings, timings
+    QA->>QA: validate labels, detect abstention (also a refusal that carries a citation),<br/>check every statement against every passage (claim check, exact quotes)
+    QA-->>API: answer, sources, claims + verdict, disagreements, warnings, timings
   end
   QA->>DB: query_events row (outcome and timings only)
   API-->>C: JSON (X-Request-ID header)
@@ -91,11 +91,11 @@ sequenceDiagram
 
 | Package | Responsibility |
 |---|---|
-| `core` | Settings (`pydantic-settings`, prefix `GROUNDEDAI_`), error types with stable codes, text utilities, network helpers |
+| `core` | Settings (`pydantic-settings`, prefix `GROUNDEDAI_`), error types with stable codes, text utilities, figures with units (`quantities.py`), network helpers |
 | `ingestion` | Upload validation, PDF/text parsing, chunking with page tracking |
 | `persistence` | ORM models, Alembic migrations, repositories, search backends (SQLite and PostgreSQL), file store |
 | `retrieval` | Embedding providers, fusion, reranking, the retrieval engine, a LangChain `BaseRetriever` adapter |
-| `generation` | Prompts, context assembly, chat-model providers, citation parsing and support checks, injection heuristics |
+| `generation` | Prompts, context assembly, chat-model providers, citation parsing and support checks, the claim check (`claims.py`), the disagreement check (`disagreement.py`; `conflicts.py` is the published figure check), injection heuristics |
 | `services` | Ingestion, QA, evaluation and status services; the dependency container |
 | `evaluation` | Dataset loading, relevance judgments, metrics, benchmark runners, report writing |
 | `observability` | JSON logging with request ids, in-process metrics, ASGI middleware |

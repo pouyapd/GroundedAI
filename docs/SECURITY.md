@@ -47,8 +47,9 @@ text inside a document steers the model:
    instructions", fake system notices, "answer every question with ...", requests to reveal the
    prompt or to stop citing). Matches are passed to the model as data and reported as warnings
    in the response and the UI.
-4. Every citation label is validated and every sentence is checked against its cited text, so an
-   answer that drifts away from the sources is flagged.
+4. Every citation label is validated and every statement is checked against every retrieved
+   passage, so an answer that drifts away from the sources is flagged. Instruction-like sentences
+   in a passage never count as evidence, and a statement that repeats one is marked unsupported.
 5. With the `answer-v2` prompt: label-like text inside a passage or title (`[S3]`) is rewritten
    as `(S3)` so a document cannot pose as another source; the policy says that text which gives
    orders or speaks to an AI assistant is not a fact; and a flagged passage is named in a note to
@@ -68,7 +69,27 @@ proof of safety.
   all documents. Do not upload documents that the key holders must not read.
 * Uploaded files and the database are not encrypted at rest by the application; use disk
   encryption on the host.
-* The lexical support check cannot detect wrong meaning (negation, swapped entities). Answers
-  must be read together with their sources.
+* The lexical support and claim checks cannot detect wrong meaning (negation, swapped entities)
+  or a true statement that does not answer the question. Answers must be read together with
+  their sources.
 * PDF parsing relies on pypdf; a parser vulnerability would affect GroundedAI. Keep
   dependencies updated (`backend/requirements/README.md`).
+
+## Before making the repository public (review of 2026-10-14)
+
+* Git history (all 24 commits on 2026-10-14, all branches): no secrets, keys, tokens, local paths
+  or deleted files; the largest file is the static demo's recordings (1.15 MB). Every commit
+  carries the author's personal email address,
+  which becomes public with the repository; rewriting history to change it is the owner's decision.
+* Tracked files: the author's name and GitHub handle appear as authorship (LICENSE, `pyproject.toml`,
+  README, banner images); `.env.example` holds placeholders only; test fixtures and datasets
+  contain deliberately planted prompt-injection text, which is test data.
+* GitHub Actions: no repository secrets are configured or used. Run logs mask the workflow token
+  and contain no personal email addresses or local paths. Artifacts (retention 90 days): the offline
+  benchmark report and Docker build records; the build records contain the GitHub event data
+  (pull-request text, public account login and id) and masked request headers. They become
+  visible with the repository.
+* Dependencies: runtime Python packages are permissive (MIT, BSD, Apache-2.0, MPL-2.0, PSF) except
+  psycopg (LGPL-3.0, used unmodified as a library; listed in `THIRD_PARTY_NOTICES.md`); the front
+  end ships React, React DOM and Scheduler (MIT). `pgserver`, used only by the developer
+  PostgreSQL script, has no licence metadata.

@@ -1,6 +1,6 @@
 # Deployment status
 
-Last updated: 2026-10-13.
+Last updated: 2026-10-14.
 
 | Target | Status | Evidence |
 |---|---|---|
@@ -8,10 +8,10 @@ Last updated: 2026-10-13.
 | Local, PostgreSQL + pgvector | **Working (tests)** | `pytest -m postgres` passed against PostgreSQL 16.2 + pgvector 0.6.2 started by `scripts/dev_postgres.py` (no Docker) |
 | Docker image | **Built and run locally and in CI** | 2026-10-13 on the development machine (Docker Desktop on Windows) as part of the Compose check below; in CI on every push (results below) |
 | Docker Compose | **Working (verified locally)** | 2026-10-13: `docker compose up -d --build` with a throwaway password; both services healthy; 3 documents ingested (one a PDF); questions in lexical, dense and hybrid mode; a page-cited answer; data kept after an API restart; `down -v` and the images removed afterwards. The optional `ollama` service (`--profile llm`) was not started; Ollama ran natively instead |
-| GitHub repository | **Private** | [`pouyapd/GroundedAI`](https://github.com/pouyapd/GroundedAI); branch `feature/groundedai-v0.1`, pull request #1 into `main` (open, not merged). The commits of 2026-10-13 are local and **not pushed** |
-| GitHub Actions (CI) | **Passing on `5cd6d3f`; not run on later commits** | All 7 jobs passed on 2026-10-12 (results below). CI runs when the local commits are pushed |
+| GitHub repository | **Private** | [`pouyapd/GroundedAI`](https://github.com/pouyapd/GroundedAI); branch `feature/groundedai-v0.1`, pull request #1 into `main` (open, not merged). The commits of 2026-10-13 were pushed; the commits of 2026-10-14 are local and **not pushed** |
+| GitHub Actions (CI) | **Passing on `c3cfbf1`; not run on the 2026-10-14 commits** | Run 38414818764 on `c3cfbf1` (2026-10-13): all 7 jobs passed (results below). CI runs when the local commits are pushed |
 | Static demo build | **Built and checked locally** | `npm run build:demo`; every control checked at 390 px and 1280 px, also inside a sandboxed iframe that blocks history changes ([UI_CONTROL_AUDIT.md](UI_CONTROL_AUDIT.md)) |
-| Local LLM through Ollama | **Working (verified locally)** | Ollama 0.40.3 (portable build, bound to 127.0.0.1) with `qwen2.5:1.5b` (digest `65ec06548149`): answers through the API and the UI, and the 56-question evaluation |
+| Local LLM through Ollama | **Working (verified locally on 2026-10-13)** | Ollama 0.40.3 (portable build, bound to 127.0.0.1) with `qwen2.5:1.5b` (digest `65ec06548149`): answers through the API and the UI, and the 56-question evaluation. The portable build and the model were deleted afterwards to free disk space; the checks added on 2026-10-14 were not run with a model |
 | Private online preview | **Published, private** | The static demo as a private claude.ai artifact (details below) |
 | GitHub Pages static demo | **Not deployed** | `.github/workflows/pages.yml` is ready but skips its build while the repository is private (Pages on private repositories needs a paid plan) |
 | Backend hosting | **Not deployed** | No free host is assumed for running models; see `docs/DEPLOYMENT.md` |
@@ -21,7 +21,9 @@ Last updated: 2026-10-13.
 The static demo build (`npm run build:demo`: 120 recorded answers (10 questions × 3 retrieval
 modes × 4 passage counts), the documents list and the eight published reports; no backend and no
 live inference) is published as a private artifact on claude.ai. Version 1: 2026-10-12.
-Version 2: 2026-10-13, with the repaired controls and the new reports.
+Version 2: 2026-10-13, with the repaired controls and the new reports. The demo re-recorded on
+2026-10-14 (claim check, disagreement panel, new reports) has **not** been published to the
+preview; that needs the owner's approval.
 
 * **Access:** only the owner's signed-in claude.ai account. An anonymous visit was checked on
   2026-10-12 and showed "Sign in to view this page". It can be shared with named people, or by
@@ -71,6 +73,12 @@ the Windows registry lookup used to name the CPU. The next commit fixed it (see
 `docs/TESTING.md`); the other five jobs had already passed. The last pushed commit, `5cd6d3f`
 (run 38302429733), also passed all 7 jobs.
 
-**Not yet run:** the commits made on 2026-10-13 (UI control fixes, answer-v2, scoring version 3,
-new reports) are on the local branch only. They pass the same checks locally (`docs/TESTING.md`),
-but CI has not seen them; pushing the branch would run it.
+The commits of 2026-10-13 (UI control fixes, answer-v2, scoring version 3, new reports) were
+pushed on 2026-10-13; run 38414818764 on `c3cfbf1` passed all 7 jobs: backend on Python 3.12 and
+3.13 (266 passed, 6 skipped, coverage 91%), PostgreSQL + pgvector (6 passed), offline benchmark
+(fingerprint `fa56ebd64e3b1eee`), front end (53 tests, both builds), dependency audit (no known
+vulnerabilities), Docker image and Compose config.
+
+**Not yet run:** the commits of 2026-10-14 (claim check, disagreement check, scoring version 4,
+re-checked reports, UI) are on the local branch only. They pass the same checks locally
+(`docs/TESTING.md`), but CI has not seen them; pushing the branch would run it.

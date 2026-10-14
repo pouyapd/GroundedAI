@@ -68,6 +68,18 @@ provider and model, real token counts, the retrieval line ("Hybrid retrieval · 
 passages used") and, because the model wrote no `[S#]` label, the "Not grounded" badge with
 "Treat it as unverified" (`docs/screenshots/ask-ollama-light.png`).
 
+## Added on 2026-10-14
+
+| Element | Class | Verified by |
+|---|---|---|
+| Verdict badge, claim check list with quotes and source links | A, B | `claims.test.tsx`; browser, live app (extractive generator, bge-small) at 1100 px and 390 px, light and dark |
+| Disagreement panel (both quotes, values, dates, which side the answer reports) | A, B | `claims.test.tsx`; browser, live app: the hotel-limit question shows €140/€110 next to €120 with "updated May 2025" |
+| Withheld answer (with `GROUNDEDAI_UNVERIFIED_ANSWERS=withhold`) | A | `claims.test.tsx` (not shown in the static demo, which uses the default) |
+| Note that dense retrieval uses the hashing embedder | A | `claims.test.tsx`; shown only when the server's embedder is `hashing` |
+| Scoring-version-4 tiles and the "recorded outputs re-checked" banner | A, B | `claims.test.tsx`; static demo includes the re-checked reports |
+
+The static demo was re-recorded on 2026-10-14 with these fields.
+
 ## Limits of this audit
 
 * The claude.ai preview itself could not be opened signed-in from this environment. The fix

@@ -53,7 +53,10 @@ dense search until then, and responses carry a warning saying so.
 * `huggingface-local` with Qwen2.5-0.5B-Instruct: used in the generation evaluation (see
   `docs/EVALUATION.md`).
 * Ollama: the `ChatOllama` integration is tested against a fake Ollama HTTP server (request
-  options, streaming, token counts, missing model, unreachable server). It was **not** run against
-  a real Ollama server here, because Ollama is not installed on the development machine.
+  options, streaming, token counts, missing model, unreachable server). On 2026-10-13 it was also
+  run against a real server (portable Ollama 0.40.3, `qwen2.5:1.5b`) through the API, the UI and
+  the 56-question evaluation. That portable build and its model were deleted afterwards; the
+  claim and disagreement checks added on 2026-10-14 were measured on the recorded outputs, not
+  with a new model run.
 * `scripts/download_models.py`: its listing, cache detection and confirmation prompt were run;
   the download step itself was not exercised because all models were already cached.

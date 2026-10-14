@@ -45,6 +45,8 @@ published retrieval benchmark ran on mains power. Runs made on battery are label
   bound to `127.0.0.1` only, with its model store in the same folder: no installer, service,
   autostart or PATH change. `qwen2.5:1.5b` (986 MB) was the only model pulled, after estimating
   its needs (about 1.5 GB of memory, 10–25 s per answer); measured: 1.3 GB and 10 s median.
+  The temporary folder (portable build, its zip and the model: 4.40 GB) was deleted afterwards
+  to free disk space, so no local language model was available on 2026-10-14.
 * **PostgreSQL without Docker.** Postgres tests ran against a throwaway server from the
   `pgserver` wheel (12.8 MB, PostgreSQL 16.2 + pgvector 0.6.2), started and removed by
   `scripts/dev_postgres.py`.

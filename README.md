@@ -26,8 +26,10 @@ usually taken on trust, and their retrieval settings are chosen by habit. **Grou
 complete RAG application that treats both as things to check. It ingests PDF and text documents,
 retrieves passages with lexical, dense or hybrid search, and asks a language model to answer
 only from those passages. The server then validates every citation against the passages the
-model actually received, checks each sentence against its cited text, flags planted instructions
-in retrieved documents, and says so when the evidence is not enough. A built-in evaluation
+model actually received, checks every statement of the answer against every retrieved passage
+(and shows the exact supporting sentence, or says that none was found), reports retrieved
+documents that disagree without choosing between them, flags planted instructions in retrieved
+documents, and says so when the evidence is not enough. A built-in evaluation
 framework measures retrieval and answer behaviour on a versioned dataset, with confidence
 intervals, so configuration choices rest on numbers rather than assumptions.
 
@@ -42,9 +44,10 @@ evidence). Intel i7-1255U laptop, no GPU, mains power. Small sample: read the in
 - **Hybrid retrieval did not beat BM25 here.** BM25 alone reached Recall@5 0.965 and MRR 0.934;
   hybrid Reciprocal Rank Fusion with bge-small reached the same Recall@5 (0.965) and MRR 0.915. No
   dense, hybrid or reranked configuration is distinguishable from BM25 (paired 95% bootstrap
-  intervals all include zero), and BM25 is the fastest (3.6 ms median vs. 84 ms). The questions
-  reuse the documents' wording, which favours lexical search; the dataset limitation is stated in
-  the report rather than hidden.
+  intervals all include zero), and BM25 is the fastest (3.6 ms median vs. 84 ms). At the
+  application's default chunking (800/120 characters) BM25 reached Recall@5 1.000 and the shipped
+  hybrid default 0.977. The questions reuse the documents' wording, which favours lexical search;
+  the dataset limitation is stated in the report rather than hidden.
 - **A valid citation is not a correct answer.** The deterministic extractive baseline has 100%
   citation validity by construction, yet it answered 5 of the 10 questions it should have refused,
   each with a valid citation (for "What is the capital of Australia?" it quoted a sentence about
@@ -57,8 +60,19 @@ evidence). Intel i7-1255U laptop, no GPU, mains power. Small sample: read the in
   (Ollama, CPU) answered all 43 answerable questions and found 94% of the key facts (v1: 84% and
   77%; both differences have paired 95% intervals above zero). It also refused fewer of the
   questions it should refuse (7 of 10, v1: 9 of 10), found neither of the two conflicts, and put
-  a valid `[S#]` citation on only 13 of its 49 answers, so the UI marks most of its answers
-  "not grounded".
+  a valid `[S#]` citation on only 13 of its 49 answers.
+- **Its answers come from the passages; its citations do not.** Re-checking those recorded
+  outputs statement by statement (no new model run) found 116 of its 118 statements in a
+  retrieved passage, 47 of 49 answers fully matched, and 90% of key facts traced to the dataset's
+  gold evidence; 9% of the statements it did cite were cited to a passage that does not contain
+  them. The application
+  now attaches the passage it found and says when the model's citation was wrong or missing. The
+  check is lexical: its three wrong answers to unanswerable questions consist of true statements
+  and pass it ([audit](docs/RELIABILITY_AUDIT.md)).
+- **Disagreeing sources are shown, not resolved.** A new check found 12 of 16 disagreements in a
+  held-out case set committed before the check was written (0 false alarms in 14 cases without
+  one; the earlier figure check: 6 found, 3 false alarms). On the evaluation set it surfaces one of
+  the two conflicts.
 
 | Retrieval configuration (n = 43) | Recall@5 | MRR | nDCG@5 | p50 latency |
 |---|:---:|:---:|:---:|:---:|
@@ -80,6 +94,12 @@ mains power. "Correct behaviour" counts an expected answer as correct even if it
 wrong; key-fact recall measures content. Neither conflict question was handled correctly by any
 configuration. † The published 0.377, re-scored with the current refusal rule.*
 
+| Recorded outputs re-checked (no model run) | Statements found in a passage | Answers with every statement found | Key facts traced to gold evidence | Model citations pointing to the right passage |
+|---|:---:|:---:|:---:|:---:|
+| qwen2.5:1.5b, prompt v2 | 98% (116 of 118) | 47 of 49 | 90% | 88% |
+| qwen2.5:1.5b, prompt v1 | 86% | 30 of 37 | 86% | 90% |
+| Qwen2.5-0.5B, prompt v2 | 72% | 15 of 25 | 57% | 79% |
+
 Full tables, metric definitions and failure analysis: [docs/EVALUATION.md](docs/EVALUATION.md).
 
 ## How it works
@@ -93,8 +113,8 @@ flowchart LR
   RET --> DB[("SQLite FTS5 + vectors  or  PostgreSQL + pgvector")]
   SVC --> GEN["LangChain: prompt → chat model"]
   GEN --> LLM["extractive demo · Ollama · transformers"]
-  SVC --> PRE["Before generation: figure-conflict check · injection flags → notes to the model"]
-  SVC --> CHK["After generation: citation check · sentence support · refusal detection"]
+  SVC --> PRE["Before generation: disagreement check · injection flags → notes to the model"]
+  SVC --> CHK["After generation: citation check · claim check against every passage · refusal detection"]
 ```
 
 1. **Ingest.** Uploads are validated (type, size, magic bytes, encoding), parsed with page
@@ -105,13 +125,17 @@ flowchart LR
    rank, dense rank, fused and rerank scores, matched terms and timings.
 3. **Generate.** A LangChain chain sends the policy and the numbered passages as separate
    messages, using a versioned prompt (`answer-v2` by default; `answer-v1` reproduces the earlier
-   reports). Two cheap checks run first and are passed to the model as notes: passages from
-   different documents that state different figures, and passages with instruction-like text.
-   If nothing relevant is retrieved, no model is called and the answer says so.
-4. **Check.** Each `[S#]` label must match a passage the model received; each sentence is checked
-   against its cited text (missing words, invented numbers); instruction-like text in retrieved
-   documents is flagged; refusals are recognised even when a small model misspells them or adds a
-   citation; a reply with only citation markers is reported as invalid, not as an answer.
+   reports). Two deterministic checks run first. The disagreement check finds passages from
+   different documents that give different values for what is asked (or a requirement and its
+   denial), separates values for different dates or groups, and returns both quotes; the model
+   gets a short note. Passages with instruction-like text are flagged. If nothing relevant is
+   retrieved, no model is called and the answer says so.
+4. **Check.** Each `[S#]` label must match a passage the model received. Every statement is then
+   compared with every retrieved passage (figures with units, and most of its words): it is
+   supported by its citation, cited to the wrong passage, found in a passage the model did not
+   cite, partly found, or not found; the exact supporting sentence is returned. Instruction-like
+   passage text never counts as evidence. Refusals are recognised even when a small model
+   misspells them or adds a citation; a reply with only citation markers is reported as invalid.
 5. **Measure.** The same pipeline runs offline over a versioned dataset and writes JSON, CSV and
    Markdown reports with bootstrap intervals and the hardware and power source.
 
@@ -121,10 +145,13 @@ guidance; it never switches to a different model on its own. Design decisions:
 
 ## Screenshots
 
-Taken from the running application with the sample corpus and bge-small embeddings.
+Taken from the running application with the sample corpus and bge-small embeddings. The two
+Ollama screenshots are from 2026-10-13, before the claim check existed.
 
-| Ask, with qwen2.5:1.5b through Ollama: a correct answer without a citation, flagged as unverified | Ask, extractive demo generator: checked citation and an injection warning |
+| Claim check: each statement with the exact supporting sentence (extractive generator) | Disagreeing sources shown side by side, with values and dates (extractive generator) |
 |---|---|
+| ![Answer with the verdict Every statement found in the sources, the claim check listing one statement as Supported by the cited passage with the quoted sentence from the travel policy, and the passage used as evidence](docs/screenshots/ask-claim-check-light.png) | ![Answer panel where the generator found no answer but a Different values for different dates panel shows the travel policy's 140 and 110 euro hotel limits next to the finance FAQ's 120 euro limit, updated May 2025](docs/screenshots/ask-disagreement-light.png) |
+| **Ask, with qwen2.5:1.5b through Ollama: a correct answer without a citation, flagged as unverified (before the claim check)** | **Ask, extractive demo generator: checked citation and an injection warning (before the claim check)** |
 | ![Ask view with an Ollama qwen2.5:1.5b answer that is correct but has no citation; the badge says Not grounded and a warning says to treat it as unverified](docs/screenshots/ask-ollama-light.png) | ![Ask view with a cited answer, sentence check and a warning about a retrieved document that contains planted instructions](docs/screenshots/ask-light.png) |
 | **Evaluation: qwen2.5:1.5b with the answer-v2 prompt** | **Evaluation: retrieval benchmark** |
 | ![Evaluation dashboard for the qwen2.5:1.5b answer-v2 report: 91% correct behaviour, 70% correct refusals, 94% key-fact recall, 27% citation format followed, and results by category](docs/screenshots/evaluation-ollama-light.png) | ![Evaluation dashboard with Recall@5, MRR and nDCG@5 per configuration, 95% intervals and latency](docs/screenshots/evaluation-light.png) |
@@ -194,7 +221,9 @@ curl -s http://127.0.0.1:8000/api/v1/query -H "Content-Type: application/json" \
 ```
 
 The response contains the answer with `[S#]` markers, `sources` (title, page, excerpt, scores,
-injection flags), `sentences` (support per sentence), `citation_check` (valid and invalid labels),
+injection flags, which claims each passage supports), `claims` (status and exact quote with
+character offsets per statement), `verification` (verdict and counts), `conflicts` (disagreeing
+passages with values and dates), `sentences` (the strict `[S#]` check), `citation_check`,
 `warnings`, `provider` (including `is_llm`), `timings` and `usage`. Other endpoints: document upload,
 listing, chunks, re-ingest and delete; retrieval-only `/retrieve`; evaluation reports and runs;
 JSON and Prometheus metrics; health and readiness. Reference with a recorded example response:
@@ -208,6 +237,8 @@ HF_HUB_OFFLINE=1 groundedai eval retrieval --config evaluation/configs/retrieval
 groundedai eval generation --provider extractive-demo
 groundedai eval generation --provider ollama --model qwen2.5:1.5b --checkpoint data/q15.jsonl  # resumable
 python scripts/compare_generation_reports.py BASE.json OTHER.json   # paired bootstrap intervals
+python scripts/revalidate_recorded_answers.py REPORT.json   # re-check recorded outputs, no model run
+python scripts/evaluate_conflict_cases.py                   # held-out disagreement cases
 ```
 
 The dataset files are hash-checked before every run, and each report records the dataset
@@ -232,9 +263,12 @@ the latest results: [docs/TESTING.md](docs/TESTING.md).
 
 | Verified | Not verified |
 |---|---|
-| 266 backend tests (offline, SQLite) and 53 front-end tests; ruff and strict mypy clean (Windows and Linux targets) | CI on the latest commits: they are local and have not been pushed; CI last passed on `5cd6d3f` |
+| 343 backend tests (offline, SQLite) and 61 front-end tests; ruff and strict mypy clean (Windows and Linux targets) | CI on the commits of 2026-10-14: they are local and have not been pushed; CI last passed (7 of 7 jobs) on `c3cfbf1` |
 | PostgreSQL 16 + pgvector: migrations, all retrieval modes, cascade delete (bundled local server) | retrieval and answer quality on real or larger document collections |
-| real Ollama inference (0.40.3, qwen2.5:1.5b) through the API, the UI and a 56-question evaluation | larger models; any LLM-as-judge or human evaluation |
+| real Ollama inference (0.40.3, qwen2.5:1.5b) through the API, the UI and a 56-question evaluation (2026-10-13) | a model run with the claim and disagreement checks of 2026-10-14: the recorded outputs were re-checked instead, and the Ollama files have since been deleted |
+| the claim check on the recorded outputs of three model runs, with the rebuilt passages verified against every recorded result | that a "verified" statement is correct: the check is lexical; human or model judging was not done |
+| the disagreement check on 30 held-out cases written before it | larger models; any LLM-as-judge or human evaluation |
+| restart: documents, chunks and answers unchanged after restarting on the same data (test) | |
 | the full Docker Compose stack on Windows: build, health, ingestion, questions, restart, shutdown | the Ollama service inside Compose (`--profile llm`); Ollama ran natively instead |
 | retrieval benchmark rerun reproduces every published metric and interval exactly | a statistically supported advantage of hybrid retrieval over BM25 (none was found) |
 | every UI control, live and in the static demo, at desktop and phone width ([audit](docs/UI_CONTROL_AUDIT.md)) | the private claude.ai preview as rendered for a signed-in viewer (checked through its files and a local sandboxed copy) |
@@ -267,18 +301,20 @@ docs/                 architecture · API · evaluation · security · deploymen
 
 - The evaluation dataset is small, synthetic and lexically easy; it cannot show where dense
   retrieval helps, and its numbers do not transfer to other domains.
-- The support check is lexical: a cited, "supported" sentence can still be wrong.
+- The claim check is lexical: a "found" statement can still be wrong or beside the question, and
+  a correct paraphrase can be marked "partly found".
 - The local models tested here are small (0.5B and 1.5B). qwen2.5:1.5b usually gives the right
   fact but rarely cites it in the required form, and it answers some questions it should refuse.
-- The figure-conflict check is a weak heuristic: on the evaluation set it found neither conflict
-  and raised two false alarms ([details](docs/EVALUATION.md#the-figure-conflict-check)).
+- The disagreement check is pattern-based: it misses synonyms and conflicts that share one value,
+  and it does not decide which source is right ([known issues](docs/RELIABILITY_AUDIT.md#known-issues)).
 - Prompt injection is reduced (separate messages, neutralised tags and labels, pattern flags,
   a note to the model), not eliminated. See [docs/SECURITY.md](docs/SECURITY.md).
 - No OCR, tables or images; English-focused tokenisation.
 - Single-tenant: one API key, no per-user document permissions. Rate limits and in-process
   metrics are per process.
 
-More: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) ·
+More: [docs/RELIABILITY_AUDIT.md](docs/RELIABILITY_AUDIT.md) ·
+[docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) ·
 [docs/ENVIRONMENT_AND_RESOURCE_STRATEGY.md](docs/ENVIRONMENT_AND_RESOURCE_STRATEGY.md) ·
 [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md) · [CONTRIBUTING.md](CONTRIBUTING.md)
 
