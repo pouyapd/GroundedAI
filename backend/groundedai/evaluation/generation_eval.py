@@ -22,7 +22,7 @@ from __future__ import annotations
 import json
 import os
 from collections import defaultdict
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from datetime import UTC, datetime
 from pathlib import Path
 from time import perf_counter
@@ -61,6 +61,87 @@ Progress = Callable[[str], None]
 SCORING_VERSION = 4
 # Versions of the deterministic answer checks, recorded with every run.
 CLAIM_CHECK_VERSION = "claims-v1"
+
+# Every setting, by whether and where it can change an answer evaluation's results. A run
+# records the effective value of each result setting, wherever it came from (an option, a
+# GROUNDEDAI_* environment variable, a .env file or the default), and
+# `groundedai eval generation --settings-from REPORT.json` sets them all again.
+#
+# Read by the answer pipeline inside run_generation_eval. They are not its arguments, so they
+# come from GROUNDEDAI_* environment variables or the defaults (the .env file is not read).
+PIPELINE_SETTINGS: tuple[str, ...] = (
+    "candidate_k",
+    "rrf_k",
+    "hybrid_alpha",
+    "rerank_candidates",
+    "unverified_answers",
+    "max_question_chars",
+)
+# Read by `groundedai eval generation` to build the index, embedder, reranker and model, and to
+# choose the prompt and checks (environment variables, .env or defaults; some also options).
+INDEX_AND_MODEL_SETTINGS: tuple[str, ...] = (
+    "chunk_size",
+    "chunk_overlap",
+    "embedding_provider",
+    "embedding_model",
+    "embedding_dim",
+    "embedding_batch_size",
+    "embedding_query_prefix",
+    "reranker_model",
+    "fusion",
+    "max_context_chars",
+    "prompt_version",
+    "conflict_check",
+    "generation_provider",
+    "ollama_model",
+    "hf_generation_model",
+    "generation_timeout_s",
+    "max_new_tokens",
+    "temperature",
+)
+# Set from run_generation_eval's arguments (recorded as retrieval_mode, top_k, reranker and
+# timeout_s).
+ARGUMENT_SETTINGS: tuple[str, ...] = (
+    "retrieval_mode",
+    "top_k",
+    "reranker",
+    "max_concurrent_generations",
+    "generation_queue_timeout_s",
+)
+# Cannot change the results: runtime, logging, storage, server limits and security; where the
+# model server runs (its model is recorded by name and digest); whether downloads are allowed;
+# upload limits (the evaluation index uses its own); and the dataset location (the dataset is
+# recorded by name and fingerprint).
+NON_RESULT_SETTINGS: tuple[str, ...] = (
+    "env",
+    "log_level",
+    "log_json",
+    "log_query_text",
+    "data_dir",
+    "database_url",
+    "auto_migrate",
+    "frontend_dist",
+    "hf_offline",
+    "ollama_base_url",
+    "max_upload_bytes",
+    "max_pdf_pages",
+    "max_document_chars",
+    "api_key",
+    "cors_origins",
+    "rate_limit_enabled",
+    "rate_limit_query_per_minute",
+    "rate_limit_upload_per_minute",
+    "rate_limit_eval_per_hour",
+    "trust_forwarded_for",
+    "evaluation_dir",
+    "evaluation_dataset",
+)
+ENV_PREFIX = "GROUNDEDAI_"
+
+
+def environment_variable_names() -> list[str]:
+    """Names (never values) of the GROUNDEDAI_* variables set in this process's environment."""
+    return sorted(name for name in os.environ if name.upper().startswith(ENV_PREFIX))
 
 
 class CheckpointMismatchError(ValueError):
@@ -127,6 +208,7 @@ def run_generation_eval(
     run_config: dict[str, Any] | None = None,
     prompt_version: PromptVersion = DEFAULT_PROMPT_VERSION,
     conflict_check: Literal["figures-v1", "disagreement-v1"] = "disagreement-v1",
+    pipeline_settings: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Evaluate answers on every dataset question.
 
@@ -134,8 +216,29 @@ def run_generation_eval(
     finishes, and questions already in the file are skipped. A long CPU run can therefore
     stop and resume without losing work. The file starts with the run configuration; resuming
     with a different configuration is refused so results are never mixed.
+
+    The answer pipeline also reads :data:`PIPELINE_SETTINGS` from GROUNDEDAI_* environment
+    variables; ``pipeline_settings`` sets them explicitly instead (as recorded by an earlier
+    run, to reproduce it). Their effective values are recorded in ``run_config``.
     """
     say = progress or (lambda _message: None)
+    unknown = sorted(set(pipeline_settings or {}) - set(PIPELINE_SETTINGS))
+    if unknown:
+        raise ValueError(f"not pipeline settings: {', '.join(unknown)}")
+    settings = Settings(
+        _env_file=None,
+        **dict(pipeline_settings or {}),
+        retrieval_mode=retrieval_mode,
+        fusion=fusion,
+        top_k=top_k,
+        reranker="cross-encoder" if reranker else "none",
+        max_context_chars=max_context_chars,
+        prompt_version=prompt_version,
+        conflict_check=conflict_check,
+        generation_timeout_s=timeout_s,
+        max_concurrent_generations=1,
+        generation_queue_timeout_s=timeout_s,
+    )
     config_record = {
         "scoring_version": SCORING_VERSION,
         "dataset_fingerprint": dataset.fingerprint,
@@ -151,24 +254,13 @@ def run_generation_eval(
         "prompt_fingerprint": prompt_fingerprint(prompt_version),
         "conflict_check": conflict_check,
         "claim_check": CLAIM_CHECK_VERSION,
+        "timeout_s": timeout_s,
+        "pipeline_settings": {name: getattr(settings, name) for name in PIPELINE_SETTINGS},
         **(run_config or {}),
     }
     completed = _load_checkpoint(checkpoint, config_record) if checkpoint else {}
     if completed:
         say(f"Resuming from checkpoint: {len(completed)} question(s) already scored")
-    settings = Settings(
-        _env_file=None,
-        retrieval_mode=retrieval_mode,
-        fusion=fusion,
-        top_k=top_k,
-        reranker="cross-encoder" if reranker else "none",
-        max_context_chars=max_context_chars,
-        prompt_version=prompt_version,
-        conflict_check=conflict_check,
-        generation_timeout_s=timeout_s,
-        max_concurrent_generations=1,
-        generation_queue_timeout_s=timeout_s,
-    )
     engine = RetrievalEngine(
         SqliteSearchBackend(), lambda: corpus.embedding_provider, lambda: reranker
     )
@@ -235,7 +327,9 @@ def run_generation_eval(
             "max_context_chars": max_context_chars,
         },
         "prompt_version": prompt_version,
-        "run_config": config_record,
+        # Variable names only (values of the result settings are in the record above). Kept
+        # out of the checkpoint header: an unrelated variable must not block resuming.
+        "run_config": {**config_record, "environment_variables": environment_variable_names()},
         "resumed_from_checkpoint": len(completed),
         "environment": environment_info(),
         "summary": summarize_rows(rows),

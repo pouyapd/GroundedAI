@@ -421,6 +421,30 @@ Every answer report records the prompt version and a fingerprint of its text, th
 and whether the tree had uncommitted changes, the model revision (Hugging Face commit or Ollama
 digest), the dataset fingerprint, the retrieval settings, the hardware and the power source.
 
+**Settings from the environment.** `groundedai eval generation` reads some settings from
+`GROUNDEDAI_*` environment variables, a `.env` file or the defaults, and the answer pipeline reads
+`candidate_k`, `rrf_k`, `hybrid_alpha`, `rerank_candidates`, `unverified_answers` and
+`max_question_chars` from environment variables or the defaults. Since 2026-10-14 every answer
+report records the value each of these settings actually had, wherever it came from:
+`run_config.settings` (index, embedder, reranker, model, prompt and checks),
+`run_config.pipeline_settings` and `run_config.timeout_s`. `run_config.environment_variables`
+lists the names of the `GROUNDEDAI_*` variables that were set (names only, never values).
+Settings that cannot change results (logging, storage, server limits, keys) are not recorded; the
+grouping is in `generation_eval.py` and a test fails if a new setting is not placed in a group.
+To run again with exactly the recorded settings, whatever the shell sets:
+
+```bash
+groundedai eval generation --provider ollama --settings-from REPORT.json
+```
+
+Options given on the command line (`--provider`, `--model`, `--mode`, `--top-k`, `--rerank`,
+`--timeout`, `--limit`, `--prompt-version`) still apply; every difference from the recorded run is
+printed before the run starts. Reports written before 2026-10-14 do not record these settings,
+and `--settings-from` refuses them. For the three 2026-10-13 model runs, a replay with the default
+pipeline settings reproduced every recorded status, citation, grounding and coverage value, which
+is consistent with the defaults but not a record of them (`unverified_answers` did not exist yet,
+and no run used a reranker).
+
 `--checkpoint` appends each scored question to a JSONL file as soon as it finishes. If a long
 CPU run is interrupted, the same command resumes from the file and asks only the missing
 questions; a checkpoint written with a different configuration is refused, so results are never

@@ -132,6 +132,9 @@ def _replay(
         max_context_chars=int(config["max_context_chars"]),
         prompt_version=config["prompt_version"],
         conflict_check=conflict_check,  # type: ignore[arg-type]
+        # Recorded since 2026-10-14. Older reports have none: the defaults then apply, and the
+        # rebuild check stops the replay if they do not reproduce the recorded results.
+        pipeline_settings=config.get("pipeline_settings"),
         run_config={
             "chunk_size": config["chunk_size"],
             "chunk_overlap": config["chunk_overlap"],

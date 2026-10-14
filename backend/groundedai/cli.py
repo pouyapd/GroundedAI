@@ -165,7 +165,7 @@ def cmd_eval_retrieval(args: argparse.Namespace) -> int:
 
 def cmd_eval_generation(args: argparse.Namespace) -> int:
     from groundedai.evaluation.dataset import load_dataset
-    from groundedai.evaluation.generation_eval import run_generation_eval
+    from groundedai.evaluation.generation_eval import INDEX_AND_MODEL_SETTINGS, run_generation_eval
     from groundedai.evaluation.index import build_index
     from groundedai.evaluation.reporting import render_markdown, write_report
     from groundedai.generation.providers import build_generation_provider
@@ -173,7 +173,17 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
     from groundedai.retrieval.embeddings import build_embedding_provider
     from groundedai.retrieval.rerank import CrossEncoderReranker
 
+    recorded = None
     base = get_settings()
+    if args.settings_from:
+        try:
+            recorded = _load_recorded_settings(Path(args.settings_from))
+            # The recorded values replace GROUNDEDAI_* variables, .env and defaults for every
+            # setting that can change results; options given on the command line still apply.
+            base = Settings(_env_file=None, **{**base.model_dump(), **recorded[0]})
+        except (OSError, ValueError) as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
     overrides: dict[str, Any] = {"generation_provider": args.provider}
     if args.prompt_version:
         overrides["prompt_version"] = args.prompt_version
@@ -182,6 +192,9 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
         overrides[key] = args.model
     settings = base.model_copy(update=overrides)
     dataset = load_dataset(Path(args.dataset_dir) if args.dataset_dir else settings.dataset_dir)
+    if recorded is not None:
+        for note in _differences_from_recording(args, settings, dataset.fingerprint, recorded):
+            print(f"Differs from the recorded run: {note}", flush=True)
     embedding = build_embedding_provider(settings)
     provider = build_generation_provider(settings)
     reranker = (
@@ -214,6 +227,7 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
                 checkpoint=Path(args.checkpoint) if args.checkpoint else None,
                 prompt_version=settings.prompt_version,
                 conflict_check=settings.conflict_check,
+                pipeline_settings=recorded[1] if recorded is not None else None,
                 run_config={
                     "chunk_size": settings.chunk_size,
                     "chunk_overlap": settings.chunk_overlap,
@@ -221,6 +235,10 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
                     "max_new_tokens": settings.max_new_tokens,
                     "temperature": settings.temperature,
                     "limit": args.limit,
+                    # Effective values of every setting read here (see INDEX_AND_MODEL_SETTINGS).
+                    "settings": {
+                        name: getattr(settings, name) for name in INDEX_AND_MODEL_SETTINGS
+                    },
                 },
             )
         finally:
@@ -229,6 +247,67 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
     print(render_markdown(report))
     print("Written:", ", ".join(str(path) for path in paths.values()))
     return 0
+
+
+RecordedSettings = tuple[dict[str, Any], dict[str, Any], dict[str, Any]]
+
+
+def _load_recorded_settings(path: Path) -> RecordedSettings:
+    """Settings an earlier answer evaluation recorded: (index and model, pipeline, run_config)."""
+    from groundedai.evaluation.generation_eval import INDEX_AND_MODEL_SETTINGS, PIPELINE_SETTINGS
+
+    report = json.loads(path.read_text(encoding="utf-8"))
+    config = report.get("run_config") if isinstance(report, dict) else None
+    settings = config.get("settings") if isinstance(config, dict) else None
+    pipeline = config.get("pipeline_settings") if isinstance(config, dict) else None
+    if (
+        not isinstance(config, dict)
+        or not isinstance(settings, dict)
+        or not isinstance(pipeline, dict)
+    ):
+        raise ValueError(
+            f"{path} does not record its settings (answer reports written before 2026-10-14 do "
+            "not); set them as described in docs/EVALUATION.md, 'Reproducing'."
+        )
+    missing = sorted(
+        (set(INDEX_AND_MODEL_SETTINGS) - set(settings)) | (set(PIPELINE_SETTINGS) - set(pipeline))
+    )
+    if missing:
+        raise ValueError(f"{path} does not record these settings: {', '.join(missing)}")
+    return (
+        {name: settings[name] for name in INDEX_AND_MODEL_SETTINGS},
+        {name: pipeline[name] for name in PIPELINE_SETTINGS},
+        config,
+    )
+
+
+def _differences_from_recording(
+    args: argparse.Namespace, settings: Settings, fingerprint: str, recorded: RecordedSettings
+) -> list[str]:
+    """What a run started with --settings-from does differently from the recorded run."""
+    recorded_settings, _pipeline, config = recorded
+    notes = [
+        f"{name} {getattr(settings, name)!r} (recorded {value!r})"
+        for name, value in recorded_settings.items()
+        if getattr(settings, name) != value
+    ]
+    given = {
+        "retrieval_mode": args.mode,
+        "top_k": args.top_k,
+        "timeout_s": args.timeout,
+        "limit": args.limit,
+        "dataset_fingerprint": fingerprint,
+    }
+    notes += [
+        f"{key} {value!r} (recorded {config.get(key)!r})"
+        for key, value in given.items()
+        if config.get(key) != value
+    ]
+    if bool(args.rerank) != (config.get("reranker") is not None):
+        notes.append(
+            f"reranker {'on' if args.rerank else 'off'} (recorded {config.get('reranker')!r})"
+        )
+    return notes
 
 
 def cmd_status(_args: argparse.Namespace) -> int:
@@ -310,6 +389,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--checkpoint",
         default=None,
         help="JSONL file: save each scored question as it finishes and resume from it",
+    )
+    generation.add_argument(
+        "--settings-from",
+        default=None,
+        metavar="REPORT.json",
+        help=(
+            "use every setting recorded in an earlier answer report instead of GROUNDEDAI_* "
+            "variables, .env and defaults (options given here still apply)"
+        ),
     )
     generation.set_defaults(func=cmd_eval_generation)
     return parser
