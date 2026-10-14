@@ -47,7 +47,7 @@ the next session: what is done, what was verified, and what is left.
 | Held-out disagreement cases (30) | 12 of 16 found, kind right in all 12, 0 of 14 false alarms |
 | Retrieval at the application's defaults | BM25 Recall@5 1.000, MRR 0.985; no configuration better |
 | Real language-model inference | not run (Ollama files deleted on 2026-10-13) |
-| GitHub Actions | passed on `c3cfbf1` (run 38414818764); the 2026-10-14 commits are local and not pushed |
+| GitHub Actions | passed on `45b12a2` (run 38612773081, all 7 jobs) after the 2026-10-14 commits were pushed |
 
 Details: [RELIABILITY_AUDIT.md](RELIABILITY_AUDIT.md).
 

@@ -35,6 +35,26 @@ cd frontend
 npm run lint && npm run typecheck && npm test && npm run build
 ```
 
+## Results recorded after the PR review fixes (2026-10-14, same laptop)
+
+Fixes: the conflict explanation for a requirement against its denial, and the recording of every
+setting that can change an answer evaluation ([RELIABILITY_AUDIT.md](RELIABILITY_AUDIT.md),
+"Fixes after the PR review").
+
+| Check | Result |
+|---|---|
+| `pytest --cov` (default suite, run from `backend/`) | 352 passed, 6 skipped (the PostgreSQL tests, no database URL set); line coverage 93% |
+| — of which `tests/unit` / `tests/integration` / `tests/api` / `tests/e2e` | 233 / 73 (+6 skipped) / 44 / 2 passed |
+| `pytest -m postgres` via `scripts/dev_postgres.py` (PostgreSQL 16.2, pgvector 0.6.2) | 6 passed |
+| `ruff check`, `ruff format --check` (`groundedai`, `tests`, `scripts`, `tools`, `evaluation/scripts`) | clean |
+| `mypy` (strict, 79 files), also with `--platform linux` | no issues |
+| `vitest` | 62 passed (7 files) |
+| `eslint`, `tsc -b`, `npm run build`, `npm run build:demo` | clean, both builds succeeded |
+| New regression tests run against the code before the fix | the conflict-text tests (backend and UI) failed with the reported text ("S1 says ,", "Value: "), as intended |
+| Disagreement check, old and new code on the 30 held-out inputs | identical pairs and kinds; one explanation changed (the broken one) |
+| `scripts/revalidate_recorded_answers.py` on the qwen2.5:1.5b answer-v2 run of 2026-10-13 | rebuild verified; every per-question row and the summary identical to the published replay; the new report records the pipeline settings (defaults) and no `GROUNDEDAI_*` variables |
+| Not rerun for these fixes | browser check (the change is the text of the disagreement panel, covered by tests); Docker Compose; real language-model inference (no model available) |
+
 ## Results recorded on 2026-10-14 (development laptop, Windows 11, Python 3.12.7, Node 24.19.0)
 
 | Check | Result |
@@ -49,7 +69,7 @@ npm run lint && npm run typecheck && npm test && npm run build
 | Live application in a browser (extractive generator, bge-small) | claim check and disagreement panel at 1100 px and 390 px, light and dark; no horizontal scrolling |
 | Real language-model inference | **not run**: the portable Ollama build and its model were deleted on 2026-10-13. The claim and disagreement checks were measured on recorded outputs instead ([RELIABILITY_AUDIT.md](RELIABILITY_AUDIT.md)) |
 | Docker Compose | **not rerun** (verified on 2026-10-13; the Dockerfile and Compose file did not change) |
-| GitHub Actions | last run on `c3cfbf1` (2026-10-13, run 38414818764): all 7 jobs passed. The commits of 2026-10-14 are local and not pushed, so CI has **not** run on them |
+| GitHub Actions | at the time: last run on `c3cfbf1` (2026-10-13, run 38414818764). The 11 commits were pushed later on 2026-10-14 and CI run 38612773081 on `45b12a2` passed all 7 jobs |
 
 ## Results recorded on 2026-10-13 (development laptop, Windows 11, Python 3.12.7, Node 24.19.0)
 

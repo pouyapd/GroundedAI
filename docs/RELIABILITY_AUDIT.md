@@ -158,11 +158,33 @@ dense retrieval helps; whether to default to BM25 is left open.
   outputs and retrieval contexts, and on new unit tests. Their thresholds are the earlier ones
   (70% / 40% word overlap); no threshold was tuned on the evaluation set.
 - The held-out disagreement cases were committed before the check existed and were run once;
-  their file is hash-checked.
+  their file is hash-checked. After the PR review (below), their inputs were used once more only
+  to confirm that a wording fix left the check's output unchanged: the old and new code were
+  compared with each other on all 30 cases, not scored against the expected results.
 - The evaluation set's failures were inspected during the audit; results on its conflict
   questions are therefore not blind.
-- Every new report records the commit (all clean), the check versions and the settings; no
-  earlier report was changed.
+- Every new report records the commit (all clean), the check versions and the explicit settings;
+  no earlier report was changed. The reports of 2026-10-14 do **not** record the pipeline settings
+  that the shell environment could change (`candidate_k`, `rrf_k`, `hybrid_alpha`,
+  `rerank_candidates`, `unverified_answers`, `max_question_chars`). The commands logged for those
+  runs set none of them and the machine's user and system environment defines none, but the
+  reports themselves cannot show it. Reports written after the fix below record them.
+
+## Fixes after the PR review (2026-10-14)
+
+- **Conflict text.** For a passage that requires something ("must") against one that says it is
+  not required, the explanation read "S1 says , S2 says there is no such requirement" and the UI
+  showed an empty "Value:". It now reads "S1 says it is required" and the UI shows "Value:
+  required" / "Value: not required"; the API marks such a statement with `affirms_requirement`.
+  Which passages are paired and how they are classified did not change (old and new code compared
+  on the 30 held-out cases: identical pairs and kinds; one explanation changed, from the broken
+  text to the fixed one). None of the published reports or demo recordings contained the broken
+  text.
+- **Settings recorded with each evaluation.** `GROUNDEDAI_*` environment variables could change
+  what an answer evaluation did without appearing in its report. Every answer report now records
+  the effective value of every setting that can change results, and the names of the variables
+  that were set; `groundedai eval generation --settings-from REPORT.json` runs again with exactly
+  those values. Defaults and results without such variables are unchanged.
 
 ## Known issues
 

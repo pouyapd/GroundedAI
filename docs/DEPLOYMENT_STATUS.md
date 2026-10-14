@@ -8,8 +8,8 @@ Last updated: 2026-10-14.
 | Local, PostgreSQL + pgvector | **Working (tests)** | `pytest -m postgres` passed against PostgreSQL 16.2 + pgvector 0.6.2 started by `scripts/dev_postgres.py` (no Docker) |
 | Docker image | **Built and run locally and in CI** | 2026-10-13 on the development machine (Docker Desktop on Windows) as part of the Compose check below; in CI on every push (results below) |
 | Docker Compose | **Working (verified locally)** | 2026-10-13: `docker compose up -d --build` with a throwaway password; both services healthy; 3 documents ingested (one a PDF); questions in lexical, dense and hybrid mode; a page-cited answer; data kept after an API restart; `down -v` and the images removed afterwards. The optional `ollama` service (`--profile llm`) was not started; Ollama ran natively instead |
-| GitHub repository | **Private** | [`pouyapd/GroundedAI`](https://github.com/pouyapd/GroundedAI); branch `feature/groundedai-v0.1`, pull request #1 into `main` (open, not merged). The commits of 2026-10-13 were pushed; the commits of 2026-10-14 are local and **not pushed** |
-| GitHub Actions (CI) | **Passing on `c3cfbf1`; not run on the 2026-10-14 commits** | Run 38414818764 on `c3cfbf1` (2026-10-13): all 7 jobs passed (results below). CI runs when the local commits are pushed |
+| GitHub repository | **Private** | [`pouyapd/GroundedAI`](https://github.com/pouyapd/GroundedAI); branch `feature/groundedai-v0.1`, pull request #1 into `main` (open, not merged). The commits of 2026-10-13 and the 11 commits of 2026-10-14 (claim and disagreement checks) were pushed; the fixes from the PR review are listed on the pull request with their CI result |
+| GitHub Actions (CI) | **Passing on `45b12a2`** | Run 38612773081 on `45b12a2` (2026-10-14): all 7 jobs passed (results below). Later commits: see the checks on pull request #1 |
 | Static demo build | **Built and checked locally** | `npm run build:demo`; every control checked at 390 px and 1280 px, also inside a sandboxed iframe that blocks history changes ([UI_CONTROL_AUDIT.md](UI_CONTROL_AUDIT.md)) |
 | Local LLM through Ollama | **Working (verified locally on 2026-10-13)** | Ollama 0.40.3 (portable build, bound to 127.0.0.1) with `qwen2.5:1.5b` (digest `65ec06548149`): answers through the API and the UI, and the 56-question evaluation. The portable build and the model were deleted afterwards to free disk space; the checks added on 2026-10-14 were not run with a model |
 | Private online preview | **Published, private** | The static demo as a private claude.ai artifact (details below) |
@@ -79,6 +79,8 @@ pushed on 2026-10-13; run 38414818764 on `c3cfbf1` passed all 7 jobs: backend on
 (fingerprint `fa56ebd64e3b1eee`), front end (53 tests, both builds), dependency audit (no known
 vulnerabilities), Docker image and Compose config.
 
-**Not yet run:** the commits of 2026-10-14 (claim check, disagreement check, scoring version 4,
-re-checked reports, UI) are on the local branch only. They pass the same checks locally
-(`docs/TESTING.md`), but CI has not seen them; pushing the branch would run it.
+The 11 commits of 2026-10-14 (claim check, disagreement check, scoring version 4, re-checked
+reports, UI) were pushed on 2026-10-14; run 38612773081 on `45b12a2` passed all 7 jobs: backend
+on Python 3.12 and 3.13 (343 passed, 6 skipped, coverage 92%), PostgreSQL + pgvector (6
+passed), offline benchmark (fingerprint `fa56ebd64e3b1eee`), front end (61 tests, both builds),
+dependency audit (no known vulnerabilities), Docker image and Compose config.
