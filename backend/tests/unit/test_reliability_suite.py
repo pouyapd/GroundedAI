@@ -628,12 +628,10 @@ def test_replacements_keep_the_subtype_and_are_logged(
     assert [row["question"] for row in replaced if row["id"] == "C-T-001"] == [new_c["question"]]
     assert [row["id"] for row in replaced] == ["C-T-001", "C-T-002"]
     (entry,) = [json.loads(line) for line in log.read_text("utf-8").splitlines()]
-    assert (entry["id"], entry["subtype"], entry["reason"]) == (
-        "C-T-001",
-        "correct_value",
-        "round 1: not confirmed",
-    )
+    assert (entry["id"], entry["reason"]) == ("C-T-001", "round 1: not confirmed")
     assert entry["old_sha256"] != entry["new_sha256"]
+    # The log names cases but never their subtype or label (a subtype implies the gold label).
+    assert set(entry) == {"id", "old_sha256", "new_sha256", "reason", "date"}
     issues, _ = suite.validate_suite(root, FIXTURE_COUNTS)
     assert {issue.code for issue in issues if issue.severity == "error"} == {"hash_mismatch"}
     assert cli.main(["rehash", "--root", str(root)]) == 0

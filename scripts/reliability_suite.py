@@ -338,9 +338,10 @@ def cmd_rehash(args: argparse.Namespace) -> int:
 def cmd_replace_cases(args: argparse.Namespace) -> int:
     """Put replacement cases in place of existing ones, keeping id, category, split and subtype.
 
-    Every replacement is logged in ``REVISIONS.jsonl`` (next to the manifest) with the old and new
-    line hashes and the reason; case text is never printed or logged. Run ``rehash`` and
-    ``validate`` afterwards; a replaced test case must then be audited blind.
+    Every replacement is logged in ``REVISIONS.jsonl`` (next to the manifest) with the case id, the
+    old and new line hashes and the reason; case text, subtypes and labels are never printed or
+    logged. Run ``rehash`` and ``validate`` afterwards; a replaced test case must then be audited
+    blind.
     """
     root = Path(args.root)
     by_file: dict[Path, dict[str, dict[str, Any]]] = {}
@@ -378,10 +379,10 @@ def cmd_replace_cases(args: argparse.Namespace) -> int:
             text = json.dumps(new, ensure_ascii=False)
             lines[index] = text
             found.add(str(old["id"]))
+            # No subtype or label: for a test case it would reveal the gold label.
             revisions.append(
                 {
                     "id": old["id"],
-                    "subtype": old["subtype"],
                     "old_sha256": hashlib.sha256(line.encode("utf-8")).hexdigest(),
                     "new_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
                     "reason": args.reason,
