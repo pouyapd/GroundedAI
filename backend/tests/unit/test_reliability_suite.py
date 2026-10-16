@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import json
 import re
+import sys
 from pathlib import Path
 from types import ModuleType
 from typing import Any
@@ -637,6 +639,23 @@ def test_replacements_keep_the_subtype_and_are_logged(
     assert cli.main(["rehash", "--root", str(root)]) == 0
     issues, _ = suite.validate_suite(root, FIXTURE_COUNTS)
     assert [issue for issue in issues if issue.severity == "error"] == []
+
+
+def test_scoring_prints_on_a_console_that_cannot_encode_the_report(
+    fixture_suite: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # The Markdown report has "≥" and "–"; a Windows console (cp1252) cannot encode "≥".
+    cli = _script()
+    console = io.TextIOWrapper(io.BytesIO(), encoding="cp1252")
+    monkeypatch.setattr(sys, "stdout", console)
+    monkeypatch.setattr(cli, "LOCAL_OUT", tmp_path / "local")
+    args = ["score", "--split", "dev", "--checks", "v1", "--root", str(fixture_suite)]
+    assert cli.main([*args, "--out", str(tmp_path / "reports")]) == 0
+    console.flush()
+    printed = console.buffer.getvalue().decode("cp1252")  # type: ignore[attr-defined]
+    assert "| A. unsupported_recall |" in printed
+    (report,) = (tmp_path / "reports").glob("*.md")
+    assert "≥" in report.read_text("utf-8")  # the file keeps the exact characters
 
 
 def test_the_test_split_is_scored_only_when_frozen_and_once(

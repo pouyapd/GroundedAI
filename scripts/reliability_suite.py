@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import html
+import io
 import json
 import random
 import sys
@@ -865,6 +866,11 @@ def cmd_score(args: argparse.Namespace) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Reports contain "≥" and "–"; a Windows console (cp1252) cannot print them. The files are
+    # written as UTF-8 either way; on the console such characters become "?".
+    for stream in (sys.stdout, sys.stderr):
+        if isinstance(stream, io.TextIOWrapper):
+            stream.reconfigure(errors="replace")
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
