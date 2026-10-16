@@ -41,6 +41,14 @@ models/
 # --- Evaluation scratch output (committed reports live in evaluation/reports/published) ---
 evaluation/reports/local/
 
+# --- Held-out reliability data: private, never committed (the manifest records its hashes) ---
+.reliability-staging/
+evaluation/datasets/groundedai-reliability-v1/test/
+evaluation/datasets/groundedai-reliability-v1/documents/test/
+evaluation/datasets/groundedai-reliability-v1/notes/
+evaluation/datasets/groundedai-reliability-v1/audit/private/
+evaluation/reports/reliability/sealed/
+
 # --- Secrets and local configuration ---
 .env
 .env.*

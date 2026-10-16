@@ -45,6 +45,11 @@ version.
 - The coordinating (implementing) agent does not open held-out cases. The scorer prints counts,
   rates and intervals only; per-case outcomes are written as `{id: {category, correct}}` to
   `evaluation/reports/reliability/sealed/` for the paired comparison.
+- Held-out material is never committed: `test/`, `documents/test/`, the writer's `notes/`, the
+  per-case audit files in `audit/private/` and the sealed outcomes are listed in `.gitignore` and
+  exist only on the owner's machine. The committed `manifest.json` and `FROZEN_TEST_SHA256`
+  record their exact content, so a copy can be checked, but they cannot be rebuilt from the
+  repository: keep a private backup. Committed audit records and reports hold counts only.
 - The test split is scored **once per version of the checks**: once with the code at freeze time
   (baseline) and once with the final, frozen implementation. Every run is logged in
   `evaluation/reports/reliability/test-runs.jsonl`; a second run of the same version is refused
