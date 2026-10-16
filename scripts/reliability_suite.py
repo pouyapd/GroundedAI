@@ -144,6 +144,7 @@ def _case_html(case: Case, number: int, *, reveal: dict[str, str] | None = None)
 PAGE = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
 <title>{title}</title>
 <style>
 :root {{
