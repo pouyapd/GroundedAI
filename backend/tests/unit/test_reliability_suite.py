@@ -424,8 +424,13 @@ def test_the_blind_audit_page_shows_no_label_and_the_comparison_counts(
     cases = {case.id: case for case in suite.load_cases(fixture_suite, "test")}
     answers = {n: {"label": suite.gold_label(cases[i])} for n, i in sample["numbers"].items()}
     first = next(iter(answers))
+    first_case = cases[sample["numbers"][first]]
     answers[first] = {
-        "label": "none" if cases[sample["numbers"][first]].category != "D" else "conflict"
+        "label": next(
+            value
+            for value, _text in suite.AUDIT_LABELS[first_case.category]
+            if value != suite.gold_label(first_case)
+        )
     }
     (tmp_path / "answers.json").write_text(json.dumps(answers), "utf-8")
     capsys.readouterr()
@@ -448,6 +453,8 @@ def test_the_blind_audit_page_shows_no_label_and_the_comparison_counts(
     assert "blind agreement: 7 of 8" in capsys.readouterr().out
     result = json.loads((out / "audit_result.json").read_text("utf-8"))
     assert [item["number"] for item in result["disagreements"]] == [first]
+    assert result["disagreements"][0]["reason"] == "different label"
+    assert result["answers"]["missing"] == []
     assert "Proposed label" in (out / "reveal.html").read_text("utf-8")
     (tmp_path / "decisions.json").write_text(json.dumps({first: {"label": "replace"}}), "utf-8")
     assert (
@@ -464,6 +471,167 @@ def test_the_blind_audit_page_shows_no_label_and_the_comparison_counts(
     )
     applied = json.loads((out / "audit_decisions_applied.json").read_text("utf-8"))
     assert applied["replace"] == [sample["numbers"][first]]
+
+
+def test_saved_answers_are_matched_to_the_sample_before_comparing(tmp_path: Path) -> None:
+    cli = _script()
+    categories = {"1": "A", "2": "B", "3": "C", "4": "D"}
+    path = tmp_path / "answers.json"
+
+    def answers(text: str) -> tuple[dict[str, str], dict[str, Any]]:
+        path.write_text(text, "utf-8")
+        result: tuple[dict[str, str], dict[str, Any]] = cli.check_answers(path, categories)
+        return result
+
+    labels, summary = answers(
+        '{"1": {"label": "supported", "note": "private note"}, "2": {"label": null, "note": ""},'
+        ' "3": {"label": "conflict", "note": ""}, "4": {"label": "  ", "note": ""}}'
+    )
+    assert labels == {"1": "supported"}
+    assert (summary["entries"], summary["answered"]) == (4, 1)
+    assert summary["missing"] == ["2", "4"]
+    assert summary["invalid"] == ["3"]  # "conflict" is a group D label, not a group C one
+    assert "private note" not in json.dumps(summary)
+    labels, summary = answers('{"1": "not_supported", "2": {"label": "wrong", "note": ""}}')
+    assert labels == {"1": "not_supported", "2": "wrong"}
+    assert summary["missing"] == ["3", "4"]
+    for incompatible in (
+        '{"1": {"label": "supported"}, "1": {"label": "not_supported"}}',
+        '{"1": {"label": "supported"}, "51": {"label": "supported"}}',
+        '[{"label": "supported"}]',
+        "not json",
+    ):
+        with pytest.raises(cli.AnswersError):
+            answers(incompatible)
+
+
+def test_the_comparison_refuses_answers_that_do_not_fit_the_sample(
+    fixture_suite: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    cli = _script()
+    monkeypatch.setattr(cli, "AUDIT_SAMPLE", {"A": 2, "B": 2, "C": 2, "D": 2})
+    out = tmp_path / "audit"
+    assert cli.main(["audit-prepare", "--root", str(fixture_suite), "--out", str(out)]) == 0
+    compare = [
+        "audit-compare",
+        "--root",
+        str(fixture_suite),
+        "--sample",
+        str(out / "audit_sample.json"),
+        "--answers",
+        str(tmp_path / "answers.json"),
+        "--out",
+        str(out),
+    ]
+    (tmp_path / "answers.json").write_text('{"9": {"label": "supported"}}', "utf-8")
+    assert cli.main(compare) == 2
+    assert not (out / "audit_result.json").exists()
+    sample = json.loads((out / "audit_sample.json").read_text("utf-8"))
+    cases = {case.id: case for case in suite.load_cases(fixture_suite, "test")}
+    answers = {n: {"label": suite.gold_label(cases[i])} for n, i in sample["numbers"].items()}
+    answers["1"] = {"label": None}
+    (tmp_path / "answers.json").write_text(json.dumps(answers), "utf-8")
+    assert cli.main(compare) == 0
+    result = json.loads((out / "audit_result.json").read_text("utf-8"))
+    assert (result["agreed"], result["total"]) == (7, 8)
+    assert result["answers"]["missing"] == ["1"]
+    assert result["disagreements"][0]["reason"] == "no valid blind label"
+    # A sample drawn from different test content is refused.
+    changed = fixture_suite / "test" / "A.jsonl"
+    changed.write_text(changed.read_text("utf-8").replace("R-A1", "R-A1 edited"), "utf-8")
+    assert cli.main(compare) == 2
+
+
+def test_a_later_round_scores_the_random_sample_apart_from_included_cases(
+    fixture_suite: Path,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    cli = _script()
+    monkeypatch.setattr(cli, "AUDIT_SAMPLE", {"A": 1, "B": 1, "C": 1, "D": 0})
+    (tmp_path / "exclude.json").write_text('["A-T-001"]', "utf-8")
+    (tmp_path / "include.json").write_text('["D-T-001"]', "utf-8")
+    out = tmp_path / "round2"
+    prepare = ["audit-prepare", "--root", str(fixture_suite), "--out", str(out), "--seed", "7"]
+    options = ["--round", "2", "--exclude", str(tmp_path / "exclude.json")]
+    assert cli.main([*prepare, *options, "--include", str(tmp_path / "include.json")]) == 0
+    page = (out / "blind_audit.html").read_text("utf-8")
+    assert "round 2" in page
+    assert "blind_answers_round2.json" in page
+    assert "D-T-001" not in page
+    sample = json.loads((out / "audit_sample.json").read_text("utf-8"))
+    assert "A-T-001" not in sample["numbers"].values()
+    assert [sample["numbers"][n] for n in sample["included"]] == ["D-T-001"]
+    cases = {case.id: case for case in suite.load_cases(fixture_suite, "test")}
+    answers = {n: {"label": suite.gold_label(cases[i])} for n, i in sample["numbers"].items()}
+    answers[sample["included"][0]] = {"label": "none"}  # the included case's proposed: conflict
+    (tmp_path / "answers.json").write_text(json.dumps(answers), "utf-8")
+    capsys.readouterr()
+    compare = ["audit-compare", "--root", str(fixture_suite), "--out", str(out)]
+    answers_file = str(tmp_path / "answers.json")
+    files = ["--sample", str(out / "audit_sample.json"), "--answers", answers_file]
+    assert cli.main([*compare, *files]) == 0
+    printed = capsys.readouterr().out
+    assert "blind agreement, random sample: 3 of 3" in printed
+    assert "each of which must agree: 0 of 1" in printed
+    result = json.loads((out / "audit_result.json").read_text("utf-8"))
+    assert (result["agreed"], result["total"]) == (3, 3)
+    assert (result["included"]["agreed"], result["included"]["total"]) == (0, 1)
+    assert result["disagreements"] == [
+        {
+            "number": sample["included"][0],
+            "id": "D-T-001",
+            "reason": "different label",
+            "included": True,
+        }
+    ]
+    (tmp_path / "include.json").write_text('["Z-T-001"]', "utf-8")
+    assert cli.main([*prepare, "--include", str(tmp_path / "include.json")]) == 2
+
+
+def test_replacements_keep_the_subtype_and_are_logged(
+    fixture_suite: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    cli = _script()
+    root = fixture_suite
+    rows = {
+        row["id"]: row
+        for path in (root / "test" / "C.jsonl", root / "test" / "D.jsonl")
+        for row in (json.loads(line) for line in path.read_text("utf-8").splitlines())
+    }
+    new_c = dict(rows["C-T-001"], question="What is the price of one adult single ticket?")
+    bad_d = dict(rows["D-T-002"], subtype="plain_conflict")
+    replace = ["replace-cases", "--root", str(root), "--reason", "round 1: not confirmed"]
+    cases_file = tmp_path / "replacements.jsonl"
+    before = {p: p.read_bytes() for p in (root / "test").glob("*.jsonl")}
+    cases_file.write_text(json.dumps(new_c) + "\n" + json.dumps(bad_d) + "\n", "utf-8")
+    assert cli.main([*replace, "--cases", str(cases_file)]) == 2
+    assert {p: p.read_bytes() for p in before} == before  # a refused run changes nothing
+    assert not (root / "REVISIONS.jsonl").exists()
+    unknown = dict(rows["C-T-002"], id="C-T-099")
+    cases_file.write_text(json.dumps(unknown) + "\n", "utf-8")
+    assert cli.main([*replace, "--cases", str(cases_file)]) == 2
+    cases_file.write_text(json.dumps(new_c) + "\n", "utf-8")
+    capsys.readouterr()
+    assert cli.main([*replace, "--cases", str(cases_file)]) == 0
+    assert "adult single ticket" not in capsys.readouterr().out
+    c_file, log = root / "test" / "C.jsonl", root / "REVISIONS.jsonl"
+    replaced = [json.loads(line) for line in c_file.read_text("utf-8").splitlines()]
+    assert [row["question"] for row in replaced if row["id"] == "C-T-001"] == [new_c["question"]]
+    assert [row["id"] for row in replaced] == ["C-T-001", "C-T-002"]
+    (entry,) = [json.loads(line) for line in log.read_text("utf-8").splitlines()]
+    assert (entry["id"], entry["subtype"], entry["reason"]) == (
+        "C-T-001",
+        "correct_value",
+        "round 1: not confirmed",
+    )
+    assert entry["old_sha256"] != entry["new_sha256"]
+    issues, _ = suite.validate_suite(root, FIXTURE_COUNTS)
+    assert {issue.code for issue in issues if issue.severity == "error"} == {"hash_mismatch"}
+    assert cli.main(["rehash", "--root", str(root)]) == 0
+    issues, _ = suite.validate_suite(root, FIXTURE_COUNTS)
+    assert [issue for issue in issues if issue.severity == "error"] == []
 
 
 def test_the_test_split_is_scored_only_when_frozen_and_once(

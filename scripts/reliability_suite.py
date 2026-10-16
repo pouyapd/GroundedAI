@@ -2,7 +2,9 @@
 
     python scripts/reliability_suite.py validate [--root DIR]
     python scripts/reliability_suite.py rehash [--root DIR]
-    python scripts/reliability_suite.py audit-prepare --out DIR [--root DIR] [--seed N]
+    python scripts/reliability_suite.py replace-cases --cases FILE.jsonl --reason TEXT [--root DIR]
+    python scripts/reliability_suite.py audit-prepare --out DIR [--root DIR] [--seed N] [--round N]
+        [--exclude IDS.json] [--include IDS.json]
     python scripts/reliability_suite.py audit-compare --sample FILE --answers FILE --out DIR
         [--root DIR]
     python scripts/reliability_suite.py audit-decide --result FILE --decisions FILE
@@ -21,6 +23,7 @@ run is logged.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 import random
@@ -92,7 +95,8 @@ def _write(path: Path, text: str) -> None:
 
 
 def _manifest(root: Path) -> dict[str, Any]:
-    return json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+    manifest: dict[str, Any] = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+    return manifest
 
 
 def _case_html(case: Case, number: int, *, reveal: dict[str, str] | None = None) -> str:
@@ -149,13 +153,16 @@ PAGE = """<!doctype html>
 <style>
 :root {{
   --bg:#fbfbf9; --fg:#1d1d1b; --muted:#5d5d58; --line:#d9d8d2; --card:#ffffff; --accent:#2f5d8a;
+  --warn:#b3261e;
 }}
 @media (prefers-color-scheme: dark) {{
   :root {{
     --bg:#18191a; --fg:#ececea; --muted:#a9a9a3; --line:#3a3b3d; --card:#222325;
-    --accent:#8db3db;
+    --accent:#8db3db; --warn:#f2b8b5;
   }}
 }}
+.case.missing {{ border:2px solid var(--warn); }}
+#status.missing {{ color:var(--warn); font-weight:600; }}
 body {{
   background:var(--bg); color:var(--fg); font:16px/1.5 system-ui, sans-serif;
   margin:0; padding:16px;
@@ -230,14 +237,21 @@ form.addEventListener("change", remember);
 form.addEventListener("input", remember);
 document.getElementById("save").addEventListener("click", () => {{
   const data = collect();
-  const missing = Object.values(data).filter((value) => !value.label).length;
+  const missing = Object.entries(data).filter(([, value]) => !value.label).map(([n]) => n);
+  document.querySelectorAll("section.case").forEach((section) => {{
+    section.classList.toggle("missing", missing.includes(section.dataset.n));
+  }});
   const blob = new Blob([JSON.stringify(data, null, 2)], {{ type: "application/json" }});
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = FILE;
   link.click();
-  document.getElementById("status").textContent = missing
-    ? missing + " case(s) still without a choice; saved anyway."
+  const status = document.getElementById("status");
+  status.classList.toggle("missing", missing.length > 0);
+  const several = missing.length > 1;
+  status.textContent = missing.length
+    ? "Saved, but " + (several ? "cases " : "case ") + missing.join(", ") + " still " +
+      (several ? "have" : "has") + " no choice (marked in red). Choose, then save again."
     : "Saved as " + FILE + ".";
 }});
 restore();
@@ -301,10 +315,94 @@ def cmd_rehash(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_replace_cases(args: argparse.Namespace) -> int:
+    """Put replacement cases in place of existing ones, keeping id, category, split and subtype.
+
+    Every replacement is logged in ``REVISIONS.jsonl`` (next to the manifest) with the old and new
+    line hashes and the reason; case text is never printed or logged. Run ``rehash`` and
+    ``validate`` afterwards; a replaced test case must then be audited blind.
+    """
+    root = Path(args.root)
+    by_file: dict[Path, dict[str, dict[str, Any]]] = {}
+    for line in Path(args.cases).read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        if not isinstance(row, dict) or str(row.get("split")) not in suite.SPLITS:
+            print("error: every replacement needs a split", file=sys.stderr)
+            return 2
+        path = root / str(row["split"]) / f"{row.get('category')}.jsonl"
+        if not path.is_file():
+            print(f"error: no case file for replacement {row.get('id')}", file=sys.stderr)
+            return 2
+        if str(row.get("id")) in by_file.setdefault(path, {}):
+            print(f"error: two replacements for {row.get('id')}", file=sys.stderr)
+            return 2
+        by_file[path][str(row.get("id"))] = row
+    # Check everything before writing anything, so a refused run changes no file.
+    updated: dict[Path, str] = {}
+    revisions: list[dict[str, Any]] = []
+    today = datetime.now(UTC).date().isoformat()
+    for path, replacements in by_file.items():
+        lines = path.read_text(encoding="utf-8").splitlines()
+        found: set[str] = set()
+        for index, line in enumerate(lines):
+            old = json.loads(line) if line.strip() else {}
+            new = replacements.get(str(old.get("id")))
+            if new is None:
+                continue
+            for key in ("category", "split", "subtype"):
+                if new.get(key) != old.get(key):
+                    print(f"error: {old['id']}: a replacement must keep its {key}", file=sys.stderr)
+                    return 2
+            text = json.dumps(new, ensure_ascii=False)
+            lines[index] = text
+            found.add(str(old["id"]))
+            revisions.append(
+                {
+                    "id": old["id"],
+                    "subtype": old["subtype"],
+                    "old_sha256": hashlib.sha256(line.encode("utf-8")).hexdigest(),
+                    "new_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                    "reason": args.reason,
+                    "date": today,
+                }
+            )
+        missing = sorted(set(replacements) - found)
+        if missing:
+            print(f"error: no existing case with id {missing}", file=sys.stderr)
+            return 2
+        updated[path] = "\n".join(lines) + "\n"
+    for path, text in updated.items():
+        _write(path, text)
+    with (root / "REVISIONS.jsonl").open("a", encoding="utf-8", newline="\n") as handle:
+        for entry in revisions:
+            handle.write(json.dumps(entry) + "\n")
+    print(f"replaced {len(revisions)} case(s): {sorted(r['id'] for r in revisions)}")
+    return 0
+
+
+def _id_list(path: str | None) -> list[str]:
+    return [str(item) for item in json.loads(Path(path).read_text("utf-8"))] if path else []
+
+
 def cmd_audit_prepare(args: argparse.Namespace) -> int:
+    """Draw a blind audit sample and write its page.
+
+    ``--exclude`` lists case ids never to sample (cases audited before). ``--include`` lists case
+    ids that must be on the page besides the random sample (replacement cases, which are audited
+    blind as well); they are shuffled in with the sampled cases of their group, and the sample
+    file records which numbers they have, so the random sample is scored on its own.
+    """
     root, out = Path(args.root), Path(args.out)
     cases = suite.load_cases(root, "test")
-    exclude = set(json.loads(Path(args.exclude).read_text("utf-8"))) if args.exclude else set()
+    by_id = {case.id: case for case in cases}
+    include = _id_list(args.include)
+    unknown = [case_id for case_id in include if case_id not in by_id]
+    if unknown:
+        print(f"error: --include names ids that are not test cases: {unknown}", file=sys.stderr)
+        return 2
+    exclude = set(_id_list(args.exclude)) | set(include)
     rng = random.Random(args.seed)  # noqa: S311 - reproducible sampling, not security
     chosen: list[Case] = []
     for category in suite.CATEGORIES:
@@ -312,35 +410,46 @@ def cmd_audit_prepare(args: argparse.Namespace) -> int:
             (c for c in cases if c.category == category and c.id not in exclude), key=lambda c: c.id
         )
         picked = rng.sample(pool, AUDIT_SAMPLE[category])
+        picked += [by_id[case_id] for case_id in include if by_id[case_id].category == category]
         rng.shuffle(picked)
         chosen.extend(picked)
     numbers = {case.id: index for index, case in enumerate(chosen, start=1)}
     sections: dict[str, list[str]] = {}
     for case in chosen:
         sections.setdefault(case.category, []).append(_case_html(case, numbers[case.id]))
+    file = "blind_answers.json" if args.round == 1 else f"blind_answers_round{args.round}.json"
     intro = (
         "<p>Label each case yourself, using only the passages and the rules of its group. The "
         "page shows no proposed labels and no system output.</p><p>Your choices are kept in this "
         "browser while you work. When you have finished, press <b>Save my answers</b> at the "
-        "bottom: it downloads <code>blind_answers.json</code>. Send that file back.</p>"
+        f"bottom: it downloads <code>{file}</code>. Send that file back.</p>"
     )
+    title = "GroundedAI label audit (blind)"
+    if args.round != 1:
+        title = f"GroundedAI label audit, round {args.round} (blind)"
     page = _page(
-        "GroundedAI label audit (blind)",
+        title,
         intro,
         sections,
         key=f"{suite.SUITE_NAME}-blind-{args.seed}",
-        file="blind_answers.json",
+        file=file,
         button="Save my answers",
     )
     _write(out / "blind_audit.html", page)
-    sample = {
+    sample: dict[str, Any] = {
         "seed": args.seed,
         "test_sha256": suite.hash_record(root)["test_sha256"],
         "numbers": {str(n): case_id for case_id, n in numbers.items()},
     }
+    if args.round != 1 or include:
+        sample["round"] = args.round
+        sample["included"] = sorted((str(numbers[case_id]) for case_id in include), key=int)
     _write(out / "audit_sample.json", suite.as_json(sample))
     counts = {category: AUDIT_SAMPLE[category] for category in suite.CATEGORIES}
-    print(f"audit page: {out / 'blind_audit.html'}; {len(chosen)} cases {counts}")
+    print(
+        f"audit page: {out / 'blind_audit.html'}; {len(chosen)} cases: random sample {counts}"
+        + (f", plus {len(include)} included case(s)" if include else "")
+    )
     return 0
 
 
@@ -349,34 +458,141 @@ def _answers(path: Path) -> dict[str, dict[str, Any]]:
     return {str(k): v if isinstance(v, dict) else {"label": v} for k, v in data.items()}
 
 
+class AnswersError(ValueError):
+    """An answers file that cannot be matched to the audit sample."""
+
+
+def check_answers(path: Path, categories: dict[str, str]) -> tuple[dict[str, str], dict[str, Any]]:
+    """Read a saved answers file and match it to the audit sample.
+
+    ``categories`` maps each audit number to its case's category. Returns the valid labels by
+    number and a summary naming audit numbers only (never a label or a note). Duplicate keys and
+    keys that are not audit numbers make the file incompatible: it is then refused, because it is
+    unclear which answer is meant. A missing or empty label, or one that is not a label of the
+    case's group, is reported and counts as not confirming the proposed label.
+    """
+    duplicates: list[str] = []
+
+    def unique(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        seen: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in seen:
+                duplicates.append(key)
+            seen[key] = value
+        return seen
+
+    raw = path.read_bytes()
+    try:
+        data = json.loads(raw.decode("utf-8-sig"), object_pairs_hook=unique)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise AnswersError(f"{path.name} is not readable JSON ({exc.__class__.__name__})") from exc
+    if not isinstance(data, dict):
+        raise AnswersError(f"{path.name} must hold one object keyed by audit number")
+    unmatched = sorted((key for key in data if key not in categories), key=str)
+    if duplicates or unmatched:
+        raise AnswersError(
+            f"{path.name} does not match the audit sample: duplicate keys "
+            f"{sorted(set(duplicates))}, keys that are not audit numbers {unmatched}"
+        )
+    labels: dict[str, str] = {}
+    missing: list[str] = []
+    invalid: list[str] = []
+    malformed: list[str] = []
+    for number in sorted(categories, key=int):
+        value = data.get(number)
+        if isinstance(value, dict):
+            label = value.get("label")
+        elif value is None or isinstance(value, str):
+            label = value
+        else:
+            malformed.append(number)
+            continue
+        if label is None or (isinstance(label, str) and not label.strip()):
+            missing.append(number)
+        elif not isinstance(label, str) or label not in dict(AUDIT_LABELS[categories[number]]):
+            invalid.append(number)
+        else:
+            labels[number] = label
+    summary = {
+        "file": path.name,
+        "sha256": hashlib.sha256(raw).hexdigest(),
+        "entries": len(data),
+        "answered": len(labels),
+        "missing": missing,
+        "invalid": invalid + malformed,
+    }
+    return labels, summary
+
+
 def cmd_audit_compare(args: argparse.Namespace) -> int:
     root, out = Path(args.root), Path(args.out)
     sample = json.loads(Path(args.sample).read_text(encoding="utf-8"))
-    answers = _answers(Path(args.answers))
     cases = {case.id: case for case in suite.load_cases(root, "test")}
-    per: dict[str, list[bool]] = {category: [] for category in suite.CATEGORIES}
-    disagreements: list[dict[str, Any]] = []
-    unanswered = 0
-    for number, case_id in sorted(sample["numbers"].items(), key=lambda item: int(item[0])):
-        case = cases[case_id]
-        blind = (answers.get(number) or {}).get("label")
-        if not blind:
-            unanswered += 1
-        agree = blind == suite.gold_label(case)
-        per[case.category].append(agree)
-        if not agree:
-            disagreements.append({"number": number, "id": case_id, "blind": blind or "none"})
-    total = sum(len(v) for v in per.values())
-    agreed = sum(sum(v) for v in per.values())
-    interval = suite.wilson(agreed, total)
+    if sample.get("test_sha256") != suite.hash_record(root)["test_sha256"]:
+        print("error: the test split changed after the audit sample was drawn", file=sys.stderr)
+        return 2
+    numbers = sorted(sample["numbers"].items(), key=lambda item: int(item[0]))
+    try:
+        answers, checked = check_answers(
+            Path(args.answers), {number: cases[case_id].category for number, case_id in numbers}
+        )
+    except AnswersError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
     print(
-        f"blind agreement: {agreed} of {total}"
-        + (f" (95% CI {interval[0]:.2f}-{interval[1]:.2f})" if interval else "")
+        f"answers: {checked['entries']} entries for {len(numbers)} audit cases; "
+        f"{checked['answered']} with a valid label; missing {checked['missing'] or 'none'}; "
+        f"invalid {checked['invalid'] or 'none'}; no duplicate or unknown keys"
     )
-    for category, values in per.items():
-        print(f"  {category}: {sum(values)} of {len(values)}")
-    if unanswered:
-        print(f"  {unanswered} case(s) had no blind label and count as disagreements")
+    # Included (replacement) cases are scored apart from the random sample, which alone is
+    # compared with the agreement threshold.
+    included = {str(number) for number in sample.get("included") or []}
+    per: dict[str, list[bool]] = {category: [] for category in suite.CATEGORIES}
+    per_included: dict[str, list[bool]] = {category: [] for category in suite.CATEGORIES}
+    disagreements: list[dict[str, Any]] = []
+    for number, case_id in numbers:
+        case = cases[case_id]
+        blind = answers.get(number)
+        agree = blind == suite.gold_label(case)
+        (per_included if number in included else per)[case.category].append(agree)
+        if not agree:
+            disagreements.append(
+                {
+                    "number": number,
+                    "id": case_id,
+                    "blind": blind or "none",
+                    "reason": "no valid blind label" if blind is None else "different label",
+                    "included": number in included,
+                }
+            )
+
+    def agreement(name: str, groups: dict[str, list[bool]]) -> tuple[int, int]:
+        total = sum(len(v) for v in groups.values())
+        agreed = sum(sum(v) for v in groups.values())
+        interval = suite.wilson(agreed, total)
+        share = ""
+        if interval:
+            share = f" ({agreed / total:.0%}; 95% CI {interval[0]:.2f}-{interval[1]:.2f})"
+        print(f"{name}: {agreed} of {total}{share}")
+        for category, values in groups.items():
+            if values or not included:
+                print(f"  {category}: {sum(values)} of {len(values)}")
+        return agreed, total
+
+    agreed, total = agreement(
+        "blind agreement, random sample" if included else "blind agreement", per
+    )
+    if included:
+        agreement("included (replacement) cases, each of which must agree", per_included)
+    unconfirmed = checked["missing"] + checked["invalid"]
+    if unconfirmed:
+        labelled = len(numbers) - len(unconfirmed)
+        agreed_all = len(numbers) - len(disagreements)
+        print(
+            f"  {len(unconfirmed)} case(s) without a valid blind label count as not confirmed "
+            f"(audit numbers {unconfirmed}); among the {labelled} labelled cases, "
+            f"{agreed_all} agree"
+        )
     sections: dict[str, list[str]] = {}
     for item in disagreements:
         case = cases[item["id"]]
@@ -406,14 +622,25 @@ def cmd_audit_compare(args: argparse.Namespace) -> int:
             ),
         )
         print(f"reveal page for {len(disagreements)} disagreement(s): {out / 'reveal.html'}")
-    result = {
+    result: dict[str, Any] = {
         "seed": sample["seed"],
         "test_sha256": sample["test_sha256"],
+        "answers": checked,
         "agreed": agreed,
         "total": total,
         "per_category": {c: [sum(v), len(v)] for c, v in per.items()},
-        "disagreements": [{"number": d["number"], "id": d["id"]} for d in disagreements],
+        "disagreements": [
+            {"number": d["number"], "id": d["id"], "reason": d["reason"]}
+            | ({"included": d["included"]} if included else {})
+            for d in disagreements
+        ],
     }
+    if included:
+        result["included"] = {
+            "agreed": sum(sum(v) for v in per_included.values()),
+            "total": sum(len(v) for v in per_included.values()),
+            "per_category": {c: [sum(v), len(v)] for c, v in per_included.items() if v},
+        }
     _write(out / "audit_result.json", suite.as_json(result))
     return 0
 
@@ -421,7 +648,9 @@ def cmd_audit_compare(args: argparse.Namespace) -> int:
 def cmd_audit_decide(args: argparse.Namespace) -> int:
     result = json.loads(Path(args.result).read_text(encoding="utf-8"))
     decisions = _answers(Path(args.decisions))
-    keep, replace, missing = [], [], []
+    keep: list[str] = []
+    replace: list[str] = []
+    missing: list[str] = []
     for item in result["disagreements"]:
         choice = (decisions.get(str(item["number"])) or {}).get("label")
         (keep if choice == "keep" else replace if choice == "replace" else missing).append(
@@ -627,11 +856,20 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("rehash")
     p.add_argument("--root", default=str(DEFAULT_ROOT), help=root_help)
     p.set_defaults(func=cmd_rehash)
+    p = sub.add_parser("replace-cases")
+    p.add_argument("--root", default=str(DEFAULT_ROOT), help=root_help)
+    p.add_argument("--cases", required=True, help="JSONL file of replacement cases")
+    p.add_argument("--reason", required=True)
+    p.set_defaults(func=cmd_replace_cases)
     p = sub.add_parser("audit-prepare")
     p.add_argument("--root", default=str(DEFAULT_ROOT), help=root_help)
     p.add_argument("--out", required=True)
     p.add_argument("--seed", type=int, default=AUDIT_SEED)
+    p.add_argument("--round", type=int, default=1, help="audit round (names the answers file)")
     p.add_argument("--exclude", default=None, help="JSON list of case ids not to sample")
+    p.add_argument(
+        "--include", default=None, help="JSON list of case ids to add (replacement cases)"
+    )
     p.set_defaults(func=cmd_audit_prepare)
     p = sub.add_parser("audit-compare")
     p.add_argument("--root", default=str(DEFAULT_ROOT), help=root_help)
