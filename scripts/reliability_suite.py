@@ -126,9 +126,10 @@ def _case_html(case: Case, number: int, *, reveal: dict[str, str] | None = None)
         )
     else:
         labels = dict(AUDIT_LABELS[case.category])
+        # An empty blind label means no choice was made; "none" is a real label in group D.
+        blind = labels.get(reveal["blind"], reveal["blind"]) or "(no valid label chosen)"
         form = (
-            f'<div class="form"><p><b>Your blind label:</b> '
-            f"{html.escape(labels.get(reveal['blind'], reveal['blind']))}</p>"
+            f'<div class="form"><p><b>Your blind label:</b> {html.escape(blind)}</p>'
             "<p><b>Proposed label:</b> "
             f"{html.escape(labels.get(reveal['gold'], reveal['gold']))}</p>"
             f"<p><b>Why (from the case writer):</b> {html.escape(reveal['rationale'])}</p>"
@@ -560,7 +561,7 @@ def cmd_audit_compare(args: argparse.Namespace) -> int:
                 {
                     "number": number,
                     "id": case_id,
-                    "blind": blind or "none",
+                    "blind": blind or "",
                     "reason": "no valid blind label" if blind is None else "different label",
                     "included": number in included,
                 }

@@ -530,12 +530,19 @@ def test_the_comparison_refuses_answers_that_do_not_fit_the_sample(
     cases = {case.id: case for case in suite.load_cases(fixture_suite, "test")}
     answers = {n: {"label": suite.gold_label(cases[i])} for n, i in sample["numbers"].items()}
     answers["1"] = {"label": None}
+    # In group D "none" is a real label ("No disagreement"); a missing choice must not read as it.
+    d_number = next(n for n, i in sample["numbers"].items() if cases[i].category == "D")
+    answers[d_number] = {"label": None}
     (tmp_path / "answers.json").write_text(json.dumps(answers), "utf-8")
     assert cli.main(compare) == 0
     result = json.loads((out / "audit_result.json").read_text("utf-8"))
-    assert (result["agreed"], result["total"]) == (7, 8)
-    assert result["answers"]["missing"] == ["1"]
-    assert result["disagreements"][0]["reason"] == "no valid blind label"
+    assert (result["agreed"], result["total"]) == (6, 8)
+    assert result["answers"]["missing"] == sorted(["1", d_number], key=int)
+    assert {item["reason"] for item in result["disagreements"]} == {"no valid blind label"}
+    reveal = (out / "reveal.html").read_text("utf-8")
+    d_section = reveal.split(f'data-n="{d_number}"')[1].split("</section>")[0]
+    assert "<b>Your blind label:</b> (no valid label chosen)" in d_section
+    assert "<b>Your blind label:</b> No disagreement" not in reveal
     # A sample drawn from different test content is refused.
     changed = fixture_suite / "test" / "A.jsonl"
     changed.write_text(changed.read_text("utf-8").replace("R-A1", "R-A1 edited"), "utf-8")
