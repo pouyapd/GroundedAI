@@ -36,7 +36,14 @@ version.
    Pouya on a page that shows no proposed labels, subtypes, ids or system output. Proposed labels
    are revealed only for disagreements. The protocol: at least 45 of 50 must agree, otherwise
    the rules are clarified and a fresh sample is audited; a case whose proposed label is not
-   confirmed is replaced (same subtype) and the replacement is audited blind. Results go to `audit/`.
+   confirmed is replaced (same subtype) and the replacement is audited blind. In a later round
+   the replacements are shuffled into the fresh sample but scored apart: the threshold applies
+   to the random sample, and each replacement must agree. Counts go to `audit/`; per-case files
+   stay in `audit/private/`, which is not committed.
+   - Round 1 (2026-10-16): 39 of 50 agreed, below the threshold. The disagreements came from the
+     page's short rules, not from wrong labels, so the rules were clarified (`SPEC.md`, rules 7a
+     and 8a) and the 11 unconfirmed cases replaced. See [`audit/ROUND1.md`](audit/ROUND1.md).
+     Round 2 (61 cases: a fresh sample of 50 and the 11 replacements) is ready for the auditor.
 6. **Freeze.** The test split's hash is recorded in `manifest.json` and pinned in
    `reliability.py` (`FROZEN_TEST_SHA256`); the scorer refuses any other content.
 
@@ -49,7 +56,9 @@ version.
   per-case audit files in `audit/private/` and the sealed outcomes are listed in `.gitignore` and
   exist only on the owner's machine. The committed `manifest.json` and `FROZEN_TEST_SHA256`
   record their exact content, so a copy can be checked, but they cannot be rebuilt from the
-  repository: keep a private backup. Committed audit records and reports hold counts only.
+  repository: keep a private backup. The committed manifest lists paths, hashes and counts
+  only, without the test documents' titles. Committed audit records and reports hold counts
+  only, and `REVISIONS.jsonl` names replaced cases without their subtypes.
 - The test split is scored **once per version of the checks**: once with the code at freeze time
   (baseline) and once with the final, frozen implementation. Every run is logged in
   `evaluation/reports/reliability/test-runs.jsonl`; a second run of the same version is refused
