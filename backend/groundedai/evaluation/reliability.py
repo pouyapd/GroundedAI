@@ -931,21 +931,23 @@ AUDIT_LABELS: dict[str, tuple[tuple[str, str], ...]] = {
         ("correct", "Citation correct"),
         ("wrong", "Citation wrong"),
     ),
+    # The texts of C and D were reworded after the first label audit; the values are unchanged.
     "C": (
         ("correct_answer", "Correct answer: it gives what was asked"),
         (
             "off_target",
-            "Off target: the passages contain the answer, but the answer gives other facts",
+            "Off target: a passage states what was asked, but the answer gives other facts",
         ),
         (
             "unanswerable_answered",
-            "Not answerable from the passages, but the answer gives other facts as if answering",
+            "Not answerable, but answered: no passage states what was asked, and the answer "
+            "gives other facts instead of saying so",
         ),
         ("correct_refusal", "Correct refusal: says the documents do not give it"),
     ),
     "D": (
         ("conflict", "Conflict"),
-        ("different_dates", "Different values for different stated periods"),
+        ("different_dates", "Different values, because each document applies to different dates"),
         ("none", "No disagreement"),
     ),
 }

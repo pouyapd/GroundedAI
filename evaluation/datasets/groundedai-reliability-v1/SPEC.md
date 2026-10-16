@@ -159,6 +159,55 @@ passages, or `null`).
 9. Every case has exactly one defensible label. If two labels are reasonable, rewrite or replace
    the case.
 
+### Clarifications after the first label audit (added 2026-10-16)
+
+The first blind label audit found no label that contradicts the subtype tables above. It did
+find that rules 7 and 8 were easy to misread. The rules below restate the subtype tables and
+change no label. Where the wording of rule 7 or 8 seems to differ from them, they decide.
+Cases written after the audit follow them. All examples are invented.
+
+7a. **Is the asked item in the passages?** Decide this before reading the answer. Does any passage
+    state the asked item for exactly what the question names: the same plan, period, group or
+    item?
+    - If one does, an answer that gives only other facts is `off_target`.
+    - If none does, the case is `unanswerable_answered`, or `correct_refusal` when the answer says
+      the documents do not give it. This holds even when the passages give the same kind of fact
+      for something else.
+    - Example: "How much is the museum's audio guide?" The passages give only entry prices, and
+      the answer is "Entry costs £11.80" → `unanswerable_answered`. If a passage gave the audio
+      guide's price, the same answer would be `off_target`.
+
+8a. **Disagreement, in two steps.**
+    1. **Do the two passages, from different documents, give different information about the
+       same thing for the same group?**
+       - The same thing may be named with different words ("fee" / "charge").
+       - "Required" against "not required" is different information.
+       - They do not differ, and the label is `none`, when:
+         - they concern different groups, plans, days, places or classes;
+         - they give the same value or the same range in other words or formats;
+         - one gives a single value equal to one end of the other's range;
+         - one gives a one-sided limit ("at least 3", "by 15:45") equal to the matching end;
+         - only one of them gives a value;
+         - they give the same value although their documents carry different dates.
+       - Compare only the ends that both passages state. Two ranges that differ at either end do
+         differ, even when one lies inside the other ("60–90 minutes" / "75–90 minutes").
+    2. **Only if they differ, look at the dates.**
+       - If both documents say which dates their information applies to ("valid from 1 March
+         2026", "2025 price list"), and those dates differ → `different_dates`.
+       - Otherwise → `conflict`. This covers only edit dates ("last updated"), a date on one side
+         only, and no dates.
+       - Here "dates" means the dates a document applies to, not a duration that is itself the
+         value.
+    - Examples:
+
+      | Passage 1 | Passage 2 | Label |
+      |---|---|---|
+      | "2025 list: £11.80" | "2026 list: 11.80 pounds" | `none` |
+      | "2025 list: £11.80" | "2026 list: £12.60" | `different_dates` |
+      | "Last updated 2025: £11.80" | "Last updated 2026: £12.60" | `conflict` |
+      | "Last tour ends by 15:45" | "Tours run 13:15–15:45" | `none` |
+      | "Tour takes 60–90 minutes" | "Tour takes 75 to 90 minutes" | `conflict` |
+
 ## Quality
 
 - No repeated questions anywhere in the dataset; no templates. Vary length, wording and number

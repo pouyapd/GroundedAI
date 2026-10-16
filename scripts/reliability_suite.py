@@ -65,25 +65,44 @@ CATEGORY_RULES = {
         "Wrong: a cited passage does not state it, one of two cited passages states nothing of "
         "it, or a cited label is not among the passages.",
     ],
+    # Rewritten after the first label audit, whose disagreements came from these short rules
+    # rather than from the specification (SPEC.md, rules 7a and 8a, which they now follow).
     "C": [
         "Judge only from the passages.",
         "An answer addresses the question when it states the asked item: the value or person "
         "for value questions, a clear yes or no for yes/no questions, the steps or the reason "
         "for how and why questions.",
-        "Off target: the passages do contain the asked item, but the answer gives only other "
-        "facts.",
-        "Not answerable but answered: the passages do not contain the asked item, and the answer "
-        "gives related facts as if answering.",
-        "Correct refusal: the passages do not contain it, and the answer clearly says so.",
+        "First, before reading the answer, decide whether any passage states the asked item for "
+        "exactly what the question names (the same plan, period, group or item). The same kind "
+        "of fact for something else is not the asked item.",
+        "Off target: a passage states what was asked, but the answer gives only other facts.",
+        "Not answerable, but answered: no passage states what was asked, and the answer gives "
+        "other facts instead of saying so.",
+        "Correct refusal: no passage states what was asked, and the answer clearly says the "
+        "documents do not give it.",
+        'Example (invented): "How much is the museum\'s audio guide?" The passages give only '
+        'entry prices, and the answer is "Entry costs £11.80": not answerable, but answered. '
+        "If a passage gave the audio guide's price, the same answer would be off target.",
     ],
     "D": [
-        "A disagreement is two passages from different documents that give incompatible "
-        "information about the same thing, for the same group and period.",
-        'Different stated periods ("from 1 March 2026", "2025 price list") -> different '
-        "values for different periods.",
-        'Only edit dates ("last updated"), or a date on one side only -> conflict.',
-        "Different groups or plans, the same value written differently, a value equal to one "
-        "end of a range, or a topic with no value on one side -> no disagreement.",
+        "Step 1: do two passages from different documents give different information about the "
+        'same thing for the same group? The same thing may be named with different words ("fee" '
+        '/ "charge"); "required" against "not required" is different information.',
+        "They do not differ (no disagreement) when they concern different groups, plans, days, "
+        "places or classes; when they give the same value or range in other words or formats; "
+        "when one gives a single value equal to one end of the other's range, or a one-sided "
+        'limit ("at least 3", "by 15:45") equal to the matching end; when only one of them gives '
+        "a value; or when they give the same value although their documents carry different "
+        "dates.",
+        "Compare only the ends both passages state: two ranges that differ at either end do "
+        'differ, even if one lies inside the other ("60–90 minutes" / "75–90 minutes").',
+        "Step 2, only if they differ: if both documents say which dates their information "
+        'applies to ("valid from 1 March 2026", "2025 price list") and those dates differ: '
+        'different values for different dates. Otherwise (only "last updated" dates, a date on '
+        "one side only, or no dates): conflict.",
+        'Examples (invented): "2025 list: £11.80" / "2026 list: 11.80 pounds": no disagreement. '
+        '"2025 list: £11.80" / "2026 list: £12.60": different dates. "Last updated 2025: £11.80" '
+        '/ "Last updated 2026: £12.60": conflict.',
     ],
 }
 
