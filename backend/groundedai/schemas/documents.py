@@ -31,6 +31,11 @@ class DocumentOut(BaseModel):
     attempts: int
     created_at: datetime
     updated_at: datetime
+    source_stored: bool | None = Field(
+        default=None,
+        description="Whether the original file is still stored, so re-ingestion is possible. "
+        "False after a file that could not be read was discarded.",
+    )
 
 
 class DocumentList(BaseModel):

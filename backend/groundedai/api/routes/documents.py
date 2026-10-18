@@ -20,6 +20,7 @@ from fastapi import (
 from groundedai.api.deps import ServicesDep, rate_limit, require_api_key
 from groundedai.core.errors import NotFound
 from groundedai.persistence.db import session_scope
+from groundedai.persistence.models import DocumentRow
 from groundedai.persistence.repositories import ChunkRepository, DocumentRepository
 from groundedai.schemas.documents import (
     DOCUMENT_ID_PATTERN,
@@ -44,6 +45,12 @@ _ERRORS: dict[int | str, dict[str, Any]] = {
     422: {"description": "Invalid or unparseable file"},
     429: {"description": "Rate limit exceeded"},
 }
+
+
+def _document_out(services: Services, row: DocumentRow) -> DocumentOut:
+    out = DocumentOut.model_validate(row)
+    out.source_stored = services.ingestion.source_stored(row)
+    return out
 
 
 def _process_in_background(services: Services, document_id: str) -> None:
@@ -73,7 +80,7 @@ def upload_document(
         file.filename or "", file.content_type, data, title=title.strip() if title else None
     )
     background.add_task(_process_in_background, services, row.id)
-    return DocumentOut.model_validate(row)
+    return _document_out(services, row)
 
 
 @router.get("", response_model=DocumentList, summary="List documents (newest first)")
@@ -85,7 +92,7 @@ def list_documents(
 ) -> DocumentList:
     with session_scope(services.session_factory) as session:
         rows, total = DocumentRepository(session).page(offset=offset, limit=limit, status=status)
-        items = [DocumentOut.model_validate(row) for row in rows]
+        items = [_document_out(services, row) for row in rows]
     return DocumentList(items=items, total=total, offset=offset, limit=limit)
 
 
@@ -96,7 +103,7 @@ def list_documents(
     responses={404: _ERRORS[404]},
 )
 def get_document(services: ServicesDep, document_id: DocumentIdPath) -> DocumentOut:
-    return DocumentOut.model_validate(services.ingestion.get(document_id))
+    return _document_out(services, services.ingestion.get(document_id))
 
 
 @router.get(
@@ -133,7 +140,7 @@ def reingest_document(
 ) -> DocumentOut:
     row = services.ingestion.prepare_reingest(document_id)
     background.add_task(_process_in_background, services, row.id)
-    return DocumentOut.model_validate(row)
+    return _document_out(services, row)
 
 
 @router.delete(
