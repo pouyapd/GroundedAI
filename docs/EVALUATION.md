@@ -380,7 +380,35 @@ issues: [RELIABILITY_AUDIT.md](RELIABILITY_AUDIT.md). In short:
   Recall@5 1.000, MRR 0.985; the shipped hybrid default with hashing vectors 0.977 / 0.950; hybrid
   with bge-small 1.000 / 0.959. No retrieval setting was changed.
 
+### 2026-10-18: the PDF journey with a real local model
+
+A seven-question check of the main user journey (`scripts/journey_check.py`), not a benchmark:
+the two sample PDFs in `examples/` are uploaded through the HTTP API, and each question is asked
+of one selected document. Four are answerable from the ferry guide (two of them paraphrase it),
+one is not, one is answered only by the other document, and that one is then asked of the right
+document. Both runs at commit `5836f06`, Windows 11, on battery power (timings are not
+performance figures). Reports: `evaluation/reports/journey/`.
+
+| Generator | Answerable (5) | Should refuse (2) | Evidence page |
+|---|---|---|---|
+| Extractive demo (not an LLM), hashing embedder | 3 answered and verified; 2 paraphrased questions refused | 2 refused | page 2, 3 and 1, all correct |
+| Qwen2.5-0.5B-Instruct (transformers, CPU), bge-small | 1 answered and verified (14 euros, page 2); 1 malformed reply (`[ORCHARD_LANE_LIBRARY_CARD_RULES][1] 12`) marked unverified by the claim check; 3 wrongly refused | 2 refused | page 2, correct |
+
+The model received the passage holding each answer (the ferry guide is one chunk) but still
+refused three times, the same weakness as in the 56-question evaluation above. No prompt was
+changed after this check; it is too small to tune on.
+
 ## Reproducing
+
+The PDF journey (no dataset hash; the sample PDFs are rebuilt by `scripts/make_sample_pdfs.py`):
+
+```bash
+python scripts/journey_check.py --out evaluation/reports/journey/extractive.json
+HF_HUB_OFFLINE=1 GROUNDEDAI_GENERATION_PROVIDER=huggingface-local \
+  GROUNDEDAI_EMBEDDING_PROVIDER=sentence-transformers GROUNDEDAI_EMBEDDING_MODEL=BAAI/bge-small-en-v1.5 \
+  GROUNDEDAI_EMBEDDING_QUERY_PREFIX="Represent this sentence for searching relevant passages: " \
+  python scripts/journey_check.py --out evaluation/reports/journey/qwen.json
+```
 
 ```bash
 # offline (no models): dataset integrity + lexical/hashing baselines

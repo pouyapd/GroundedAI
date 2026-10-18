@@ -8,7 +8,8 @@
 | Integration | `backend/tests/integration` | Alembic migrations (upgrade, downgrade, schema matches models), ingestion lifecycle (failure, retry, re-ingest, delete without orphans, crash recovery), SQLite search and hybrid retrieval, reranking, QA service failure modes (timeout, busy, provider errors, invalid citations, hallucinated numbers, citation-marker-only replies), what reaches the model (documents only as data, conflict and injection notes, answer-v1 unchanged), LangChain retriever adapter, Ollama integration against a fake Ollama HTTP server (including model digest and server version), evaluation runners on the bundled dataset |
 | PostgreSQL | `backend/tests/integration/test_postgres.py` | migrations with pgvector/tsvector/HNSW, all retrieval modes, hostile queries, cascade delete (runs when `GROUNDEDAI_TEST_POSTGRES_URL` is set) |
 | API | `backend/tests/api` | every endpoint, status codes, error shape, validation, size limits, API key, rate limiting, CORS, security headers, request ids, OpenAPI paths, metrics, evaluation runs |
-| End to end | `backend/tests/e2e` | upload PDF → ask → cited answer with page → abstention → delete → metrics, through HTTP only; three application starts on one data directory (documents, chunks, answers, claims and disagreements unchanged; re-ingest and delete kept) |
+| End to end | `backend/tests/e2e` | upload PDF → ask → cited answer with page → abstention → delete → metrics, through HTTP only; the sample-PDF journey (extracted text, a quote on page 2 of a one-chunk 3-page PDF, a question the selected document cannot answer, isolation between two documents, deletion); three application starts on one data directory (documents, chunks, answers, claims and disagreements unchanged; re-ingest and delete kept) |
+| Browser | `scripts/e2e_browser.py` (not in CI) | the same journey in Chromium against a real local server and the built UI: damaged, text-less and unsupported files, upload, Ask from the documents table, quote and page, citation highlight, not-in-document question, switching documents, repeated questions, deletion, console errors (24 checks) |
 | Front end | `frontend/src/test` | claim check and disagreement panel (quotes, statuses, withheld answer, no repeated warnings), scoring-version-4 tiles and re-checked reports, the hashing-embedder note, citation rendering, answer view states, abstention, LLM vs demo labels, offline backend, model unavailable, question flow, empty documents, evaluation report rendering (invalid outputs, latency, category names), static demo replay and expected-result comparison, upload validation, formatting |
 | Build/config | CI | lint, type checks, front-end build (live and demo), Docker image build and container smoke test, Compose validation, dependency audits |
 
@@ -33,7 +34,31 @@ cd .. && python scripts/dev_postgres.py -- python -m pytest backend/tests -m pos
 
 cd frontend
 npm run lint && npm run typecheck && npm test && npm run build
+
+# browser journey against a real server (needs: pip install playwright && playwright install chromium)
+cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
+
+## Results recorded on 2026-10-18 (same laptop, on battery power)
+
+Changes: document selection on the Ask page, the page of each evidence quote (migration 0002),
+discarding unreadable uploads, the sample-PDF journey tests.
+
+| Check | Result |
+|---|---|
+| `pytest --cov` (default suite, run from `backend/`) | 419 passed, 7 skipped (the PostgreSQL tests, no database URL set); line coverage 92% |
+| — of which `tests/unit` / `tests/integration` / `tests/api` / `tests/e2e` | 289 / 80 (+7 skipped) / 47 / 3 passed |
+| `pytest -m postgres` via `scripts/dev_postgres.py` | 7 passed |
+| `ruff check`, `ruff format --check` (`groundedai`, `tests`, `scripts`, `tools`, `evaluation/scripts`) | clean |
+| `mypy` (strict, 83 files), also with `--platform linux` | no issues |
+| `vitest` | 70 passed (7 files) |
+| `eslint`, `tsc -b`, `npm run build`, `npm run build:demo` | clean, both builds succeeded |
+| `scripts/e2e_browser.py` (Chromium 1208, default providers) | 24 of 24 checks passed |
+| `scripts/journey_check.py` with Qwen2.5-0.5B-Instruct (transformers, CPU, offline) | ran without errors; results in [EVALUATION.md](EVALUATION.md#2026-10-18-the-pdf-journey-with-a-real-local-model) |
+| Migration 0002 on a database with documents from before | upgraded at start-up; old chunks answer with `page: null` for multi-page quotes until re-ingested, then with the page (checked by hand and in `test_migrations.py`) |
+| `scripts/reliability_suite.py validate` | 660 cases, 0 errors, 0 warnings (frozen test split unchanged; it was not scored again) |
+| `docker compose config` | valid |
+| Not run | the Docker image build and Compose stack (Docker Desktop not running; a build downloads packages); GitHub Actions (nothing pushed); dependency audits (need the network) |
 
 ## Results recorded after the PR review fixes (2026-10-14, same laptop)
 

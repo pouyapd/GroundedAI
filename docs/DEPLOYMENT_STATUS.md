@@ -1,6 +1,12 @@
 # Deployment status
 
-Last updated: 2026-10-14.
+Last updated: 2026-10-18.
+
+2026-10-18: the local SQLite setup (`groundedai serve` with the built UI) was checked again with
+the browser journey (`scripts/e2e_browser.py`, 24 of 24) and with a local transformers model
+(Qwen2.5-0.5B-Instruct). The Docker image and Compose stack were **not** rebuilt with these
+changes (Docker Desktop was not running, and a build downloads packages); `docker compose config`
+is valid. The new commits are local and have not been through CI.
 
 | Target | Status | Evidence |
 |---|---|---|

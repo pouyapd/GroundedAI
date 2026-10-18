@@ -1,7 +1,30 @@
 # Implementation status
 
-Last updated: 2026-10-14 (end of the fourth work session). This file is the hand-over point for
-the next session: what is done, what was verified, and what is left.
+Last updated: 2026-10-18. This file is the hand-over point for the next session: what is done,
+what was verified, and what is left.
+
+## 2026-10-18: the PDF journey as a product
+
+Local branch `feature/reliability-v1` (not pushed; pull request #1 is unchanged at `100f124`).
+
+- Ask page: choose the document to search (`document_ids`); asking is disabled until a document
+  is ready; an **Ask** button on each ready document; the answer says what was searched.
+- Evidence quotes and conflict statements carry the page on which the quote starts, also inside
+  chunks that span pages (migration 0002 adds `chunks.page_breaks`).
+- Unreadable uploads are deleted at once; re-uploading retries; documents report
+  `source_stored`, and re-ingest is disabled in the UI when the file is gone.
+- Reproducible journey: sample PDFs in `examples/`, an API end-to-end test, a browser check
+  (`scripts/e2e_browser.py`, 24 checks) and `scripts/journey_check.py` for a real model.
+- A real local model ran on the journey (Qwen2.5-0.5B-Instruct via transformers, from the local
+  cache, offline): it works end to end, but the model refused 3 of 5 answerable questions
+  ([EVALUATION.md](EVALUATION.md#2026-10-18-the-pdf-journey-with-a-real-local-model)).
+- Results of every check: [TESTING.md](TESTING.md#results-recorded-on-2026-10-18-same-laptop-on-battery-power).
+- Earlier on 2026-10-18: answer checks version 2, evaluated on a frozen test split
+  ([RELIABILITY_V2.md](RELIABILITY_V2.md)).
+
+Still open: push and CI (owner's approval), a Docker image build with these changes, a larger
+local model for the 56-question evaluation, and a public demo (needs a public repository or a
+host; see [DEPLOYMENT_STATUS.md](DEPLOYMENT_STATUS.md)).
 
 ## Definition of done
 

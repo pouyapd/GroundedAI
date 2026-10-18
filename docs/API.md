@@ -31,7 +31,7 @@ schema at `/openapi.json` when the server runs.
 | GET | `/api/v1/documents?offset&limit&status` | List documents, newest first | 200 |
 | GET | `/api/v1/documents/{id}` | Metadata and ingestion status | 200 |
 | GET | `/api/v1/documents/{id}/chunks?offset&limit` | Indexed chunks with page ranges | 200 |
-| POST | `/api/v1/documents/{id}/reingest` | Process again (after a failure or configuration change) | 202 |
+| POST | `/api/v1/documents/{id}/reingest` | Process again (after a failure or configuration change); 409 with `details.reason = "source_missing"` when the file is no longer stored | 202 |
 | DELETE | `/api/v1/documents/{id}` | Delete document, chunks and stored file | 204 |
 | POST | `/api/v1/query` | Grounded answer with sources, citation check and timings | 200 |
 | POST | `/api/v1/retrieve` | Retrieval only, with component scores and timings | 200 |
@@ -48,7 +48,7 @@ schema at `/openapi.json` when the server runs.
 |---|---|
 | 401 | `unauthorized` |
 | 404 | `not_found` |
-| 409 | `duplicate_document` (details include the existing `document_id`), `conflict` |
+| 409 | `duplicate_document` (details include the existing `document_id`; a document whose processing failed is replaced instead), `conflict` |
 | 413 | `file_too_large`, `payload_too_large` |
 | 415 | `unsupported_file_type` |
 | 422 | `invalid_input` (validation errors list `loc`, `msg`, `type` but never echo the input), `empty_document`, `document_parse_failed` |
@@ -70,7 +70,13 @@ curl -s http://127.0.0.1:8000/api/v1/documents/doc_bcee98dbd52e4be372ae
 # {"id": "doc_bcee98dbd52e4be372ae", "status": "ready", "chunk_count": 7, ...}
 ```
 
-Ask a question:
+Stored files: the original file is kept while its document exists (re-ingestion needs it) and is
+deleted with the document. A file that cannot be read at all (damaged, password-protected, no
+extractable text) is deleted as soon as that is known; the document stays `failed` with the
+reason, `source_stored` is `false`, and uploading the file again retries it. A file over a
+settings limit (pages, characters) is kept, since a configuration change can fix that.
+
+Ask a question (add `"document_ids": ["doc_…"]` to search only those documents):
 
 ```bash
 curl -s http://127.0.0.1:8000/api/v1/query \
@@ -131,6 +137,9 @@ Field meanings:
   `unsupported`. `citations` lists the labels the model attached in any form (`[S1]`,
   `[Source 1]`, `(S1)`, a bracketed title). `evidence[]` gives the passage label, document, page,
   chunk and the exact `quote` with `quote_start`/`quote_end` offsets into that source's `text`.
+  `page` (added 2026-10-18) is the page on which the quote starts, also when the passage spans
+  several pages; it is `null` for text files, and for multi-page passages indexed before
+  2026-10-18 until the document is re-ingested. Conflict statements carry `page` too.
   `missing_figures` names figures that no passage states; `flags` contains `instruction_text`
   when the statement repeats an instruction from a source.
 * `verification` (added 2026-10-14): `verdict` (`verified`, `partially_verified`, `unverified`,
@@ -157,6 +166,7 @@ Field meanings:
   * All new fields are optional; older clients and recordings are unaffected. Results:
     [RELIABILITY_V2.md](RELIABILITY_V2.md).
 * `sources[].supports_claims` (added 2026-10-14): indices of the claims a passage is evidence for.
+* Documents: `source_stored` (added 2026-10-18) says whether the original file is still stored.
 * `unverified_answer`: set only with `GROUNDEDAI_UNVERIFIED_ANSWERS=withhold`, when no statement
   could be matched to a passage and the answer was therefore returned as `insufficient_evidence`.
 * `provider.is_llm`: `false` for the extractive demo generator.
