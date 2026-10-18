@@ -13,6 +13,8 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.responses import Response
+from starlette.types import Scope
 
 from groundedai import __version__
 from groundedai.api.errors import register_exception_handlers
@@ -104,9 +106,23 @@ def create_app(settings: Settings | None = None, services: Services | None = Non
     return app
 
 
+class FrontendFiles(StaticFiles):
+    """The built UI. Files under ``assets/`` have a content hash in their name and never
+    change, so browsers may keep them for a year. Everything else (``index.html``, demo data)
+    must be revalidated, so an upgrade is seen at once instead of an old page."""
+
+    async def get_response(self, path: str, scope: Scope) -> Response:
+        response = await super().get_response(path, scope)
+        if path.replace("\\", "/").startswith("assets/"):
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        else:
+            response.headers["Cache-Control"] = "no-cache"
+        return response
+
+
 def _mount_frontend(app: FastAPI, dist: Path | None) -> None:
     if dist is not None and (dist / "index.html").is_file():
-        app.mount("/", StaticFiles(directory=dist, html=True), name="frontend")
+        app.mount("/", FrontendFiles(directory=dist, html=True), name="frontend")
         return
 
     @app.get("/", include_in_schema=False)

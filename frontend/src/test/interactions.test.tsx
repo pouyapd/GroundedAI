@@ -228,7 +228,7 @@ function demoApi() {
     "reports/index.json": { items: [] },
   };
   vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
-    const name = Object.keys(files).find((file) => String(input).endsWith(`/demo/${file}`));
+    const name = Object.keys(files).find((file) => String(input).replace(/\?.*$/, "").endsWith(`/demo/${file}`));
     return name ? new Response(JSON.stringify(files[name]), { status: 200 }) : new Response("missing", { status: 404 });
   });
   return new StaticDemoApi("./demo");

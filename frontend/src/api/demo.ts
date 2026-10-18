@@ -111,13 +111,26 @@ export class StaticDemoApi implements Api {
   readonly mode = "static-demo" as const;
   private readonly root: string;
   private answers: Promise<RecordedAnswers> | null = null;
+  private versionTag: Promise<string> | null = null;
 
   constructor(root = `${import.meta.env.BASE_URL}demo`) {
     this.root = root.replace(/\/$/, "");
   }
 
+  /** The export time from manifest.json. Every other demo file is requested with it, so a
+   * redeployed demo never mixes cached old data with new code; the manifest is always revalidated. */
+  private version(): Promise<string> {
+    this.versionTag ??= fetch(`${this.root}/manifest.json`, { cache: "no-cache" })
+      .then(async (response) => (response.ok ? ((await response.json()) as DemoManifest).exported_at : ""))
+      .catch(() => "");
+    return this.versionTag;
+  }
+
   private async load<T>(file: string): Promise<T> {
-    const response = await fetch(`${this.root}/${file}`);
+    const isManifest = file === "manifest.json";
+    const version = isManifest ? "" : await this.version();
+    const url = `${this.root}/${file}${version ? `?v=${encodeURIComponent(version)}` : ""}`;
+    const response = await fetch(url, isManifest ? { cache: "no-cache" } : undefined);
     if (!response.ok) throw new ApiError(response.status, "demo_data_missing", `Demo file ${file} is missing.`);
     return (await response.json()) as T;
   }
