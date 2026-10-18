@@ -988,3 +988,11 @@ th.num {
   margin-top: 8px;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
+
+/* claims-v2: evidence, citations and relevance badges side by side */
+.badge-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}

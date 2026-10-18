@@ -85,6 +85,28 @@ describe("claim check in the answer view", () => {
     expect(screen.getByRole("heading", { name: "Passages used as evidence" })).toBeInTheDocument();
   });
 
+  it("shows three separate checks for claims-v2 answers and one badge for older ones", () => {
+    const v2: AnswerResponse = {
+      ...CHECKED,
+      verification: {
+        ...CHECKED.verification!,
+        version: "claims-v2",
+        evidence: "some_not_found",
+        citations: "some_wrong",
+        addresses_question: "yes",
+      },
+    };
+    const { unmount } = render(<AnswerView response={v2} />);
+    const checks = screen.getByLabelText("Answer checks");
+    expect(within(checks).getByText("Some statements not found")).toBeInTheDocument();
+    expect(within(checks).getByText("Some citations wrong")).toBeInTheDocument();
+    expect(within(checks).getByText("Gives what was asked")).toBeInTheDocument();
+    unmount();
+    render(<AnswerView response={CHECKED} />);
+    expect(screen.queryByLabelText("Answer checks")).toBeNull();
+    expect(screen.getByText("Some statements not found in the sources")).toBeInTheDocument();
+  });
+
   it("shows both sides of a disagreement without choosing one", () => {
     render(<AnswerView response={CHECKED} />);
     const panel = screen.getByRole("region", { name: "Retrieved passages that disagree" });

@@ -122,7 +122,14 @@ export interface ClaimOut {
   missing_figures: string[];
   word_overlap: number;
   flags: string[];
+  /** claims-v2 only. */
+  citation_status?: "correct" | "wrong" | "partly_wrong" | "invalid" | "unconfirmed" | "none" | null;
+  invalid_citations?: string[];
 }
+
+export type EvidenceVerdict = "all_found" | "some_uncertain" | "some_not_found" | "none_found" | "not_applicable";
+export type CitationVerdict = "all_correct" | "some_wrong" | "some_unconfirmed" | "none_given" | "not_applicable";
+export type AddressesQuestion = "yes" | "no" | "declined" | "not_checked";
 
 export interface VerificationOut {
   verdict: Verdict;
@@ -136,6 +143,12 @@ export interface VerificationOut {
   references_standard: number;
   references_variant: number;
   method: string;
+  /** Absent in answers recorded before claims-v2. */
+  version?: string;
+  evidence?: EvidenceVerdict | null;
+  citations?: CitationVerdict | null;
+  addresses_question?: AddressesQuestion | null;
+  expected_answer_type?: string | null;
 }
 
 export interface ConflictStatementOut {
