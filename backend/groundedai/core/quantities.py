@@ -20,8 +20,11 @@ What it reads:
 Identifiers such as ``SX-5``, ``E07``, ``IP65`` or ``SEV1`` are *not* figures; they are
 returned separately so a check can still require them to appear in the evidence.
 
-It is a pattern matcher, not a parser. Ranges are read as two values with the shared unit,
-and anything it does not recognise is a plain number.
+It is a pattern matcher, not a parser. :func:`read_quantities` reads a range as two values
+with the shared unit, and anything it does not recognise is a plain number. Two helpers used
+only by version 2 of the checks leave its output unchanged: :func:`read_ranges` links the two
+ends of a range ("09:00–17:00", "3 to 5 days", "between 7 am and 4 pm"), and
+:func:`limit_of` reads the limit word attached to a figure ("at least 14", "up to 12").
 """
 
 from __future__ import annotations
@@ -570,6 +573,144 @@ def read_quantities(text: str) -> Reading:
         quantities=sorted(scanner.found, key=lambda quantity: quantity.start),
         identifiers=scanner.identifiers,
     )
+
+
+@dataclass(frozen=True, slots=True)
+class Range:
+    """Two figures of one kind that are the ends of one range ("09:00–17:00")."""
+
+    low: Quantity
+    high: Quantity
+    text: str
+
+    def comparable(self, other: Range | Quantity) -> bool:
+        return self.low.comparable(other.low if isinstance(other, Range) else other)
+
+    def same_range(self, other: Range) -> bool:
+        return self.low.same_value(other.low) and self.high.same_value(other.high)
+
+    def has_end(self, value: Quantity) -> bool:
+        return value.same_value(self.low) or value.same_value(self.high)
+
+    def contains(self, value: Quantity) -> bool:
+        low, high = sorted((self.low.value, self.high.value))
+        return self.comparable(value) and low <= value.value <= high
+
+
+# What may stand between the two ends of a range. "and" only after "between".
+_RANGE_JOIN_RE = re.compile(r"^\s*(?:-|–|—|to|until|till|through)\s*$", re.I)
+_BETWEEN_JOIN_RE = re.compile(r"^\s*and\s*$", re.I)
+_BETWEEN_BEFORE_RE = re.compile(r"\bbetween\s+$", re.I)
+_RANGE_KINDS = frozenset(
+    {"money", "percent", "duration", "time_of_day", "date", "size", "weight", "length", "count",
+     "number", "speed", "temperature", "power", "voltage", "current"}
+)  # fmt: skip
+
+
+def _range_end(first: Quantity, second: Quantity) -> bool:
+    if first.kind not in _RANGE_KINDS or first.interval or second.interval:
+        return False
+    if first.kind == "duration" and second.kind == "duration":
+        return True  # "18 months to 3 years": the units may differ
+    return first.comparable(second) and first.kind == second.kind
+
+
+def read_ranges(text: str, quantities: list[Quantity] | None = None) -> list[Range]:
+    """Ranges in ``text``: two neighbouring figures of one kind joined by "–", "to", "until"
+    or "through", or by "and" after "between". Used by version 2 of the checks, which compare
+    a range as one value; :func:`read_quantities` itself still returns the two ends."""
+    found = read_quantities(text).quantities if quantities is None else quantities
+    ranges: list[Range] = []
+    index = 0
+    while index + 1 < len(found):
+        first, second = found[index], found[index + 1]
+        between = text[first.end : second.start]
+        joined = bool(_RANGE_JOIN_RE.match(between)) or (
+            bool(_BETWEEN_JOIN_RE.match(between))
+            and bool(_BETWEEN_BEFORE_RE.search(text[max(0, first.start - 12) : first.start]))
+        )
+        if joined and _range_end(first, second):
+            ranges.append(Range(first, second, text[first.start : second.end]))
+            index += 2
+            continue
+        index += 1
+    return ranges
+
+
+Limit = Literal["at_least", "at_most", "more_than", "less_than", "exactly"]
+
+# A limit word right before a figure ("at least 14 days", "a maximum of 8 students") or right
+# after it ("14 days or more"). Words of one meaning are one limit: "minimum" = "at least".
+_LIMIT_BEFORE: list[tuple[re.Pattern[str], Limit]] = [
+    (
+        re.compile(
+            r"(?:\bat\s+least|\b(?:a\s+)?minimum(?:\s+of)?|\bmin\.|\bno\s+(?:fewer|less)\s+than"
+            r"|\bnot\s+(?:fewer|less)\s+than)\s*$",
+            re.I,
+        ),
+        "at_least",
+    ),
+    (
+        re.compile(
+            r"(?:\bat\s+(?:the\s+)?most|\b(?:a\s+)?maximum(?:\s+of)?|\bmax\.|\bup\s+to"
+            r"|\bno\s+(?:more|longer)\s+than|\bnot\s+more\s+than|\bwithin"
+            r"|\b(?:not|never)\s+exceed(?:ing)?|\b(?:must|may|can|should|will|does|do)\s+not\s+"
+            r"exceed|\bcannot\s+exceed)\s*(?:the\s+)?$",
+            re.I,
+        ),
+        "at_most",
+    ),
+    (
+        re.compile(
+            r"(?:\bmore\s+than|\bover|\babove|\bgreater\s+than|\bin\s+excess\s+of|\bexceeding"
+            r"|\blonger\s+than)\s*$",
+            re.I,
+        ),
+        "more_than",
+    ),
+    (
+        re.compile(r"(?:\b(?:less|fewer|shorter)\s+than|\bunder|\bbelow)\s*$", re.I),
+        "less_than",
+    ),
+    (re.compile(r"(?:\bexactly|\bprecisely)\s*$", re.I), "exactly"),
+]
+_LIMIT_AFTER: list[tuple[re.Pattern[str], Limit]] = [
+    (
+        re.compile(r"^\s*(?:or\s+(?:more|longer|above|over|later)|minimum|at\s+least)\b", re.I),
+        "at_least",
+    ),
+    (
+        re.compile(
+            r"^\s*(?:or\s+(?:less|fewer|under|shorter|earlier)|maximum|at\s+(?:the\s+)?most)\b",
+            re.I,
+        ),
+        "at_most",
+    ),
+]
+
+
+def limit_of(text: str, figure: Quantity) -> Limit | None:
+    """The limit word attached to ``figure`` in ``text``, if any.
+
+    Only words right next to the figure count (a currency sign, "a", "an" or "the" may stand
+    between), so "the minimum charge is for 8 metres" attaches nothing to "8 metres".
+    """
+    before = re.sub(r"(?:\b(?:a|an|the)\s+|[€£$]\s*)$", "", text[max(0, figure.start - 40) :
+                                                              figure.start].rstrip())  # fmt: skip
+    for pattern, limit in _LIMIT_BEFORE:
+        if pattern.search(before + " "):
+            return limit
+    after = text[figure.end : figure.end + 24]
+    for pattern, limit in _LIMIT_AFTER:
+        if pattern.match(after):
+            return limit
+    return None
+
+
+def limits_compatible(first: Limit | None, second: Limit | None) -> bool:
+    """Two limits on the same value agree unless both are stated and differ ("at least 14" vs
+    "at most 14"). A limit stated on one side only is accepted."""
+    return first is None or second is None or first == second
 
 
 def figure_present(figure: Quantity, candidates: list[Quantity]) -> bool:

@@ -20,6 +20,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from groundedai.generation.answer_checks import check_answer, citation_verdict, evidence_verdict
 from groundedai.generation.citations import labels_in, parse_answer
 from groundedai.generation.claims import MATCHED, EvidenceSource, check_claims
 from groundedai.generation.context import AssembledContext, assemble_context
@@ -634,6 +635,27 @@ def _predict_v1(case: Case) -> dict[str, Any]:
     return {"reports": [{"pair": sorted(d.labels), "kind": d.kind} for d in reports]}
 
 
+def _predict_v2(case: Case) -> dict[str, Any]:
+    context = build_context(case)
+    if case.category in "AB":
+        report = check_claims(
+            str(case.data["statement"]), evidence(context), case.question, "claims-v2"
+        )
+        if case.category == "A":
+            return {"flagged": evidence_verdict(report) != "all_found"}
+        return {"judged_correct": citation_verdict(report) == "all_correct"}
+    if case.category == "C":
+        answer = str(case.data["answer"])
+        parsed = parse_answer(answer, {block.label: block.text for block in context.sources})
+        if parsed.is_abstention:
+            return {"flagged": True, "refusal": True}
+        report = check_claims(answer, evidence(context), case.question, "claims-v2")
+        addresses = check_answer(case.question, answer, report).addresses_question
+        return {"flagged": addresses in ("no", "declined"), "refusal": addresses == "declined"}
+    reports = find_disagreements(case.question, context.sources, "disagreement-v2")
+    return {"reports": [{"pair": sorted(d.labels), "kind": d.kind} for d in reports]}
+
+
 CHECKS: dict[str, Checks] = {
     "v1": Checks(
         "v1",
@@ -643,6 +665,15 @@ CHECKS: dict[str, Checks] = {
             "relevance_check": None,
         },
         _predict_v1,
+    ),
+    "v2": Checks(
+        "v2",
+        {
+            "claim_check": "claims-v2",
+            "conflict_check": "disagreement-v2",
+            "relevance_check": "claims-v2",
+        },
+        _predict_v2,
     ),
 }
 

@@ -14,15 +14,24 @@ retrieved passage, not only with the passages the model cited, and gets one stat
 ``partial``
     Some of the claim's words are in a passage, not enough to call it supported.
 ``unsupported``
-    No retrieved passage (and no pair of passages) contains the claim's figures and most of its
-    words.
+    No single retrieved passage contains the claim's figures and most of its words. (A compound
+    claim is supported when each of its clauses is found in one passage; words are never
+    pooled across passages.)
 
 The comparison is lexical, as in :mod:`groundedai.generation.citations`: a claim is supported
-when no figure is missing and at least 70% of its content words occur in the passage or its
-title (the same thresholds as the sentence check). It catches invented figures, wrong numbers,
-claims about things the passages do not mention and citations that point to the wrong passage.
-It does **not** understand meaning: a negation, a wrong subject ("contractors" for
+when no figure is missing and at least 70% of its content words occur in the passage text (the
+same thresholds as the sentence check). Words of the document title are left out of the claim
+before the comparison, so a title cannot support a claim. It catches invented figures, wrong
+numbers, claims about things the passages do not mention and citations that point to the wrong
+passage. It does **not** understand meaning: a negation, a wrong subject ("contractors" for
 "employees") or a correct paraphrase with other words can be misjudged.
+
+Version 2 (``claims-v2``, chosen with :func:`check_claims`'s ``version``) keeps this method and
+changes four things: :func:`claim_stem_v2` joins word forms that version 1 keeps apart
+("changed"/"change", "applied"/"apply", "cancelled"/"cancel"); a limit word on a figure must
+not contradict the evidence's ("at least 14" is not "at most 14"); a claim whose negation
+differs from its evidence sentence is only ``partial``; and every cited label is checked on
+its own, so a second citation that states nothing of the claim can be reported.
 
 Citation forms other than ``[S1]`` (``[Source 1]``, ``(S1)``, "source 2 says", a bracketed
 document title) are recognised here and counted as *variant* references, so that what the
@@ -32,11 +41,19 @@ model meant is not lost. The strict ``[S#]`` count used by the published metrics
 from __future__ import annotations
 
 import re
-from collections.abc import Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Literal
 
-from groundedai.core.quantities import NUMBER_WORDS, Quantity, figure_present, read_quantities
+from groundedai.core.quantities import (
+    NUMBER_WORDS,
+    Limit,
+    Quantity,
+    figure_present,
+    limit_of,
+    limits_compatible,
+    read_quantities,
+)
 from groundedai.core.text import (
     STOPWORDS,
     find_normalized_span,
@@ -58,6 +75,8 @@ from groundedai.generation.safety import detect_injection
 ClaimStatus = Literal["supported", "wrong_source", "added_source", "partial", "unsupported"]
 Verdict = Literal["verified", "partially_verified", "unverified", "not_applicable"]
 ReferenceForm = Literal["standard", "variant", "title"]
+ClaimCheckVersion = Literal["claims-v1", "claims-v2"]
+CLAIM_CHECK_VERSIONS: tuple[ClaimCheckVersion, ...] = ("claims-v1", "claims-v2")
 
 MATCHED: frozenset[str] = frozenset({"supported", "wrong_source", "added_source"})
 MAX_EVIDENCE_SENTENCES = 2
@@ -199,6 +218,10 @@ class Claim:
     missing_figures: list[str] = field(default_factory=list)
     word_overlap: float = 0.0
     flags: list[str] = field(default_factory=list)
+    # claims-v2 only: labels written with the claim that are not among the passages, and for
+    # each cited label whether its passage states at least part of the claim.
+    invalid_citations: list[str] = field(default_factory=list)
+    label_support: dict[str, bool] = field(default_factory=dict)
 
 
 @dataclass(slots=True)
@@ -206,6 +229,7 @@ class ClaimReport:
     claims: list[Claim]
     references: list[Reference]
     notes: int  # sentences about the sources themselves, not checked as claims
+    version: ClaimCheckVersion = "claims-v1"
 
     @property
     def verdict(self) -> Verdict:
@@ -343,7 +367,7 @@ def _strip_attribution(sentence: str) -> str:
 
 # ------------------------------------------------------------------ matching
 def claim_stem(token: str) -> str:
-    """:func:`light_stem` plus "-ly", doubled consonants and a few irregular forms."""
+    """:func:`light_stem` plus "-ly", doubled consonants and a few irregular forms (claims-v1)."""
     stem = light_stem(_IRREGULAR.get(token, token))
     if len(stem) > 5 and stem.endswith("ly"):
         stem = stem[:-2]
@@ -352,17 +376,108 @@ def claim_stem(token: str) -> str:
     return stem
 
 
-def _words(text: str) -> set[str]:
+_VOWELS = frozenset("aeiou")
+
+
+def _consonant(word: str, index: int) -> bool:
+    letter = word[index]
+    if letter in _VOWELS:
+        return False
+    return not (letter == "y" and index > 0 and _consonant(word, index - 1))
+
+
+def _measure(stem: str) -> int:
+    """Porter's measure: the number of vowel-consonant sequences in ``stem``."""
+    pattern = "".join("c" if _consonant(stem, i) else "v" for i in range(len(stem)))
+    return len(re.findall(r"v+c+", pattern))
+
+
+def _has_vowel(stem: str) -> bool:
+    return any(not _consonant(stem, i) for i in range(len(stem)))
+
+
+def _ends_cvc(stem: str) -> bool:
+    """Consonant-vowel-consonant at the end, the last not w, x or y ("hop", "plan")."""
+    return (
+        len(stem) >= 3
+        and _consonant(stem, -3 % len(stem))
+        and not _consonant(stem, -2 % len(stem))
+        and _consonant(stem, -1 % len(stem))
+        and stem[-1] not in "wxy"
+    )
+
+
+def _after_suffix(stem: str) -> str:
+    """Porter's tidy-up after "-ed" or "-ing": "dat" -> "date", "plann" -> "plan"."""
+    if stem.endswith(("at", "bl", "iz")):
+        return stem + "e"
+    if len(stem) > 1 and stem[-1] == stem[-2] and _consonant(stem, len(stem) - 1):
+        if stem[-1] not in "lsz":
+            return stem[:-1]
+        return stem
+    if _measure(stem) == 1 and _ends_cvc(stem):
+        return stem + "e"
+    return stem
+
+
+def claim_stem_v2(token: str) -> str:
+    """claims-v2: the inflection steps of the Porter stemmer, written out here.
+
+    Joins forms that :func:`claim_stem` keeps apart: change/changed, require/required,
+    update/updated, date/dated, base/based, use/used, apply/applied, empty/emptied,
+    cancel/cancelled, monthly/month. Short words that only differ by a final "e" stay apart
+    (plan/plane, hop/hope, rat/rate), as Porter's rules intend. Derived words ("cancellation",
+    "requirement") are not reduced, and synonyms are not joined. :func:`light_stem` and
+    :func:`claim_stem` are unchanged.
+    """
+    word = _IRREGULAR.get(token, token)
+    if not word.isalpha() or len(word) <= 2:
+        return word
+    if word.endswith("sses"):
+        word = word[:-2]
+    elif word.endswith(("ies", "ied")) and len(word) > 4:
+        word = word[:-3] + "y"
+    elif word.endswith("eed"):
+        if _measure(word[:-3]) > 0:
+            word = word[:-1]  # agreed -> agree; need, feed stay
+    elif word.endswith("ed") and _has_vowel(word[:-2]):
+        word = _after_suffix(word[:-2])
+    elif word.endswith("ing") and _has_vowel(word[:-3]) and len(word) > 4:
+        word = _after_suffix(word[:-3])
+    elif word.endswith("es") and word[:-2].endswith(("ss", "x", "ch", "sh", "zz")):
+        word = word[:-2]
+    elif word.endswith("s") and not word.endswith(("ss", "us", "is")) and len(word) > 3:
+        word = word[:-1]
+    if len(word) > 5 and word.endswith("ly"):
+        word = word[:-2]
+    if word.endswith("e"):
+        stem = word[:-1]
+        measure = _measure(stem)
+        if measure > 1 or (measure == 1 and not _ends_cvc(stem)):
+            word = stem
+    if word.endswith("ll") and _measure(word) > 1:
+        word = word[:-1]
+    return word
+
+
+Stemmer = Callable[[str], str]
+STEMMERS: dict[ClaimCheckVersion, Stemmer] = {
+    "claims-v1": claim_stem,
+    "claims-v2": claim_stem_v2,
+}
+
+
+def _words(text: str, stem: Stemmer = claim_stem) -> set[str]:
     return {
-        claim_stem(token)
+        stem(token)
         for token in tokenize(text)
         if token not in STOPWORDS and not token.isdigit() and token not in _NUMBER_TOKENS
     }
 
 
-def claim_words(text: str) -> set[str]:
+def claim_words(text: str, stem: Stemmer = claim_stem) -> set[str]:
     return {
-        claim_stem(token)
+        stem(token)
         for token in tokenize(text)
         if token not in STOPWORDS
         and token not in _META_WORDS
@@ -378,6 +493,7 @@ class _Passage:
     figures: tuple[Quantity, ...]
     body_words: frozenset[str] = frozenset()
     title_words: frozenset[str] = frozenset()
+    limits: tuple[Limit | None, ...] = ()  # claims-v2: the limit word on each figure
 
 
 def _trusted_text(text: str) -> str:
@@ -388,15 +504,45 @@ def _trusted_text(text: str) -> str:
     return " ".join(sentence for sentence in sentences if not detect_injection(sentence))
 
 
-def _passage(source: EvidenceSource, text: str | None = None) -> _Passage:
+@dataclass(frozen=True, slots=True)
+class _Method:
+    """What differs between versions of the check."""
+
+    version: ClaimCheckVersion
+    stem: Stemmer
+    limits: bool  # compare limit words ("at least" / "at most") on figures
+
+
+_METHODS: dict[ClaimCheckVersion, _Method] = {
+    "claims-v1": _Method("claims-v1", claim_stem, limits=False),
+    "claims-v2": _Method("claims-v2", claim_stem_v2, limits=True),
+}
+_V1 = _METHODS["claims-v1"]
+
+
+def _passage(source: EvidenceSource, text: str | None = None, method: _Method = _V1) -> _Passage:
     body = _trusted_text(source.text if text is None else text)
-    figures = read_quantities(body).quantities + read_quantities(source.title).quantities
-    body_words, title_words = frozenset(_words(body)), frozenset(_words(source.title))
-    return _Passage(source, body_words | title_words, tuple(figures), body_words, title_words)
+    body_figures = read_quantities(body).quantities
+    title_figures = read_quantities(source.title).quantities
+    body_words = frozenset(_words(body, method.stem))
+    title_words = frozenset(_words(source.title, method.stem))
+    limits: tuple[Limit | None, ...] = ()
+    if method.limits:
+        limits = tuple(limit_of(body, f) for f in body_figures) + tuple(
+            limit_of(source.title, f) for f in title_figures
+        )
+    return _Passage(
+        source,
+        body_words | title_words,
+        tuple(body_figures + title_figures),
+        body_words,
+        title_words,
+        limits,
+    )
 
 
 def _sentence_windows(
-    sources: Sequence[EvidenceSource],
+    sources: Sequence[EvidenceSource], method: _Method = _V1
 ) -> tuple[list[_Passage], list[_Passage]]:
     """Each sentence, and each pair of neighbouring sentences, as a passage of its own.
 
@@ -407,9 +553,9 @@ def _sentence_windows(
     for source in sources:
         sentences = split_sentences(source.text)
         for index, sentence in enumerate(sentences):
-            singles.append(_passage(source, sentence))
+            singles.append(_passage(source, sentence, method))
             if index + 1 < len(sentences):
-                pairs.append(_passage(source, f"{sentence} {sentences[index + 1]}"))
+                pairs.append(_passage(source, f"{sentence} {sentences[index + 1]}", method))
     return singles, pairs
 
 
@@ -425,12 +571,31 @@ class _Match:
         return (order[self.level], -len(self.missing), self.overlap)
 
 
-def _match(words: set[str], figures: list[Quantity], passages: Sequence[_Passage]) -> _Match:
+Limits = Mapping[Quantity, Limit | None]
+
+
+def _figure_found(figure: Quantity, limit: Limit | None, passages: Sequence[_Passage]) -> bool:
+    """claims-v2: the figure is stated, and not with a contradicting limit word."""
+    for passage in passages:
+        for index, candidate in enumerate(passage.figures):
+            other = passage.limits[index] if index < len(passage.limits) else None
+            if figure_present(figure, [candidate]) and limits_compatible(limit, other):
+                return True
+    return False
+
+
+def _match(
+    words: set[str],
+    figures: list[Quantity],
+    passages: Sequence[_Passage],
+    limits: Limits | None = None,
+) -> _Match:
     """How well ``passages`` support a claim with these words and figures.
 
     Words of the document title only say which document a claim is about ("Orbis Fitness");
     they are left out of the overlap, which is measured on the passage text. Otherwise "Orbis
-    Fitness membership is free" would pass on the strength of the name alone.
+    Fitness membership is free" would pass on the strength of the name alone. With ``limits``
+    (claims-v2), a figure also needs a compatible limit word in the passage.
     """
     body: set[str] = set()
     title: set[str] = set()
@@ -441,7 +606,10 @@ def _match(words: set[str], figures: list[Quantity], passages: Sequence[_Passage
         available_figures.extend(passage.figures)
     content = (words - title) or words
     overlap = len(content & body) / len(content) if content else 1.0
-    missing = tuple(f.text for f in figures if not figure_present(f, available_figures))
+    if limits is None:
+        missing = tuple(f.text for f in figures if not figure_present(f, available_figures))
+    else:
+        missing = tuple(f.text for f in figures if not _figure_found(f, limits.get(f), passages))
     if missing or overlap < PARTIAL_RECALL:
         level: Literal["supported", "partial", "unsupported"] = "unsupported"
     elif overlap < SUPPORTED_RECALL:
@@ -456,12 +624,13 @@ def _best(
     figures: list[Quantity],
     passages: Sequence[_Passage],
     clauses: list[tuple[set[str], list[Quantity]]] | None = None,
+    limits: Limits | None = None,
 ) -> tuple[_Match, list[_Passage]] | None:
     """The passage that best supports a claim, or one passage per clause of a compound one."""
     if not passages:
         return None
     scored = sorted(
-        ((_match(words, figures, [passage]), [passage]) for passage in passages),
+        ((_match(words, figures, [passage], limits), [passage]) for passage in passages),
         key=lambda item: item[0].rank,
         reverse=True,
     )
@@ -475,7 +644,7 @@ def _best(
     overlaps = []
     for clause_words, clause_figures in clauses:
         found = max(
-            ((_match(clause_words, clause_figures, [p]), p) for p in passages),
+            ((_match(clause_words, clause_figures, [p], limits), p) for p in passages),
             key=lambda item: item[0].rank,
         )
         if found[0].level != "supported":
@@ -490,7 +659,9 @@ _CLAUSE_SPLIT_RE = re.compile(r";\s+|,\s+(?:and|but|while|whereas)\s+|\s+and\s+(
 MIN_CLAUSE_WORDS = 2
 
 
-def clauses_of(text: str, figures: list[Quantity]) -> list[tuple[set[str], list[Quantity]]]:
+def clauses_of(
+    text: str, figures: list[Quantity], stem: Stemmer = claim_stem
+) -> list[tuple[set[str], list[Quantity]]]:
     """The independent clauses of a sentence, each with its words and its own figures."""
     parts = [part for part in _CLAUSE_SPLIT_RE.split(text) if part.strip()]
     if len(parts) < 2:
@@ -501,7 +672,7 @@ def clauses_of(text: str, figures: list[Quantity]) -> list[tuple[set[str], list[
         start = text.find(part, offset)
         end = start + len(part)
         offset = end
-        part_words = claim_words(part)
+        part_words = claim_words(part, stem)
         part_figures = [f for f in figures if start <= f.start < end]
         if len(part_words) < MIN_CLAUSE_WORDS and not part_figures:
             return []  # a fragment, not a clause: judge the sentence as a whole
@@ -510,7 +681,7 @@ def clauses_of(text: str, figures: list[Quantity]) -> list[tuple[set[str], list[
 
 
 def _evidence(
-    claim_words: set[str], figures: list[Quantity], passage: _Passage
+    claim_words: set[str], figures: list[Quantity], passage: _Passage, stem: Stemmer = claim_stem
 ) -> EvidenceQuote | None:
     """The sentence(s) of the passage that carry the claim, with their character offsets."""
     title = _title_key(passage.source.title)
@@ -523,7 +694,7 @@ def _evidence(
     for sentence in sentences:
         sentence_figures = read_quantities(sentence).quantities
         hits = sum(1 for f in figures if figure_present(f, sentence_figures))
-        overlap = len(claim_words & _words(sentence))
+        overlap = len(claim_words & _words(sentence, stem))
         scored.append((hits, overlap, sentence))
     scored.sort(key=lambda item: (item[0], item[1]), reverse=True)
     if not scored[0][0] and not scored[0][1]:
@@ -546,24 +717,61 @@ def _evidence(
 
 
 def _quotes(
-    claim_words: set[str], figures: list[Quantity], passages: Sequence[_Passage]
+    claim_words: set[str],
+    figures: list[Quantity],
+    passages: Sequence[_Passage],
+    stem: Stemmer = claim_stem,
 ) -> list[EvidenceQuote]:
-    quotes = (_evidence(claim_words, figures, passage) for passage in passages)
+    quotes = (_evidence(claim_words, figures, passage, stem) for passage in passages)
     return [quote for quote in quotes if quote is not None]
+
+
+_NEGATION_RE = re.compile(r"\b(?:not|never|cannot|no\s+longer)\b|n't\b", re.IGNORECASE)
+
+
+def negated(text: str) -> bool:
+    """Whether a sentence negates its verb ("is not", "cannot", "never", "don't")."""
+    return bool(_NEGATION_RE.search(text))
+
+
+def _negation_differs(claim: Claim, words: set[str], stem: Stemmer) -> bool:
+    """claims-v2: the claim negates what its best evidence sentence affirms, or the reverse.
+
+    Only the clause of the claim and the evidence sentence that share most words are
+    compared, so a negated clause elsewhere in a compound claim ("X is not Y; Z is W"), or a
+    neighbouring negated sentence in the quote, does not count.
+    """
+    del words  # the comparison is per clause
+    sentences = [s for quote in claim.evidence for s in split_sentences(quote.quote)]
+    clauses = [part for part in _CLAUSE_SPLIT_RE.split(claim.text) if part.strip()]
+    if not sentences or not clauses:
+        return False
+    clause, sentence = max(
+        ((c, s) for c in clauses for s in sentences),
+        key=lambda pair: len(_words(pair[0], stem) & _words(pair[1], stem)),
+    )
+    return negated(clause) != negated(sentence)
 
 
 # --------------------------------------------------------------------- check
 def check_claims(
-    answer: str, sources: Sequence[EvidenceSource], question: str | None = None
+    answer: str,
+    sources: Sequence[EvidenceSource],
+    question: str | None = None,
+    version: ClaimCheckVersion = "claims-v1",
 ) -> ClaimReport:
     """Check every factual sentence of ``answer`` against every passage in ``sources``.
 
     Figures that the question itself states ("a train that arrives 45 minutes late") need not
     appear in a passage, as long as the claim also states a figure of its own that does
     ("you can claim 25%"); a claim whose only figure comes from the question still needs it.
+
+    ``version`` chooses the method; ``claims-v1`` reproduces every earlier result.
     """
+    method = _METHODS[version]
+    stem = method.stem
     working, references = resolve_references(answer, sources)
-    passages = {source.label: _passage(source) for source in sources}
+    passages = {source.label: _passage(source, method=method) for source in sources}
     question_figures = read_quantities(question).quantities if question else []
     windows: tuple[list[_Passage], list[_Passage]] | None = None
     claims: list[Claim] = []
@@ -577,7 +785,7 @@ def check_claims(
         if text.endswith(":") and not figures:
             notes += 1  # "Data retention periods are as follows:"
             continue
-        words = claim_words(text)
+        words = claim_words(text, stem)
         if not words and not figures:
             notes += 1
             continue
@@ -588,24 +796,32 @@ def check_claims(
         required = own if own else figures
         cited = [label for label in labels if label in passages]
         display = text[:1].upper() + text[1:]
+        limits = {f: limit_of(text, f) for f in required} if method.limits else None
         if not words and question:
             # A figure on its own ("€260") answers the question: it must be in the sentence(s)
             # that match the question best, not merely somewhere in a passage.
             if windows is None:
-                windows = _sentence_windows(sources)
-            words = claim_words(question) - {claim_stem(word) for word in QUESTION_FILLERS}
+                windows = _sentence_windows(sources, method)
+            words = claim_words(question, stem) - {stem(word) for word in QUESTION_FILLERS}
             pool = _answer_windows(words, required, *windows)
-            claim = _judge(display, words, required, cited, pool)
+            claim = _judge(display, words, required, cited, pool, None, method, limits)
         else:
-            clauses = clauses_of(text, required)
-            claim = _judge(display, words, required, cited, list(passages.values()), clauses)
+            clauses = clauses_of(text, required, stem)
+            claim = _judge(
+                display, words, required, cited, list(passages.values()), clauses, method, limits
+            )
+        if method.version == "claims-v2":
+            claim.invalid_citations = [label for label in labels if label not in passages]
+            if claim.status in MATCHED and _negation_differs(claim, words, stem):
+                claim.status = "partial"
+                claim.flags.append("negation_differs")
         if detect_injection(text):
             # Text that gives orders to an AI system is not a fact, even when a passage
             # contains it word for word.
             claim.status = "unsupported"
             claim.flags.append("instruction_text")
         claims.append(claim)
-    return ClaimReport(claims=claims, references=references, notes=notes)
+    return ClaimReport(claims=claims, references=references, notes=notes, version=version)
 
 
 def _answer_windows(
@@ -642,6 +858,37 @@ def _missing(
     return best[0].missing if best else tuple(f.text for f in figures)
 
 
+def _label_support(
+    words: set[str],
+    figures: list[Quantity],
+    cited: list[str],
+    pool: Sequence[_Passage],
+    clauses: list[tuple[set[str], list[Quantity]]] | None,
+    limits: Limits | None,
+) -> dict[str, bool]:
+    """claims-v2: for each cited label, whether its passage states at least part of the claim.
+
+    A passage states part of a claim when it supports the whole claim, or one clause of a
+    compound claim ("X is 5 [S1], and Y is 7 [S3]"). A second label whose passage states
+    nothing of the claim is then visible, even though the first label supports it.
+    """
+    support: dict[str, bool] = {}
+    for label in cited:
+        passages = [passage for passage in pool if passage.source.label == label]
+        if not passages:
+            support[label] = False
+            continue
+        whole = _best(words, figures, passages, None, limits)
+        stated = bool(whole and whole[0].level == "supported")
+        for clause_words, clause_figures in clauses or []:
+            if stated:
+                break
+            part = _best(clause_words, clause_figures, passages, None, limits)
+            stated = bool(part and part[0].level == "supported")
+        support[label] = stated
+    return support
+
+
 def _judge(
     display: str,
     words: set[str],
@@ -649,40 +896,49 @@ def _judge(
     cited: list[str],
     pool: Sequence[_Passage],
     clauses: list[tuple[set[str], list[Quantity]]] | None = None,
+    method: _Method = _V1,
+    limits: Limits | None = None,
 ) -> Claim:
     """Status of one claim. ``pool`` holds whole passages, or sentence windows of them."""
-    best = _best(words, figures, pool, clauses)
+    stem = method.stem
+    best = _best(words, figures, pool, clauses, limits)
     if cited:
         cited_pool = [passage for passage in pool if passage.source.label in cited]
-        found = _best(words, figures, cited_pool, clauses)
+        found = _best(words, figures, cited_pool, clauses, limits)
         cited_match = found[0] if found else _Match("unsupported", 0.0, _missing(figures, best))
         cited_passages = found[1] if found else []
+        support = (
+            _label_support(words, figures, cited, pool, clauses, limits)
+            if method.version == "claims-v2"
+            else {}
+        )
         if cited_match.level == "supported":
             return Claim(
-                display, cited, "supported", _quotes(words, figures, cited_passages), [],
-                cited_match.overlap,
+                display, cited, "supported", _quotes(words, figures, cited_passages, stem), [],
+                cited_match.overlap, label_support=support,
             )  # fmt: skip
         if best and best[0].level == "supported":
             return Claim(
-                display, cited, "wrong_source", _quotes(words, figures, best[1]), [],
-                best[0].overlap,
+                display, cited, "wrong_source", _quotes(words, figures, best[1], stem), [],
+                best[0].overlap, label_support=support,
             )  # fmt: skip
         status: ClaimStatus = "partial" if cited_match.level == "partial" else "unsupported"
         evidence = (
-            _quotes(words, figures, cited_passages[:1])
+            _quotes(words, figures, cited_passages[:1], stem)
             if cited_match.overlap >= PARTIAL_RECALL
             else []
         )
         return Claim(
-            display, cited, status, evidence, list(cited_match.missing), cited_match.overlap
-        )
+            display, cited, status, evidence, list(cited_match.missing), cited_match.overlap,
+            label_support=support,
+        )  # fmt: skip
     if best is None:
         return Claim(display, [], "unsupported", [], [f.text for f in figures], 0.0)
     match, chosen = best
     if match.level == "supported":
         return Claim(
-            display, [], "added_source", _quotes(words, figures, chosen), [], match.overlap
+            display, [], "added_source", _quotes(words, figures, chosen, stem), [], match.overlap
         )
     status = "partial" if match.level == "partial" else "unsupported"
-    evidence = _quotes(words, figures, chosen[:1]) if match.overlap >= PARTIAL_RECALL else []
+    evidence = _quotes(words, figures, chosen[:1], stem) if match.overlap >= PARTIAL_RECALL else []
     return Claim(display, [], status, evidence, list(match.missing), match.overlap)
