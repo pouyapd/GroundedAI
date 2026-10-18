@@ -37,6 +37,7 @@ from groundedai.core.text import content_tokens, normalize_whitespace, split_sen
 from groundedai.generation.answer_checks import check_answer, citation_status
 from groundedai.generation.citations import (
     ParsedAnswer,
+    bracketed_only,
     labels_in,
     parse_answer,
     strip_citations,
@@ -551,11 +552,24 @@ class QAService:
         source_texts = {block.label: block.text for block in context.sources}
 
         has_words = bool(re.search(r"[^\W_]", strip_citations(raw)))
-        if not has_words:
+        # claims-v2 also rejects replies made only of bracketed fragments (titles, a bare
+        # "[21]"); version 1 keeps its published behaviour, so recorded runs replay unchanged.
+        only_brackets = (
+            has_words
+            and self.settings.claim_check == "claims-v2"
+            and bracketed_only(raw)
+            and not parse_answer(raw, source_texts).is_abstention
+        )
+        if not has_words or only_brackets:
             # No substitute answer is generated here: the passages are shown as retrieved
             # evidence, and the status says plainly that the model produced no answer.
             pointed = [label for label in labels_in(raw) if label in source_texts]
-            if pointed:
+            if only_brackets:
+                warnings.append(
+                    "The model replied only with bracketed fragments (labels, titles or a bare "
+                    "value) and no answer sentence, so it is not shown as an answer."
+                )
+            elif pointed:
                 warnings.append(
                     "The model returned citation markers without any answer text. It pointed "
                     f"to {', '.join(pointed)}; those passages are listed below, but no answer "

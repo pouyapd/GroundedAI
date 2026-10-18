@@ -589,6 +589,34 @@ def test_claims_v2_withholds_only_when_nothing_was_found(
         services.close()
 
 
+# Real Qwen2.5-0.5B replies on the development set (2026-10-18), and the status each version gives.
+# Version 1 keeps its published behaviour, so recorded runs replay unchanged.
+BRACKET_REPLIES = [
+    ("[21]", "invalid_output", "answered"),
+    ("[Travel Policy]\n[Finance FAQ]", "invalid_output", "answered"),
+    ("[Insufficient Evidence: nothing about hotels.]", "insufficient_evidence", None),
+    ("[Travel Policy]: The hotel limit is EUR 140 per night [S1].", "answered", None),
+]
+
+
+@pytest.mark.parametrize("version", ["claims-v1", "claims-v2"])
+@pytest.mark.parametrize(("reply", "v2_status", "v1_status"), BRACKET_REPLIES)
+def test_claims_v2_rejects_replies_made_only_of_brackets(
+    make_settings: SettingsFactory, version: str, reply: str, v2_status: str, v1_status: str | None
+) -> None:
+    settings = make_settings(claim_check=version)
+    services = _services_with(settings, FakeListChatModel(responses=[reply]))
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        expected = v2_status if version == "claims-v2" else (v1_status or v2_status)
+        assert response.status == expected
+        if expected == "invalid_output":
+            assert response.answer is None
+            assert any("bracketed fragments" in warning for warning in response.warnings)
+    finally:
+        services.close()
+
+
 def test_disagreement_v2_can_be_selected(make_settings: SettingsFactory) -> None:
     settings = make_settings(prompt_version="answer-v2", conflict_check="disagreement-v2")
     services = _services_with(settings, RecordingChatModel(seen=[]))

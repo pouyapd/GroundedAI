@@ -182,6 +182,19 @@ def states_conflict(text: str) -> bool:
     return bool(_CONFLICT_STATEMENT_RE.search(strip_citations(text)))
 
 
+_ANY_BRACKETS_RE = re.compile(r"\[[^\[\]\n]*\]")
+_WORD_RE = re.compile(r"[^\W_]")
+
+
+def bracketed_only(text: str) -> bool:
+    """Whether every letter and digit of a reply sits inside square brackets.
+
+    Small models sometimes reply with only labels, titles or a bare value ("[21]",
+    "[Travel Policy]"); such a reply has no answer sentence to check.
+    """
+    return bool(_WORD_RE.search(text)) and not _WORD_RE.search(_ANY_BRACKETS_RE.sub(" ", text))
+
+
 def strip_citations(text: str) -> str:
     without = re.sub(r"\s{2,}", " ", CITATION_RE.sub("", text))
     return re.sub(r"\s+([.,;:!?])", r"\1", without).strip()

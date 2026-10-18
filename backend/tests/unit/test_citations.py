@@ -2,6 +2,7 @@ import pytest
 
 from groundedai.generation.citations import (
     assess_support,
+    bracketed_only,
     labels_in,
     malformed_citations,
     parse_answer,
@@ -216,3 +217,13 @@ def test_abstention_after_leading_labels_is_recognised() -> None:
         SOURCES,
     )
     assert not later.is_abstention
+
+
+def test_bracketed_only_finds_replies_without_text_outside_brackets() -> None:
+    assert bracketed_only("[21]")
+    assert bracketed_only("[S1][S2]")
+    assert bracketed_only("[Travel Policy] [Finance FAQ]")
+    assert not bracketed_only("[Standard plan]: First response within 2 business days")
+    assert not bracketed_only("The limit is EUR 140 [S1].")
+    assert not bracketed_only("[S1] 12")  # a bare value outside brackets is checked as a claim
+    assert not bracketed_only("")
