@@ -19,7 +19,7 @@ export function validateFile(file: File, allowed: string[], maxBytes: number): s
 }
 
 export function DocumentsPage() {
-  const { api, status } = useApp();
+  const { api, status, askAbout } = useApp();
   const readOnly = api.mode === "static-demo";
   const [page, setPage] = useState<Page<DocumentOut> | null>(null);
   const [offset, setOffset] = useState(0);
@@ -203,7 +203,8 @@ export function DocumentsPage() {
         {page && page.total === 0 ? (
           <EmptyState title="No documents yet">
             <p className="small">
-              Upload a file above, or index the sample corpus from a terminal:
+              Upload a file above (two small sample PDFs are in the repository&apos;s <code>examples/</code> folder), or
+              index the sample corpus from a terminal:
               <br />
               <code>groundedai ingest evaluation/datasets/groundedai-synthetic-v1/corpus/*</code>
             </p>
@@ -233,6 +234,7 @@ export function DocumentsPage() {
                     readOnly={readOnly}
                     chunks={openChunks?.id === doc.id ? openChunks.chunks : null}
                     onToggleChunks={() => void toggleChunks(doc.id)}
+                    onAsk={() => askAbout(doc.id)}
                     onReingest={() => void act(() => api.reingestDocument(doc.id))}
                     onDelete={() => {
                       if (window.confirm(`Delete "${doc.title}" and its chunks?`)) void act(() => api.deleteDocument(doc.id));
@@ -266,6 +268,7 @@ function DocumentRow({
   readOnly,
   chunks,
   onToggleChunks,
+  onAsk,
   onReingest,
   onDelete,
 }: {
@@ -273,6 +276,7 @@ function DocumentRow({
   readOnly: boolean;
   chunks: ChunkOut[] | null;
   onToggleChunks: () => void;
+  onAsk: () => void;
   onReingest: () => void;
   onDelete: () => void;
 }) {
@@ -299,10 +303,25 @@ function DocumentRow({
         <td style={{ whiteSpace: "nowrap" }}>
           {!readOnly ? (
             <>
+              <button
+                type="button"
+                className="btn btn-small btn-primary"
+                onClick={onAsk}
+                disabled={doc.status !== "ready"}
+                aria-label={`Ask about ${doc.title}`}
+              >
+                Ask
+              </button>{" "}
               <button type="button" className="btn btn-small" onClick={onToggleChunks} disabled={doc.status !== "ready"}>
                 {chunks ? "Hide chunks" : "Chunks"}
               </button>{" "}
-              <button type="button" className="btn btn-small" onClick={onReingest} disabled={!settled}>
+              <button
+                type="button"
+                className="btn btn-small"
+                onClick={onReingest}
+                disabled={!settled || doc.source_stored === false}
+                title={doc.source_stored === false ? "The file was not kept; upload it again to retry." : undefined}
+              >
                 Re-ingest
               </button>{" "}
               <button type="button" className="btn btn-small btn-danger" onClick={onDelete} disabled={doc.status === "processing"}>

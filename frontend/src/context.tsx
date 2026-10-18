@@ -8,6 +8,11 @@ export interface AppContextValue {
   status: SystemStatus | null;
   statusError: ApiError | null;
   refreshStatus: () => void;
+  /** Which documents the Ask page searches: "all" or one document id. */
+  askScope: string;
+  setAskScope: (scope: string) => void;
+  /** Opens the Ask page with one document selected. */
+  askAbout: (documentId: string) => void;
 }
 
 export const AppContext = createContext<AppContextValue | null>(null);

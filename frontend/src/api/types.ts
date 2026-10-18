@@ -19,6 +19,8 @@ export interface DocumentOut {
   attempts: number;
   created_at: string;
   updated_at: string;
+  /** False when a file that could not be read was discarded (added 2026-10-18). */
+  source_stored?: boolean | null;
 }
 
 export interface Page<T> {
@@ -109,6 +111,8 @@ export interface EvidenceOut {
   document_title: string;
   page_start: number | null;
   page_end: number | null;
+  /** Page on which the quote starts (added 2026-10-18); absent in older recordings. */
+  page?: number | null;
   quote: string;
   quote_start: number;
   quote_end: number;
@@ -158,6 +162,8 @@ export interface ConflictStatementOut {
   document_title: string;
   page_start: number | null;
   page_end: number | null;
+  /** Page on which the quote starts (added 2026-10-18); absent in older recordings. */
+  page?: number | null;
   quote: string;
   quote_start: number;
   quote_end: number;

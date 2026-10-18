@@ -8,6 +8,7 @@ export function EvidenceQuote({
   title,
   pageStart,
   pageEnd,
+  page,
   quote,
   onCite,
 }: {
@@ -15,6 +16,8 @@ export function EvidenceQuote({
   title: string;
   pageStart: number | null;
   pageEnd: number | null;
+  /** The quote's own page, when known; otherwise the passage's page range is shown. */
+  page?: number | null;
   quote: string;
   onCite: (label: string) => void;
 }) {
@@ -25,7 +28,7 @@ export function EvidenceQuote({
           {label}
         </button>{" "}
         {title}
-        {pageStart !== null ? ` · ${pageRange(pageStart, pageEnd)}` : ""}
+        {page != null ? ` · p. ${page}` : pageStart !== null ? ` · ${pageRange(pageStart, pageEnd)}` : ""}
       </span>
       <span className="evidence-quote">“{quote}”</span>
     </blockquote>
@@ -94,6 +97,7 @@ export function ClaimCheck({
                 title={item.document_title}
                 pageStart={item.page_start}
                 pageEnd={item.page_end}
+                page={item.page}
                 quote={item.quote}
                 onCite={onCite}
               />

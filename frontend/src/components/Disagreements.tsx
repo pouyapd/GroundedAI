@@ -30,6 +30,7 @@ export function Disagreements({ conflicts, onCite }: { conflicts: ConflictOut[];
                   title={statement.document_title}
                   pageStart={statement.page_start}
                   pageEnd={statement.page_end}
+                  page={statement.page}
                   quote={statement.quote}
                   onCite={onCite}
                 />

@@ -74,7 +74,14 @@ export function App({ api: injected }: { api?: Api }) {
   const [statusError, setStatusError] = useState<ApiError | null>(null);
   const [manifest, setManifest] = useState<DemoManifest | null>(null);
   const [keyDialog, setKeyDialog] = useState(false);
+  const [askScope, setAskScope] = useState("all");
   const [theme, cycleTheme] = useTheme();
+
+  const askAbout = useCallback((documentId: string) => {
+    setAskScope(documentId);
+    setTab("ask");
+    rememberTab("ask");
+  }, []);
 
   const refreshStatus = useCallback(() => {
     api
@@ -104,8 +111,8 @@ export function App({ api: injected }: { api?: Api }) {
   }, []);
 
   const contextValue = useMemo(
-    () => ({ api, status, statusError, refreshStatus }),
-    [api, status, statusError, refreshStatus],
+    () => ({ api, status, statusError, refreshStatus, askScope, setAskScope, askAbout }),
+    [api, status, statusError, refreshStatus, askScope, askAbout],
   );
   const needsKey = status?.auth_required === true && !getStoredApiKey();
 
@@ -168,7 +175,7 @@ export function App({ api: injected }: { api?: Api }) {
         ) : null}
         {/* Ask stays mounted so its answer and settings survive a visit to another tab. */}
         <div className="page" hidden={tab !== "ask"}>
-          <AskPage />
+          <AskPage active={tab === "ask"} />
         </div>
         {tab === "documents" ? <DocumentsPage /> : null}
         {tab === "evaluation" ? <EvaluationPage /> : null}
@@ -232,8 +239,9 @@ function ModeBanners({
   if (status.demo_mode) {
     return (
       <Banner tone="info" title="Demo generator active (not an LLM)">
-        Answers are built by selecting sentences from the retrieved passages. To use a local language model, install
-        Ollama and set <code>GROUNDEDAI_GENERATION_PROVIDER=ollama</code> (see README, “Local inference”).
+        Answers are built by selecting sentences from the retrieved passages. To use a local language model, set{" "}
+        <code>GROUNDEDAI_GENERATION_PROVIDER=ollama</code> or <code>huggingface-local</code> (see README, “Local
+        inference”).
       </Banner>
     );
   }

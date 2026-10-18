@@ -407,6 +407,16 @@ label {
   min-width: 140px;
 }
 
+.controls-row .scope-field {
+  flex: 1 1 220px;
+  max-width: 360px;
+}
+
+.scope-field select {
+  width: 100%;
+  text-overflow: ellipsis;
+}
+
 .checkbox {
   display: inline-flex;
   gap: 6px;

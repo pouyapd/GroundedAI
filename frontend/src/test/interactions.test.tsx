@@ -10,7 +10,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "../App";
 import { StaticDemoApi, type RecordedAnswers } from "../api/demo";
 import type { AnswerResponse, OperationalMetrics, RetrievalMode } from "../api/types";
-import { ANSWER, STATUS, fakeApi } from "./fixtures";
+import { ANSWER, READY_DOCUMENTS, STATUS, documentPage, fakeApi, readyDocument } from "./fixtures";
 
 const METRICS: OperationalMetrics = {
   uptime_s: 60,
@@ -36,6 +36,7 @@ afterEach(() => {
 
 async function askLive(api = fakeApi()) {
   render(<App api={api} />);
+  await screen.findByLabelText("Search in"); // the ready documents have loaded
   await userEvent.type(screen.getByLabelText("Question"), "What is the hotel limit?");
   return api;
 }
@@ -132,7 +133,7 @@ describe("Ask controls against the live API", () => {
   it("asks an example question when its chip is clicked", async () => {
     const api = fakeApi();
     render(<App api={api} />);
-    await userEvent.click(screen.getByRole("button", { name: "What are the payment terms for Aldervale suppliers?" }));
+    await userEvent.click(await screen.findByRole("button", { name: "What are the payment terms for Aldervale suppliers?" }));
     expect(api.query).toHaveBeenCalledWith(
       expect.objectContaining({ question: "What are the payment terms for Aldervale suppliers?" }),
     );
@@ -164,6 +165,79 @@ describe("Ask controls against the live API", () => {
     expect(screen.getByText(/Retrieving passages and generating an answer/)).toBeInTheDocument();
     resolve(ANSWER);
     expect(await screen.findByText("Cited sources")).toBeInTheDocument();
+  });
+});
+
+describe("choosing which documents to search", () => {
+  const FERRY = readyDocument("doc_bbbbbbbbbbbbbbbbbbbb", "Harbourline Ferries Passenger Guide", "ferry.pdf");
+
+  it("asks nothing until a document is ready, and points to the upload page", async () => {
+    render(<App api={fakeApi({ listDocuments: vi.fn().mockResolvedValue(documentPage([])) })} />);
+    expect(await screen.findByText(/No document is ready to search yet/)).toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText("Question"), "What is the hotel limit?");
+    expect(screen.getByRole("button", { name: /Ask question/ })).toBeDisabled();
+    expect(screen.getByRole("link", { name: "Go to Documents" })).toHaveAttribute("href", "#documents");
+  });
+
+  it("offers the sample-corpus examples only when that corpus is indexed", async () => {
+    render(<App api={fakeApi({ listDocuments: vi.fn().mockResolvedValue(documentPage([FERRY])) })} />);
+    await screen.findByLabelText("Search in");
+    expect(screen.queryByText(/Example questions for the bundled sample corpus/)).not.toBeInTheDocument();
+  });
+
+  it("sends the selected document as document_ids and says what was searched", async () => {
+    const api = fakeApi({ listDocuments: vi.fn().mockResolvedValue(documentPage([...READY_DOCUMENTS, FERRY])) });
+    await askLive(api);
+    await userEvent.selectOptions(screen.getByLabelText("Search in"), FERRY.id);
+    await userEvent.click(screen.getByRole("button", { name: /Ask question/ }));
+    expect(api.query).toHaveBeenLastCalledWith(expect.objectContaining({ document_ids: [FERRY.id] }));
+    expect(await screen.findByText("Searched “Harbourline Ferries Passenger Guide”.")).toBeInTheDocument();
+
+    await userEvent.selectOptions(screen.getByLabelText("Search in"), "all");
+    expect(screen.getByText(/searched “Harbourline Ferries Passenger Guide”. Your settings have changed/)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /Ask again/ }));
+    expect(vi.mocked(api.query).mock.lastCall?.[0]).not.toHaveProperty("document_ids");
+    expect(await screen.findByText("Searched all 2 ready documents.")).toBeInTheDocument();
+  });
+
+  it("opens the Ask page with a document selected from the Documents page", async () => {
+    const api = fakeApi({ listDocuments: vi.fn().mockResolvedValue(documentPage([...READY_DOCUMENTS, FERRY])) });
+    render(<App api={api} />);
+    await userEvent.click(screen.getByRole("button", { name: "Documents" }));
+    await userEvent.click(await screen.findByRole("button", { name: `Ask about ${FERRY.title}` }));
+    expect(screen.getByRole("heading", { name: "Ask your documents" })).toBeVisible();
+    expect(await screen.findByLabelText("Search in")).toHaveValue(FERRY.id);
+  });
+
+  it("disables re-ingest for a failed document whose unreadable file was not kept", async () => {
+    const failed = {
+      ...readyDocument("doc_cccccccccccccccccccc", "damaged", "damaged.pdf"),
+      status: "failed" as const,
+      error_code: "document_parse_failed",
+      error_message: "The PDF could not be read. The file was not kept; upload a readable copy to try again.",
+      source_stored: false,
+    };
+    render(<App api={fakeApi({ listDocuments: vi.fn().mockResolvedValue(documentPage([failed, FERRY])) })} />);
+    await userEvent.click(screen.getByRole("button", { name: "Documents" }));
+    expect(await screen.findByText(/The file was not kept/)).toBeInTheDocument();
+    const [failedReingest, readyReingest] = screen.getAllByRole("button", { name: "Re-ingest" });
+    expect(failedReingest).toBeDisabled();
+    expect(readyReingest).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Ask about damaged" })).toBeDisabled();
+  });
+
+  it("falls back to all documents when the selected one is no longer ready", async () => {
+    const listDocuments = vi.fn().mockResolvedValue(documentPage([...READY_DOCUMENTS, FERRY]));
+    const api = fakeApi({ listDocuments });
+    render(<App api={api} />);
+    await userEvent.click(screen.getByRole("button", { name: "Documents" }));
+    await userEvent.click(await screen.findByRole("button", { name: `Ask about ${FERRY.title}` }));
+    await screen.findByLabelText("Search in");
+    listDocuments.mockResolvedValue(documentPage(READY_DOCUMENTS)); // deleted elsewhere
+    await userEvent.click(screen.getByRole("button", { name: "Documents" }));
+    await userEvent.click(screen.getByRole("button", { name: "Ask" }));
+    expect(await screen.findByText(/The selected document is no longer ready/)).toBeInTheDocument();
+    expect(screen.getByLabelText("Search in")).toHaveValue("all");
   });
 });
 

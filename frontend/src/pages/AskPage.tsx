@@ -1,7 +1,7 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { findRecorded, findRecording, StaticDemoApi, type RecordedAnswers } from "../api/demo";
-import type { AnswerResponse, RetrievalMode } from "../api/types";
+import type { AnswerResponse, DocumentOut, RetrievalMode } from "../api/types";
 import { AnswerView } from "../components/AnswerView";
 import { ErrorBanner } from "../components/ErrorBanner";
 import { Loading } from "../components/Banner";
@@ -19,6 +19,8 @@ export const MODES: { value: RetrievalMode; label: string; description: string }
 
 const TOP_K_VALUES = [3, 5, 8, 10];
 
+/** Example questions, offered only when the bundled sample corpus has been indexed. */
+const SAMPLE_CORPUS_FILE = /^(aldervale|solvane)-/;
 const LIVE_EXAMPLES = [
   "What does error code E07 mean on the SX-5 inverter?",
   "What is the maximum hotel cost per night that Aldervale reimburses?",
@@ -32,14 +34,17 @@ interface AskedWith {
   mode: RetrievalMode;
   topK: number;
   diagnostics: boolean;
+  /** "all", or the id of the one document searched. */
+  scope: string;
+  scopeLabel: string;
 }
 
 export function modeLabel(mode: RetrievalMode): string {
   return MODES.find((item) => item.value === mode)?.label ?? mode;
 }
 
-export function AskPage() {
-  const { api, status } = useApp();
+export function AskPage({ active = true }: { active?: boolean }) {
+  const { api, status, askScope, setAskScope: setScope } = useApp();
   const [question, setQuestion] = useState("");
   const [mode, setMode] = useState<RetrievalMode>("hybrid");
   const [topK, setTopK] = useState(5);
@@ -49,6 +54,8 @@ export function AskPage() {
   const [response, setResponse] = useState<AnswerResponse | null>(null);
   const [asked, setAsked] = useState<AskedWith | null>(null);
   const [recorded, setRecorded] = useState<RecordedAnswers | null>(null);
+  const [readyDocs, setReadyDocs] = useState<DocumentOut[] | null>(null);
+  const latestRequest = useRef(0);
 
   const isDemo = api instanceof StaticDemoApi;
   useEffect(() => {
@@ -57,37 +64,80 @@ export function AskPage() {
     }
   }, [api]);
 
+  // Refresh the searchable documents whenever the page is shown (uploads happen on another tab).
+  useEffect(() => {
+    if (isDemo || !active) return;
+    let cancelled = false;
+    api
+      .listDocuments(0, 100)
+      .then((page) => {
+        if (!cancelled) setReadyDocs(page.items.filter((doc) => doc.status === "ready"));
+      })
+      .catch(() => {
+        // The list only fills the document selector; questions still work without it.
+        if (!cancelled) setReadyDocs(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [api, active, isDemo]);
+
+  // A selected document that was deleted (or is being re-ingested) falls back to all documents.
+  const scopeMissing = askScope !== "all" && readyDocs !== null && !readyDocs.some((doc) => doc.id === askScope);
+  const scope = scopeMissing ? "all" : askScope;
+
   const maxChars = status?.limits.max_question_chars ?? 1000;
   const trimmed = question.trim();
   const tooShort = trimmed.length < 3;
   const tooLong = trimmed.length > maxChars;
   const topKValues = isDemo && recorded ? recorded.top_k_values : TOP_K_VALUES;
+  const noDocuments = !isDemo && readyDocs !== null && readyDocs.length === 0;
+  const scopeLabel =
+    scope === "all"
+      ? readyDocs
+        ? `all ${readyDocs.length} ready document${readyDocs.length === 1 ? "" : "s"}`
+        : "all documents"
+      : `“${readyDocs?.find((doc) => doc.id === scope)?.title ?? scope}”`;
 
   async function ask(text: string) {
-    const settings: AskedWith = { question: text, mode, topK, diagnostics };
+    const settings: AskedWith = { question: text, mode, topK, diagnostics, scope, scopeLabel };
+    // Only the newest request may update the page, so a slow earlier answer never replaces it.
+    const requestId = ++latestRequest.current;
     setLoading(true);
     setError(null);
     setResponse(null);
     setAsked(settings);
     try {
-      setResponse(
-        await api.query({ question: text, retrieval_mode: mode, top_k: topK, include_diagnostics: diagnostics }),
-      );
+      const result = await api.query({
+        question: text,
+        retrieval_mode: mode,
+        top_k: topK,
+        include_diagnostics: diagnostics,
+        ...(scope === "all" ? {} : { document_ids: [scope] }),
+      });
+      if (requestId === latestRequest.current) setResponse(result);
     } catch (caught) {
-      setError(caught);
+      if (requestId === latestRequest.current) setError(caught);
     } finally {
-      setLoading(false);
+      if (requestId === latestRequest.current) setLoading(false);
     }
   }
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
-    if (!tooShort && !tooLong && !loading) void ask(trimmed);
+    if (!tooShort && !tooLong && !loading && !noDocuments) void ask(trimmed);
   }
 
-  const examples = isDemo ? (recorded?.items.map((item) => item.question) ?? []) : LIVE_EXAMPLES;
+  const sampleCorpusIndexed = readyDocs?.some((doc) => SAMPLE_CORPUS_FILE.test(doc.filename)) ?? false;
+  const examples = isDemo
+    ? (recorded?.items.map((item) => item.question) ?? [])
+    : sampleCorpusIndexed && scope === "all"
+      ? LIVE_EXAMPLES
+      : [];
   const settingsChanged =
-    asked !== null && !loading && (asked.mode !== mode || asked.topK !== topK || asked.diagnostics !== diagnostics);
+    asked !== null &&
+    !loading &&
+    (asked.mode !== mode || asked.topK !== topK || asked.diagnostics !== diagnostics || asked.scope !== scope);
   const recordedItem = isDemo && recorded && asked ? findRecorded(recorded, asked.question) : undefined;
   const recording = recordedItem && asked ? findRecording(recordedItem, asked.mode, asked.topK) : undefined;
 
@@ -96,10 +146,20 @@ export function AskPage() {
       <div>
         <h1 className="page-title">Ask your documents</h1>
         <p className="page-intro">
-          Answers are built only from retrieved passages. Every citation is checked against the passages the model
-          received, and the system says so when the evidence is not enough.
+          Upload a PDF, ask a question, and get an answer built only from passages of your documents. Each statement is
+          checked against those passages and shown with its quote and page, and the system says so when the evidence
+          is not enough.
         </p>
       </div>
+
+      {noDocuments ? (
+        <div className="notice" role="status">
+          <span>No document is ready to search yet. Upload a PDF, text or Markdown file first.</span>
+          <a className="btn btn-small btn-primary" href="#documents">
+            Go to Documents
+          </a>
+        </div>
+      ) : null}
 
       <form className="card" onSubmit={onSubmit} aria-label="Ask a question">
         <div className="field">
@@ -119,6 +179,19 @@ export function AskPage() {
           </span>
         </div>
         <div className="controls-row" style={{ marginTop: 12 }}>
+          {!isDemo && readyDocs && readyDocs.length > 0 ? (
+            <div className="field scope-field">
+              <label htmlFor="scope">Search in</label>
+              <select id="scope" value={scope} onChange={(event) => setScope(event.target.value)}>
+                <option value="all">All ready documents ({readyDocs.length})</option>
+                {readyDocs.map((doc) => (
+                  <option key={doc.id} value={doc.id}>
+                    {doc.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
           <div className="field">
             <span className="small secondary" id="mode-label">
               Retrieval
@@ -151,7 +224,12 @@ export function AskPage() {
             <input type="checkbox" checked={diagnostics} onChange={(event) => setDiagnostics(event.target.checked)} />
             Retrieval diagnostics
           </label>
-          <button type="submit" className="btn btn-primary" disabled={loading || tooShort || tooLong} style={{ marginLeft: "auto" }}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={loading || tooShort || tooLong || noDocuments}
+            style={{ marginLeft: "auto" }}
+          >
             {loading ? <span className="spinner" /> : null} Ask question
           </button>
         </div>
@@ -190,11 +268,17 @@ export function AskPage() {
         ) : null}
       </form>
 
+      {scopeMissing ? (
+        <div className="notice" role="status">
+          <span>The selected document is no longer ready, so all documents are searched.</span>
+        </div>
+      ) : null}
       {settingsChanged && asked ? (
         <div className="notice" role="status">
           <span>
             The answer below used {modeLabel(asked.mode)} retrieval with {asked.topK} passages
-            {asked.diagnostics ? "" : ", without diagnostics"}. Your settings have changed.
+            {asked.diagnostics ? "" : ", without diagnostics"}
+            {isDemo ? "" : ` and searched ${asked.scopeLabel}`}. Your settings have changed.
           </span>
           <button type="button" className="btn btn-small" onClick={() => void ask(asked.question)}>
             Ask again with {modeLabel(mode)}, {topK} passages
@@ -203,6 +287,11 @@ export function AskPage() {
       ) : null}
       {loading ? <Loading label="Retrieving passages and generating an answer" /> : null}
       {error ? <ErrorBanner error={error} /> : null}
+      {response && asked && !isDemo ? (
+        <p className="small secondary" style={{ margin: 0 }}>
+          Searched {asked.scopeLabel}.
+        </p>
+      ) : null}
       {response && asked ? (
         <AnswerView
           response={response}
