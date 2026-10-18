@@ -1,0 +1,265 @@
+{
+  "name": "groundedai-reliability-v1",
+  "version": "1.0.0",
+  "status": "frozen",
+  "created_at": "2026-10-16T08:42:05+00:00",
+  "generator": "separate agent runs (documents; A; B; C; D) working from SPEC.md only, in an isolated folder; manifest and hashes computed by scripts/reliability_suite.py",
+  "audit_seed": 20261015,
+  "counts": {
+    "dev": {
+      "A": {
+        "absent": 6,
+        "negation": 6,
+        "number_form": 6,
+        "paraphrase": 15,
+        "verbatim": 6,
+        "wrong_subject": 6,
+        "wrong_value": 9
+      },
+      "B": {
+        "correct_single": 12,
+        "correct_two": 6,
+        "nonexistent_label": 3,
+        "one_of_two_wrong": 3,
+        "wrong_related": 9,
+        "wrong_unrelated": 3
+      },
+      "C": {
+        "correct_other": 9,
+        "correct_refusal": 9,
+        "correct_value": 12,
+        "off_target": 9,
+        "unanswerable_answered": 9
+      },
+      "D": {
+        "agreement": 6,
+        "dated_agreement": 3,
+        "different_groups": 6,
+        "incomplete": 6,
+        "plain_conflict": 6,
+        "range_consistent": 6,
+        "range_shared_endpoint": 6,
+        "requirement_denial": 6,
+        "revision_date_only": 3,
+        "synonym_conflict": 6,
+        "validity_dates": 6
+      }
+    },
+    "test": {
+      "A": {
+        "absent": 14,
+        "negation": 14,
+        "number_form": 14,
+        "paraphrase": 35,
+        "verbatim": 14,
+        "wrong_subject": 14,
+        "wrong_value": 21
+      },
+      "B": {
+        "correct_single": 28,
+        "correct_two": 14,
+        "nonexistent_label": 7,
+        "one_of_two_wrong": 7,
+        "wrong_related": 21,
+        "wrong_unrelated": 7
+      },
+      "C": {
+        "correct_other": 21,
+        "correct_refusal": 21,
+        "correct_value": 28,
+        "off_target": 21,
+        "unanswerable_answered": 21
+      },
+      "D": {
+        "agreement": 14,
+        "dated_agreement": 7,
+        "different_groups": 14,
+        "incomplete": 14,
+        "plain_conflict": 14,
+        "range_consistent": 14,
+        "range_shared_endpoint": 14,
+        "requirement_denial": 14,
+        "revision_date_only": 7,
+        "synonym_conflict": 14,
+        "validity_dates": 14
+      }
+    }
+  },
+  "documents": [
+    {
+      "document_id": "dev-language-1",
+      "split": "dev",
+      "title": "Dunmarra Language Centre – Student Handbook"
+    },
+    {
+      "document_id": "dev-language-2",
+      "split": "dev",
+      "title": "Dunmarra Language Centre – Fees, Payments and Cancellations: Questions and Answers"
+    },
+    {
+      "document_id": "dev-marina-1",
+      "split": "dev",
+      "title": "Gullstone Harbour Marina – Berth Holder Regulations"
+    },
+    {
+      "document_id": "dev-marina-2",
+      "split": "dev",
+      "title": "Gullstone Harbour Marina – Visitor Berths: Questions and Answers"
+    },
+    {
+      "document_id": "dev-nursery-1",
+      "split": "dev",
+      "title": "Bramblecot Day Nursery – Parent Handbook"
+    },
+    {
+      "document_id": "dev-nursery-2",
+      "split": "dev",
+      "title": "Bramblecot Day Nursery – Fees and Sessions Notice 2026–27"
+    },
+    {
+      "document_id": "dev-waste-1",
+      "split": "dev",
+      "title": "Thornmere District Council – Household Waste and Recycling Collection Policy"
+    },
+    {
+      "document_id": "dev-waste-2",
+      "split": "dev",
+      "title": "Thornmere Waste Services – Frequently Asked Questions and Christmas Collections"
+    },
+    {
+      "document_id": "test-carshare-1",
+      "split": "test"
+    },
+    {
+      "document_id": "test-carshare-2",
+      "split": "test"
+    },
+    {
+      "document_id": "test-dental-1",
+      "split": "test"
+    },
+    {
+      "document_id": "test-dental-2",
+      "split": "test"
+    },
+    {
+      "document_id": "test-exam-1",
+      "split": "test"
+    },
+    {
+      "document_id": "test-exam-2",
+      "split": "test"
+    },
+    {
+      "document_id": "test-ferry-1",
+      "split": "test"
+    },
+    {
+      "document_id": "test-ferry-2",
+      "split": "test"
+    },
+    {
+      "document_id": "test-lab-1",
+      "split": "test"
+    },
+    {
+      "document_id": "test-lab-2",
+      "split": "test"
+    },
+    {
+      "document_id": "test-pension-1",
+      "split": "test"
+    },
+    {
+      "document_id": "test-pension-2",
+      "split": "test"
+    },
+    {
+      "document_id": "test-theatre-1",
+      "split": "test"
+    },
+    {
+      "document_id": "test-theatre-2",
+      "split": "test"
+    },
+    {
+      "document_id": "test-vet-1",
+      "split": "test"
+    },
+    {
+      "document_id": "test-vet-2",
+      "split": "test"
+    }
+  ],
+  "files": {
+    "dev/A.jsonl": "07a582e87ce95736b840af277bc977812ec3c97f241e3170c0dee0214f34a29d",
+    "dev/B.jsonl": "df4628131a763fb2021e15bc84706b144d9bfbd4ec0e5fe04ade8b6fa5015b29",
+    "dev/C.jsonl": "2748787a901aa1d061142118a5b011116bf7293ad822e9395d6bc87cab58aabf",
+    "dev/D.jsonl": "811b804c4f8cbba531a9351bb97475509fb521da7d5c055cb4922a33a57a14bc",
+    "test/A.jsonl": "aba26aaf98ba288962e61eafe6ffb354c248d55b86478158d2c0d870ffe81646",
+    "test/B.jsonl": "7b6b8d890315bbfc0615456dd70af21bdcd3d8266565b8c6870dc6caa148c892",
+    "test/C.jsonl": "d4f06d88c2fe21cc47396276597cbf9fc6280728a166293610a1cc52f1012417",
+    "test/D.jsonl": "9d3cc710437feb8708b11ec60fefbbb48f13169fe8e1c2f4678d268e1b43ad47",
+    "documents/dev/dev-language-1.md": "fae816b47ee4b2b2f1408cf1a24008001b8ca6b6428223fafb38fddb74a7d771",
+    "documents/dev/dev-language-2.md": "1bbc3b06c39f7387a407652463d8595f171addbc0a9d59817e93c59383e7be31",
+    "documents/dev/dev-marina-1.md": "00e101bfdebf5159e01cd1f4b9aca64d931e4cdcb249fb83b9ee0596d41e0ec2",
+    "documents/dev/dev-marina-2.md": "84e1844a4e6452089a568b441125a596c99db05e3d83a97d3133cbc98f60f062",
+    "documents/dev/dev-nursery-1.md": "e2449f321c8ad55717c4eb73c11269d959cdbf1b536dc4b9633e9bd7dfdc5e03",
+    "documents/dev/dev-nursery-2.md": "57f92fbeb2e9706e4ed211251c5c64f33a47ae66ee39262b8c26f473b3f1de87",
+    "documents/dev/dev-waste-1.md": "7e069e09eec9515168763d0ee1d07685b2d0bb6daf18a7c08888f562bfbb7cf4",
+    "documents/dev/dev-waste-2.md": "35d674935f9ab6fccc4de0bf86c1002fa85e8c0f6f9e10977f1ffd9e0d52e7ac",
+    "documents/dev/passages.jsonl": "cfd45208b347bea4563eff9bb68c274d2fdf8c5f8a146a7fe7956c948d5f9837",
+    "documents/test/passages.jsonl": "6f6179f7cbd04b22475e57c29d6b95857d8f43ae60ef07d98ecf3a9549d424d1",
+    "documents/test/test-carshare-1.md": "a760ada63137609385bd04494532f36eafa79629b2fe9fb0759d451e83053b88",
+    "documents/test/test-carshare-2.md": "7a2e81a8078707ac496eabaf34d46b9bd8e3a10d0e7d8f7e0f70ee80962ffb6b",
+    "documents/test/test-dental-1.md": "f823f24a05b5920ed1ac152762a6854b02ef0d485aa457f645ba24962a96c3d5",
+    "documents/test/test-dental-2.md": "87b8c7774933b47fa1aa4b502dea52e63655e8678193bda726e5653ce129df52",
+    "documents/test/test-exam-1.md": "367af741095f9f052d5e0bf002256f6e872fbf0b778cc0e07671bacc81740c02",
+    "documents/test/test-exam-2.md": "7e9a31e1fa38ce9da57e589a4d842b6057b099a433eecd12c6dbf27d4087662b",
+    "documents/test/test-ferry-1.md": "f4afba58b5bc9e2b4b3813aefea968753d233a7d97b519dce3582f00a9f7f667",
+    "documents/test/test-ferry-2.md": "b7f619b20a201ccf93a0314bebf6e153a2c868e6cbb379570281486d3f156dbe",
+    "documents/test/test-lab-1.md": "75bcce85230e2c142b95f336ad72490d13ddad2fabc4e9a5c3e37e4a7f43ed16",
+    "documents/test/test-lab-2.md": "bbf11c458ea7d0de7bacd77c6ab5fabe426c54c287df3bd859ae5afa8b3d2b8a",
+    "documents/test/test-pension-1.md": "83f1997a24c429da385b659e68b967b5fb32a4df14d670736a1a42b892b404f1",
+    "documents/test/test-pension-2.md": "d325fffc69fcd12d74c440ae6a64528d10d5c66ada7e154d2077352f4cf144ca",
+    "documents/test/test-theatre-1.md": "c0b6918c62155c5d8f167cb86c1834d5f80b480742c17a841d7dd76f6dd36ceb",
+    "documents/test/test-theatre-2.md": "e7c2941d28c1eaac77d5fbe25feaf45fff6c7c965977560d318dafd93fd8934d",
+    "documents/test/test-vet-1.md": "f25ca84e2881e42dc1c5b7c4e13da53e39552bf7194e48affb9466a27e5d6916",
+    "documents/test/test-vet-2.md": "e01471d518a699ceae50941e0b6848311e223d149979b38f0292b67cad37e6f6",
+    "notes/A.md": "60ca8fd1930611c185ba91c78a558eb9651afacadee122aba6d9816bf2fd3ed5",
+    "notes/B.md": "203520e274778eb99b7a3f1b3f81ed1089cf4abe516ef1d7aed8204f5dc1c0c7",
+    "notes/C.md": "60496a342eae66aa52fc5dde1915c66eabc00cc9abe53e4bd90fe102ecedc9ad",
+    "notes/D.md": "e22aea0baaef9913fd6c5928960c50805a5b9be2242425f1eaf05ec8db32a897",
+    "notes/documents.md": "34120ccea9d313064a840760f4904b980f91c95c272f23ae606eb01215b7a7cc",
+    "notes/replacements-round1.md": "bfa2de41da97d15932eb42e2fca37b11529ac5adbdf3650b2fb264edcfb7f1d4"
+  },
+  "combined_sha256": "f953f796e72588ed778f3a35fcc2d1c0218f39a2a81ed861c172b191172751f6",
+  "dev_sha256": "176aae44a5fcf614d26c4619b04b1a2fdead463a65ccf3cb78f448e4aab81b9a",
+  "test_sha256": "7b0c8840cfd223579937803b51ab8233565dedac2cba6bbdce03860a5e166913",
+  "frozen_at": "2026-10-18",
+  "label_status": {
+    "labels": "written by a model (separate writer agent) from SPEC.md; not human-verified",
+    "validator": "0 errors, 0 warnings",
+    "human_audit_round_1": {
+      "agreed": 39,
+      "of": 50,
+      "threshold": 45,
+      "met": false
+    },
+    "human_audit_round_2": "not performed (auditor not available)",
+    "independent_model_review": {
+      "model": "claude-sonnet-5-5",
+      "blind": true,
+      "agreed": 462,
+      "of": 462
+    },
+    "replacements_reviewed": {
+      "cases": 11,
+      "valid": 11
+    },
+    "human_confirmed_subset": {
+      "cases": 39,
+      "ids_sha256": "8d4206288174adcdecda52113c807c5a0c99799a796facf2f676f0c5fa0ab6a0"
+    }
+  }
+}

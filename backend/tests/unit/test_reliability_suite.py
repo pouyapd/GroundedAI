@@ -687,11 +687,23 @@ def test_the_test_split_is_scored_only_when_frozen_and_once(
     printed = capsys.readouterr().out
     for secret in ("adult single ticket", "R-A1", "Permit rules", "A-T-001"):
         assert secret not in printed
+    report = json.loads(next(out.glob("test-v1-*.json")).read_text("utf-8"))
+    assert report["correct_by_category"]["A"]["n"] == 2
     assert cli.main(args) == 2  # once per version of the checks
-    assert cli.main([*args, "--rerun-reason", "test of the override"]) == 0
+    subset = tmp_path / "subset.json"
+    subset.write_text('["A-T-001", "D-T-002"]', "utf-8")
+    override = [*args, "--rerun-reason", "test of the override", "--subset", f"two={subset}"]
+    assert cli.main(override) == 0
     log = (out / "test-runs.jsonl").read_text("utf-8").splitlines()
     assert len(log) == 2
     assert json.loads(log[1])["rerun_reason"] == "test of the override"
+    assert set(json.loads(log[1])["subsets"]) == {"two"}
+    latest = max(out.glob("test-v1-*.json"), key=lambda p: p.stat().st_mtime_ns)
+    two = json.loads(latest.read_text("utf-8"))["subsets"]["two"]
+    assert two["cases"] == 2
+    assert set(two["correct_by_category"]) == {"A", "D"}
+    subset.write_text('["Z-T-999"]', "utf-8")
+    assert cli.main([*override, "--subset", f"bad={subset}"]) == 2
     (sealed,) = sorted((out / "sealed").glob("*.json"))[:1]
     outcomes = json.loads(sealed.read_text("utf-8"))["outcomes"]
     assert all(set(value) == {"category", "correct"} for value in outcomes.values())

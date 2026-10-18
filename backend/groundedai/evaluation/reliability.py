@@ -32,7 +32,7 @@ CATEGORIES = ("A", "B", "C", "D")
 SCORING_VERSION = 1
 # Set when the test split is frozen (after the label audit). Scoring the test split refuses any
 # other content, so the held-out cases cannot change unnoticed.
-FROZEN_TEST_SHA256: str | None = None
+FROZEN_TEST_SHA256: str | None = "7b0c8840cfd223579937803b51ab8233565dedac2cba6bbdce03860a5e166913"
 
 # Exact case counts per category, subtype and split: (dev, test).
 COUNTS: dict[str, dict[str, tuple[int, int]]] = {
@@ -861,6 +861,18 @@ def summarize(outcomes: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         m["f1"] = _f1(m["disagreement_precision"], m["disagreement_recall"])
         summary["D"] = m
     return summary
+
+
+def correct_by_category(outcomes: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    """Share of cases handled correctly in each category (the paired test's outcome)."""
+    groups: dict[str, list[bool]] = defaultdict(list)
+    for outcome in outcomes:
+        groups[str(outcome["category"])].append(bool(outcome["correct"]))
+    return {
+        category: measure(f"{category}.correct", sum(groups[category]), len(groups[category]))
+        for category in CATEGORIES
+        if groups.get(category)
+    }
 
 
 def by_subtype(outcomes: Sequence[Mapping[str, Any]]) -> dict[str, dict[str, Any]]:

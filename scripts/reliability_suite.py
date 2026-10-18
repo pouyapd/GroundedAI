@@ -750,6 +750,20 @@ def _markdown(report: dict[str, Any]) -> str:
                 _row(category, record["cases"], record["fixed"], record["broke"], record["p_value"])
             )
         lines.append(f"\nBaseline run: `{report['paired']['baseline']}`")
+    shares = [("all cases", report.get("correct_by_category"))] + [
+        (f"subset {name} ({entry['cases']} cases)", entry["correct_by_category"])
+        for name, entry in (report.get("subsets") or {}).items()
+    ]
+    if shares[0][1]:
+        lines += ["", "## Share of cases handled correctly, per category", ""]
+        lines += ["| Cases | Category | k / n | Rate | 95% CI |", "|---|---|---|---|---|"]
+        for label, by_category in shares:
+            for category, record in (by_category or {}).items():
+                ci = f"{record['ci95'][0]:.2f}–{record['ci95'][1]:.2f}" if record["ci95"] else "–"
+                rate = f"{record['value']:.2f}" if record["value"] is not None else "–"
+                lines.append(_row(label, category, f"{record['k']} / {record['n']}", rate, ci))
+        for name, entry in (report.get("subsets") or {}).items():
+            lines.append(f"\nSubset `{name}`: id list SHA-256 `{entry['ids_sha256']}`")
     lines += ["", "## Limitations", ""] + [f"- {item}" for item in report["limitations"]]
     return "\n".join(lines) + "\n"
 
@@ -798,6 +812,16 @@ def cmd_score(args: argparse.Namespace) -> int:
             )
             return 2
     cases = suite.load_cases(root, args.split)
+    subsets: dict[str, tuple[set[str], str]] = {}
+    for spec in args.subset or []:
+        name, _, path = spec.partition("=")
+        raw = Path(path).read_bytes()
+        ids = {str(item) for item in json.loads(raw.decode("utf-8"))}
+        unknown = ids - {case.id for case in cases}
+        if not name or unknown:
+            print(f"error: subset {spec!r} names {len(unknown)} unknown case(s)", file=sys.stderr)
+            return 2
+        subsets[name] = (ids, hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest())
     predictions, outcomes = suite.run_checks(cases, checks)
     generated = datetime.now(UTC)
     report_id = f"{args.split}-{checks.name}-{generated:%Y%m%dT%H%M%SZ}"
@@ -821,12 +845,31 @@ def cmd_score(args: argparse.Namespace) -> int:
         "by_subtype": suite.by_subtype(list(outcomes.values())),
         "limitations": LIMITATIONS,
     }
-    if args.paired_with:
-        baseline = json.loads(Path(args.paired_with).read_text(encoding="utf-8"))
+    baseline = (
+        json.loads(Path(args.paired_with).read_text(encoding="utf-8")) if args.paired_with else None
+    )
+    if baseline:
         report["paired"] = {
             "baseline": baseline["report_id"],
             "by_category": suite.paired(baseline["outcomes"], outcomes),
         }
+    if subsets:
+        report["subsets"] = {}
+        for name, (ids, digest) in subsets.items():
+            chosen = [outcome for case_id, outcome in outcomes.items() if case_id in ids]
+            entry: dict[str, Any] = {
+                "ids_sha256": digest,
+                "cases": len(chosen),
+                "correct_by_category": suite.correct_by_category(chosen),
+                "summary": suite.summarize(chosen),
+            }
+            if baseline:
+                entry["paired"] = suite.paired(
+                    {k: v for k, v in baseline["outcomes"].items() if k in ids},
+                    {k: v for k, v in outcomes.items() if k in ids},
+                )
+            report["subsets"][name] = entry
+    report["correct_by_category"] = suite.correct_by_category(list(outcomes.values()))
     _write(out / f"{report_id}.json", suite.as_json(report))
     _write(out / f"{report_id}.md", _markdown(report))
     if args.split == "test":
@@ -844,6 +887,7 @@ def cmd_score(args: argparse.Namespace) -> int:
             "generated_at": report["generated_at"],
             "code": report["code"],
             "test_sha256": split_hash,
+            "subsets": {name: digest for name, (_ids, digest) in subsets.items()},
             "rerun_reason": args.rerun_reason,
         }
         with log_path.open("a", encoding="utf-8", newline="\n") as handle:
@@ -915,6 +959,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--out", default=str(DEFAULT_OUT))
     p.add_argument("--paired-with", default=None, help="sealed outcomes of the baseline test run")
     p.add_argument("--rerun-reason", default=None)
+    p.add_argument(
+        "--subset",
+        action="append",
+        help="NAME=IDS.json: also report the measures on these cases (repeatable)",
+    )
     p.set_defaults(func=cmd_score)
     args = parser.parse_args(argv)
     return int(args.func(args))
