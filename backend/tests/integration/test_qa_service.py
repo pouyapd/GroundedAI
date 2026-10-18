@@ -540,3 +540,65 @@ def test_abstention_has_no_claims(settings: Settings) -> None:
         assert response.verification is None
     finally:
         services.close()
+
+
+@pytest.mark.parametrize("version", ["claims-v1", "claims-v2"])
+def test_claims_v2_reports_three_verdicts_and_v1_does_not(
+    make_settings: SettingsFactory, version: str
+) -> None:
+    reply = "The hotel limit in capital cities is EUR 140 per night [S1]."
+    model = FakeListChatModel(responses=[reply])
+    services = _services_with(make_settings(claim_check=version), model)
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="How much is the hotel limit in capital cities?")
+        )
+        verification = response.verification
+        assert verification is not None
+        assert verification.version == version
+        assert verification.verdict == "verified"
+        if version == "claims-v1":
+            assert verification.evidence is None
+            assert response.claims[0].citation_status is None
+        else:
+            assert verification.evidence == "all_found"
+            assert verification.citations == "all_correct"
+            assert verification.addresses_question == "yes"
+            assert response.claims[0].citation_status == "correct"
+    finally:
+        services.close()
+
+
+@pytest.mark.parametrize(("version", "withheld"), [("claims-v1", True), ("claims-v2", False)])
+def test_claims_v2_withholds_only_when_nothing_was_found(
+    make_settings: SettingsFactory, version: str, withheld: bool
+) -> None:
+    # A statement only partly found: v1 calls the answer unverified and withholds it; v2 counts
+    # it as uncertain and returns it labelled.
+    reply = "The hotel limit in capital cities is reviewed by the travel desk [S1]."
+    settings = make_settings(unverified_answers="withhold", claim_check=version)
+    services = _services_with(settings, FakeListChatModel(responses=[reply]))
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        assert [claim.status for claim in response.claims] == ["partial"]
+        assert (response.status == "insufficient_evidence") is withheld
+        if version == "claims-v2":
+            assert response.verification is not None
+            assert response.verification.evidence == "some_uncertain"
+    finally:
+        services.close()
+
+
+def test_disagreement_v2_can_be_selected(make_settings: SettingsFactory) -> None:
+    settings = make_settings(prompt_version="answer-v2", conflict_check="disagreement-v2")
+    services = _services_with(settings, RecordingChatModel(seen=[]))
+    services.ingestion.ingest_bytes("faq.txt", None, FAQ_TEXT.encode())
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="What is the hotel limit per night in capital cities?")
+        )
+        (conflict,) = response.conflicts
+        assert conflict.kind == "conflict"
+        assert all(statement.validity_dates == [] for statement in conflict.statements)
+    finally:
+        services.close()

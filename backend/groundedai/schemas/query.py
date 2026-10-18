@@ -144,6 +144,19 @@ class ClaimOut(BaseModel):
     missing_figures: list[str] = Field(description="Figures that no retrieved passage states")
     word_overlap: float
     flags: list[str] = Field(description="instruction_text: the claim repeats an instruction")
+    citation_status: (
+        Literal["correct", "wrong", "partly_wrong", "invalid", "unconfirmed", "none"] | None
+    ) = Field(
+        default=None,
+        description=(
+            "claims-v2 only. correct: the cited passages state it; wrong: another passage does; "
+            "partly_wrong: one cited passage states nothing of it; invalid: a cited label is not "
+            "a passage; unconfirmed: the claim was not found; none: nothing cited"
+        ),
+    )
+    invalid_citations: list[str] = Field(
+        default_factory=list, description="claims-v2: cited labels that are not passages"
+    )
 
 
 class VerificationOut(BaseModel):
@@ -160,6 +173,25 @@ class VerificationOut(BaseModel):
         description="Citations written another way ([Source 1], (S1), a document title)"
     )
     method: str
+    version: str = Field(default="claims-v1", description="Version of the claim check")
+    evidence: (
+        Literal["all_found", "some_uncertain", "some_not_found", "none_found", "not_applicable"]
+        | None
+    ) = Field(default=None, description="claims-v2: were the statements found in a passage?")
+    citations: (
+        Literal["all_correct", "some_wrong", "some_unconfirmed", "none_given", "not_applicable"]
+        | None
+    ) = Field(default=None, description="claims-v2: are the citations right?")
+    addresses_question: Literal["yes", "no", "declined", "not_checked"] | None = Field(
+        default=None,
+        description=(
+            "claims-v2: does a statement give the kind of value asked for, about the question's "
+            "subject? declined: the answer says the documents do not give it. Lexical heuristic."
+        ),
+    )
+    expected_answer_type: str | None = Field(
+        default=None, description="claims-v2: the kind of value the question asks for"
+    )
 
 
 class ConflictStatementOut(BaseModel):
@@ -178,6 +210,15 @@ class ConflictStatementOut(BaseModel):
         default=False, description='It says something is required ("must", "is required")'
     )
     dates: list[str] = Field(description="Dates that say when it applies, if any")
+    validity_dates: list[str] = Field(
+        default_factory=list,
+        description="disagreement-v2: dates that say when the value applies",
+    )
+    revision_dates: list[str] = Field(
+        default_factory=list,
+        description='disagreement-v2: dates that only say when a document was edited ("last '
+        'updated")',
+    )
 
 
 class ConflictOut(BaseModel):

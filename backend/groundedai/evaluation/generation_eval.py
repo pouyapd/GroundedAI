@@ -58,8 +58,8 @@ from groundedai.services.qa_service import QAService
 Progress = Callable[[str], None]
 
 # Bump when answer parsing or scoring rules change, so old checkpoints are not reused.
-SCORING_VERSION = 4
-# Versions of the deterministic answer checks, recorded with every run.
+SCORING_VERSION = 5  # 5: claims-v2 verdicts in each row
+# The claim check's default version; a run records the version it used (claim_check).
 CLAIM_CHECK_VERSION = "claims-v1"
 
 # Every setting, by whether and where it can change an answer evaluation's results. A run
@@ -76,6 +76,7 @@ PIPELINE_SETTINGS: tuple[str, ...] = (
     "rerank_candidates",
     "unverified_answers",
     "max_question_chars",
+    "claim_check",
 )
 # Read by `groundedai eval generation` to build the index, embedder, reranker and model, and to
 # choose the prompt and checks (environment variables, .env or defaults; some also options).
@@ -207,7 +208,7 @@ def run_generation_eval(
     checkpoint: Path | None = None,
     run_config: dict[str, Any] | None = None,
     prompt_version: PromptVersion = DEFAULT_PROMPT_VERSION,
-    conflict_check: Literal["figures-v1", "disagreement-v1"] = "disagreement-v1",
+    conflict_check: Literal["figures-v1", "disagreement-v1", "disagreement-v2"] = "disagreement-v1",
     pipeline_settings: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Evaluate answers on every dataset question.
@@ -253,7 +254,7 @@ def run_generation_eval(
         "prompt_version": prompt_version,
         "prompt_fingerprint": prompt_fingerprint(prompt_version),
         "conflict_check": conflict_check,
-        "claim_check": CLAIM_CHECK_VERSION,
+        "claim_check": settings.claim_check,
         "timeout_s": timeout_s,
         "pipeline_settings": {name: getattr(settings, name) for name in PIPELINE_SETTINGS},
         **(run_config or {}),
@@ -484,6 +485,9 @@ def _score(
             for source in response.sources
         ],
         "verdict": verification.verdict if verification else None,
+        "evidence_verdict": verification.evidence if verification else None,
+        "citations_verdict": verification.citations if verification else None,
+        "addresses_question": verification.addresses_question if verification else None,
         "claims_total": verification.claims if verification else 0,
         "claims_cited": sum(1 for claim in response.claims if claim.citations),
         "claims_supported": verification.supported if verification else 0,

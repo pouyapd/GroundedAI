@@ -34,6 +34,7 @@ from groundedai.core.errors import (
 )
 from groundedai.core.quantities import figure_present, read_quantities
 from groundedai.core.text import content_tokens, normalize_whitespace, split_sentences
+from groundedai.generation.answer_checks import check_answer, citation_status
 from groundedai.generation.citations import (
     ParsedAnswer,
     labels_in,
@@ -184,13 +185,25 @@ def claims_out(report: ClaimReport, context: AssembledContext) -> list[ClaimOut]
                 missing_figures=claim.missing_figures,
                 word_overlap=claim.word_overlap,
                 flags=claim.flags,
+                citation_status=(citation_status(claim) if report.version == "claims-v2" else None),
+                invalid_citations=claim.invalid_citations,
             )
         )
     return result
 
 
-def verification_out(report: ClaimReport) -> VerificationOut:
+def verification_out(report: ClaimReport, question: str = "", answer: str = "") -> VerificationOut:
+    extra: dict[str, Any] = {"version": report.version}
+    if report.version == "claims-v2":
+        checks = check_answer(question, answer, report)
+        extra.update(
+            evidence=checks.evidence,
+            citations=checks.citations,
+            addresses_question=checks.addresses_question,
+            expected_answer_type=checks.expected_answer_type,
+        )
     return VerificationOut(
+        **extra,
         verdict=report.verdict,
         claims=len(report.claims),
         supported=report.count("supported"),
@@ -265,6 +278,8 @@ def conflicts_out(
                     denies_requirement=statement.denies,
                     affirms_requirement=statement.affirms,
                     dates=list(statement.dates),
+                    validity_dates=list(statement.validity_dates),
+                    revision_dates=list(statement.revision_dates),
                 )
             )
             if any(figure_present(value, answer_figures) for value in statement.values):
@@ -501,8 +516,10 @@ class QAService:
             warnings.append("The top passage was shortened to fit the context limit.")
         notes: list[str] = []
         disagreements: list[Disagreement] = []
-        if self.settings.conflict_check == "disagreement-v1":
-            disagreements = find_disagreements(question, context.sources)
+        if self.settings.conflict_check in ("disagreement-v1", "disagreement-v2"):
+            disagreements = find_disagreements(
+                question, context.sources, self.settings.conflict_check
+            )
             warnings.extend(disagreement.explanation() for disagreement in disagreements)
         if self.settings.prompt_version != "answer-v1":  # answer-v1 is kept as published
             if self.settings.conflict_check == "figures-v1":
@@ -574,7 +591,9 @@ class QAService:
                 f"{', '.join(parsed.check.invalid)}. Those citations are invalid."
             )
         report = (
-            None if parsed.is_abstention else check_claims(raw, evidence_sources(context), question)
+            None
+            if parsed.is_abstention
+            else check_claims(raw, evidence_sources(context), question, self.settings.claim_check)
         )
         claims = claims_out(report, context) if report else []
         if report:
@@ -587,11 +606,14 @@ class QAService:
         answer: str | None = parsed.text
         abstention_reason = parsed.abstention_reason
         unverified_answer = None
-        if (
-            report
-            and report.verdict == "unverified"
-            and self.settings.unverified_answers == "withhold"
-        ):
+        verification = verification_out(report, question, raw) if report else None
+        # claims-v2 withholds only when nothing was found and nothing is uncertain.
+        nothing_found = report is not None and (
+            verification is not None and verification.evidence == "none_found"
+            if report.version == "claims-v2"
+            else report.verdict == "unverified"
+        )
+        if nothing_found and self.settings.unverified_answers == "withhold":
             status, answer, unverified_answer = "insufficient_evidence", None, parsed.text
             abstention_reason = (
                 "No statement in the model's answer could be matched to the retrieved passages, "
@@ -615,7 +637,7 @@ class QAService:
                 for sentence in parsed.sentences
             ],
             claims=claims,
-            verification=verification_out(report) if report else None,
+            verification=verification,
             conflicts=conflicts,
             unverified_answer=unverified_answer,
             citation_check=CitationCheckOut(
