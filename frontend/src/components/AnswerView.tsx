@@ -114,7 +114,7 @@ export function AnswerView({
       ) : null}
       {response.status === "insufficient_evidence" ? (
         <p className="answer-text">
-          The indexed documents do not contain enough evidence to answer this question.
+          The searched documents do not contain enough evidence to answer this question.
           {response.abstention_reason ? <span className="secondary"> ({response.abstention_reason})</span> : null}
         </p>
       ) : null}
