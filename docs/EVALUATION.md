@@ -398,6 +398,49 @@ The model received the passage holding each answer (the ferry guide is one chunk
 refused three times, the same weakness as in the 56-question evaluation above. No prompt was
 changed after this check; it is too small to tune on.
 
+**Why it refuses (diagnosis, 2026-10-18).** The exact prompt after the chat template was
+captured for each question: the passage with the answer is there, under `<source id="S1">`, and
+the refusals are the model's own raw output, so retrieval, context assembly and output parsing
+are not the cause. With the same passage and greedy decoding, one factor was changed at a time
+on the three refused questions and one unanswerable question:
+
+| Change | Result |
+|---|---|
+| PDF line breaks joined | still 3 refusals |
+| the answering paragraph moved to the top | still 3 refusals |
+| answer-v1 prompt | still refuses; invents a departure time for the unanswerable question |
+| answer-v2 without its refusal rule (diagnostic only) | "No information provided about bicycle prices", next to "Bicycles cost 6 euros per trip" |
+| no system prompt, plain question | answers, but with invented facts ("children under 5 must pay", "07:00 UTC") |
+| choose the number of the answering sentence | picks sentence 3 for every question, including "Is there a cafe on board?" |
+
+The 0.5B model does not read this passage reliably under any of these prompts. Prompt changes
+trade false refusals for invented answers, and the current prompt with the claim check gives
+the safe failure. The development set (`groundedai-dev-v1`, 25 questions,
+`evaluation/reports/dev/`) shows the same: 11 of 19 answerable questions refused with the
+evidence retrieved, 1 answered correctly and verified. No prompt or retrieval change was
+made. The one pipeline fix: with `claims-v2`, a reply made only of bracketed fragments
+(`[21]`, three document titles) is reported as invalid output instead of an answer. On the
+development set this moved 3 replies (`[21]`, `[12]`, and the title-only reply to a question
+that should be refused) from "answered" to "invalid output", with identical raw outputs. The
+cost: `[12]` contained half the expected facts of one question.
+
+| Qwen2.5-0.5B, answer-v2, 800/120 chunks | dev: v1 checks | dev: claims-v2 | journey: claims-v2 |
+|---|---|---|---|
+| Answerable: correct and verified | 1 of 19 | 1 of 19 | 1 of 5 |
+| Answerable: false refusals | 11 | 11 | 3 |
+| Answerable: invalid output (no answer shown) | 3 | 5 | 0 |
+| Answerable: other answers (facts missing or partial, unverified) | 4 | 2 | 1 (`… 12`, unverified) |
+| Should refuse: refused | 5 of 6 | 5 of 6 | 2 of 2 |
+| Should refuse: shown as an answer | 1 (titles only) | 0 (invalid output) | 0 |
+| Valid `[S#]` labels among cited labels | 100% | 100% | 100% |
+| Answers shown with malformed citations (titles or numbers in brackets) | 6 of 6 | 3 of 3 | 1 of 2 |
+
+**Next step: a stronger model.** No other generation model is in the local cache (only
+SmolLM2-360M, which is smaller). The smallest step is `qwen2.5:1.5b` through Ollama (already
+integrated and measured on 2026-10-13: 43 of 43 answerable questions answered, 7 of 10
+refusals; about 1 GB download, 1.3 GB of memory), then the development set, the journey and,
+once, the 56-question evaluation. This laptop has 15.6 GB of memory and 61 GB free disk.
+
 ## Reproducing
 
 The PDF journey (no dataset hash; the sample PDFs are rebuilt by `scripts/make_sample_pdfs.py`):

@@ -53,7 +53,9 @@ and local models (sentence-transformers, Ollama, transformers) are optional.
   answerable questions it answered 1 correctly with its page and gave 1 malformed reply, which
   the claim check marked unverified; it wrongly refused the other 3. It refused both questions it
   should refuse ([report](evaluation/reports/journey/journey-qwen2.5-0.5b-20261018.json)). The
-  small model is the weak link; the checks expose its failures rather than hide them.
+  passage with each answer was in its prompt; prompt variants only traded refusals for invented
+  facts, so the 0.5B model is the limit, and the checks expose its failures rather than hide
+  them ([diagnosis](docs/EVALUATION.md#2026-10-18-the-pdf-journey-with-a-real-local-model)).
 - **Answer checks, version 2, measured once on a frozen test split.** On a 462-case synthetic
   test split, version 2 caught 69% of answers that miss the question (version 1: none) and every
   wrong citation. Disagreement recall rose from 0.38 to 0.47, and paraphrase acceptance fell from

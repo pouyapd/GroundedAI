@@ -15,6 +15,7 @@ run: every case has fixed passages and a fixed statement or answer.
 | Negation | a statement whose negation differs from its best evidence sentence is only partly found (kept because it helped on the dev split) |
 | Ranges | compared as a whole: "08:00–20:00" and "08:00–18:00" differ; a value at one end agrees |
 | Dates | validity dates ("2025 season", "valid from …") are kept apart from edit dates ("last updated …"); `different_dates` needs differing validity dates on both sides |
+| Malformed replies (2026-10-18) | a reply made only of bracketed fragments (`[21]`, document titles) is `invalid_output`, not an answer; bracketed refusals stay refusals |
 | Caching | `index.html` and demo data are revalidated; hashed assets are cached for a year; demo data requests carry the export time |
 
 Version 1 stays the default and selectable, and its behaviour is unchanged: its predictions on

@@ -39,6 +39,17 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## Results recorded after the answer-quality diagnosis (2026-10-18, on battery power)
+
+Change: claims-v2 reports replies made only of bracketed fragments as invalid output.
+
+| Check | Result |
+|---|---|
+| `pytest` (default suite) | 428 passed, 7 skipped (PostgreSQL) |
+| `ruff check`, `ruff format --check`, `mypy` (strict, also `--platform linux`) | clean |
+| Real model: dev set (25 questions) with claims-v1 and claims-v2, journey with claims-v2 | ran; Qwen2.5-0.5B-Instruct through transformers, offline; results in [EVALUATION.md](EVALUATION.md#2026-10-18-the-pdf-journey-with-a-real-local-model) |
+| Front end | not rerun: no front-end change |
+
 ## Results recorded on 2026-10-18 (same laptop, on battery power)
 
 Changes: document selection on the Ask page, the page of each evidence quote (migration 0002),

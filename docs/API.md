@@ -157,6 +157,9 @@ Field meanings:
     `not_applicable`), `addresses_question` (`yes`, `no`, `declined`, `not_checked`) and
     `expected_answer_type`, and per claim `citation_status` (`correct`, `wrong`, `partly_wrong`,
     `invalid`, `unconfirmed`, `none`) and `invalid_citations`. `verdict` keeps its meaning.
+    A reply made only of bracketed fragments (labels, titles or a bare value such as `[21]`) is
+    returned as `invalid_output` with a warning, as replies made only of `[S#]` markers are in
+    both versions; a bracketed refusal stays `insufficient_evidence`.
     With `GROUNDEDAI_UNVERIFIED_ANSWERS=withhold`, an answer is withheld only when no statement
     was found and none is uncertain.
   * `GROUNDEDAI_CONFLICT_CHECK=disagreement-v2` compares ranges as a whole and tells validity

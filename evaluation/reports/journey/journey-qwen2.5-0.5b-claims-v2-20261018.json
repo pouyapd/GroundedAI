@@ -1,0 +1,167 @@
+{
+  "generated_at": "2026-10-18T17:57:21Z",
+  "code_version": {
+    "commit": "6a74774bd0ca",
+    "uncommitted_changes": true
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7"
+  },
+  "providers": {
+    "embedding": {
+      "provider": "sentence-transformers",
+      "model": "sentence-transformers:BAAI/bge-small-en-v1.5",
+      "is_llm": null,
+      "available": true,
+      "detail": "Loaded."
+    },
+    "generation": {
+      "provider": "huggingface-local",
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "is_llm": true,
+      "available": true,
+      "detail": "Model found in the local Hugging Face cache."
+    },
+    "reranker": {
+      "provider": "none",
+      "model": null,
+      "is_llm": null,
+      "available": null,
+      "detail": "Disabled."
+    }
+  },
+  "documents": {
+    "ferry": "doc_bf26755860f9d7d81f20",
+    "library": "doc_44268f81f2bbd713cfdf"
+  },
+  "questions": 7,
+  "outcomes": {
+    "correct": 1,
+    "false_refusal": 3,
+    "correct_refusal": 2,
+    "correct_unverified": 1
+  },
+  "results": [
+    {
+      "question": "How much does a single adult ticket from Kessport to Mirrow cost?",
+      "scope": "ferry",
+      "expected": "14",
+      "outcome": "correct",
+      "status": "answered",
+      "answer": "[S1] A single adult ticket from Kessport to Mirrow costs 14 euros.",
+      "verdict": "verified",
+      "claims": [
+        {
+          "text": "A single adult ticket from Kessport to Mirrow costs 14 euros.",
+          "status": "supported",
+          "pages": [
+            2
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        }
+      ],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 20.3
+    },
+    {
+      "question": "Do young children have to pay for the ferry?",
+      "scope": "ferry",
+      "expected": "free",
+      "outcome": "false_refusal",
+      "status": "insufficient_evidence",
+      "answer": "[Insufficient Evidence: No information about children's fares is provided in the given sources.]",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 15.6
+    },
+    {
+      "question": "How much does it cost to take a bicycle?",
+      "scope": "ferry",
+      "expected": "6",
+      "outcome": "false_refusal",
+      "status": "insufficient_evidence",
+      "answer": "INSUFFICIENT_EVIDENCE: Bicycle cost not mentioned in the given source.",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 15.4
+    },
+    {
+      "question": "Can I bring my dog on the ferry?",
+      "scope": "ferry",
+      "expected": "lead",
+      "outcome": "false_refusal",
+      "status": "insufficient_evidence",
+      "answer": "INSUFFICIENT_EVIDENCE: No information about dogs is provided in the given sources.",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 15.6
+    },
+    {
+      "question": "What time does the last ferry leave Mirrow?",
+      "scope": "ferry",
+      "expected": null,
+      "outcome": "correct_refusal",
+      "status": "insufficient_evidence",
+      "answer": "INSUFFICIENT_EVIDENCE: No specific departure time is provided in the given information.",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 16.0
+    },
+    {
+      "question": "How many items can library members borrow?",
+      "scope": "ferry",
+      "expected": null,
+      "outcome": "correct_refusal",
+      "status": "insufficient_evidence",
+      "answer": "INSUFFICIENT_EVIDENCE: No information about borrowing items is provided in the given sources.",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 16.2
+    },
+    {
+      "question": "How many items can library members borrow?",
+      "scope": "library",
+      "expected": "12",
+      "outcome": "correct_unverified",
+      "status": "answered",
+      "answer": "[ORCHARD_LANE_LIBRARY_CARD_RULES][1]\n12",
+      "verdict": "unverified",
+      "claims": [
+        {
+          "text": "[1] 12",
+          "status": "unsupported",
+          "pages": [
+            1
+          ],
+          "documents": [
+            "doc_44268f81f2bbd713cfdf"
+          ]
+        }
+      ],
+      "source_documents": [
+        "doc_44268f81f2bbd713cfdf"
+      ],
+      "seconds": 12.2
+    }
+  ]
+}
