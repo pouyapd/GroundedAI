@@ -141,6 +141,21 @@ Field meanings:
   values, dates, whether it denies a requirement (`denies_requirement`, "do not have to") and
   whether it states one (`affirms_requirement`, "must"; a "have to" inside a denial does not
   count); `answer_reports` lists the labels whose value the answer states. Nothing is resolved.
+* Version 2 of the checks (added 2026-10-18, opt-in; the defaults stay at version 1):
+  * `GROUNDEDAI_CLAIM_CHECK=claims-v2` adds `verification.version`, `evidence`
+    (`all_found`, `some_uncertain`, `some_not_found`, `none_found`, `not_applicable`),
+    `citations` (`all_correct`, `some_wrong`, `some_unconfirmed`, `none_given`,
+    `not_applicable`), `addresses_question` (`yes`, `no`, `declined`, `not_checked`) and
+    `expected_answer_type`, and per claim `citation_status` (`correct`, `wrong`, `partly_wrong`,
+    `invalid`, `unconfirmed`, `none`) and `invalid_citations`. `verdict` keeps its meaning.
+    With `GROUNDEDAI_UNVERIFIED_ANSWERS=withhold`, an answer is withheld only when no statement
+    was found and none is uncertain.
+  * `GROUNDEDAI_CONFLICT_CHECK=disagreement-v2` compares ranges as a whole and tells validity
+    dates from edit dates; each conflict statement gains `validity_dates` and `revision_dates`.
+    It changes the conflict notes the answer-v2 prompt sends to the model, so it stays opt-in
+    until a real-model run.
+  * All new fields are optional; older clients and recordings are unaffected. Results:
+    [RELIABILITY_V2.md](RELIABILITY_V2.md).
 * `sources[].supports_claims` (added 2026-10-14): indices of the claims a passage is evidence for.
 * `unverified_answer`: set only with `GROUNDEDAI_UNVERIFIED_ANSWERS=withhold`, when no statement
   could be matched to a passage and the answer was therefore returned as `insufficient_evidence`.

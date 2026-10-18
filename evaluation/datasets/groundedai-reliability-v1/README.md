@@ -46,6 +46,13 @@ version.
      Round 2 (61 cases: a fresh sample of 50 and the 11 replacements) is ready for the auditor.
 6. **Freeze.** The test split's hash is recorded in `manifest.json` and pinned in
    `reliability.py` (`FROZEN_TEST_SHA256`); the scorer refuses any other content.
+7. **Amended protocol (2026-10-18).** The auditor was not available for round 2, so the
+   45-of-50 human threshold was **not met**. The test split (SHA-256 `7b0c8840…`) was frozen on
+   other evidence, recorded under `label_status` in `manifest.json`: the 11 replacements were
+   reviewed (11 valid), and a blind review of all 462 test cases by a second model agreed with
+   every label. Labels are model-written, not human-verified. Each version of the checks is
+   reported on the full split and on the 39-case human-confirmed subset; see
+   [`docs/RELIABILITY_V2.md`](../../../docs/RELIABILITY_V2.md).
 
 ## Rules for using the test split
 

@@ -1,0 +1,656 @@
+{
+  "report_id": "dev-v2-20261018T134958Z",
+  "kind": "reliability",
+  "suite": "groundedai-reliability-v1",
+  "split": "dev",
+  "checks": "v2",
+  "versions": {
+    "claim_check": "claims-v2",
+    "conflict_check": "disagreement-v2",
+    "relevance_check": "claims-v2"
+  },
+  "scoring_version": 1,
+  "generated_at": "2026-10-18T13:49:58+00:00",
+  "code": {
+    "commit": "4d1e361082b9",
+    "uncommitted_changes": true
+  },
+  "environment": {
+    "os": "Windows 11",
+    "python": "3.12.7",
+    "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+    "logical_cpus": 12,
+    "ram_gb": 15.6,
+    "gpu_used": false,
+    "power_source": "battery",
+    "code": {
+      "commit": "4d1e361082b9",
+      "uncommitted_changes": true
+    }
+  },
+  "dataset": {
+    "split_sha256": "176aae44a5fcf614d26c4619b04b1a2fdead463a65ccf3cb78f448e4aab81b9a",
+    "combined_sha256": "f953f796e72588ed778f3a35fcc2d1c0218f39a2a81ed861c172b191172751f6",
+    "cases": 198
+  },
+  "summary": {
+    "A": {
+      "unsupported_recall": {
+        "k": 23,
+        "n": 27,
+        "value": 0.8519,
+        "ci95": [
+          0.6752,
+          0.9408
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": true,
+        "stretch_met": false,
+        "established": false
+      },
+      "unsupported_precision": {
+        "k": 23,
+        "n": 31,
+        "value": 0.7419,
+        "ci95": [
+          0.5675,
+          0.863
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": false,
+        "stretch_met": false,
+        "established": false
+      },
+      "supported_false_flag_rate": {
+        "k": 8,
+        "n": 27,
+        "value": 0.2963,
+        "ci95": [
+          0.1585,
+          0.4848
+        ],
+        "target": 0.2,
+        "stretch": 0.1,
+        "direction": "lower",
+        "met": false,
+        "stretch_met": false,
+        "established": false
+      },
+      "false_negative_rate": {
+        "k": 4,
+        "n": 27,
+        "value": 0.1481,
+        "ci95": [
+          0.0592,
+          0.3248
+        ]
+      },
+      "supported_acceptance": {
+        "k": 19,
+        "n": 27,
+        "value": 0.7037,
+        "ci95": [
+          0.5152,
+          0.8415
+        ]
+      },
+      "paraphrase_acceptance": {
+        "k": 8,
+        "n": 15,
+        "value": 0.5333,
+        "ci95": [
+          0.3012,
+          0.7519
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": false,
+        "stretch_met": false,
+        "established": false
+      },
+      "f1": 0.7931
+    },
+    "B": {
+      "correct_citation_precision": {
+        "k": 16,
+        "n": 16,
+        "value": 1.0,
+        "ci95": [
+          0.8064,
+          1.0
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": true,
+        "stretch_met": true,
+        "established": true
+      },
+      "correct_citation_recall": {
+        "k": 16,
+        "n": 18,
+        "value": 0.8889,
+        "ci95": [
+          0.672,
+          0.969
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": true,
+        "stretch_met": false,
+        "established": false
+      },
+      "wrong_citation_precision": {
+        "k": 18,
+        "n": 20,
+        "value": 0.9,
+        "ci95": [
+          0.699,
+          0.9721
+        ]
+      },
+      "wrong_citation_recall": {
+        "k": 18,
+        "n": 18,
+        "value": 1.0,
+        "ci95": [
+          0.8241,
+          1.0
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": true,
+        "stretch_met": true,
+        "established": true
+      },
+      "false_positive_rate": {
+        "k": 2,
+        "n": 18,
+        "value": 0.1111,
+        "ci95": [
+          0.031,
+          0.328
+        ]
+      },
+      "false_negative_rate": {
+        "k": 0,
+        "n": 18,
+        "value": 0.0,
+        "ci95": [
+          0.0,
+          0.1759
+        ]
+      },
+      "accuracy": {
+        "k": 34,
+        "n": 36,
+        "value": 0.9444,
+        "ci95": [
+          0.8186,
+          0.9846
+        ]
+      },
+      "f1": 0.9474
+    },
+    "C": {
+      "off_target_recall": {
+        "k": 14,
+        "n": 18,
+        "value": 0.7778,
+        "ci95": [
+          0.5479,
+          0.91
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": false,
+        "stretch_met": false,
+        "established": false
+      },
+      "off_target_precision": {
+        "k": 14,
+        "n": 16,
+        "value": 0.875,
+        "ci95": [
+          0.6398,
+          0.965
+        ]
+      },
+      "false_warning_rate": {
+        "k": 2,
+        "n": 21,
+        "value": 0.0952,
+        "ci95": [
+          0.0265,
+          0.2891
+        ],
+        "target": 0.2,
+        "stretch": 0.1,
+        "direction": "lower",
+        "met": true,
+        "stretch_met": true,
+        "established": false
+      },
+      "false_negative_rate": {
+        "k": 4,
+        "n": 18,
+        "value": 0.2222,
+        "ci95": [
+          0.09,
+          0.4521
+        ]
+      },
+      "refusal_recognition": {
+        "k": 8,
+        "n": 9,
+        "value": 0.8889,
+        "ci95": [
+          0.565,
+          0.9801
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": true,
+        "stretch_met": false,
+        "established": false
+      },
+      "f1": 0.8235
+    },
+    "D": {
+      "disagreement_recall": {
+        "k": 15,
+        "n": 33,
+        "value": 0.4545,
+        "ci95": [
+          0.2984,
+          0.6201
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": false,
+        "stretch_met": false,
+        "established": false
+      },
+      "disagreement_precision": {
+        "k": 15,
+        "n": 16,
+        "value": 0.9375,
+        "ci95": [
+          0.7167,
+          0.9889
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": true,
+        "stretch_met": true,
+        "established": false
+      },
+      "false_alarm_rate": {
+        "k": 1,
+        "n": 27,
+        "value": 0.037,
+        "ci95": [
+          0.0066,
+          0.1828
+        ],
+        "target": 0.2,
+        "stretch": 0.1,
+        "direction": "lower",
+        "met": true,
+        "stretch_met": true,
+        "established": true
+      },
+      "false_negative_rate": {
+        "k": 18,
+        "n": 33,
+        "value": 0.5455,
+        "ci95": [
+          0.3799,
+          0.7016
+        ]
+      },
+      "kind_accuracy": {
+        "k": 15,
+        "n": 15,
+        "value": 1.0,
+        "ci95": [
+          0.7961,
+          1.0
+        ],
+        "target": 0.8,
+        "stretch": 0.9,
+        "direction": "higher",
+        "met": true,
+        "stretch_met": true,
+        "established": false
+      },
+      "f1": 0.6122
+    }
+  },
+  "by_subtype": {
+    "A": {
+      "absent": {
+        "k": 6,
+        "n": 6,
+        "value": 1.0,
+        "ci95": [
+          0.6097,
+          1.0
+        ]
+      },
+      "negation": {
+        "k": 6,
+        "n": 6,
+        "value": 1.0,
+        "ci95": [
+          0.6097,
+          1.0
+        ]
+      },
+      "number_form": {
+        "k": 5,
+        "n": 6,
+        "value": 0.8333,
+        "ci95": [
+          0.4365,
+          0.9699
+        ]
+      },
+      "paraphrase": {
+        "k": 8,
+        "n": 15,
+        "value": 0.5333,
+        "ci95": [
+          0.3012,
+          0.7519
+        ]
+      },
+      "verbatim": {
+        "k": 6,
+        "n": 6,
+        "value": 1.0,
+        "ci95": [
+          0.6097,
+          1.0
+        ]
+      },
+      "wrong_subject": {
+        "k": 3,
+        "n": 6,
+        "value": 0.5,
+        "ci95": [
+          0.1876,
+          0.8124
+        ]
+      },
+      "wrong_value": {
+        "k": 8,
+        "n": 9,
+        "value": 0.8889,
+        "ci95": [
+          0.565,
+          0.9801
+        ]
+      }
+    },
+    "B": {
+      "correct_single": {
+        "k": 11,
+        "n": 12,
+        "value": 0.9167,
+        "ci95": [
+          0.6461,
+          0.9851
+        ]
+      },
+      "correct_two": {
+        "k": 5,
+        "n": 6,
+        "value": 0.8333,
+        "ci95": [
+          0.4365,
+          0.9699
+        ]
+      },
+      "nonexistent_label": {
+        "k": 3,
+        "n": 3,
+        "value": 1.0,
+        "ci95": [
+          0.4385,
+          1.0
+        ]
+      },
+      "one_of_two_wrong": {
+        "k": 3,
+        "n": 3,
+        "value": 1.0,
+        "ci95": [
+          0.4385,
+          1.0
+        ]
+      },
+      "wrong_related": {
+        "k": 9,
+        "n": 9,
+        "value": 1.0,
+        "ci95": [
+          0.7009,
+          1.0
+        ]
+      },
+      "wrong_unrelated": {
+        "k": 3,
+        "n": 3,
+        "value": 1.0,
+        "ci95": [
+          0.4385,
+          1.0
+        ]
+      }
+    },
+    "C": {
+      "correct_other": {
+        "k": 8,
+        "n": 9,
+        "value": 0.8889,
+        "ci95": [
+          0.565,
+          0.9801
+        ]
+      },
+      "correct_refusal": {
+        "k": 8,
+        "n": 9,
+        "value": 0.8889,
+        "ci95": [
+          0.565,
+          0.9801
+        ]
+      },
+      "correct_value": {
+        "k": 11,
+        "n": 12,
+        "value": 0.9167,
+        "ci95": [
+          0.6461,
+          0.9851
+        ]
+      },
+      "off_target": {
+        "k": 6,
+        "n": 9,
+        "value": 0.6667,
+        "ci95": [
+          0.3542,
+          0.8794
+        ]
+      },
+      "unanswerable_answered": {
+        "k": 8,
+        "n": 9,
+        "value": 0.8889,
+        "ci95": [
+          0.565,
+          0.9801
+        ]
+      }
+    },
+    "D": {
+      "agreement": {
+        "k": 6,
+        "n": 6,
+        "value": 1.0,
+        "ci95": [
+          0.6097,
+          1.0
+        ]
+      },
+      "dated_agreement": {
+        "k": 3,
+        "n": 3,
+        "value": 1.0,
+        "ci95": [
+          0.4385,
+          1.0
+        ]
+      },
+      "different_groups": {
+        "k": 5,
+        "n": 6,
+        "value": 0.8333,
+        "ci95": [
+          0.4365,
+          0.9699
+        ]
+      },
+      "incomplete": {
+        "k": 6,
+        "n": 6,
+        "value": 1.0,
+        "ci95": [
+          0.6097,
+          1.0
+        ]
+      },
+      "plain_conflict": {
+        "k": 4,
+        "n": 6,
+        "value": 0.6667,
+        "ci95": [
+          0.3,
+          0.9032
+        ]
+      },
+      "range_consistent": {
+        "k": 6,
+        "n": 6,
+        "value": 1.0,
+        "ci95": [
+          0.6097,
+          1.0
+        ]
+      },
+      "range_shared_endpoint": {
+        "k": 5,
+        "n": 6,
+        "value": 0.8333,
+        "ci95": [
+          0.4365,
+          0.9699
+        ]
+      },
+      "requirement_denial": {
+        "k": 0,
+        "n": 6,
+        "value": 0.0,
+        "ci95": [
+          0.0,
+          0.3903
+        ]
+      },
+      "revision_date_only": {
+        "k": 1,
+        "n": 3,
+        "value": 0.3333,
+        "ci95": [
+          0.0615,
+          0.7923
+        ]
+      },
+      "synonym_conflict": {
+        "k": 0,
+        "n": 6,
+        "value": 0.0,
+        "ci95": [
+          0.0,
+          0.3903
+        ]
+      },
+      "validity_dates": {
+        "k": 5,
+        "n": 6,
+        "value": 0.8333,
+        "ci95": [
+          0.4365,
+          0.9699
+        ]
+      }
+    }
+  },
+  "limitations": [
+    "Synthetic cases written by a separate agent of the same model family as the checks' author; shared blind spots are possible. A blind audit of 50 test labels estimates label quality.",
+    "Subtypes were chosen around known failure modes, so the mix does not reflect how often each case occurs in real use; overall rates are not real-world rates.",
+    "The checks are lexical and pattern-based. A good score does not show that they understand meaning, and results on this suite do not prove generalisation to other documents.",
+    "Component-level only: fixed passages and fixed answers; no language model was run."
+  ],
+  "correct_by_category": {
+    "A": {
+      "k": 42,
+      "n": 54,
+      "value": 0.7778,
+      "ci95": [
+        0.6506,
+        0.868
+      ]
+    },
+    "B": {
+      "k": 34,
+      "n": 36,
+      "value": 0.9444,
+      "ci95": [
+        0.8186,
+        0.9846
+      ]
+    },
+    "C": {
+      "k": 41,
+      "n": 48,
+      "value": 0.8542,
+      "ci95": [
+        0.7283,
+        0.9275
+      ]
+    },
+    "D": {
+      "k": 41,
+      "n": 60,
+      "value": 0.6833,
+      "ci95": [
+        0.5577,
+        0.7869
+      ]
+    }
+  }
+}
