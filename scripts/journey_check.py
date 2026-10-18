@@ -119,7 +119,8 @@ def main() -> int:
         "results": rows,
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    text = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
+    args.out.write_text(text, encoding="utf-8", newline="\n")
     print(f"{report['as_expected']} of {report['questions']} as expected; report: {args.out}")
     return 0
 
