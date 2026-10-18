@@ -33,9 +33,10 @@ documents, and says so when the evidence is not enough. A built-in evaluation
 framework measures retrieval and answer behaviour on a versioned dataset, with confidence
 intervals, so configuration choices rest on numbers rather than assumptions.
 
-In practice: upload a PDF, choose the document to ask, and get an answer whose every statement
-comes with the quoted sentence and the page it is on, or a plain "not enough evidence" when the
-document does not say.
+In practice: upload a PDF, choose the document to ask, and get an answer in which each statement
+found in the document comes with the quoted sentence and the page it is on, statements that are
+not found are marked as such, and the reply is a plain "not enough evidence" when the document
+does not say.
 
 Everything runs on a laptop CPU with no paid service: the default mode needs no model at all,
 and local models (sentence-transformers, Ollama, transformers) are optional.

@@ -6,8 +6,13 @@ The app runs in-process (FastAPI test client, temporary data folder) with the pr
 in the environment, so this is the way to check a real model on the journey: upload the two
 sample PDFs, ask seven questions (four answerable from the ferry guide, one it cannot answer,
 one answered only by the other document, and that one scoped to the other document), and
-record each answer with its check results, evidence pages and timings. ``expected`` is a
-plain substring test on the answer, a rough first look rather than a score; read the answers.
+record each answer with its check results, evidence pages and timings.
+
+Each question gets one outcome: ``correct`` (the expected fact is in the answer and the claim
+check verified every statement), ``correct_unverified`` (the fact is there but the answer is
+malformed or not fully verified), ``wrong_answer``, ``false_refusal``, ``invalid_output``
+(no usable text), ``correct_refusal`` or ``answered_unanswerable``. ``expected`` is a plain
+substring test, a rough first look rather than a score; read the answers.
 """
 
 from __future__ import annotations
@@ -18,6 +23,7 @@ import platform
 import sys
 import tempfile
 import time
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +47,19 @@ QUESTIONS: list[tuple[str, str, str | None]] = [
     ("How many items can library members borrow?", "ferry", None),
     ("How many items can library members borrow?", "library", "12"),
 ]
+
+
+def _outcome(body: dict[str, Any], expected: str | None, verdict: str | None) -> str:
+    status = body["status"]
+    if expected is None:
+        return "answered_unanswerable" if status == "answered" else "correct_refusal"
+    if status == "insufficient_evidence":
+        return "false_refusal"
+    if status != "answered":
+        return "invalid_output"
+    if expected.casefold() not in (body["answer"] or "").casefold():
+        return "wrong_answer"
+    return "correct" if verdict == "verified" else "correct_unverified"
 
 
 def main() -> int:
@@ -75,19 +94,14 @@ def main() -> int:
                     rows.append({"question": question, "scope": scope, "error": body})
                     print(f"ERROR {question}: {body}")
                     continue
-                answered = body["status"] == "answered"
-                as_expected = (
-                    (answered and expected.casefold() in body["answer"].casefold())
-                    if expected
-                    else not answered
-                )
                 verification = body.get("verification") or {}
+                outcome = _outcome(body, expected, verification.get("verdict"))
                 rows.append(
                     {
                         "question": question,
                         "scope": scope,
                         "expected": expected,
-                        "as_expected": as_expected,
+                        "outcome": outcome,
                         "status": body["status"],
                         "answer": body["answer"],
                         "verdict": verification.get("verdict"),
@@ -104,24 +118,21 @@ def main() -> int:
                         "seconds": round(elapsed, 1),
                     }
                 )
-                print(
-                    f"{'ok  ' if as_expected else 'MISS'} {body['status']:<22} "
-                    f"{verification.get('verdict') or '-':<19} {elapsed:5.1f}s  {question}"
-                )
+                print(f"{outcome:<22} {elapsed:5.1f}s  {question}")
     report = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "code_version": code_version(),
         "machine": {"platform": platform.platform(), "python": platform.python_version()},
         "providers": {key: status[key] for key in ("embedding", "generation", "reranker")},
         "documents": {key: value for key, value in ids.items()},
-        "as_expected": sum(1 for row in rows if row.get("as_expected")),
         "questions": len(rows),
+        "outcomes": dict(Counter(str(row.get("outcome", "error")) for row in rows)),
         "results": rows,
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
     args.out.write_text(text, encoding="utf-8", newline="\n")
-    print(f"{report['as_expected']} of {report['questions']} as expected; report: {args.out}")
+    print(f"outcomes: {report['outcomes']}; report: {args.out}")
     return 0
 
 
