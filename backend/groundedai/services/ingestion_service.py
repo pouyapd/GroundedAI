@@ -149,6 +149,7 @@ class IngestionService:
                             char_end=spec.char_end,
                             page_start=spec.page_start,
                             page_end=spec.page_end,
+                            page_breaks=[list(item) for item in spec.page_breaks] or None,
                             text_sha256=spec.sha256,
                             embedding=vector,
                         )

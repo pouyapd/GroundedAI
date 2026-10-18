@@ -79,6 +79,8 @@ class ChunkRow(Base):
     char_end: Mapped[int] = mapped_column(Integer)
     page_start: Mapped[int | None] = mapped_column(Integer, default=None)
     page_end: Mapped[int | None] = mapped_column(Integer, default=None)
+    # [[offset in text, page number], ...] for pages that start inside the chunk (migration 0002).
+    page_breaks: Mapped[list[list[int]] | None] = mapped_column(JSON, default=None)
     text_sha256: Mapped[str] = mapped_column(String(64), index=True)
     embedding: Mapped[np.ndarray | None] = mapped_column(EmbeddingVector(), default=None)
 

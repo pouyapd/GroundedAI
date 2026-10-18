@@ -48,6 +48,7 @@ from groundedai.generation.disagreement import Disagreement, find_disagreements
 from groundedai.generation.prompts import answer_prompt, format_notes
 from groundedai.generation.providers import GenerationProvider, translate_provider_error
 from groundedai.generation.safety import detect_injection
+from groundedai.ingestion.chunking import page_at
 from groundedai.observability.metrics import MetricsRegistry
 from groundedai.persistence.db import session_scope
 from groundedai.persistence.models import QueryEventRow
@@ -171,6 +172,7 @@ def claims_out(report: ClaimReport, context: AssembledContext) -> list[ClaimOut]
                     document_title=chunk.document_title,
                     page_start=chunk.page_start,
                     page_end=chunk.page_end,
+                    page=page_at(quote.start, chunk.page_start, chunk.page_end, chunk.page_breaks),
                     quote=quote.quote,
                     quote_start=quote.start,
                     quote_end=quote.end,
@@ -271,6 +273,9 @@ def conflicts_out(
                     document_title=chunk.document_title,
                     page_start=chunk.page_start,
                     page_end=chunk.page_end,
+                    page=page_at(
+                        statement.start, chunk.page_start, chunk.page_end, chunk.page_breaks
+                    ),
                     quote=statement.sentence,
                     quote_start=statement.start,
                     quote_end=statement.end,

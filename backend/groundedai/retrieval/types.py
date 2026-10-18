@@ -50,6 +50,7 @@ class RetrievedChunk:
     scores: ChunkScores
     rank: int = 0
     matched_terms: list[str] = field(default_factory=list)
+    page_breaks: list[list[int]] | None = None
 
 
 @dataclass(slots=True)

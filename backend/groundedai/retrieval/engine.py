@@ -109,6 +109,7 @@ class RetrievalEngine:
                     char_end=row.char_end,
                     page_start=row.page_start,
                     page_end=row.page_end,
+                    page_breaks=row.page_breaks,
                     scores=ChunkScores(
                         lexical=lexical_hit[1] if lexical_hit else None,
                         lexical_rank=lexical_hit[0] if lexical_hit else None,

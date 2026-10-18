@@ -122,6 +122,11 @@ class EvidenceOut(BaseModel):
     document_title: str
     page_start: int | None = None
     page_end: int | None = None
+    page: int | None = Field(
+        default=None,
+        description="Page on which the quote starts; null when unknown (no page numbers, or a "
+        "multi-page passage indexed before page breaks were recorded)",
+    )
     quote: str = Field(description="The sentence(s) of the passage that carry the claim")
     quote_start: int = Field(description="Character offset of the quote in the source's `text`")
     quote_end: int
@@ -201,6 +206,11 @@ class ConflictStatementOut(BaseModel):
     document_title: str
     page_start: int | None = None
     page_end: int | None = None
+    page: int | None = Field(
+        default=None,
+        description="Page on which the quote starts; null when unknown (no page numbers, or a "
+        "multi-page passage indexed before page breaks were recorded)",
+    )
     quote: str = Field(description="The sentence that states the value")
     quote_start: int = Field(description="Character offset of the quote in the source's `text`")
     quote_end: int

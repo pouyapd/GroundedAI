@@ -1,7 +1,8 @@
 """Deterministic chunking with source-location tracking.
 
 Pages are joined into one text so that chunks may cross page boundaries; each
-chunk keeps its character span in that text and the first/last page it covers.
+chunk keeps its character span in that text, the first/last page it covers and,
+when it covers several pages, where each later page starts inside the chunk.
 Splitting uses LangChain's ``RecursiveCharacterTextSplitter`` (paragraph, then
 line, then sentence, then word boundaries).
 """
@@ -42,6 +43,8 @@ class ChunkSpec:
     char_end: int
     page_start: int | None
     page_end: int | None
+    # (offset in ``text``, page number) for each page that starts inside the chunk.
+    page_breaks: tuple[tuple[int, int], ...] = ()
 
     @property
     def sha256(self) -> str:
@@ -107,6 +110,11 @@ def chunk_pages(pages: Sequence[PageText], config: ChunkingConfig) -> list[Chunk
         search_from = start + 1
         covered = [span.number for span in spans if span.start < end and span.end > start]
         numbered = [number for number in covered if number is not None]
+        breaks = tuple(
+            (span.start - start, span.number)
+            for span in spans
+            if span.number is not None and start < span.start < end
+        )
         chunks.append(
             ChunkSpec(
                 index=len(chunks),
@@ -115,6 +123,32 @@ def chunk_pages(pages: Sequence[PageText], config: ChunkingConfig) -> list[Chunk
                 char_end=end,
                 page_start=min(numbered) if numbered else None,
                 page_end=max(numbered) if numbered else None,
+                page_breaks=breaks,
             )
         )
     return chunks
+
+
+def page_at(
+    offset: int,
+    page_start: int | None,
+    page_end: int | None,
+    page_breaks: Sequence[Sequence[int]] | None,
+) -> int | None:
+    """The page on which the character at ``offset`` of a chunk's text lies.
+
+    ``None`` when it cannot be told: no page numbers, or a multi-page chunk indexed
+    before page breaks were recorded.
+    """
+    if page_start is None:
+        return None
+    if page_end is None or page_end == page_start:
+        return page_start
+    if not page_breaks:
+        return None
+    page = page_start
+    for break_offset, number in page_breaks:
+        if offset < break_offset:
+            break
+        page = number
+    return page
