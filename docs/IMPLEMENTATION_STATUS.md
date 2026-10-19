@@ -22,8 +22,12 @@ Local branch `feature/reliability-v1` (not pushed; pull request #1 is unchanged 
 - Earlier on 2026-10-18: answer checks version 2, evaluated on a frozen test split
   ([RELIABILITY_V2.md](RELIABILITY_V2.md)).
 
-Still open: push and CI (owner's approval), a Docker image build with these changes, a larger
-local model for the 56-question evaluation, and a public demo (needs a public repository or a
+2026-10-19: Ollama 0.14.2 installed and `qwen2.5:1.5b` pulled; the development set, the
+journey, the browser check and, once, the 56-question evaluation ran with it; two check fixes
+(month-first dates, quotes) ([EVALUATION.md](EVALUATION.md#2026-10-19-qwen25-15b-through-ollama)).
+
+Still open: push and CI (owner's approval), a Docker image build with these changes, conflict
+questions (no model run states a conflict), and a public demo (needs a public repository or a
 host; see [DEPLOYMENT_STATUS.md](DEPLOYMENT_STATUS.md)).
 
 ## Definition of done

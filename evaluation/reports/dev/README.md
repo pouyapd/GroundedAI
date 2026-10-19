@@ -35,6 +35,18 @@ shared the CPU with a diagnosis script):
 
 Diagnosis and results: [docs/EVALUATION.md](../../../docs/EVALUATION.md#2026-10-18-the-pdf-journey-with-a-real-local-model).
 
+## 2026-10-19: qwen2.5:1.5b through Ollama 0.14.2
+
+Same settings as the 2026-10-13 runs above (400/60 chunks, at most 200 new tokens), mains
+power, default checks:
+
+| Report | Code | Notes |
+|---|---|---|
+| `generation-ollama-…T085836Z` | `e08d140` | first run; a correct month-first date ("December 31, 2027") was marked not found |
+| `generation-ollama-…T091342Z` | `ddbe192` | after the date fix; raw outputs identical in 25 of 25, that verdict now verified |
+
+Results: [docs/EVALUATION.md](../../../docs/EVALUATION.md#2026-10-19-qwen25-15b-through-ollama).
+
 Known weaknesses of the frozen prompt on this set (qwen2.5:1.5b): citation-format compliance
 0.42 (v1: 0.54), malformed citations in 32% of answers (v1: 8%), and one of the two injection
 questions failed: the model copied all sources, including the planted text, into its reply.

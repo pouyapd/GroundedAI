@@ -48,6 +48,10 @@ dense search until then, and responses carry a warning saying so.
 
 ## Verified in this repository
 
+* Ollama 0.14.2 with `qwen2.5:1.5b` (2026-10-19): installed with the Windows installer (per
+  user); `OLLAMA_MODELS` may point elsewhere (here `D:\ollama_models`). Median 18 s per answer on
+  an i7-1255U without a GPU, mains power ([results](EVALUATION.md#2026-10-19-qwen25-15b-through-ollama)).
+
 * sentence-transformers embeddings (bge-small, MiniLM) and the cross-encoder reranker: used in
   the published retrieval benchmark.
 * `huggingface-local` with Qwen2.5-0.5B-Instruct: used in the generation evaluation (see

@@ -440,6 +440,67 @@ SmolLM2-360M, which is smaller). The smallest step is `qwen2.5:1.5b` through Oll
 integrated and measured on 2026-10-13: 43 of 43 answerable questions answered, 7 of 10
 refusals; about 1 GB download, 1.3 GB of memory), then the development set, the journey and,
 once, the 56-question evaluation. This laptop has 15.6 GB of memory and 61 GB free disk.
+This was done on 2026-10-19 (next section).
+
+### 2026-10-19: qwen2.5:1.5b through Ollama
+
+Ollama 0.14.2 was installed from the owner's existing, signed installer and `qwen2.5:1.5b`
+pulled (986 MB, digest `65ec06548149`, the same build as on 2026-10-13). Every run below is a
+real model run: Windows 11, i7-1255U without a GPU, mains power, temperature 0, seed 0, the
+default checks (claims-v1), answer-v2. The development set and the 56-question set use the
+2026-10-13 settings (bge-small, hybrid, top 5, 400/60-character chunks, at most 200 new
+tokens); the journey uses the application's defaults (800/120 chunks).
+
+Order: development set, two pipeline fixes found there and on the journey, development set
+again (raw outputs identical in 25 of 25; only the fixed verdict changed), journey, then the
+56-question set once. The 56-question set was not inspected question by question.
+
+| Outcome | Development (25) | Journey (7) | 56-question set |
+|---|---|---|---|
+| Answer questions | 19 | 5 | 41 |
+| — correct and every statement verified | 13 | 2 | 29 |
+| — correct facts, not every statement verified | 3 | 3 | 10 |
+| — partly correct | 1 | 0 | 0 |
+| — wrong (no key fact) | 0 | 0 | 1 |
+| — false refusals | 2 | 0 | 1 |
+| Should refuse: refused / answered anyway | 5 / 1 | 2 / 0 | 8 / 2 |
+| Conflict questions: conflict stated | 0 of 2 (in the 19 above) | – | 0 of 2 |
+| Ambiguous questions (not scored) | – | – | 3 answered |
+| Invalid outputs, timeouts, errors | 0, 0, 0 | 0, 0, 0 | 0, 0, 0 |
+| Answers with malformed citations (titles or `[Source 1]` in brackets) | 6 | 1 | 17 |
+| Statements cited to the passage that contains them | 69% | – | 80% |
+| Strict `[S#]` format followed | 28% | – | 30% |
+| Median latency | 21 s | 3–18 s per question | 18 s |
+
+Compared with the 2026-10-13 run of the same model and prompt on the 56-question set
+(Ollama 0.40.3): correct behaviour 0.906 both times, answerable answered 42 of 43 (was 43 of
+43), correct refusals 8 of 10 (was 7 of 10), key-fact recall 0.919 (was 0.942); latency is
+higher (18 s, was 10 s) with this Ollama build.
+
+"Not every statement verified" is mostly the lexical claim check being strict about extra
+sentences: on the journey, "No, young children do not have to pay" (the passage says "travel
+free"), "Therefore, the answer is 12 items" and a caveat the model added ("this information
+was provided in 2026 and may have changed") were not confirmed, while each answer's fact was
+quoted with the right page (2, 3, 3 and 1). One should-refuse question on the development set
+was answered with a true statement about a different subject, which the default check marks
+verified (the known "beside the question" weakness; `claims-v2` addresses it). No conflict
+was stated, as on 2026-10-13.
+
+**Fixes from these runs** (each with a regression test; the reliability suite's development
+split gives the same v1 and v2 results in every category before and after):
+
+- Month-first dates: the model wrote "December 31, 2027" for a passage's "31 December 2027";
+  only day-first dates were read as dates, so a correct statement was "not found".
+- Quotes: "Yes, you can bring your dog on the ferry" was quoted with the guide's opening
+  sentence, because the sentence chooser counted document-title words that the support check
+  ignores. It now ignores them too; that quote is now on page 3. The claim's status was found
+  from words in two sentences of one passage ("bring" and "dog"), a known limit of the
+  passage-level lexical check; quoting both sentences was tried and dropped, because it
+  changed one v2 result on the development split.
+
+Reports: `evaluation/reports/dev/generation-ollama-groundedai-dev-v1-20261019T*`,
+`evaluation/reports/journey/journey-qwen2.5-1.5b-ollama-20261019.json`,
+`evaluation/reports/published/generation-ollama-groundedai-synthetic-v1-20261019T093836Z.*`.
 
 ## Reproducing
 

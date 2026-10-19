@@ -39,6 +39,20 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## Results recorded with qwen2.5:1.5b (2026-10-19, mains power)
+
+Changes: month-first dates are read as dates; evidence quotes ignore document-title words.
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e; scripted fake models where a model is needed | 431 passed, 7 skipped (PostgreSQL) |
+| `ruff`, `ruff format --check`, `mypy` (strict, also `--platform linux`) | static | clean |
+| `vitest`, `eslint`, `tsc -b`, `npm run build` | front end | 70 passed; clean; built |
+| `scripts/reliability_suite.py validate`; dev split scored with v1 and v2 before and after each fix | dataset, checks | 0 errors; results unchanged in every category |
+| Development set (25), journey (7), 56-question set (once) | **real model**: qwen2.5:1.5b, Ollama 0.14.2 | no errors or timeouts; results in [EVALUATION.md](EVALUATION.md#2026-10-19-qwen25-15b-through-ollama) |
+| `scripts/e2e_browser.py` | browser, real server | 24 of 24 with the default generator and 24 of 24 with qwen2.5:1.5b |
+| Docker | – | not run: Docker Desktop is not running |
+
 ## Results recorded after the answer-quality diagnosis (2026-10-18, on battery power)
 
 Change: claims-v2 reports replies made only of bracketed fragments as invalid output.

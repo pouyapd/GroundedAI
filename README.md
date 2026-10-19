@@ -49,13 +49,14 @@ and local models (sentence-transformers, Ollama, transformers) are optional.
   though the short pages share one chunk; a question the selected document cannot answer gets
   "not enough evidence" instead of an answer from another document; switching and deleting
   documents leave no stale answers (24 of 24 checks, [script](scripts/e2e_browser.py)).
-- **A real local model on that journey (Qwen2.5-0.5B-Instruct, transformers, CPU).** Of 5
-  answerable questions it answered 1 correctly with its page and gave 1 malformed reply, which
-  the claim check marked unverified; it wrongly refused the other 3. It refused both questions it
-  should refuse ([report](evaluation/reports/journey/journey-qwen2.5-0.5b-20261018.json)). The
-  passage with each answer was in its prompt; prompt variants only traded refusals for invented
-  facts, so the 0.5B model is the limit, and the checks expose its failures rather than hide
-  them ([diagnosis](docs/EVALUATION.md#2026-10-18-the-pdf-journey-with-a-real-local-model)).
+- **A real local model on that journey.** With `qwen2.5:1.5b` through Ollama (CPU), all 5
+  answerable questions got the right fact, with the supporting quote on the right page; 2 were
+  verified statement by statement, 3 had an extra sentence the lexical check could not confirm
+  (such as "No, young children do not have to pay", where the guide says "travel free"). Both
+  unanswerable questions were refused, and the browser check passes with this model too (24 of
+  24). Qwen2.5-0.5B, by contrast, refused 3 of the 5 with the answer in its prompt; prompt
+  variants only traded refusals for invented facts
+  ([details](docs/EVALUATION.md#2026-10-19-qwen25-15b-through-ollama)).
 - **Answer checks, version 2, measured once on a frozen test split.** On a 462-case synthetic
   test split, version 2 caught 69% of answers that miss the question (version 1: none) and every
   wrong citation. Disagreement recall rose from 0.38 to 0.47, and paraphrase acceptance fell from
@@ -112,6 +113,7 @@ evidence). Intel i7-1255U laptop, no GPU, mains power. Small sample: read the in
 | Qwen2.5-0.5B, prompt v2 | 0.528 | 21 of 43 | 7 of 10 | 0.302 | 8% | 38 s |
 | qwen2.5:1.5b, prompt v1 (Ollama, Q4_K_M) | 0.830 | 36 of 43 | 9 of 10 | 0.767 | 30% | 11 s |
 | **qwen2.5:1.5b, prompt v2** (default Ollama setup) | **0.906** | **43 of 43** | 7 of 10 | **0.942** | 27% | 10 s |
+| qwen2.5:1.5b, prompt v2, rerun 2026-10-19 (Ollama 0.14.2, current checks) | 0.906 | 42 of 43 | 8 of 10 | 0.919 | 30% | 18 s |
 
 *Hybrid RRF retrieval with bge-small, top 5 passages, greedy decoding, Intel i7-1255U, no GPU,
 mains power. "Correct behaviour" counts an expected answer as correct even if its content is
@@ -311,7 +313,8 @@ the latest results: [docs/TESTING.md](docs/TESTING.md).
 |---|---|
 | 419 backend tests (offline, SQLite) and 70 front-end tests; ruff and strict mypy clean (Windows and Linux targets) (2026-10-18) | CI on the local commits after `100f124` (not pushed); CI last passed, 7 of 7 jobs, on `100f124` |
 | the PDF journey in Chromium against a real local server, 24 checks ([script](scripts/e2e_browser.py), 2026-10-18) | the browser check in CI (it needs playwright, which is not a project dependency) |
-| a real local model (Qwen2.5-0.5B-Instruct, transformers, CPU) on that journey through the HTTP API and the UI (2026-10-18) | the 56-question evaluation with the checks of 2026-10-14 and later: only the 7-question journey was run with a model; the Ollama files were deleted |
+| real local models on that journey: Qwen2.5-0.5B-Instruct (transformers, 2026-10-18) and qwen2.5:1.5b (Ollama 0.14.2, 2026-10-19, also the browser check, 24 of 24) | models larger than 1.5B parameters; real or larger document collections |
+| qwen2.5:1.5b on the 25-question development set and, once, the 56-question evaluation with the current checks (2026-10-19) | |
 | PostgreSQL 16 + pgvector: migrations, all retrieval modes, cascade delete, evidence pages (7 tests, bundled local server, 2026-10-18) | retrieval and answer quality on real or larger document collections |
 | real Ollama inference (0.40.3, qwen2.5:1.5b) through the API, the UI and a 56-question evaluation (2026-10-13) | |
 | the claim check on the recorded outputs of three model runs, with the rebuilt passages verified against every recorded result | that a "verified" statement is correct: the check is lexical; human or model judging was not done |
