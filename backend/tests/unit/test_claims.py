@@ -244,3 +244,17 @@ def test_a_markdown_heading_after_a_sentence_starts_a_new_claim() -> None:
     assert _statuses(report) == ["supported"]
     assert report.claims[0].cited == ["S1"]
     assert report.notes == 1  # the title used as a heading
+
+
+def test_a_month_first_date_is_found_in_a_day_first_passage() -> None:
+    support = EvidenceSource(
+        "S1", "Support Policy", "Version 7 reaches end of support on 31 December 2027."
+    )
+    for version in ("claims-v1", "claims-v2"):
+        report = check_claims(
+            "Version 7 reaches end of support on December 31, 2027 [S1].",
+            [support],
+            "When does version 7 reach end of support?",
+            version,
+        )
+        assert [claim.status for claim in report.claims] == ["supported"]

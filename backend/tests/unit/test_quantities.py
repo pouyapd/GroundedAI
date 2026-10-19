@@ -65,6 +65,16 @@ def test_dates_years_and_month_names() -> None:
     assert read_quantities("Employees may book hotels in May without approval.").quantities == []
 
 
+def test_month_first_dates_read_as_the_same_date() -> None:
+    # Regression: qwen2.5:1.5b wrote "December 31, 2027" for a passage's "31 December 2027";
+    # the two figures 31 and 2027 were then reported as missing from the passage.
+    assert _one("Support ends on December 31, 2027.").value == 20271231.0
+    assert _one("from January 1st 2026").value == 20260101.0
+    assert figure_present(_one("on December 31, 2027"), [_one("on 31 December 2027")])
+    # The year is required, so a verb "may" before a number is still not a date.
+    assert _one("Guests may 2 times a week.").kind != "date"
+
+
 def test_ranges_share_their_unit() -> None:
     low, high = read_quantities("Delivery takes 3 to 5 working days.").quantities
     assert (low.written, high.written, low.unit) == (3.0, 5.0, "working_day")

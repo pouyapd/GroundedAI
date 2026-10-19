@@ -188,8 +188,10 @@ _CURRENCY_WORD = {
     "p": "pence",
 }
 
+# Month-first dates ("December 31, 2027") need the year, so "may 3" is never read as a date.
 _DATE_RE = re.compile(
-    rf"\b(?:(?P<day>\d{{1,2}})(?:st|nd|rd|th)?\s+)?(?P<month>{_MONTH})(?:\s+(?P<year>(?:19|20)\d{{2}}))?\b"
+    rf"\b(?P<mf_month>{_MONTH})\s+(?P<mf_day>\d{{1,2}})(?:st|nd|rd|th)?,?\s+(?P<mf_year>(?:19|20)\d{{2}})\b"
+    rf"|\b(?:(?P<day>\d{{1,2}})(?:st|nd|rd|th)?\s+)?(?P<month>{_MONTH})(?:\s+(?P<year>(?:19|20)\d{{2}}))?\b"
     rf"|\b(?P<iso>(?:19|20)\d{{2}}-\d{{2}}-\d{{2}})\b",
     re.I,
 )
@@ -331,6 +333,9 @@ def _scan_dates(scanner: _Scanner) -> None:
             continue
         if match.group("iso"):
             year, month, day = (int(part) for part in match.group("iso").split("-"))
+        elif match.group("mf_month"):
+            month = MONTHS[match.group("mf_month").lower()]
+            year, day = int(match.group("mf_year")), int(match.group("mf_day"))
         else:
             if not match.group("day") and not match.group("year"):
                 continue  # a bare month name ("in March") is not a date figure
