@@ -4,6 +4,122 @@ GroundedAI evaluates retrieval and answers offline, on a version-controlled data
 deterministic metrics. No judge model is used. All numbers below come from report files in
 `evaluation/reports/published/`; nothing was typed in by hand.
 
+## Engineering challenges in detail
+
+The README summarises these in one table. Each challenge below gives the evidence behind it;
+the figures come from the reports and sections cited.
+
+### 1. Fluent answers that the documents do not support
+
+- **Challenge:** an answer can read well and carry a citation while the cited passage says
+  something else. Small local models do this often.
+- **Approach:** treat the model's citations as claims to check, not as evidence. Compare each
+  statement with every passage the model received, so the check still works when citations are
+  missing or wrong.
+- **Solution:** the claim check
+  ([`generation/claims.py`](../backend/groundedai/generation/claims.py)) gives each statement a
+  status and the exact supporting sentence, with character offsets. Chunks store their page
+  breaks (migration `0002_chunk_page_breaks`), so every quote carries the page on which it
+  starts.
+- **Result:** with qwen2.5:1.5b on the 56-question set, 101 of 117 statements were matched to an
+  exact quote (claim match rate 0.863, report `…T093836Z`). The browser test checks the quoted
+  sentence and its page. A match means the words and figures were found; it does not prove the
+  statement true.
+
+### 2. A small model that ignores the citation format
+
+- **Challenge:** on the 56-question set, qwen2.5:1.5b used the required `[S#]` labels in 30% of
+  answers. Otherwise it wrote `[Source S1]`, document titles or bare numbers. Qwen2.5-0.5B
+  sometimes replied with bracketed fragments only.
+- **Approach:** separate a malformed citation from an unsupported statement, and validate every
+  label against the passages that were actually sent.
+- **Solution:**
+  - *Found in a passage, not cited* and *cited the wrong passage* attach the passage that
+    contains the statement.
+  - Labels that point to no passage become warnings.
+  - With `claims-v2`, a reply made only of bracketed fragments is *invalid output*.
+  - A full answer that a model wrapped in brackets is unwrapped instead of hidden. This was
+    found on real answers and has a regression test.
+- **Result** (56-question set):
+  - citation-label validity 1.000;
+  - 80% of statements cited to the passage that contains them;
+  - malformed citations remain in 17 of 47 answers. GroundedAI works around this model
+    limitation; it does not fix it.
+
+### 3. Reporting conflicting sources without false alarms
+
+- **Challenge:** the first heuristic, `figures-v1`, flagged sentences from different documents
+  that state different figures. It missed both conflict questions of the 56-question set and
+  paired unrelated figures, such as a €300 stipend with 28 days of leave
+  ([section](#the-figure-conflict-check-published-2026-10-13-replaced-on-2026-10-14)).
+- **Approach:** measure misses and false alarms on 30 held-out cases committed before the
+  replacement was written.
+- **Solution:** a disagreement check that compares values on the question's topic, keeps values
+  for different dates or groups apart, and shows both quotes. Real model answers later showed it
+  pairing two organisations' prices, so it now ignores documents that never mention an
+  organisation named in the question (regression test).
+- **Result:** 12 of 16 disagreements found, with 0 false alarms in 14 cases (`figures-v1`: 6
+  found, 3 false alarms). The model stated the conflict in 0 of 2 conflict questions, which is
+  why the UI shows both quotes instead of relying on the answer.
+
+### 4. Refusing when evidence is missing, and only then
+
+- **Challenge:** early runs refused many answerable questions. Qwen2.5-0.5B refused 11 of 19
+  answerable development questions.
+- **Approach:**
+  - Find the cause first. In 27 of 29 wrong refusals in the published run, the evidence was
+    already in the top 5 passages, so retrieval was not the cause.
+  - Try prompt drafts only on a separate development set, under an acceptance rule fixed
+    before each draft ran.
+  - Ablate one factor at a time on the 0.5B model. This showed that prompt changes only
+    traded refusals for invented facts
+    ([section](#2026-10-18-the-pdf-journey-with-a-real-local-model)).
+- **Solution:** the answer-v2 prompt ([how it was developed](#how-answer-v2-was-developed); the
+  next draft was rejected under the fixed rule when correct behaviour fell from 0.88 to 0.76),
+  then a larger local model, qwen2.5:1.5b, instead of more prompt tuning.
+- **Result:**
+  - 56-question set: 42 of 43 answerable questions answered, 8 of 10 should-refuse questions
+    refused.
+  - Development set: 2 false refusals in 19, both with the evidence retrieved.
+
+### 5. An evaluation that could grade its own work
+
+- **Challenge:** one author writes the checks, the data and most labels. Tuning against the
+  reported numbers would make them meaningless.
+- **Approach:** keep development data, test data and reported results apart, and record enough
+  to rerun every result.
+- **Solution:**
+  - a 660-case reliability suite for the checks (198 development and 462 test cases); the test
+    split is kept out of the repository, pinned by hashes and scored once per check version;
+  - every report records the commit, dataset fingerprint, settings, hardware and power source;
+  - recorded model outputs are replayed through new checks only after the rebuilt index
+    reproduces the original results
+    ([`scripts/revalidate_recorded_answers.py`](../scripts/revalidate_recorded_answers.py)).
+- **Result:**
+  - On the test split, the 2026-10-18 version of `claims-v2` caught 69% of answers that miss
+    the question (`claims-v1`: none), but paraphrase acceptance fell from 0.63 to 0.51.
+  - Its later revision has development-split results only, so `claims-v2` stays opt-in
+    ([RELIABILITY_V2.md](RELIABILITY_V2.md)).
+
+### 6. Local inference, and PDFs that fail
+
+- **Challenge:** the app must run on a laptop CPU without a hosted API. It must also handle
+  damaged files, scanned PDFs, and files that are not PDFs at all.
+- **Approach:** make every model optional and every failure explicit.
+- **Solution:**
+  - three generators behind one interface: a deterministic extractive default, Ollama and
+    transformers;
+  - a missing model returns `503 model_unavailable` with the fix, never a silent fallback;
+  - uploads are checked for type, size, the `%PDF-` header and text encoding;
+  - PDFs without a text layer get an explicit "OCR is not supported" message, and unreadable
+    files are deleted with the reason kept;
+  - the default test suite uses a fake Ollama HTTP server, so it needs no model or network.
+- **Result:**
+  - the 24-check browser journey passes with the default generator and with qwen2.5:1.5b
+    ([TESTING.md](TESTING.md)). It covers a damaged PDF, a PDF without text, the right page
+    quoted, no answer from an unselected document, and no stale answers;
+  - qwen2.5:1.5b takes a median of 18 s per answer on the CPU.
+
 ## Dataset
 
 `evaluation/datasets/groundedai-synthetic-v1` (fingerprint `fa56ebd64e3b1eee`): 14 synthetic
@@ -483,7 +599,8 @@ free"), "Therefore, the answer is 12 items" and a caveat the model added ("this 
 was provided in 2026 and may have changed") were not confirmed, while each answer's fact was
 quoted with the right page (2, 3, 3 and 1). One should-refuse question on the development set
 was answered with a true statement about a different subject, which the default check marks
-verified (the known "beside the question" weakness; `claims-v2` addresses it). No conflict
+verified (the known "beside the question" weakness; `claims-v2` marks it verified too, because
+its relevance check does not recognise that question type). No conflict
 was stated, as on 2026-10-13.
 
 **Fixes from these runs** (each with a regression test; the reliability suite's development
