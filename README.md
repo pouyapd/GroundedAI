@@ -12,313 +12,345 @@
 </p>
 
 <p align="center">
-  <a href="#key-results">Key results</a> ·
-  <a href="#how-it-works">How it works</a> ·
-  <a href="#screenshots">Screenshots</a> ·
+  <a href="https://pouyapd.github.io/GroundedAI/"><img alt="Open the live demo" src="https://img.shields.io/badge/%E2%96%B6%20Live%20demo-runs%20in%20your%20browser-2ea043?style=for-the-badge"></a>
+</p>
+
+<p align="center">
+  <a href="#live-demo">Live demo</a> ·
+  <a href="#what-it-does">What it does</a> ·
+  <a href="#engineering-challenges">Engineering challenges</a> ·
+  <a href="#results">Results</a> ·
+  <a href="#limitations">Limitations</a> ·
+  <a href="#future-work">Future work</a> ·
   <a href="#quick-start">Quick start</a> ·
-  <a href="#reproduce-the-evaluation">Reproduce</a> ·
-  <a href="#what-is-verified-and-what-is-not">Verified / not verified</a> ·
   <a href="docs/ARCHITECTURE.md">Architecture</a>
 </p>
 
-Retrieval-augmented generation (RAG) systems answer from documents, but their citations are
-usually taken on trust, and their retrieval settings are chosen by habit. **GroundedAI** is a
-complete RAG application that treats both as things to check. It ingests PDF and text documents,
-retrieves passages with lexical, dense or hybrid search, and asks a language model to answer
-only from those passages. The server then validates every citation against the passages the
-model actually received, checks every statement of the answer against every retrieved passage
-(and shows the exact supporting sentence, or says that none was found), reports retrieved
-documents that disagree without choosing between them, flags planted instructions in retrieved
-documents, and says so when the evidence is not enough. A built-in evaluation
-framework measures retrieval and answer behaviour on a versioned dataset, with confidence
-intervals, so configuration choices rest on numbers rather than assumptions.
+Retrieval-augmented generation (RAG) answers questions from documents, but its citations are
+usually taken on trust. **GroundedAI** is a local RAG application that checks them.
 
-Everything runs on a laptop CPU with no paid service: the default mode needs no model at all,
-and local models (sentence-transformers, Ollama, transformers) are optional.
+- Upload a PDF, ask a question, and every statement in the answer is compared with the
+  passages the model actually received.
+- Statements found in a document come with the exact quoted sentence and its page; statements
+  that are not found are marked.
+- Sources that disagree are shown side by side.
+- When the documents don't say, the reply is a plain "not enough evidence".
 
-## Key results
+Everything runs on a laptop CPU, with no paid service or cloud API, and the
+[live demo](https://pouyapd.github.io/GroundedAI/) runs it entirely in your browser.
 
-*Synthetic dataset written for this project (14 fictional documents, 56 questions, 43 with
-evidence). Intel i7-1255U laptop, no GPU, mains power. Small sample: read the intervals.*
+<p align="center">
+  <a href="https://pouyapd.github.io/GroundedAI/"><img src="docs/images/demo-answer-card.png" width="860"
+     alt="GroundedAI live demo: the answer that a single adult ticket from Kessport to Mirrow costs 14 euros, marked as supported by the cited passage, with the quoted sentence from page 2 of the Harbourline Ferries Passenger Guide"></a>
+</p>
+<p align="center"><sub>A real answer from the live demo: each statement with its status, the quoted sentence and its page.</sub></p>
 
-- **Hybrid retrieval did not beat BM25 here.** BM25 alone reached Recall@5 0.965 and MRR 0.934;
-  hybrid Reciprocal Rank Fusion with bge-small reached the same Recall@5 (0.965) and MRR 0.915. No
-  dense, hybrid or reranked configuration is distinguishable from BM25 (paired 95% bootstrap
-  intervals all include zero), and BM25 is the fastest (3.6 ms median vs. 84 ms). At the
-  application's default chunking (800/120 characters) BM25 reached Recall@5 1.000 and the shipped
-  hybrid default 0.977. The questions reuse the documents' wording, which favours lexical search;
-  the dataset limitation is stated in the report rather than hidden.
-- **A valid citation is not a correct answer.** The deterministic extractive baseline has 100%
-  citation validity by construction, yet it answered 5 of the 10 questions it should have refused,
-  each with a valid citation (for "What is the capital of Australia?" it quoted a sentence about
-  hotel limits in capital cities). This is why GroundedAI reports citation validity, sentence
-  support and abstention behaviour separately.
-- **A revised prompt stopped wrong refusals; citations are still the weak point.** With the
-  original prompt, Qwen2.5-0.5B refused 29 answerable questions although retrieval had found the
-  evidence. The `answer-v2` prompt, developed on a separate 25-question development set, was then
-  frozen and run once on the evaluation set. With it, the configured model `qwen2.5:1.5b`
-  (Ollama, CPU) answered all 43 answerable questions and found 94% of the key facts (v1: 84% and
-  77%; both differences have paired 95% intervals above zero). It also refused fewer of the
-  questions it should refuse (7 of 10, v1: 9 of 10), found neither of the two conflicts, and put
-  a valid `[S#]` citation on only 13 of its 49 answers.
-- **Its answers come from the passages; its citations do not.** Re-checking those recorded
-  outputs statement by statement (no new model run) found 116 of its 118 statements in a
-  retrieved passage, 47 of 49 answers fully matched, and 90% of key facts traced to the dataset's
-  gold evidence; 9% of the statements it did cite were cited to a passage that does not contain
-  them. The application
-  now attaches the passage it found and says when the model's citation was wrong or missing. The
-  check is lexical: its three wrong answers to unanswerable questions consist of true statements
-  and pass it ([audit](docs/RELIABILITY_AUDIT.md)).
-- **Disagreeing sources are shown, not resolved.** A new check found 12 of 16 disagreements in a
-  held-out case set committed before the check was written (0 false alarms in 14 cases without
-  one; the earlier figure check: 6 found, 3 false alarms). On the evaluation set it surfaces one of
-  the two conflicts.
+This is a portfolio and research project, evaluated on small synthetic datasets. It has not
+been independently validated, and its checks are rule-based ([Limitations](#limitations)).
 
-| Retrieval configuration (n = 43) | Recall@5 | MRR | nDCG@5 | p50 latency |
-|---|:---:|:---:|:---:|:---:|
-| BM25 (SQLite FTS5) | **0.965** [0.91, 1.00] | **0.934** [0.86, 0.99] | **0.931** [0.87, 0.98] | 3.6 ms |
-| Dense, bge-small-en-v1.5 | 0.942 [0.87, 1.00] | 0.879 [0.80, 0.95] | 0.886 [0.80, 0.96] | 104 ms |
-| Hybrid RRF (BM25 + bge-small) | **0.965** [0.91, 1.00] | 0.915 [0.84, 0.98] | 0.920 [0.85, 0.97] | 84 ms |
-| Hybrid RRF + cross-encoder rerank | 0.942 [0.88, 0.99] | 0.920 [0.85, 0.98] | 0.917 [0.84, 0.98] | 810 ms |
+**Built with:** Python 3.12, FastAPI, LangChain, SQLAlchemy + Alembic, SQLite FTS5 or
+PostgreSQL + pgvector, sentence-transformers, Ollama, React 19 + TypeScript (Vite), pytest,
+Playwright (browser check), Docker, GitHub Actions.
 
-| Answer evaluation (56 questions) | Correct behaviour | Answerable answered | Correct refusals | Key-fact recall | Citation format followed | p50 latency |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| Extractive baseline (not an LLM) | 0.660 | 30 of 43 | 5 of 10 | 0.558 | 100% | < 0.1 s |
-| Qwen2.5-0.5B, prompt v1 (transformers) | 0.340 † | 8 of 43 | 10 of 10 | 0.163 | 13% | 32 s |
-| Qwen2.5-0.5B, prompt v2 | 0.528 | 21 of 43 | 7 of 10 | 0.302 | 8% | 38 s |
-| qwen2.5:1.5b, prompt v1 (Ollama, Q4_K_M) | 0.830 | 36 of 43 | 9 of 10 | 0.767 | 30% | 11 s |
-| **qwen2.5:1.5b, prompt v2** (default Ollama setup) | **0.906** | **43 of 43** | 7 of 10 | **0.942** | 27% | 10 s |
+## Live demo
 
-*Hybrid RRF retrieval with bge-small, top 5 passages, greedy decoding, Intel i7-1255U, no GPU,
-mains power. "Correct behaviour" counts an expected answer as correct even if its content is
-wrong; key-fact recall measures content. Neither conflict question was handled correctly by any
-configuration. † The published 0.377, re-scored with the current refusal rule.*
+**[Open the live demo →](https://pouyapd.github.io/GroundedAI/)** No installation and no
+account; nothing you type or upload leaves the browser tab.
 
-| Recorded outputs re-checked (no model run) | Statements found in a passage | Answers with every statement found | Key facts traced to gold evidence | Model citations pointing to the right passage |
-|---|:---:|:---:|:---:|:---:|
-| qwen2.5:1.5b, prompt v2 | 98% (116 of 118) | 47 of 49 | 90% | 88% |
-| qwen2.5:1.5b, prompt v1 | 86% | 30 of 37 | 86% | 90% |
-| Qwen2.5-0.5B, prompt v2 | 72% | 15 of 25 | 57% | 79% |
+- **The real backend, in your browser.** GroundedAI's Python code runs as WebAssembly
+  (Pyodide): upload checks, PDF extraction, hybrid retrieval, the prompt and the claim check.
+  Two synthetic sample PDFs are loaded, with example questions; you can also upload a PDF.
+- **Two generators.** The default extractive generator answers instantly and is not a language
+  model. Optionally, Qwen2.5-1.5B-Instruct runs on your GPU (WebGPU, about 880 MB downloaded
+  once); its answers go through the same claim check.
+- **Limits.** The first load takes about 15–60 s (about 26 MB, then cached). The demo uses the
+  word-overlap embedder, keeps data only in the tab, and has no evaluation runs. Its model is a
+  different 4-bit build from the one evaluated below, so its answers can differ. Details:
+  [docs/ONLINE_DEMO.md](docs/ONLINE_DEMO.md).
 
-Full tables, metric definitions and failure analysis: [docs/EVALUATION.md](docs/EVALUATION.md).
+<p align="center">
+  <img src="docs/images/demo-start.png" width="860"
+       alt="The live demo's start page: a short explanation, the choice between the extractive generator and Qwen2.5-1.5B-Instruct on the GPU, the question form with the document selector, and example questions about the two sample PDFs">
+</p>
 
-## How it works
+## What it does
+
+- **Documents.** PDF, text and Markdown uploads are validated (type, size, file header,
+  encoding) and split into chunks that keep their page numbers. They are indexed for BM25
+  and vector search. Unreadable files are refused with a reason.
+- **Questions.** Ask across all documents or only selected ones. Hybrid retrieval (BM25 +
+  embeddings, Reciprocal Rank Fusion) feeds a versioned prompt to one of three generators: a
+  deterministic extractive demo (default, no model), a local model through
+  [Ollama](https://ollama.com), or transformers.
+- **Checks.** Before generation, conflicting passages and instruction-like text are flagged.
+  After generation, citation labels are validated and every statement gets a status, a quote
+  and a page.
+- **Evaluation.** Versioned datasets and recorded model runs; every report records the
+  hardware, model revision and power source. A 660-case suite tests the checks themselves,
+  and recorded model outputs can be replayed through new checks.
+- **Operations.** FastAPI with OpenAPI docs, SQLite or PostgreSQL + pgvector, Alembic
+  migrations, health probes, Prometheus metrics, rate limits, optional API key, Docker.
+
+<p align="center">
+  <img src="docs/screenshots/journey-answer-qwen15-light.png" width="860"
+       alt="Ask page with the Harbourline Ferries Passenger Guide selected: the qwen2.5:1.5b answer that a single adult ticket costs 14 euros, the claim check, and the supporting quote attributed to page 2">
+</p>
+<p align="center"><sub>The full application run locally with qwen2.5:1.5b through Ollama (an earlier version of
+the interface), on one of the sample PDFs in <code>examples/</code>. More screenshots:
+<a href="docs/SCREENSHOTS.md">docs/SCREENSHOTS.md</a>.</sub></p>
+
+## How answers are checked
+
+Each statement gets one status. A status says whether the statement's words and figures were
+**found** in a retrieved passage; it is not a judgement of truth.
+
+| Status shown | Meaning |
+|---|---|
+| Supported by the cited passage | the passage the model cited contains it |
+| Found in a passage, not cited | another retrieved passage contains it; GroundedAI adds that source |
+| Cited the wrong passage | the cited passage does not contain it, another one does (shown instead) |
+| Partly found | some of it is in a passage, not enough to count as found |
+| Not found in the sources | no retrieved passage contains it |
+
+The answer can also be *Not enough evidence* or *Invalid model output* (no usable answer text),
+and it can come with warnings: conflicting sources (with both quotes), invented citation labels,
+and instruction-like source text. Quotes are always the document's own text, with character
+offsets.
+
+The comparison is lexical and rule-based: word forms, figures with units, dates and limit
+words such as "at least". `claims-v1` is the default. `claims-v2` is opt-in
+(`GROUNDEDAI_CLAIM_CHECK=claims-v2`): it judges each statement on the few sentences that carry
+it, reads equivalent wordings, ordinals and names, and compares negation sentence by sentence.
+It stays opt-in because its gains were measured on development data that was also used to
+design it ([details](docs/RELIABILITY_V2.md)).
+
+## Architecture
 
 ```mermaid
 flowchart LR
   UI["React UI"] --> API["FastAPI /api/v1"]
   CLI["CLI"] --> SVC
   API --> SVC["Services: ingestion · QA · evaluation · status"]
-  SVC --> RET["Retrieval: BM25 + dense vectors → RRF → optional rerank"]
+  SVC --> RET["Retrieval: BM25 + vectors → RRF → optional rerank"]
   RET --> DB[("SQLite FTS5 + vectors  or  PostgreSQL + pgvector")]
-  SVC --> GEN["LangChain: prompt → chat model"]
-  GEN --> LLM["extractive demo · Ollama · transformers"]
-  SVC --> PRE["Before generation: disagreement check · injection flags → notes to the model"]
-  SVC --> CHK["After generation: citation check · claim check against every passage · refusal detection"]
+  SVC --> PRE["Before generation: disagreement check · injection flags"]
+  SVC --> GEN["LangChain prompt → generator (extractive demo · Ollama · transformers)"]
+  SVC --> CHK["After generation: citation check · claim check · refusal detection"]
 ```
 
-1. **Ingest.** Uploads are validated (type, size, magic bytes, encoding), parsed with page
-   numbers, split into overlapping chunks, embedded and indexed. Identical files are detected by
-   hash; failed documents can be re-ingested; deleting a document leaves no orphaned chunks.
-2. **Retrieve.** Full-text search (BM25 on SQLite, `ts_rank_cd` on PostgreSQL) and vector search
-   run in parallel and are fused with Reciprocal Rank Fusion. Every result carries its lexical
-   rank, dense rank, fused and rerank scores, matched terms and timings.
-3. **Generate.** A LangChain chain sends the policy and the numbered passages as separate
-   messages, using a versioned prompt (`answer-v2` by default; `answer-v1` reproduces the earlier
-   reports). Two deterministic checks run first. The disagreement check finds passages from
-   different documents that give different values for what is asked (or a requirement and its
-   denial), separates values for different dates or groups, and returns both quotes; the model
-   gets a short note. Passages with instruction-like text are flagged. If nothing relevant is
-   retrieved, no model is called and the answer says so.
-4. **Check.** Each `[S#]` label must match a passage the model received. Every statement is then
-   compared with every retrieved passage (figures with units, and most of its words): it is
-   supported by its citation, cited to the wrong passage, found in a passage the model did not
-   cite, partly found, or not found; the exact supporting sentence is returned. Instruction-like
-   passage text never counts as evidence. Refusals are recognised even when a small model
-   misspells them or adds a citation; a reply with only citation markers is reported as invalid.
-5. **Measure.** The same pipeline runs offline over a versioned dataset and writes JSON, CSV and
-   Markdown reports with bootstrap intervals and the hardware and power source.
+Upload → validate → extract text with page numbers → chunk → embed and index → retrieve →
+check for disagreement and planted instructions → generate from numbered passages → validate
+citations and check every statement → answer with quotes, pages and warnings. Design
+decisions: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-If the configured model is unavailable, the API returns `503 model_unavailable` with setup
-guidance; it never switches to a different model on its own. Design decisions:
-[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+The [live demo](docs/ONLINE_DEMO.md) runs this same application in the browser: the UI sends
+its requests to a Web Worker running the Python package in Pyodide instead of a server, and the
+optional model runs on the visitor's GPU with WebLLM.
 
-## Screenshots
+## Engineering challenges
 
-Taken from the running application with the sample corpus and bge-small embeddings. The two
-Ollama screenshots are from 2026-10-13, before the claim check existed.
+| Challenge | Engineering decision | Evidence |
+|---|---|---|
+| **Fluent answers the sources don't support.** Model citations can't be taken on trust. | Check every statement against every passage the model received, not only the cited one. Return the exact sentence with character offsets and its page (chunks store page breaks). | 101 of 117 statements matched to an exact quote (qwen2.5:1.5b, 56-question set). The browser test checks the quoted sentence and its page. |
+| **Citations in the wrong format.** qwen2.5:1.5b used the required `[S#]` labels in 30% of answers. | Separate "malformed citation" from "unsupported statement", and attach the passage that actually contains the statement. With claims-v2, bracket-only replies become *invalid output*. | No answer cited a label that does not exist; 80% of statements were cited to the passage that contains them. 17 of 47 answers still had malformed citations. |
+| **Conflicts without false alarms.** The first heuristic missed both conflict questions and paired unrelated figures. | Replace it with a disagreement check measured on 30 held-out cases written before the check. It keeps values for different dates or groups apart and ignores documents that don't mention the organisation asked about. | 12 of 16 disagreements found, 0 false alarms in 14 cases (old heuristic: 6 found, 3 false alarms). |
+| **False refusals.** Early runs refused answerable questions. | Diagnose before tuning: in 27 of 29 wrong refusals the evidence had been retrieved. Prompt drafts were tested only on a separate development set, under an acceptance rule fixed in advance. The next step was a larger local model, not more prompt tuning. | 56-question set: 42 of 43 answerable questions answered, 8 of 10 should-refuse questions refused. |
+| **An evaluation that could grade its own work.** One author writes the checks, data and labels. | Separate development and test splits; the test split stays out of the repository, pinned by hashes and scored once per check version. Reports record commit, settings and hardware, and recorded outputs are replayed only if the rebuild reproduces them. | `claims-v2` stays opt-in. On the test split, its 2026-10-18 version caught 69% of off-target answers (`claims-v1`: none), but accepted fewer correct paraphrases (0.63 → 0.51). |
+| **Local-only inference, and broken PDFs.** | Three generators behind one interface. A missing model returns `503 model_unavailable`, never a silent fallback. Scanned PDFs get an explicit no-OCR message. | The 24-check browser journey passes with the default generator and with qwen2.5:1.5b; the default test suite needs no model or network. |
 
-| Claim check: each statement with the exact supporting sentence (extractive generator) | Disagreeing sources shown side by side, with values and dates (extractive generator) |
-|---|---|
-| ![Answer with the verdict Every statement found in the sources, the claim check listing one statement as Supported by the cited passage with the quoted sentence from the travel policy, and the passage used as evidence](docs/screenshots/ask-claim-check-light.png) | ![Answer panel where the generator found no answer but a Different values for different dates panel shows the travel policy's 140 and 110 euro hotel limits next to the finance FAQ's 120 euro limit, updated May 2025](docs/screenshots/ask-disagreement-light.png) |
-| **Ask, with qwen2.5:1.5b through Ollama: a correct answer without a citation, flagged as unverified (before the claim check)** | **Ask, extractive demo generator: checked citation and an injection warning (before the claim check)** |
-| ![Ask view with an Ollama qwen2.5:1.5b answer that is correct but has no citation; the badge says Not grounded and a warning says to treat it as unverified](docs/screenshots/ask-ollama-light.png) | ![Ask view with a cited answer, sentence check and a warning about a retrieved document that contains planted instructions](docs/screenshots/ask-light.png) |
-| **Evaluation: qwen2.5:1.5b with the answer-v2 prompt** | **Evaluation: retrieval benchmark** |
-| ![Evaluation dashboard for the qwen2.5:1.5b answer-v2 report: 91% correct behaviour, 70% correct refusals, 94% key-fact recall, 27% citation format followed, and results by category](docs/screenshots/evaluation-ollama-light.png) | ![Evaluation dashboard with Recall@5, MRR and nDCG@5 per configuration, 95% intervals and latency](docs/screenshots/evaluation-light.png) |
-| **Documents (dark theme)** | **Operations on a phone** |
-| ![Documents table with status, pages and chunks](docs/screenshots/documents-dark.png) | ![Operations page at phone width](docs/screenshots/operations-mobile-dark.png) |
+Each challenge in more detail: [docs/EVALUATION.md](docs/EVALUATION.md#engineering-challenges-in-detail).
 
-A static, read-only version of the UI can be built with `npm run build:demo`. Ten dataset
-questions (five where the extractive generator behaves as expected, five known failures) were
-recorded with every retrieval mode and passage count, so the Hybrid / Lexical / Dense and
-passage controls replay the recording made with exactly that setting, and each answer shows the
-dataset's expected result. The published reports are included; nothing is generated live. See
-[docs/DEPLOYMENT_STATUS.md](docs/DEPLOYMENT_STATUS.md) for where it is hosted and
-[docs/UI_CONTROL_AUDIT.md](docs/UI_CONTROL_AUDIT.md) for how every control was checked.
+## Results
+
+All datasets were written for this project and describe fictional organisations. Expected
+behaviours and key facts were written by the project author; the reliability suite's labels
+were written and reviewed by models. The numbers come from small samples on one laptop and do
+not transfer to other domains.
+
+The development set was used to develop the prompt. The 56-question evaluation set was run
+once, with the frozen prompt.
+
+| qwen2.5:1.5b via Ollama, CPU, default checks | Development set (25) | Evaluation set (56) |
+|---|---|---|
+| Answer questions: correct, every statement verified | 13 of 19 | 29 of 41 |
+| — correct facts, not every statement verified | 3 | 10 |
+| — partly correct / wrong | 1 / 0 | 0 / 1 |
+| — false refusals | 2 | 1 |
+| Should refuse: refused / answered anyway | 5 / 1 | 8 / 2 |
+| Conflict questions: conflict stated by the model | 0 of 2 | 0 of 2 |
+| Answers with malformed citations | 6 of 18 | 17 of 47 |
+| Correct and fully verified with `claims-v2` (opt-in) | 14 of 19 | 26 of 41 (replay) |
+| Median time per answer | 21 s | 18 s |
+
+- **"Correct"** means the answer contains every key fact. **"Not every statement verified"**
+  usually means that an extra sentence or a paraphrase was not matched to a passage. It is
+  counted apart from wrong answers.
+- **Conflict questions:** the development column counts its 2 among the 19 answer questions;
+  the evaluation column counts them separately.
+- **The `claims-v2` replay** re-checks the recorded answers without calling the model.
+- **Retrieval:** on the development set, the evidence was among the 5 passages for all 19
+  answerable questions, so both false refusals came from the model.
+- **Retrieval (evaluation set):** on its 43 questions with evidence, BM25 alone reached
+  Recall@5 0.965. Hybrid retrieval with bge-small matched it, and no configuration was
+  distinguishable from BM25. The questions reuse the documents' wording, which favours
+  lexical search.
+- **Why the behaviours are scored separately:** a correct answer can carry an unsupported
+  sentence, a supported statement can cite the wrong passage, and a refusal can be right or
+  wrong. The fixes differ too (retrieval, prompt or model, claim check, conflict check), so a
+  single combined score would hide which part failed.
+
+Full tables and methodology: [docs/EVALUATION.md](docs/EVALUATION.md). Reproduce:
+[docs/EVALUATION.md#reproducing](docs/EVALUATION.md#reproducing).
+
+## Limitations
+
+- **The claim check is lexical, not an entailment model.** A "found" statement can still be
+  wrong or beside the question, and a correct paraphrase can be "partly found". Known misses:
+  - a true statement about something other than what was asked;
+  - a rate whose unit differs ("£1 per minute" accepted for "£1 per 15 minutes").
+- **The tested local models are small** (qwen2.5:1.5b, Qwen2.5-0.5B). qwen2.5:1.5b usually
+  gives the right fact, but rarely uses the required citation format, has never stated a
+  conflict, and answers some questions it should refuse.
+- **The disagreement check is pattern-based.** It misses conflicts that need world knowledge,
+  can pair statements about different groups when a sentence doesn't name its group, and
+  never decides which source is right.
+- **The evaluation data is synthetic, small and lexically easy.** GroundedAI does not
+  eliminate hallucinations or guarantee that an answer is correct.
+- **No OCR, tables or images;** text processing is English-focused. A quote's page is the
+  page on which it starts.
+
+## Future work
+
+1. **Benchmark more local models under the same conditions**, for example Mistral 7B through
+   the existing Ollama provider. The datasets, settings, checks and scoring stay the same, so
+   the comparison is fair. The development-set errors point mostly at the model (refusals,
+   citation format, unstated conflicts).
+2. **Improve claim-level verification and citation quality**: off-topic true statements, rate
+   units, strict paraphrase handling and malformed citations. The method is error analysis on
+   development data, with changes confirmed on a new held-out set.
+3. **Improve conflict detection and refusals**: find conflicts stated in words rather than
+   figures, and reduce false refusals (2 of 19 on the development set) without answering
+   unanswerable questions (1 of 6 answered).
+4. **Expand regression tests** with the failure cases observed in model runs. Bug fixes already
+   come with regression tests ([CONTRIBUTING.md](CONTRIBUTING.md)).
+5. **Compare models on answer quality, verification coverage, latency and memory**, and
+   publish the results next to the qwen2.5:1.5b figures once they have been measured.
 
 ## Quick start
 
-Requires Python 3.12+ and Node 22+ (developed with Python 3.12.7 and Node 24).
+Requirements: Python 3.12 or 3.13, Node.js 22 or later, and about 1 GB of disk without
+models. Ollama is optional.
 
 ```bash
 git clone https://github.com/pouyapd/GroundedAI.git && cd GroundedAI
 python -m venv .venv
-source .venv/bin/activate                 # Windows PowerShell: .venv\Scripts\Activate.ps1
+source .venv/bin/activate          # Windows PowerShell: .venv\Scripts\Activate.ps1
 pip install -r backend/requirements/dev.txt
 pip install --no-deps -e backend
-
-groundedai ingest evaluation/datasets/groundedai-synthetic-v1/corpus    # sample documents
-groundedai ask "During a boil water notice, how long should tap water be boiled?"
-groundedai serve                          # API on http://127.0.0.1:8000, docs at /docs
+cp .env.example .env               # optional: every setting has a safe default
+groundedai serve                   # API on http://127.0.0.1:8000, OpenAPI docs at /docs
 ```
 
-UI in a second terminal: `cd frontend && npm ci && npm run dev`, then open http://localhost:5173.
+In a second terminal: `cd frontend && npm ci && npm run dev`, then open http://localhost:5173.
+The SQLite database in `./data` is created and migrated at startup.
 
-The default configuration uses the **hashing embedder** (word overlap, no model) and the
-**extractive demo generator** (it copies sentences from the sources; it is not a language model).
-The UI and every API response say which generator produced an answer.
+**Try it.** On **Documents**, upload `examples/harbourline-ferry-guide.pdf` and
+`examples/orchard-library-rules.pdf`, then press **Ask** next to the ferry guide:
 
-**Local models (optional).** Install the ML extra (CPU-only PyTorch), download models explicitly,
-and point GroundedAI at them:
+- "How much does a single adult ticket to Mirrow cost?" → 14 euros, quoted from page 2.
+- "How many items can members borrow?" → not enough evidence in the ferry guide. Choose the
+  library rules under **Search in** and ask again → 12 items.
+
+**A local model.** The default extractive generator copies sentences from the passages; it is
+not a language model and needs no download. To answer with a local model instead:
 
 ```bash
-pip install --extra-index-url https://download.pytorch.org/whl/cpu -r backend/requirements/ml.txt
-pip install --no-deps -e backend
-python scripts/download_models.py --preset recommended      # bge-small + reranker, asks first
-ollama pull qwen2.5:1.5b                                    # https://ollama.com, about 1 GB
-export GROUNDEDAI_GENERATION_PROVIDER=ollama GROUNDEDAI_EMBEDDING_PROVIDER=sentence-transformers
-export GROUNDEDAI_EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
-export GROUNDEDAI_EMBEDDING_QUERY_PREFIX="Represent this sentence for searching relevant passages: "
+ollama pull qwen2.5:1.5b                          # about 1 GB; install Ollama from https://ollama.com
+export GROUNDEDAI_GENERATION_PROVIDER=ollama      # PowerShell: $env:GROUNDEDAI_GENERATION_PROVIDER="ollama"
 groundedai serve
 ```
 
-Verified on the development laptop with Ollama 0.40.3 and `qwen2.5:1.5b` (Q4_K_M, digest
-`65ec06548149`): about 1.3 GB of memory for the model runner and 10 s per answer (median) on an
-i7-1255U without a GPU. The prompt can be switched with `GROUNDEDAI_PROMPT_VERSION`
-(`answer-v2`, default, or `answer-v1`).
+If Ollama or the model is missing, questions return `503 model_unavailable` with the fix.
+Optional semantic embeddings: [docs/MODELS.md](docs/MODELS.md). Docker Compose (PostgreSQL +
+pgvector): [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). Common problems:
+[docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
+The Compose stack was last run end to end locally on 2026-10-13; CI builds and smoke-tests the
+image and validates the Compose file on every pull request.
 
-Docker (PostgreSQL + pgvector + API/UI): `cp .env.example .env`, set `POSTGRES_PASSWORD`, then
-`docker compose up --build` (verified on Windows with Docker Desktop: build, health checks,
-ingestion, questions in all three retrieval modes, restart with data kept, and shutdown).
-Details: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md),
-[docs/MODELS.md](docs/MODELS.md), [docs/RESOURCE_PROFILE.md](docs/RESOURCE_PROFILE.md).
+### Configuration
 
-## API
+All settings use the `GROUNDEDAI_` prefix ([`.env.example`](.env.example) lists them).
 
-```bash
-curl -s http://127.0.0.1:8000/api/v1/query -H "Content-Type: application/json" \
-  -d '{"question": "What are the payment terms for Aldervale suppliers?", "include_diagnostics": true}'
-```
+| Setting | Default | Options |
+|---|---|---|
+| `GENERATION_PROVIDER` | `extractive-demo` | `ollama`, `huggingface-local` |
+| `OLLAMA_MODEL`, `OLLAMA_BASE_URL` | `qwen2.5:1.5b`, `http://localhost:11434` | any pulled model; a local or remote Ollama |
+| `EMBEDDING_PROVIDER` | `hashing` (word overlap, no model) | `sentence-transformers`, `ollama` |
+| `RETRIEVAL_MODE`, `TOP_K` | `hybrid`, `5` | `lexical`, `dense`; 1 to 50 |
+| `CLAIM_CHECK` | `claims-v1` | `claims-v2` |
+| `CONFLICT_CHECK` | `disagreement-v1` | `disagreement-v2`, `figures-v1` |
+| `UNVERIFIED_ANSWERS` | `label` | `withhold`: return "not enough evidence" when no statement is found |
+| `DATABASE_URL` | SQLite in `./data` | a PostgreSQL URL (pgvector) |
+| `API_KEY`, `ENV` | none, `development` | required for `ENV=production` |
 
-The response contains the answer with `[S#]` markers, `sources` (title, page, excerpt, scores,
-injection flags, which claims each passage supports), `claims` (status and exact quote with
-character offsets per statement), `verification` (verdict and counts), `conflicts` (disagreeing
-passages with values and dates), `sentences` (the strict `[S#]` check), `citation_check`,
-`warnings`, `provider` (including `is_llm`), `timings` and `usage`. Other endpoints: document upload,
-listing, chunks, re-ingest and delete; retrieval-only `/retrieve`; evaluation reports and runs;
-JSON and Prometheus metrics; health and readiness. Reference with a recorded example response:
-[docs/API.md](docs/API.md).
-
-## Reproduce the evaluation
-
-```bash
-groundedai eval retrieval --config evaluation/configs/retrieval_offline.json   # no models, ~5 s
-HF_HUB_OFFLINE=1 groundedai eval retrieval --config evaluation/configs/retrieval_full.json
-groundedai eval generation --provider extractive-demo
-groundedai eval generation --provider ollama --model qwen2.5:1.5b --checkpoint data/q15.jsonl  # resumable
-python scripts/compare_generation_reports.py BASE.json OTHER.json   # paired bootstrap intervals
-python scripts/revalidate_recorded_answers.py REPORT.json   # re-check recorded outputs, no model run
-python scripts/evaluate_conflict_cases.py                   # held-out disagreement cases
-```
-
-The dataset files are hash-checked before every run, and each report records the dataset
-fingerprint, configuration, model revisions, package versions, hardware and power source.
-Retrieval metrics are deterministic (tested). Exact commands for the published reports:
-[docs/EVALUATION.md](docs/EVALUATION.md#reproducing).
+The HTTP API (`POST /api/v1/query` and the document, retrieval, evaluation and health
+endpoints) is documented in [docs/API.md](docs/API.md); a CLI covers the same tasks.
 
 ## Testing
 
 ```bash
-cd backend && ruff check groundedai tests && mypy && pytest      # offline: no models, keys or network
+cd backend && ruff check groundedai tests && ruff format --check groundedai tests && mypy && pytest
 cd frontend && npm run lint && npm run typecheck && npm test && npm run build
 python scripts/dev_postgres.py -- python -m pytest backend/tests -m postgres   # real PostgreSQL, no Docker
+python scripts/e2e_browser.py      # browser journey; needs playwright (not a project dependency)
+python scripts/e2e_demo.py         # the online demo in a browser (see docs/ONLINE_DEMO.md)
 ```
 
-Unit, integration, API, security and end-to-end tests run on SQLite with deterministic providers;
-in the test suite the Ollama client talks to a fake Ollama HTTP server (real Ollama inference was
-checked separately, see below); PostgreSQL + pgvector tests run against a real server. Counts and
-the latest results: [docs/TESTING.md](docs/TESTING.md).
+The default suite is offline: SQLite, deterministic providers and a fake Ollama HTTP server.
+No model, key or network is needed.
 
-## What is verified and what is not
+- **Latest local run (2026-10-19):**
+  - backend: 487 tests passed, plus 7 PostgreSQL tests run separately against a local
+    PostgreSQL + pgvector; strict mypy and ruff clean;
+  - front end: 77 tests passed;
+  - browser journey: 24 of 24, with the default generator and with qwen2.5:1.5b;
+  - online demo: 16 of 16 browser checks.
+- **CI** (Python 3.12 and 3.13, PostgreSQL + pgvector, front end, offline benchmark,
+  dependency audit, Docker image and Compose file): all 7 jobs pass on the release branch.
 
-| Verified | Not verified |
-|---|---|
-| 343 backend tests (offline, SQLite) and 61 front-end tests; ruff and strict mypy clean (Windows and Linux targets) | CI on the commits of 2026-10-14: they are local and have not been pushed; CI last passed (7 of 7 jobs) on `c3cfbf1` |
-| PostgreSQL 16 + pgvector: migrations, all retrieval modes, cascade delete (bundled local server) | retrieval and answer quality on real or larger document collections |
-| real Ollama inference (0.40.3, qwen2.5:1.5b) through the API, the UI and a 56-question evaluation (2026-10-13) | a model run with the claim and disagreement checks of 2026-10-14: the recorded outputs were re-checked instead, and the Ollama files have since been deleted |
-| the claim check on the recorded outputs of three model runs, with the rebuilt passages verified against every recorded result | that a "verified" statement is correct: the check is lexical; human or model judging was not done |
-| the disagreement check on 30 held-out cases written before it | larger models; any LLM-as-judge or human evaluation |
-| restart: documents, chunks and answers unchanged after restarting on the same data (test) | |
-| the full Docker Compose stack on Windows: build, health, ingestion, questions, restart, shutdown | the Ollama service inside Compose (`--profile llm`); Ollama ran natively instead |
-| retrieval benchmark rerun reproduces every published metric and interval exactly | a statistically supported advantage of hybrid retrieval over BM25 (none was found) |
-| every UI control, live and in the static demo, at desktop and phone width ([audit](docs/UI_CONTROL_AUDIT.md)) | the private claude.ai preview as rendered for a signed-in viewer (checked through its files and a local sandboxed copy) |
+Details: [docs/TESTING.md](docs/TESTING.md).
 
-## Technology
+## Privacy and security
 
-| Layer | Technology |
-|---|---|
-| API and services | Python 3.12, FastAPI, Pydantic, Uvicorn |
-| Orchestration | LangChain (prompts, LCEL chain, text splitter, Ollama and Hugging Face integrations) |
-| Storage and search | SQLAlchemy 2, Alembic; SQLite FTS5 or PostgreSQL 16 with pgvector (HNSW) |
-| Models (optional) | sentence-transformers (bge-small, MiniLM), cross-encoder reranker, Ollama, transformers |
-| UI | React 19, TypeScript, Vite; hand-written SVG charts |
-| Quality | pytest, ruff, mypy (strict), Vitest, ESLint, pip-audit, npm audit, GitHub Actions |
-| Deployment | Docker (multi-stage, non-root), Docker Compose, static demo build |
+- **Local by default.** The server binds to `127.0.0.1`, and the only outbound connection is
+  to the Ollama URL you configure. Models are never downloaded implicitly.
+- **Your files stay in `./data`** (or your PostgreSQL). Deleting a document deletes its file
+  and chunks. Question text is not logged unless you enable it.
+- **Prompt injection is reduced, not prevented.** Documents reach the model as data, and
+  instruction-like passages are flagged and never count as evidence.
+- **Single-tenant.** One API key, no per-user permissions.
+
+Details: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Repository layout
 
 ```
 backend/groundedai/   api · core · ingestion · retrieval · generation · services · evaluation
-                      persistence (models, migrations, search backends) · observability · security
+                      persistence (models, migrations, search) · observability · security
 backend/tests/        unit · integration · api · e2e
-frontend/             React UI (src/) and static-demo data (public/demo/)
-evaluation/           datasets/ · configs/ · reports/published/ · scripts/
-scripts/              check_environment · download_models · dev_postgres · export_demo_data · bench_api
-docs/                 architecture · API · evaluation · security · deployment · status documents
+frontend/             React 19 + TypeScript UI (src/) and static-demo data (public/demo/)
+evaluation/           datasets/ · configs/ · reports/ · reviews/
+examples/             two small sample PDFs with known content
+scripts/              journey and browser checks, evaluation helpers, model download
+docs/                 architecture, API, evaluation, security, deployment, testing
 ```
 
-## Limitations
+More: [CHANGELOG.md](CHANGELOG.md) · [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md) ·
+[docs/RELIABILITY_AUDIT.md](docs/RELIABILITY_AUDIT.md)
 
-- The evaluation dataset is small, synthetic and lexically easy; it cannot show where dense
-  retrieval helps, and its numbers do not transfer to other domains.
-- The claim check is lexical: a "found" statement can still be wrong or beside the question, and
-  a correct paraphrase can be marked "partly found".
-- The local models tested here are small (0.5B and 1.5B). qwen2.5:1.5b usually gives the right
-  fact but rarely cites it in the required form, and it answers some questions it should refuse.
-- The disagreement check is pattern-based: it misses synonyms and conflicts that share one value,
-  and it does not decide which source is right ([known issues](docs/RELIABILITY_AUDIT.md#known-issues)).
-- Prompt injection is reduced (separate messages, neutralised tags and labels, pattern flags,
-  a note to the model), not eliminated. See [docs/SECURITY.md](docs/SECURITY.md).
-- No OCR, tables or images; English-focused tokenisation.
-- Single-tenant: one API key, no per-user document permissions. Rate limits and in-process
-  metrics are per process.
+## Contributing and licence
 
-More: [docs/RELIABILITY_AUDIT.md](docs/RELIABILITY_AUDIT.md) ·
-[docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) ·
-[docs/ENVIRONMENT_AND_RESOURCE_STRATEGY.md](docs/ENVIRONMENT_AND_RESOURCE_STRATEGY.md) ·
-[docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md) · [CONTRIBUTING.md](CONTRIBUTING.md)
-
-## Licence
-
-MIT, see [LICENSE](LICENSE). Third-party packages and optional models keep their own licences:
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Please report security
+problems privately ([docs/SECURITY.md](docs/SECURITY.md)). MIT licence ([LICENSE](LICENSE));
+third-party packages and models keep their own licences
+([THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).

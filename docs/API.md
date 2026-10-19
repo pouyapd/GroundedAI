@@ -31,7 +31,7 @@ schema at `/openapi.json` when the server runs.
 | GET | `/api/v1/documents?offset&limit&status` | List documents, newest first | 200 |
 | GET | `/api/v1/documents/{id}` | Metadata and ingestion status | 200 |
 | GET | `/api/v1/documents/{id}/chunks?offset&limit` | Indexed chunks with page ranges | 200 |
-| POST | `/api/v1/documents/{id}/reingest` | Process again (after a failure or configuration change) | 202 |
+| POST | `/api/v1/documents/{id}/reingest` | Process again (after a failure or configuration change); 409 with `details.reason = "source_missing"` when the file is no longer stored | 202 |
 | DELETE | `/api/v1/documents/{id}` | Delete document, chunks and stored file | 204 |
 | POST | `/api/v1/query` | Grounded answer with sources, citation check and timings | 200 |
 | POST | `/api/v1/retrieve` | Retrieval only, with component scores and timings | 200 |
@@ -48,7 +48,7 @@ schema at `/openapi.json` when the server runs.
 |---|---|
 | 401 | `unauthorized` |
 | 404 | `not_found` |
-| 409 | `duplicate_document` (details include the existing `document_id`), `conflict` |
+| 409 | `duplicate_document` (details include the existing `document_id`; a document whose processing failed is replaced instead), `conflict` |
 | 413 | `file_too_large`, `payload_too_large` |
 | 415 | `unsupported_file_type` |
 | 422 | `invalid_input` (validation errors list `loc`, `msg`, `type` but never echo the input), `empty_document`, `document_parse_failed` |
@@ -70,7 +70,13 @@ curl -s http://127.0.0.1:8000/api/v1/documents/doc_bcee98dbd52e4be372ae
 # {"id": "doc_bcee98dbd52e4be372ae", "status": "ready", "chunk_count": 7, ...}
 ```
 
-Ask a question:
+Stored files: the original file is kept while its document exists (re-ingestion needs it) and is
+deleted with the document. A file that cannot be read at all (damaged, password-protected, no
+extractable text) is deleted as soon as that is known; the document stays `failed` with the
+reason, `source_stored` is `false`, and uploading the file again retries it. A file over a
+settings limit (pages, characters) is kept, since a configuration change can fix that.
+
+Ask a question (add `"document_ids": ["doc_…"]` to search only those documents):
 
 ```bash
 curl -s http://127.0.0.1:8000/api/v1/query \
@@ -131,6 +137,9 @@ Field meanings:
   `unsupported`. `citations` lists the labels the model attached in any form (`[S1]`,
   `[Source 1]`, `(S1)`, a bracketed title). `evidence[]` gives the passage label, document, page,
   chunk and the exact `quote` with `quote_start`/`quote_end` offsets into that source's `text`.
+  `page` (added 2026-10-18) is the page on which the quote starts, also when the passage spans
+  several pages; it is `null` for text files, and for multi-page passages indexed before
+  2026-10-18 until the document is re-ingested. Conflict statements carry `page` too.
   `missing_figures` names figures that no passage states; `flags` contains `instruction_text`
   when the statement repeats an instruction from a source.
 * `verification` (added 2026-10-14): `verdict` (`verified`, `partially_verified`, `unverified`,
@@ -141,7 +150,26 @@ Field meanings:
   values, dates, whether it denies a requirement (`denies_requirement`, "do not have to") and
   whether it states one (`affirms_requirement`, "must"; a "have to" inside a denial does not
   count); `answer_reports` lists the labels whose value the answer states. Nothing is resolved.
+* Version 2 of the checks (added 2026-10-18, opt-in; the defaults stay at version 1):
+  * `GROUNDEDAI_CLAIM_CHECK=claims-v2` adds `verification.version`, `evidence`
+    (`all_found`, `some_uncertain`, `some_not_found`, `none_found`, `not_applicable`),
+    `citations` (`all_correct`, `some_wrong`, `some_unconfirmed`, `none_given`,
+    `not_applicable`), `addresses_question` (`yes`, `no`, `declined`, `not_checked`) and
+    `expected_answer_type`, and per claim `citation_status` (`correct`, `wrong`, `partly_wrong`,
+    `invalid`, `unconfirmed`, `none`) and `invalid_citations`. `verdict` keeps its meaning.
+    A reply made only of bracketed fragments (labels, titles or a bare value such as `[21]`) is
+    returned as `invalid_output` with a warning, as replies made only of `[S#]` markers are in
+    both versions; a bracketed refusal stays `insufficient_evidence`.
+    With `GROUNDEDAI_UNVERIFIED_ANSWERS=withhold`, an answer is withheld only when no statement
+    was found and none is uncertain.
+  * `GROUNDEDAI_CONFLICT_CHECK=disagreement-v2` compares ranges as a whole and tells validity
+    dates from edit dates; each conflict statement gains `validity_dates` and `revision_dates`.
+    It changes the conflict notes the answer-v2 prompt sends to the model, so it stays opt-in
+    until a real-model run.
+  * All new fields are optional; older clients and recordings are unaffected. Results:
+    [RELIABILITY_V2.md](RELIABILITY_V2.md).
 * `sources[].supports_claims` (added 2026-10-14): indices of the claims a passage is evidence for.
+* Documents: `source_stored` (added 2026-10-18) says whether the original file is still stored.
 * `unverified_answer`: set only with `GROUNDEDAI_UNVERIFIED_ANSWERS=withhold`, when no statement
   could be matched to a passage and the answer was therefore returned as `insufficient_evidence`.
 * `provider.is_llm`: `false` for the extractive demo generator.

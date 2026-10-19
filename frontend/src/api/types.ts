@@ -19,6 +19,8 @@ export interface DocumentOut {
   attempts: number;
   created_at: string;
   updated_at: string;
+  /** False when a file that could not be read was discarded (added 2026-10-18). */
+  source_stored?: boolean | null;
 }
 
 export interface Page<T> {
@@ -109,6 +111,8 @@ export interface EvidenceOut {
   document_title: string;
   page_start: number | null;
   page_end: number | null;
+  /** Page on which the quote starts (added 2026-10-18); absent in older recordings. */
+  page?: number | null;
   quote: string;
   quote_start: number;
   quote_end: number;
@@ -122,7 +126,14 @@ export interface ClaimOut {
   missing_figures: string[];
   word_overlap: number;
   flags: string[];
+  /** claims-v2 only. */
+  citation_status?: "correct" | "wrong" | "partly_wrong" | "invalid" | "unconfirmed" | "none" | null;
+  invalid_citations?: string[];
 }
+
+export type EvidenceVerdict = "all_found" | "some_uncertain" | "some_not_found" | "none_found" | "not_applicable";
+export type CitationVerdict = "all_correct" | "some_wrong" | "some_unconfirmed" | "none_given" | "not_applicable";
+export type AddressesQuestion = "yes" | "no" | "declined" | "not_checked";
 
 export interface VerificationOut {
   verdict: Verdict;
@@ -136,6 +147,12 @@ export interface VerificationOut {
   references_standard: number;
   references_variant: number;
   method: string;
+  /** Absent in answers recorded before claims-v2. */
+  version?: string;
+  evidence?: EvidenceVerdict | null;
+  citations?: CitationVerdict | null;
+  addresses_question?: AddressesQuestion | null;
+  expected_answer_type?: string | null;
 }
 
 export interface ConflictStatementOut {
@@ -145,6 +162,8 @@ export interface ConflictStatementOut {
   document_title: string;
   page_start: number | null;
   page_end: number | null;
+  /** Page on which the quote starts (added 2026-10-18); absent in older recordings. */
+  page?: number | null;
   quote: string;
   quote_start: number;
   quote_end: number;

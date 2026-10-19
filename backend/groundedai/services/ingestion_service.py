@@ -4,6 +4,12 @@ State machine: ``pending -> processing -> ready | failed``. Slow work (parsing,
 embedding) happens outside database transactions; the final write of chunks
 and status is a single transaction, so a document is never searchable with a
 partial set of chunks. A failed document keeps no chunks and can be retried.
+
+Storage policy: the original file is kept while its document exists, so it can be
+re-ingested after a configuration change, and is deleted with the document. A file
+that cannot be read at all (damaged, password-protected, no extractable text) is
+deleted as soon as that is known, because re-ingesting the same bytes cannot help;
+the document keeps its error message, and uploading the file again replaces it.
 """
 
 from __future__ import annotations
@@ -19,6 +25,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from groundedai.core.errors import (
     Conflict,
+    DocumentParseError,
     DuplicateDocument,
     EmptyDocument,
     GroundedAIError,
@@ -37,6 +44,15 @@ from groundedai.retrieval.embeddings import EmbeddingProvider
 logger = logging.getLogger(__name__)
 
 _EXTENSION_BY_MEDIA_TYPE = {media_type: ext for ext, media_type in MEDIA_TYPES.items()}
+_LIMIT_DETAILS = frozenset({"max_pages", "max_chars"})
+FILE_DISCARDED_NOTE = "The file was not kept; upload a readable copy to try again."
+
+
+def _unreadable(exc: GroundedAIError) -> bool:
+    """The file itself cannot be read; unlike a size limit, settings cannot change that."""
+    if isinstance(exc, EmptyDocument):
+        return True
+    return isinstance(exc, DocumentParseError) and not _LIMIT_DETAILS & set(exc.details)
 
 
 @dataclass(frozen=True, slots=True)
@@ -71,8 +87,13 @@ class IngestionService:
         upload = validate_upload(filename, content_type, data, self.limits.max_upload_bytes)
         document_id = document_id_for(upload.sha256)
         with session_scope(self.session_factory) as session:
-            existing = DocumentRepository(session).get_by_sha256(upload.sha256)
-            if existing is not None:
+            repository = DocumentRepository(session)
+            existing = repository.get_by_sha256(upload.sha256)
+            if existing is not None and existing.status == DocumentStatus.FAILED:
+                # Uploading a file again is the way to retry a failed document.
+                repository.delete(existing)
+                logger.info("failed_document_replaced", extra={"document_id": existing.id})
+            elif existing is not None:
                 raise DuplicateDocument(
                     details={"document_id": existing.id, "status": existing.status}
                 )
@@ -149,6 +170,7 @@ class IngestionService:
                             char_end=spec.char_end,
                             page_start=spec.page_start,
                             page_end=spec.page_end,
+                            page_breaks=[list(item) for item in spec.page_breaks] or None,
                             text_sha256=spec.sha256,
                             embedding=vector,
                         )
@@ -171,7 +193,11 @@ class IngestionService:
             logger.warning("document_vanished", extra={"document_id": document_id})
             raise
         except GroundedAIError as exc:
-            self._mark_failed(document_id, exc.code, exc.message)
+            message = exc.message
+            if _unreadable(exc):
+                self.file_store.delete(document_id, extension)
+                message = f"{message} {FILE_DISCARDED_NOTE}"
+            self._mark_failed(document_id, exc.code, message)
         except FileNotFoundError:
             self._mark_failed(
                 document_id, "source_missing", "The stored original file is missing. Upload again."
@@ -216,6 +242,10 @@ class IngestionService:
                 raise NotFound(f"Document {document_id} does not exist.")
             return row
 
+    def source_stored(self, row: DocumentRow) -> bool:
+        """Whether the original file is still stored (re-ingestion needs it)."""
+        return self.file_store.exists(row.id, _EXTENSION_BY_MEDIA_TYPE[row.media_type])
+
     def prepare_reingest(self, document_id: str) -> DocumentRow:
         """Reset a document to ``pending`` so it can be processed again."""
         with session_scope(self.session_factory) as session:
@@ -224,6 +254,11 @@ class IngestionService:
                 raise NotFound(f"Document {document_id} does not exist.")
             if row.status in (DocumentStatus.PENDING, DocumentStatus.PROCESSING):
                 raise Conflict("The document is already queued or being processed.")
+            if not self.source_stored(row):
+                raise Conflict(
+                    "The original file is no longer stored. Upload it again.",
+                    details={"reason": "source_missing"},
+                )
             row.status = DocumentStatus.PENDING
             row.updated_at = utcnow()
             return row

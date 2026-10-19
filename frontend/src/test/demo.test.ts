@@ -51,7 +51,7 @@ export const RECORDED: RecordedAnswers = {
 
 function mockFetch(files: Record<string, unknown>) {
   return vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
-    const url = String(input);
+    const url = String(input).replace(/\?.*$/, "");
     const name = Object.keys(files).find((file) => url.endsWith(`/demo/${file}`));
     if (!name) return new Response("missing", { status: 404 });
     return new Response(JSON.stringify(files[name]), { status: 200 });
@@ -59,6 +59,24 @@ function mockFetch(files: Record<string, unknown>) {
 }
 
 afterEach(() => vi.restoreAllMocks());
+
+describe("StaticDemoApi requests", () => {
+  it("adds the export time to data requests and always revalidates the manifest", async () => {
+    const calls: { url: string; cache?: RequestCache }[] = [];
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
+      calls.push({ url: String(input), cache: init?.cache });
+      const body = String(input).includes("manifest.json") ? { exported_at: "2026-10-18T08:00:00Z" } : { ok: true };
+      return new Response(JSON.stringify(body), { status: 200 });
+    });
+    const api = new StaticDemoApi("./demo");
+    await api.systemStatus();
+    await api.manifest();
+    expect(calls.find((call) => call.url.includes("status.json"))?.url).toBe(
+      "./demo/status.json?v=2026-10-18T08%3A00%3A00Z",
+    );
+    expect(calls.filter((call) => call.url.endsWith("manifest.json")).every((call) => call.cache === "no-cache")).toBe(true);
+  });
+});
 
 describe("StaticDemoApi", () => {
   it("replays the recording for the default settings, ignoring case and surrounding spaces", async () => {

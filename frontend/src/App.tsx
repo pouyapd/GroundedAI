@@ -74,7 +74,19 @@ export function App({ api: injected }: { api?: Api }) {
   const [statusError, setStatusError] = useState<ApiError | null>(null);
   const [manifest, setManifest] = useState<DemoManifest | null>(null);
   const [keyDialog, setKeyDialog] = useState(false);
+  const [askScope, setAskScope] = useState("all");
+  const [demoVersion, setDemoVersion] = useState(0);
+  const resetDemo = useCallback(() => {
+    setAskScope("all");
+    setDemoVersion((value) => value + 1);
+  }, []);
   const [theme, cycleTheme] = useTheme();
+
+  const askAbout = useCallback((documentId: string) => {
+    setAskScope(documentId);
+    setTab("ask");
+    rememberTab("ask");
+  }, []);
 
   const refreshStatus = useCallback(() => {
     api
@@ -104,8 +116,8 @@ export function App({ api: injected }: { api?: Api }) {
   }, []);
 
   const contextValue = useMemo(
-    () => ({ api, status, statusError, refreshStatus }),
-    [api, status, statusError, refreshStatus],
+    () => ({ api, status, statusError, refreshStatus, askScope, setAskScope, askAbout, demoVersion, resetDemo }),
+    [api, status, statusError, refreshStatus, askScope, askAbout, demoVersion, resetDemo],
   );
   const needsKey = status?.auth_required === true && !getStoredApiKey();
 
@@ -114,7 +126,10 @@ export function App({ api: injected }: { api?: Api }) {
       <header className="app-header">
         <div className="header-inner">
           <div className="brand">
-            GroundedAI <small>grounded answers with checked citations</small>
+            <img className="brand-mark" src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width={26} height={26} />
+            <span>GroundedAI</span>
+            {api.mode === "browser" ? <span className="live-pill">Live demo</span> : null}
+            <small>grounded answers with checked citations</small>
           </div>
           <nav className="tabs" aria-label="Sections">
             {TABS.map((item) => (
@@ -133,6 +148,11 @@ export function App({ api: injected }: { api?: Api }) {
             ))}
           </nav>
           <div className="header-actions">
+            {api.mode !== "live" ? (
+              <a className="btn btn-small" href="https://github.com/pouyapd/GroundedAI" rel="noopener">
+                Source on GitHub
+              </a>
+            ) : null}
             {status?.auth_required ? (
               <button type="button" className="btn btn-small" onClick={() => setKeyDialog(true)}>
                 API key
@@ -168,15 +188,17 @@ export function App({ api: injected }: { api?: Api }) {
         ) : null}
         {/* Ask stays mounted so its answer and settings survive a visit to another tab. */}
         <div className="page" hidden={tab !== "ask"}>
-          <AskPage />
+          {/* A demo reset remounts the pages, so they start empty and reload their data. */}
+          <AskPage key={demoVersion} active={tab === "ask"} />
         </div>
-        {tab === "documents" ? <DocumentsPage /> : null}
+        {tab === "documents" ? <DocumentsPage key={demoVersion} /> : null}
         {tab === "evaluation" ? <EvaluationPage /> : null}
         {tab === "operations" ? <OperationsPage /> : null}
       </main>
       <footer className="footer">
-        GroundedAI {status?.version ?? ""} · answers can be wrong even when cited; open the sources before relying on
-        them.
+        GroundedAI {status?.version ?? ""}
+        {api.mode === "browser" ? " · running in your browser (Pyodide, optional WebLLM model)" : ""} · answers can be
+        wrong even when cited; open the sources before relying on them.
       </footer>
       {keyDialog ? <ApiKeyDialog onClose={() => setKeyDialog(false)} onSaved={refreshStatus} /> : null}
     </AppContext.Provider>
@@ -229,11 +251,12 @@ function ModeBanners({
       </Banner>
     );
   }
-  if (status.demo_mode) {
+  if (status.demo_mode && api.mode === "live") {
     return (
       <Banner tone="info" title="Demo generator active (not an LLM)">
-        Answers are built by selecting sentences from the retrieved passages. To use a local language model, install
-        Ollama and set <code>GROUNDEDAI_GENERATION_PROVIDER=ollama</code> (see README, “Local inference”).
+        Answers are built by selecting sentences from the retrieved passages. To use a local language model, set{" "}
+        <code>GROUNDEDAI_GENERATION_PROVIDER=ollama</code> or <code>huggingface-local</code> (see README, “Local
+        inference”).
       </Banner>
     );
   }

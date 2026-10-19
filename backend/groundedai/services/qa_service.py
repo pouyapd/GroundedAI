@@ -34,10 +34,13 @@ from groundedai.core.errors import (
 )
 from groundedai.core.quantities import figure_present, read_quantities
 from groundedai.core.text import content_tokens, normalize_whitespace, split_sentences
+from groundedai.generation.answer_checks import check_answer, citation_status
 from groundedai.generation.citations import (
     ParsedAnswer,
+    bracketed_only,
     labels_in,
     parse_answer,
+    states_conflict,
     strip_citations,
 )
 from groundedai.generation.claims import ClaimReport, EvidenceSource, check_claims
@@ -47,6 +50,7 @@ from groundedai.generation.disagreement import Disagreement, find_disagreements
 from groundedai.generation.prompts import answer_prompt, format_notes
 from groundedai.generation.providers import GenerationProvider, translate_provider_error
 from groundedai.generation.safety import detect_injection
+from groundedai.ingestion.chunking import page_at
 from groundedai.observability.metrics import MetricsRegistry
 from groundedai.persistence.db import session_scope
 from groundedai.persistence.models import QueryEventRow
@@ -170,6 +174,7 @@ def claims_out(report: ClaimReport, context: AssembledContext) -> list[ClaimOut]
                     document_title=chunk.document_title,
                     page_start=chunk.page_start,
                     page_end=chunk.page_end,
+                    page=page_at(quote.start, chunk.page_start, chunk.page_end, chunk.page_breaks),
                     quote=quote.quote,
                     quote_start=quote.start,
                     quote_end=quote.end,
@@ -184,13 +189,25 @@ def claims_out(report: ClaimReport, context: AssembledContext) -> list[ClaimOut]
                 missing_figures=claim.missing_figures,
                 word_overlap=claim.word_overlap,
                 flags=claim.flags,
+                citation_status=(citation_status(claim) if report.version == "claims-v2" else None),
+                invalid_citations=claim.invalid_citations,
             )
         )
     return result
 
 
-def verification_out(report: ClaimReport) -> VerificationOut:
+def verification_out(report: ClaimReport, question: str = "", answer: str = "") -> VerificationOut:
+    extra: dict[str, Any] = {"version": report.version}
+    if report.version == "claims-v2":
+        checks = check_answer(question, answer, report)
+        extra.update(
+            evidence=checks.evidence,
+            citations=checks.citations,
+            addresses_question=checks.addresses_question,
+            expected_answer_type=checks.expected_answer_type,
+        )
     return VerificationOut(
+        **extra,
         verdict=report.verdict,
         claims=len(report.claims),
         supported=report.count("supported"),
@@ -258,6 +275,9 @@ def conflicts_out(
                     document_title=chunk.document_title,
                     page_start=chunk.page_start,
                     page_end=chunk.page_end,
+                    page=page_at(
+                        statement.start, chunk.page_start, chunk.page_end, chunk.page_breaks
+                    ),
                     quote=statement.sentence,
                     quote_start=statement.start,
                     quote_end=statement.end,
@@ -265,6 +285,8 @@ def conflicts_out(
                     denies_requirement=statement.denies,
                     affirms_requirement=statement.affirms,
                     dates=list(statement.dates),
+                    validity_dates=list(statement.validity_dates),
+                    revision_dates=list(statement.revision_dates),
                 )
             )
             if any(figure_present(value, answer_figures) for value in statement.values):
@@ -278,6 +300,28 @@ def conflicts_out(
             )
         )
     return result
+
+
+UNSTATED_CONFLICT_WARNING = (
+    "The sources disagree (see the disagreement below), but the answer does not say so; it "
+    "may present one side as the only answer, or call the sources consistent."
+)
+
+
+def unstated_conflict_warnings(
+    conflicts: Sequence[ConflictOut], answer: str | None, report: ClaimReport | None
+) -> list[str]:
+    """claims-v2: a warning when the passages conflict and the answer does not say so.
+
+    Only ``conflict`` counts: values for different dates are not a contradiction. Whether
+    the answer says so is the lexical test of :func:`states_conflict` ("disagree",
+    "conflicting", "the sources differ", "but the FAQ says ...").
+    """
+    if report is None or report.version != "claims-v2" or not answer:
+        return []
+    if any(conflict.kind == "conflict" for conflict in conflicts) and not states_conflict(answer):
+        return [UNSTATED_CONFLICT_WARNING]
+    return []
 
 
 def one_sided_warnings(conflicts: Sequence[ConflictOut]) -> list[str]:
@@ -501,8 +545,10 @@ class QAService:
             warnings.append("The top passage was shortened to fit the context limit.")
         notes: list[str] = []
         disagreements: list[Disagreement] = []
-        if self.settings.conflict_check == "disagreement-v1":
-            disagreements = find_disagreements(question, context.sources)
+        if self.settings.conflict_check in ("disagreement-v1", "disagreement-v2"):
+            disagreements = find_disagreements(
+                question, context.sources, self.settings.conflict_check
+            )
             warnings.extend(disagreement.explanation() for disagreement in disagreements)
         if self.settings.prompt_version != "answer-v1":  # answer-v1 is kept as published
             if self.settings.conflict_check == "figures-v1":
@@ -529,11 +575,24 @@ class QAService:
         source_texts = {block.label: block.text for block in context.sources}
 
         has_words = bool(re.search(r"[^\W_]", strip_citations(raw)))
-        if not has_words:
+        # claims-v2 also rejects replies made only of bracketed fragments (titles, a bare
+        # "[21]"); version 1 keeps its published behaviour, so recorded runs replay unchanged.
+        only_brackets = (
+            has_words
+            and self.settings.claim_check == "claims-v2"
+            and bracketed_only(raw)
+            and not parse_answer(raw, source_texts).is_abstention
+        )
+        if not has_words or only_brackets:
             # No substitute answer is generated here: the passages are shown as retrieved
             # evidence, and the status says plainly that the model produced no answer.
             pointed = [label for label in labels_in(raw) if label in source_texts]
-            if pointed:
+            if only_brackets:
+                warnings.append(
+                    "The model replied only with bracketed fragments (labels, titles or a bare "
+                    "value) and no answer sentence, so it is not shown as an answer."
+                )
+            elif pointed:
                 warnings.append(
                     "The model returned citation markers without any answer text. It pointed "
                     f"to {', '.join(pointed)}; those passages are listed below, but no answer "
@@ -574,7 +633,9 @@ class QAService:
                 f"{', '.join(parsed.check.invalid)}. Those citations are invalid."
             )
         report = (
-            None if parsed.is_abstention else check_claims(raw, evidence_sources(context), question)
+            None
+            if parsed.is_abstention
+            else check_claims(raw, evidence_sources(context), question, self.settings.claim_check)
         )
         claims = claims_out(report, context) if report else []
         if report:
@@ -583,15 +644,19 @@ class QAService:
             disagreements, context, None if parsed.is_abstention else parsed.text
         )
         warnings.extend(one_sided_warnings(conflicts))
+        warnings.extend(unstated_conflict_warnings(conflicts, parsed.text, report))
         status: AnswerStatus = "insufficient_evidence" if parsed.is_abstention else "answered"
         answer: str | None = parsed.text
         abstention_reason = parsed.abstention_reason
         unverified_answer = None
-        if (
-            report
-            and report.verdict == "unverified"
-            and self.settings.unverified_answers == "withhold"
-        ):
+        verification = verification_out(report, question, raw) if report else None
+        # claims-v2 withholds only when nothing was found and nothing is uncertain.
+        nothing_found = report is not None and (
+            verification is not None and verification.evidence == "none_found"
+            if report.version == "claims-v2"
+            else report.verdict == "unverified"
+        )
+        if nothing_found and self.settings.unverified_answers == "withhold":
             status, answer, unverified_answer = "insufficient_evidence", None, parsed.text
             abstention_reason = (
                 "No statement in the model's answer could be matched to the retrieved passages, "
@@ -615,7 +680,7 @@ class QAService:
                 for sentence in parsed.sentences
             ],
             claims=claims,
-            verification=verification_out(report) if report else None,
+            verification=verification,
             conflicts=conflicts,
             unverified_answer=unverified_answer,
             citation_check=CitationCheckOut(

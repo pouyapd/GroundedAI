@@ -93,3 +93,48 @@ proof of safety.
   psycopg (LGPL-3.0, used unmodified as a library; listed in `THIRD_PARTY_NOTICES.md`); the front
   end ships React, React DOM and Scheduler (MIT). `pgserver`, used only by the developer
   PostgreSQL script, has no licence metadata.
+
+## Release-candidate review (2026-10-19)
+
+Scope: every tracked file on `feature/reliability-v1`, the new and changed files of the release
+candidate, and the content of every commit on all branches.
+
+* Secrets: no API keys, tokens, private keys or passwords other than the documented placeholders
+  (`change-me...` in `.env.example`, `ci-only-password` for the CI database service).
+* Local paths and machine details: no absolute local paths or user names in tracked files or in
+  any commit's content. Reports record the CPU model, RAM, operating system and power source on
+  purpose (they explain the timings); they contain no host names or paths.
+* Personal data: the author's name and GitHub handle appear as authorship; every commit carries
+  the author's personal email address and the author's time zone offset (unchanged from the
+  2026-10-14 review: owner's decision). Rechecked later on 2026-10-19: the same address is
+  already public in commits of the owner's public repositories, and the GitHub profile shows no
+  public email, so publishing this repository adds no new exposure of the address
+  (`docs/RELEASE_CHECKLIST.md`, item 1).
+* Private evaluation data: the reliability suite's test split, its documents, the writer notes,
+  private audit files and sealed reports are git-ignored and were never committed (checked
+  across all history). The committed manifest lists test documents by id only, with file hashes;
+  `REVISIONS.jsonl` holds test case ids and hashes only; the committed test reports are
+  aggregates without per-case rows. The development split, the synthetic evaluation set, the
+  claim-review set and their reports are public by design (fictional organisations).
+* Binary files: screenshots of the application with synthetic data, two generated sample PDFs,
+  one synthetic corpus PDF, and the social-preview image. No databases, model weights, caches or
+  uploaded user documents are tracked.
+* Workflows: no repository secrets are used; jobs have read-only permissions except the Pages
+  deployment, which runs only for a public repository.
+
+## Online demo (GitHub Pages, 2026-10-19)
+
+* **No server, no credentials.** The demo is static files; the application runs in the
+  visitor's browser. No API key, token or secret is built into the site, and the Pages
+  workflow uses only the job token GitHub issues for deployment.
+* **Visitor data stays in the tab.** Uploaded files and questions are processed in a Web Worker
+  and kept in memory; nothing is sent to this project. A reload or *Reset demo* deletes them.
+* **Third parties the browser contacts:** jsDelivr (the pinned Pyodide release and its
+  packages), and, only if the visitor chooses the language model, Hugging Face (model weights)
+  and GitHub (the model's WebGPU library, through the MLC project's URLs). Their own privacy
+  terms apply to those requests.
+* **Pinned code.** The wheels served with the site are checked against SHA-256 hashes in
+  `frontend/browser-runtime.lock.json` when the site is built; Pyodide is pinned to one
+  release. The CDN files themselves are not hash-checked in the browser.
+* **Headers.** GitHub Pages does not allow custom response headers, so the demo has no Content
+  Security Policy. It renders documents as text, never as HTML.

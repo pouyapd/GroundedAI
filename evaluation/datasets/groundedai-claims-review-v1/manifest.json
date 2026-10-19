@@ -1,0 +1,37 @@
+{
+  "name": "groundedai-claims-review-v1",
+  "version": "0.1.0",
+  "license": "MIT (same as the repository). All documents are synthetic and describe fictional organisations.",
+  "description": "Claim-level review set: real model answers to these questions are exported for blind human labelling of every statement (scripts/claim_review.py). Written after the claim checks were frozen at commit 7082970; not used to design them.",
+  "created": "2026-10-19",
+  "documents": [
+    {
+      "key": "tidewell-member-terms",
+      "file": "corpus/tidewell-member-terms.txt",
+      "title": "Tidewell Bike Share - Member Terms (valid from 1 March 2026)",
+      "sha256": "eff731618d8a630b4d1c4019bea246c9894dfee5af20f45d86b140d86aecb18d",
+      "description": "Current terms; the ride-time limit (45 minutes) and annual price (£96) differ from the 2025 FAQ."
+    },
+    {
+      "key": "tidewell-help-faq",
+      "file": "corpus/tidewell-help-faq.txt",
+      "title": "Tidewell Bike Share - Help Centre FAQ (2025 edition)",
+      "sha256": "4d14aaa0a5b8d1b070d6a6ba427d00d27acf13d949a1263bcf547df31d446d66",
+      "description": "Older FAQ: 30 minutes before extra time, £84 annual pass for 2025."
+    },
+    {
+      "key": "copperfield-membership-handbook",
+      "file": "corpus/copperfield-membership-handbook.txt",
+      "title": "Copperfield Makerspace - Membership Handbook",
+      "sha256": "c4169356f86259e0ec5528006d62f3a73c788df8b028003275e2e749544f98d4",
+      "description": "Says a paid laser induction is required."
+    },
+    {
+      "key": "copperfield-workshop-safety",
+      "file": "corpus/copperfield-workshop-safety.txt",
+      "title": "Copperfield Makerspace - Workshop Safety Rules",
+      "sha256": "86804a0750e557b2bd68821ed1ca6d315e0214b0b8fb1ad10a96b4722c9632b2",
+      "description": "Says no induction is needed for the laser cutter (a requirement conflict with the handbook)."
+    }
+  ]
+}

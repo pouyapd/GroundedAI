@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+from groundedai.evaluation.pdf_fixture import make_pdf
 from tests.conftest import SECURITY_TEXT, TRAVEL_TEXT, upload
 
 
@@ -100,3 +101,44 @@ def test_delete_and_reingest(client: TestClient) -> None:
 def test_invalid_document_ids_are_rejected(client: TestClient) -> None:
     assert client.get("/api/v1/documents/not-an-id").status_code == 422
     assert client.get("/api/v1/documents/doc_" + "0" * 20).status_code == 404
+
+
+def _stored_files(client: TestClient) -> list[str]:
+    root = client.app.state.services.settings.uploads_dir  # type: ignore[attr-defined]
+    return sorted(path.name for path in root.glob("doc_*")) if root.is_dir() else []
+
+
+def test_unreadable_upload_is_not_kept_and_can_be_uploaded_again(client: TestClient) -> None:
+    broken = b"%PDF-1.7 broken"
+    created = upload(client, "broken.pdf", broken, "application/pdf").json()
+    document = client.get(f"/api/v1/documents/{created['id']}").json()
+    assert document["status"] == "failed"
+    assert "not kept" in document["error_message"]
+    assert document["source_stored"] is False
+    assert _stored_files(client) == []
+
+    reingest = client.post(f"/api/v1/documents/{created['id']}/reingest")
+    assert reingest.status_code == 409
+    assert reingest.json()["error"]["details"] == {"reason": "source_missing"}
+
+    again = upload(client, "broken.pdf", broken, "application/pdf")
+    assert again.status_code == 202  # a failed document is replaced, not a duplicate
+    assert client.get("/api/v1/documents").json()["total"] == 1
+
+
+def test_pdf_without_text_is_not_kept(client: TestClient) -> None:
+    created = upload(client, "scan.pdf", make_pdf([""]), "application/pdf").json()
+    document = client.get(f"/api/v1/documents/{created['id']}").json()
+    assert (document["status"], document["error_code"]) == ("failed", "empty_document")
+    assert "OCR" in document["error_message"]
+    assert _stored_files(client) == []
+
+
+def test_file_over_a_settings_limit_is_kept_for_reingest(client_factory) -> None:  # type: ignore[no-untyped-def]
+    client = client_factory(max_pdf_pages=1)
+    created = upload(client, "two.pdf", make_pdf(["one", "two"]), "application/pdf").json()
+    document = client.get(f"/api/v1/documents/{created['id']}").json()
+    assert (document["status"], document["error_code"]) == ("failed", "document_parse_failed")
+    assert _stored_files(client) == [f"{created['id']}.pdf"]
+    assert document["source_stored"] is True
+    assert client.post(f"/api/v1/documents/{created['id']}/reingest").status_code == 202

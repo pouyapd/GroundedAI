@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { App } from "../App";
 import { ApiError } from "../api/client";
-import { ANSWER, REPORT, STATUS, fakeApi, networkError } from "./fixtures";
+import { ANSWER, REPORT, STATUS, documentPage, fakeApi, networkError } from "./fixtures";
 
 describe("App", () => {
   it("shows the demo-generator notice when no LLM is configured", async () => {
@@ -60,7 +60,7 @@ describe("App", () => {
 
   it("shows the empty state on the documents tab", async () => {
     window.location.hash = "/documents";
-    render(<App api={fakeApi()} />);
+    render(<App api={fakeApi({ listDocuments: vi.fn().mockResolvedValue(documentPage([])) })} />);
     expect(await screen.findByText("No documents yet")).toBeInTheDocument();
   });
 

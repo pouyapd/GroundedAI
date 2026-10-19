@@ -14,6 +14,7 @@ import pytest
 from sqlalchemy import create_engine, text
 
 from groundedai.core.config import Settings
+from groundedai.evaluation.sample_documents import FERRY_GUIDE
 from groundedai.persistence.db import session_scope
 from groundedai.retrieval.types import RetrievalRequest
 from groundedai.schemas.query import QueryRequest
@@ -77,3 +78,12 @@ def test_answer_and_delete(pg_services: Services) -> None:
     with session_scope(pg_services.session_factory) as session:
         remaining = session.execute(text("SELECT count(*) FROM chunks")).scalar()
     assert remaining == 0
+
+
+def test_pdf_evidence_names_its_page(pg_services: Services) -> None:
+    ferry = pg_services.ingestion.ingest_bytes(FERRY_GUIDE.filename, None, FERRY_GUIDE.pdf())
+    response = pg_services.qa.answer(
+        QueryRequest(question="How much does a single adult ticket cost?", document_ids=[ferry.id])
+    )
+    assert response.status == "answered"
+    assert response.claims[0].evidence[0].page == 2  # page breaks round-trip through JSON

@@ -8,7 +8,8 @@
 | Integration | `backend/tests/integration` | Alembic migrations (upgrade, downgrade, schema matches models), ingestion lifecycle (failure, retry, re-ingest, delete without orphans, crash recovery), SQLite search and hybrid retrieval, reranking, QA service failure modes (timeout, busy, provider errors, invalid citations, hallucinated numbers, citation-marker-only replies), what reaches the model (documents only as data, conflict and injection notes, answer-v1 unchanged), LangChain retriever adapter, Ollama integration against a fake Ollama HTTP server (including model digest and server version), evaluation runners on the bundled dataset |
 | PostgreSQL | `backend/tests/integration/test_postgres.py` | migrations with pgvector/tsvector/HNSW, all retrieval modes, hostile queries, cascade delete (runs when `GROUNDEDAI_TEST_POSTGRES_URL` is set) |
 | API | `backend/tests/api` | every endpoint, status codes, error shape, validation, size limits, API key, rate limiting, CORS, security headers, request ids, OpenAPI paths, metrics, evaluation runs |
-| End to end | `backend/tests/e2e` | upload PDF → ask → cited answer with page → abstention → delete → metrics, through HTTP only; three application starts on one data directory (documents, chunks, answers, claims and disagreements unchanged; re-ingest and delete kept) |
+| End to end | `backend/tests/e2e` | upload PDF → ask → cited answer with page → abstention → delete → metrics, through HTTP only; the sample-PDF journey (extracted text, a quote on page 2 of a one-chunk 3-page PDF, a question the selected document cannot answer, isolation between two documents, deletion); three application starts on one data directory (documents, chunks, answers, claims and disagreements unchanged; re-ingest and delete kept) |
+| Browser | `scripts/e2e_browser.py` (not in CI) | the same journey in Chromium against a real local server and the built UI: damaged, text-less and unsupported files, upload, Ask from the documents table, quote and page, citation highlight, not-in-document question, switching documents, repeated questions, deletion, console errors (24 checks) |
 | Front end | `frontend/src/test` | claim check and disagreement panel (quotes, statuses, withheld answer, no repeated warnings), scoring-version-4 tiles and re-checked reports, the hashing-embedder note, citation rendering, answer view states, abstention, LLM vs demo labels, offline backend, model unavailable, question flow, empty documents, evaluation report rendering (invalid outputs, latency, category names), static demo replay and expected-result comparison, upload validation, formatting |
 | Build/config | CI | lint, type checks, front-end build (live and demo), Docker image build and container smoke test, Compose validation, dependency audits |
 
@@ -33,7 +34,137 @@ cd .. && python scripts/dev_postgres.py -- python -m pytest backend/tests -m pos
 
 cd frontend
 npm run lint && npm run typecheck && npm test && npm run build
+
+# browser journey against a real server (needs: pip install playwright && playwright install chromium)
+cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
+
+## Online demo and release (2026-10-19, evening; mains power)
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e | 487 passed, 7 skipped (PostgreSQL tests, run separately) |
+| `tests/unit/test_browser_runtime.py` | the demo's runtime under CPython: extractive answer with quote and page, the two-step page-model flow, an invented figure not found, refusal, changed passages refused, status | 10 passed |
+| Pyodide rehearsal in Node (scratch script, not committed) | the real FastAPI app in Pyodide 314.0.7 with only the pinned wheels: start-up, PDF uploads, a 1.5 MB upload through the disk-spooled path, extractive and page-model answers | worked; ready after 11–12 s |
+| `vitest` | front end, including `BrowserApi` (two-step flow, timings, errors, reset) | 77 passed; three repeated runs without unhandled errors |
+| `scripts/e2e_demo.py` | the demo build in Chromium and in Chrome, served under `/GroundedAI/` | 16 of 16 (start-up 25–47 s with a cold cache; about 26 MB downloaded) |
+| Heading fix (`split_sentences`) | reliability dev split (v1, v2), 30 held-out conflict cases, replays of recorded qwen2.5:1.5b answers (dev, 56-question; v1, v2) | every measure unchanged |
+| CI on pull request #2 | GitHub Actions | first run: backend lint (script line lengths) and a front-end test race failed; both fixed; run 39316142259 on `c95d612`: 7 of 7 jobs passed, including the Docker image build and smoke test |
+
+The in-page model (WebLLM, Qwen2.5-1.5B-Instruct) needs WebGPU. In Playwright's own Chromium on
+Windows the adapter was found but the device failed (`dxil.dll` missing; Chrome ships it); the
+demo then showed "The language model could not be loaded … The extractive generator still
+works", as intended. The model check therefore uses the installed Chrome (`--channel chrome`).
+
+## Release preparation checks (2026-10-19, later; commit `83c5668` plus this round's changes; mains power)
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e; scripted fake models | 475 passed, 7 skipped (PostgreSQL tests, run separately below) |
+| `scripts/dev_postgres.py -- pytest -m postgres` | PostgreSQL 16 + pgvector, bundled local server | 7 passed |
+| `ruff`, `ruff format --check` (backend and scripts), `mypy` strict (Windows and `--platform linux`) | static | clean |
+| `eslint`, `tsc -b`, `vitest`, `npm run build:demo`, `npm run build` | front end | clean; 70 passed; both builds succeed |
+| Workflow files | YAML parse (no `actionlint` available) | both parse; `contents: read`; Pages jobs only add `pages`/`id-token` write |
+| `scripts/reliability_suite.py score --split dev` (v1, v2) | checks, model-written labels | unchanged: v1 A 37, B 31, C 21, D 35; v2 A 47, B 34, C 41, D 47 |
+| `scripts/evaluate_conflict_cases.py` | 30 held-out conflict cases, aggregate only | 12 of 16 found, 0 of 14 false alarms (unchanged) |
+| `groundedai eval generation` on the development set | **real model** (qwen2.5:1.5b) | 16 of 19 answerable correct, 2 false refusals, 5 of 6 refusals; outputs identical to the earlier run ([EVALUATION.md](EVALUATION.md#2026-10-19-release-preparation-each-behaviour-separately)) |
+| `scripts/journey_check.py` with Ollama | **real model**, API, PDF upload | 2 correct and verified, 3 correct but not fully verified, 2 correct refusals; 2–7 s per answer |
+| `scripts/e2e_browser.py` | browser, real server | 24 of 24 with the default generator; 24 of 24 with qwen2.5:1.5b on the first run; no test folder left behind |
+| `review.html` in a browser (two browser profiles) | tooling, placeholder labels | restored-label notice, *Clear all labels* and the download work; `score` reads the files |
+| Docker image and Compose | – | **not run**: Docker Desktop is not running |
+| CI | – | **not run** on any commit after `100f124`: nothing pushed |
+
+Fixed in this round, each with a test: `claim_review.py score` scored only the first labeller's
+file (now: only statements all labellers agree on, disputed ones listed, optional adjudication
+file); the review page could show one labeller's stored labels to the next labeller in the
+same browser; `e2e_browser.py` silently left its test folder (uploaded files and database) in
+the temporary directory on Windows, because the server's database is still locked for a moment
+after the server is stopped.
+
+## Release-candidate checks (2026-10-19, commit `cca6670` plus the e2e timeout change; laptop on battery)
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e; scripted fake models | 467 passed, 7 skipped (PostgreSQL tests, run separately below) |
+| `scripts/dev_postgres.py -- pytest -m postgres` | PostgreSQL 16 + pgvector, bundled local server | 7 passed |
+| `ruff`, `ruff format --check` (backend and scripts), `mypy` strict (Windows and `--platform linux`) | static | clean |
+| `eslint`, `tsc -b`, `vitest`, `npm run build`, `npm run build:demo` | front end | clean; 70 passed; both builds succeed |
+| Workflow files | YAML parse only (no `actionlint` available) | both parse; jobs unchanged |
+| `scripts/reliability_suite.py score --split dev` (v1, v2) | checks, model-written labels | unchanged by the release fixes: v1 A 37, B 31, C 21, D 35; v2 A 47, B 34, C 41, D 47 |
+| `scripts/journey_check.py` with Ollama | **real model** (qwen2.5:1.5b), API | 2 correct and verified, 3 correct but not fully verified, 2 correct refusals; 2–6 s per answer |
+| `scripts/e2e_browser.py` | browser, real server | 24 of 24 with the default generator; 24 of 24 with qwen2.5:1.5b (see note) |
+| `scripts/claim_review.py collect` | **real model**, new review set | 30 questions, 56 statements exported; labels not collected |
+| Docker image and Compose | – | **not run**: Docker Desktop is not running (CI builds and smoke-tests the image) |
+| CI | – | **not run** on these commits: nothing pushed |
+
+Note on the browser check with Ollama: the first two runs failed, both while the model was
+loading on battery power. One timed out after 20 s waiting for the first answer (the script now
+allows 300 s for an answer), and one timed out at an upload step that does not use the model.
+The third run, with the model loaded, passed 24 of 24. Running `npm run build:demo` after
+`npm run build` replaces the UI the check serves; build the normal UI before running it.
+
+## Results recorded after the claims-v2 revision (2026-10-19, mains power, commit `7082970`)
+
+Changes: claims-v2 judges claims on supporting sentences, reads equivalent wordings, names,
+ordinals and unresolved labels, and warns when an answer does not state a conflict;
+disagreement-v2 reads requirement wording and equivalent words (both opt-in; defaults unchanged).
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e; scripted fake models where a model is needed | 464 passed, 7 skipped (PostgreSQL); 33 new tests, invented examples |
+| `ruff`, `ruff format --check`, `mypy` (strict, also `--platform linux`), scripts lint | static | clean |
+| `vitest`, `eslint`, `tsc -b`, `npm run build` | front end (unchanged) | 70 passed; clean; built |
+| `scripts/reliability_suite.py validate`; dev split with v1 and v2 | dataset, checks (labels written by models) | 0 errors; v1 identical in every case; v2 in [RELIABILITY_V2.md](RELIABILITY_V2.md#revision-of-2026-10-19-development-split-only) |
+| Development set (25, claims-v2) and journey (7, both versions) | **real model**: qwen2.5:1.5b, Ollama 0.14.2 | outputs identical to the earlier runs; results in [EVALUATION.md](EVALUATION.md#2026-10-19-later-the-revised-claims-v2-on-real-model-answers) |
+| 56-question set, once | recorded real-model outputs re-checked with both versions (no model call) | same section |
+| `scripts/e2e_browser.py` | browser, real server | 24 of 24 with the default checks, with claims-v2, and with claims-v2 and qwen2.5:1.5b (the script now accepts the claims-v2 label "Every statement found") |
+| Docker | – | not run: Docker Desktop is not running |
+
+## Results recorded with qwen2.5:1.5b (2026-10-19, mains power)
+
+Changes: month-first dates are read as dates; evidence quotes ignore document-title words.
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e; scripted fake models where a model is needed | 431 passed, 7 skipped (PostgreSQL) |
+| `ruff`, `ruff format --check`, `mypy` (strict, also `--platform linux`) | static | clean |
+| `vitest`, `eslint`, `tsc -b`, `npm run build` | front end | 70 passed; clean; built |
+| `scripts/reliability_suite.py validate`; dev split scored with v1 and v2 before and after each fix | dataset, checks | 0 errors; results unchanged in every category |
+| Development set (25), journey (7), 56-question set (once) | **real model**: qwen2.5:1.5b, Ollama 0.14.2 | no errors or timeouts; results in [EVALUATION.md](EVALUATION.md#2026-10-19-qwen2515b-through-ollama) |
+| `scripts/e2e_browser.py` | browser, real server | 24 of 24 with the default generator and 24 of 24 with qwen2.5:1.5b |
+| Docker | – | not run: Docker Desktop is not running |
+
+## Results recorded after the answer-quality diagnosis (2026-10-18, on battery power)
+
+Change: claims-v2 reports replies made only of bracketed fragments as invalid output.
+
+| Check | Result |
+|---|---|
+| `pytest` (default suite) | 428 passed, 7 skipped (PostgreSQL) |
+| `ruff check`, `ruff format --check`, `mypy` (strict, also `--platform linux`) | clean |
+| Real model: dev set (25 questions) with claims-v1 and claims-v2, journey with claims-v2 | ran; Qwen2.5-0.5B-Instruct through transformers, offline; results in [EVALUATION.md](EVALUATION.md#2026-10-18-the-pdf-journey-with-a-real-local-model) |
+| Front end | not rerun: no front-end change |
+
+## Results recorded on 2026-10-18 (same laptop, on battery power)
+
+Changes: document selection on the Ask page, the page of each evidence quote (migration 0002),
+discarding unreadable uploads, the sample-PDF journey tests.
+
+| Check | Result |
+|---|---|
+| `pytest --cov` (default suite, run from `backend/`) | 419 passed, 7 skipped (the PostgreSQL tests, no database URL set); line coverage 92% |
+| — of which `tests/unit` / `tests/integration` / `tests/api` / `tests/e2e` | 289 / 80 (+7 skipped) / 47 / 3 passed |
+| `pytest -m postgres` via `scripts/dev_postgres.py` | 7 passed |
+| `ruff check`, `ruff format --check` (`groundedai`, `tests`, `scripts`, `tools`, `evaluation/scripts`) | clean |
+| `mypy` (strict, 83 files), also with `--platform linux` | no issues |
+| `vitest` | 70 passed (7 files) |
+| `eslint`, `tsc -b`, `npm run build`, `npm run build:demo` | clean, both builds succeeded |
+| `scripts/e2e_browser.py` (Chromium 1208, default providers) | 24 of 24 checks passed |
+| `scripts/journey_check.py` with Qwen2.5-0.5B-Instruct (transformers, CPU, offline) | ran without errors; results in [EVALUATION.md](EVALUATION.md#2026-10-18-the-pdf-journey-with-a-real-local-model) |
+| Migration 0002 on a database with documents from before | upgraded at start-up; old chunks answer with `page: null` for multi-page quotes until re-ingested, then with the page (checked by hand and in `test_migrations.py`) |
+| `scripts/reliability_suite.py validate` | 660 cases, 0 errors, 0 warnings (frozen test split unchanged; it was not scored again) |
+| `docker compose config` | valid |
+| Not run | the Docker image build and Compose stack (Docker Desktop not running; a build downloads packages); GitHub Actions (nothing pushed); dependency audits (need the network) |
 
 ## Results recorded after the PR review fixes (2026-10-14, same laptop)
 

@@ -4,6 +4,122 @@ GroundedAI evaluates retrieval and answers offline, on a version-controlled data
 deterministic metrics. No judge model is used. All numbers below come from report files in
 `evaluation/reports/published/`; nothing was typed in by hand.
 
+## Engineering challenges in detail
+
+The README summarises these in one table. Each challenge below gives the evidence behind it;
+the figures come from the reports and sections cited.
+
+### 1. Fluent answers that the documents do not support
+
+- **Challenge:** an answer can read well and carry a citation while the cited passage says
+  something else. Small local models do this often.
+- **Approach:** treat the model's citations as claims to check, not as evidence. Compare each
+  statement with every passage the model received, so the check still works when citations are
+  missing or wrong.
+- **Solution:** the claim check
+  ([`generation/claims.py`](../backend/groundedai/generation/claims.py)) gives each statement a
+  status and the exact supporting sentence, with character offsets. Chunks store their page
+  breaks (migration `0002_chunk_page_breaks`), so every quote carries the page on which it
+  starts.
+- **Result:** with qwen2.5:1.5b on the 56-question set, 101 of 117 statements were matched to an
+  exact quote (claim match rate 0.863, report `…T093836Z`). The browser test checks the quoted
+  sentence and its page. A match means the words and figures were found; it does not prove the
+  statement true.
+
+### 2. A small model that ignores the citation format
+
+- **Challenge:** on the 56-question set, qwen2.5:1.5b used the required `[S#]` labels in 30% of
+  answers. Otherwise it wrote `[Source S1]`, document titles or bare numbers. Qwen2.5-0.5B
+  sometimes replied with bracketed fragments only.
+- **Approach:** separate a malformed citation from an unsupported statement, and validate every
+  label against the passages that were actually sent.
+- **Solution:**
+  - *Found in a passage, not cited* and *cited the wrong passage* attach the passage that
+    contains the statement.
+  - Labels that point to no passage become warnings.
+  - With `claims-v2`, a reply made only of bracketed fragments is *invalid output*.
+  - A full answer that a model wrapped in brackets is unwrapped instead of hidden. This was
+    found on real answers and has a regression test.
+- **Result** (56-question set):
+  - citation-label validity 1.000;
+  - 80% of statements cited to the passage that contains them;
+  - malformed citations remain in 17 of 47 answers. GroundedAI works around this model
+    limitation; it does not fix it.
+
+### 3. Reporting conflicting sources without false alarms
+
+- **Challenge:** the first heuristic, `figures-v1`, flagged sentences from different documents
+  that state different figures. It missed both conflict questions of the 56-question set and
+  paired unrelated figures, such as a €300 stipend with 28 days of leave
+  ([section](#the-figure-conflict-check-published-2026-10-13-replaced-on-2026-10-14)).
+- **Approach:** measure misses and false alarms on 30 held-out cases committed before the
+  replacement was written.
+- **Solution:** a disagreement check that compares values on the question's topic, keeps values
+  for different dates or groups apart, and shows both quotes. Real model answers later showed it
+  pairing two organisations' prices, so it now ignores documents that never mention an
+  organisation named in the question (regression test).
+- **Result:** 12 of 16 disagreements found, with 0 false alarms in 14 cases (`figures-v1`: 6
+  found, 3 false alarms). The model stated the conflict in 0 of 2 conflict questions, which is
+  why the UI shows both quotes instead of relying on the answer.
+
+### 4. Refusing when evidence is missing, and only then
+
+- **Challenge:** early runs refused many answerable questions. Qwen2.5-0.5B refused 11 of 19
+  answerable development questions.
+- **Approach:**
+  - Find the cause first. In 27 of 29 wrong refusals in the published run, the evidence was
+    already in the top 5 passages, so retrieval was not the cause.
+  - Try prompt drafts only on a separate development set, under an acceptance rule fixed
+    before each draft ran.
+  - Ablate one factor at a time on the 0.5B model. This showed that prompt changes only
+    traded refusals for invented facts
+    ([section](#2026-10-18-the-pdf-journey-with-a-real-local-model)).
+- **Solution:** the answer-v2 prompt ([how it was developed](#how-answer-v2-was-developed); the
+  next draft was rejected under the fixed rule when correct behaviour fell from 0.88 to 0.76),
+  then a larger local model, qwen2.5:1.5b, instead of more prompt tuning.
+- **Result:**
+  - 56-question set: 42 of 43 answerable questions answered, 8 of 10 should-refuse questions
+    refused.
+  - Development set: 2 false refusals in 19, both with the evidence retrieved.
+
+### 5. An evaluation that could grade its own work
+
+- **Challenge:** one author writes the checks, the data and most labels. Tuning against the
+  reported numbers would make them meaningless.
+- **Approach:** keep development data, test data and reported results apart, and record enough
+  to rerun every result.
+- **Solution:**
+  - a 660-case reliability suite for the checks (198 development and 462 test cases); the test
+    split is kept out of the repository, pinned by hashes and scored once per check version;
+  - every report records the commit, dataset fingerprint, settings, hardware and power source;
+  - recorded model outputs are replayed through new checks only after the rebuilt index
+    reproduces the original results
+    ([`scripts/revalidate_recorded_answers.py`](../scripts/revalidate_recorded_answers.py)).
+- **Result:**
+  - On the test split, the 2026-10-18 version of `claims-v2` caught 69% of answers that miss
+    the question (`claims-v1`: none), but paraphrase acceptance fell from 0.63 to 0.51.
+  - Its later revision has development-split results only, so `claims-v2` stays opt-in
+    ([RELIABILITY_V2.md](RELIABILITY_V2.md)).
+
+### 6. Local inference, and PDFs that fail
+
+- **Challenge:** the app must run on a laptop CPU without a hosted API. It must also handle
+  damaged files, scanned PDFs, and files that are not PDFs at all.
+- **Approach:** make every model optional and every failure explicit.
+- **Solution:**
+  - three generators behind one interface: a deterministic extractive default, Ollama and
+    transformers;
+  - a missing model returns `503 model_unavailable` with the fix, never a silent fallback;
+  - uploads are checked for type, size, the `%PDF-` header and text encoding;
+  - PDFs without a text layer get an explicit "OCR is not supported" message, and unreadable
+    files are deleted with the reason kept;
+  - the default test suite uses a fake Ollama HTTP server, so it needs no model or network.
+- **Result:**
+  - the 24-check browser journey passes with the default generator and with qwen2.5:1.5b
+    ([TESTING.md](TESTING.md)). It covers a damaged PDF, a PDF without text, the right page
+    quoted, no answer from an unselected document, and no stale answers;
+  - qwen2.5:1.5b takes a median of 18 s per answer on the CPU.
+
 ## Dataset
 
 `evaluation/datasets/groundedai-synthetic-v1` (fingerprint `fa56ebd64e3b1eee`): 14 synthetic
@@ -380,7 +496,270 @@ issues: [RELIABILITY_AUDIT.md](RELIABILITY_AUDIT.md). In short:
   Recall@5 1.000, MRR 0.985; the shipped hybrid default with hashing vectors 0.977 / 0.950; hybrid
   with bge-small 1.000 / 0.959. No retrieval setting was changed.
 
+### 2026-10-18: the PDF journey with a real local model
+
+A seven-question check of the main user journey (`scripts/journey_check.py`), not a benchmark:
+the two sample PDFs in `examples/` are uploaded through the HTTP API, and each question is asked
+of one selected document. Four are answerable from the ferry guide (two of them paraphrase it),
+one is not, one is answered only by the other document, and that one is then asked of the right
+document. Both runs at commit `5836f06`, Windows 11, on battery power (timings are not
+performance figures). Reports: `evaluation/reports/journey/`.
+
+| Generator | Answerable (5) | Should refuse (2) | Evidence page |
+|---|---|---|---|
+| Extractive demo (not an LLM), hashing embedder | 3 answered and verified; 2 paraphrased questions refused | 2 refused | page 2, 3 and 1, all correct |
+| Qwen2.5-0.5B-Instruct (transformers, CPU), bge-small | 1 answered and verified (14 euros, page 2); 1 malformed reply (`[ORCHARD_LANE_LIBRARY_CARD_RULES][1] 12`) marked unverified by the claim check; 3 wrongly refused | 2 refused | page 2, correct |
+
+The model received the passage holding each answer (the ferry guide is one chunk) but still
+refused three times, the same weakness as in the 56-question evaluation above. No prompt was
+changed after this check; it is too small to tune on.
+
+**Why it refuses (diagnosis, 2026-10-18).** The exact prompt after the chat template was
+captured for each question: the passage with the answer is there, under `<source id="S1">`, and
+the refusals are the model's own raw output, so retrieval, context assembly and output parsing
+are not the cause. With the same passage and greedy decoding, one factor was changed at a time
+on the three refused questions and one unanswerable question:
+
+| Change | Result |
+|---|---|
+| PDF line breaks joined | still 3 refusals |
+| the answering paragraph moved to the top | still 3 refusals |
+| answer-v1 prompt | still refuses; invents a departure time for the unanswerable question |
+| answer-v2 without its refusal rule (diagnostic only) | "No information provided about bicycle prices", next to "Bicycles cost 6 euros per trip" |
+| no system prompt, plain question | answers, but with invented facts ("children under 5 must pay", "07:00 UTC") |
+| choose the number of the answering sentence | picks sentence 3 for every question, including "Is there a cafe on board?" |
+
+The 0.5B model does not read this passage reliably under any of these prompts. Prompt changes
+trade false refusals for invented answers, and the current prompt with the claim check gives
+the safe failure. The development set (`groundedai-dev-v1`, 25 questions,
+`evaluation/reports/dev/`) shows the same: 11 of 19 answerable questions refused with the
+evidence retrieved, 1 answered correctly and verified. No prompt or retrieval change was
+made. The one pipeline fix: with `claims-v2`, a reply made only of bracketed fragments
+(`[21]`, three document titles) is reported as invalid output instead of an answer. On the
+development set this moved 3 replies (`[21]`, `[12]`, and the title-only reply to a question
+that should be refused) from "answered" to "invalid output", with identical raw outputs. The
+cost: `[12]` contained half the expected facts of one question.
+
+| Qwen2.5-0.5B, answer-v2, 800/120 chunks | dev: v1 checks | dev: claims-v2 | journey: claims-v2 |
+|---|---|---|---|
+| Answerable: correct and verified | 1 of 19 | 1 of 19 | 1 of 5 |
+| Answerable: false refusals | 11 | 11 | 3 |
+| Answerable: invalid output (no answer shown) | 3 | 5 | 0 |
+| Answerable: other answers (facts missing or partial, unverified) | 4 | 2 | 1 (`… 12`, unverified) |
+| Should refuse: refused | 5 of 6 | 5 of 6 | 2 of 2 |
+| Should refuse: shown as an answer | 1 (titles only) | 0 (invalid output) | 0 |
+| Valid `[S#]` labels among cited labels | 100% | 100% | 100% |
+| Answers shown with malformed citations (titles or numbers in brackets) | 6 of 6 | 3 of 3 | 1 of 2 |
+
+**Next step: a stronger model.** No other generation model is in the local cache (only
+SmolLM2-360M, which is smaller). The smallest step is `qwen2.5:1.5b` through Ollama (already
+integrated and measured on 2026-10-13: 43 of 43 answerable questions answered, 7 of 10
+refusals; about 1 GB download, 1.3 GB of memory), then the development set, the journey and,
+once, the 56-question evaluation. This laptop has 15.6 GB of memory and 61 GB free disk.
+This was done on 2026-10-19 (next section).
+
+### 2026-10-19: qwen2.5:1.5b through Ollama
+
+Ollama 0.14.2 was installed from the owner's existing, signed installer and `qwen2.5:1.5b`
+pulled (986 MB, digest `65ec06548149`, the same build as on 2026-10-13). Every run below is a
+real model run: Windows 11, i7-1255U without a GPU, mains power, temperature 0, seed 0, the
+default checks (claims-v1), answer-v2. The development set and the 56-question set use the
+2026-10-13 settings (bge-small, hybrid, top 5, 400/60-character chunks, at most 200 new
+tokens); the journey uses the application's defaults (800/120 chunks).
+
+Order: development set, two pipeline fixes found there and on the journey, development set
+again (raw outputs identical in 25 of 25; only the fixed verdict changed), journey, then the
+56-question set once. The 56-question set was not inspected question by question.
+
+| Outcome | Development (25) | Journey (7) | 56-question set |
+|---|---|---|---|
+| Answer questions | 19 | 5 | 41 |
+| — correct and every statement verified | 13 | 2 | 29 |
+| — correct facts, not every statement verified | 3 | 3 | 10 |
+| — partly correct | 1 | 0 | 0 |
+| — wrong (no key fact) | 0 | 0 | 1 |
+| — false refusals | 2 | 0 | 1 |
+| Should refuse: refused / answered anyway | 5 / 1 | 2 / 0 | 8 / 2 |
+| Conflict questions: conflict stated | 0 of 2 (in the 19 above) | – | 0 of 2 |
+| Ambiguous questions (not scored) | – | – | 3 answered |
+| Invalid outputs, timeouts, errors | 0, 0, 0 | 0, 0, 0 | 0, 0, 0 |
+| Answers with malformed citations (titles or `[Source 1]` in brackets) | 6 | 1 | 17 |
+| Statements cited to the passage that contains them | 69% | – | 80% |
+| Strict `[S#]` format followed | 28% | – | 30% |
+| Median latency | 21 s | 3–18 s per question | 18 s |
+
+Compared with the 2026-10-13 run of the same model and prompt on the 56-question set
+(Ollama 0.40.3): correct behaviour 0.906 both times, answerable answered 42 of 43 (was 43 of
+43), correct refusals 8 of 10 (was 7 of 10), key-fact recall 0.919 (was 0.942); latency is
+higher (18 s, was 10 s) with this Ollama build.
+
+"Not every statement verified" is mostly the lexical claim check being strict about extra
+sentences: on the journey, "No, young children do not have to pay" (the passage says "travel
+free"), "Therefore, the answer is 12 items" and a caveat the model added ("this information
+was provided in 2026 and may have changed") were not confirmed, while each answer's fact was
+quoted with the right page (2, 3, 3 and 1). One should-refuse question on the development set
+was answered with a true statement about a different subject, which the default check marks
+verified (the known "beside the question" weakness; `claims-v2` marks it verified too, because
+its relevance check does not recognise that question type). No conflict
+was stated, as on 2026-10-13.
+
+**Fixes from these runs** (each with a regression test; the reliability suite's development
+split gives the same v1 and v2 results in every category before and after):
+
+- Month-first dates: the model wrote "December 31, 2027" for a passage's "31 December 2027";
+  only day-first dates were read as dates, so a correct statement was "not found".
+- Quotes: "Yes, you can bring your dog on the ferry" was quoted with the guide's opening
+  sentence, because the sentence chooser counted document-title words that the support check
+  ignores. It now ignores them too; that quote is now on page 3. The claim's status was found
+  from words in two sentences of one passage ("bring" and "dog"), a known limit of the
+  passage-level lexical check; quoting both sentences was tried and dropped, because it
+  changed one v2 result on the development split.
+
+Reports: `evaluation/reports/dev/generation-ollama-groundedai-dev-v1-20261019T*`,
+`evaluation/reports/journey/journey-qwen2.5-1.5b-ollama-20261019.json`,
+`evaluation/reports/published/generation-ollama-groundedai-synthetic-v1-20261019T093836Z.*`.
+
+### 2026-10-19 (later): the revised claims-v2 on real model answers
+
+`claims-v2` and `disagreement-v2` were revised (commit `7082970`; what changed and the
+reliability-suite results are in [RELIABILITY_V2.md](RELIABILITY_V2.md#revision-of-2026-10-19-development-split-only)).
+The defaults (claims-v1, disagreement-v1) are unchanged. Model: qwen2.5:1.5b through Ollama
+0.14.2, mains power, temperature 0, seed 0, answer-v2.
+
+How each set was run:
+
+- **Development set (25):** a real model run with `GROUNDEDAI_CLAIM_CHECK=claims-v2` and the
+  2026-10-13 settings, at `7082970`. Its raw outputs were identical to the earlier run's in
+  25 of 25, so the claims-v1 column is the earlier run's result, replayed at
+  `7082970` (no difference from the recorded results).
+- **Journey (7):** two real model runs at `7082970`, one per claim-check version (the model's
+  answers were the same in both).
+- **56-question set:** run once, as a replay: the outputs recorded on 2026-10-19 (`adc86f2`)
+  were checked again with each version, without a model call; no setting was chosen on this
+  set. Its questions were not inspected one by one.
+
+| Outcome | Dev, v1 | Dev, v2 | Journey, v1 | Journey, v2 | 56-question, v1 | 56-question, v2 |
+|---|---|---|---|---|---|---|
+| Answer questions | 17 | 17 | 5 | 5 | 41 | 41 |
+| — correct, every statement verified | 13 | 13 | 2 | 3 | 29 | 26 |
+| — correct facts, not every statement verified | 1 | 1 | 3 | 2 | 10 | 13 |
+| — partly correct / wrong | 1 / 0 | 1 / 0 | 0 / 0 | 0 / 0 | 0 / 1 | 0 / 1 |
+| — false refusals | 2 | 2 | 0 | 0 | 1 | 1 |
+| Should refuse: refused / answered | 5 / 1 | 5 / 1 | 2 / 0 | 2 / 0 | 8 / 2 | 8 / 2 |
+| Conflict questions: conflict stated by the model | 0 of 2 | 0 of 2 | – | – | 0 of 2 | 0 of 2 |
+| Answers with the unstated-conflict warning (claims-v2 only) | – | 1 | – | 0 | – | 1 |
+| Invalid outputs | 0 | 0 | 0 | 0 | 0 | 0 |
+
+(The development set's two conflict questions are counted separately here; the table of the
+earlier run counted them among its 19 answer questions.)
+
+Notes, all from answers that could be read (development set and journey):
+
+- **Paraphrase now confirmed:** "bring up to two guests per day without any additional cost"
+  for "at no charge" (development set), and "Therefore, the answer is 12 items" (journey).
+- **Pooled words no longer support a claim:** "Yes, you can bring your dog on the ferry" is now
+  *partly found* (the guide says dogs are allowed on the open deck on a lead; no sentence says
+  "bring"), where version 1 marks it found.
+- **Evidence quotes:** "Yes, you can bring your dog on the train for free" was quoted with the
+  FAQ question "Can I take my dog on the train?"; it is now quoted with the question *and* its
+  answer "Dogs travel free of charge." A compound statement about bicycles is quoted with the
+  two sentences that carry it.
+- **Still only partly found, correctly:** "No, young children do not have to pay" (the guide
+  says "Children under 5 travel free"; "young" is wider than "under 5"). An inference the model
+  added ("... which implies a non-free membership") is now partly found instead of found.
+- **Still wrong:** a true statement about a different subject answering a should-refuse question
+  is found (the "beside the question" weakness), and an answer that says one source "confirms"
+  another while they disagree has every statement found; the new warning is the only signal.
+- **56-question set:** with version 2, four answers that version 1 marks verified are partly
+  verified (five statements found by version 1 are partly found by version 2). Whether those are
+  correct catches or false rejections was not checked, to keep the set held out.
+
+Reports: `evaluation/reports/dev/generation-ollama-groundedai-dev-v1-20261019T103613Z.*` (claims-v2),
+`evaluation/reports/journey/journey-qwen2.5-1.5b-ollama-20261019-claims-v1.json` and
+`...-claims-v2.json`, `evaluation/reports/reliability/dev/dev-v1-20261019T103650Z.*` and
+`dev-v2-20261019T103653Z.*`.
+
+### 2026-10-19 (release candidate): a claim-review set for human labels
+
+`groundedai-claims-review-v1` (four new invented documents, 30 questions) was written after
+the checks were frozen, and qwen2.5:1.5b answered it once through the application's defaults
+(`evaluation/reviews/claims-review-v1`, commit `cca6670`, battery power, no timings used).
+Outcomes by the dataset author's expected behaviour, not human-checked:
+
+| Outcome | Count |
+|---|---|
+| Answer questions (24): answered / refused / invalid output (bracket-only reply) | 21 / 1 / 2 |
+| Conflict questions (2): answered; the conflict stated by the model | 2; 0 |
+| Should refuse (4): refused / answered | 2 / 2 (one with an invented "£0", one with an invented rate) |
+| Statements exported for labelling | 56 |
+| Conflict reports (default check) | 5: two on the asked dated difference, two on a real but unasked dated difference, one false pair; the requirement conflict was missed |
+
+A first collection found two bugs that were fixed before this one (`92a46f5`): conflict
+reports pairing one organisation's prices with another's, and a whole answer in brackets hidden
+as invalid output. One wrong statement that both claim-check versions accept was seen and left
+unfixed ("£1 per minute" for "£1 per 15 minutes"). Accuracy of the checks on this set will be
+measured only from human labels ([README](../evaluation/reviews/claims-review-v1/README.md)).
+
+### 2026-10-19 (release preparation): each behaviour separately
+
+One more run of the development set with qwen2.5:1.5b (Ollama 0.14.2, mains power, default
+checks, code `83c5668`; the uncommitted changes were documentation and scripts the run does
+not use). Its 25 raw outputs were identical to those of `…T091342Z`, so every measure below is
+the same as in that committed report; replaying them with claims-v2 gave the same values as
+`…T103613Z`. Table: `python scripts/answer_behaviours.py REPORT.json [...]`. Labels of this set
+were written by the project author; no human checked the answers.
+
+| Behaviour (development set, 25 questions) | claims-v1 | claims-v2 |
+|---|---|---|
+| 1. Answerable questions answered with every key fact | 16/19 | 16/19 |
+| 2. False refusals | 2/19 | 2/19 |
+| 3. Correct refusals / unanswerable questions answered | 5/6 / 1/6 | 5/6 / 1/6 |
+| 4. Statements not found or partly found | 4/32 | 3/32 |
+| 5. Correct answers not fully verified | 3/16 | 2/16 |
+| 6. Statements with an exact quote | 28/32 | 29/32 |
+| 7. Key facts quoted from the expected document (mean); statements quoted from a passage the model did not cite | 0.88; 19/32 | 0.88; 20/32 |
+| 8. Answers citing a label that does not exist; answers with malformed citations | 0/18; 6/18 | 0/18; 6/18 |
+| 9. Conflict questions with a conflict report; conflict stated by the model | 2/2; 0/2 | 2/2; 0/2 |
+| 10. Conflict reports on other questions | 0/23 | 0/23 |
+
+Where the remaining errors come from (development set only):
+
+- **Retrieval is not the cause here.** For all 19 answerable questions every expected evidence
+  sentence was among the 5 passages the model received (same settings, rebuilt index).
+- **The model:** both false refusals (the fact was in the passages); one unanswerable question
+  answered with a true but unrelated fact; neither conflict stated, although GroundedAI
+  reported both; one answer to a prompt-injection question concluded "Yes, membership … is
+  free for guests" next to the right price; 6 of 18 answers wrote citations in another format
+  (`[Source S1]`, `[Source id="S2"]`, a document title), which GroundedAI recovers by quoting
+  the passage itself.
+- **The checks:** a true but unrelated fact is "found" by both versions (neither judges whether
+  a statement answers the question); claims-v1 marked the injection answer above verified
+  (claims-v2: partly verified); 3 (claims-v1) and 2 (claims-v2) correct answers were not fully
+  verified because a paraphrase did not match.
+
+Secondary comparison, recorded outputs only: replaying the 56-question qwen2.5:1.5b run
+(`…T093836Z`) at this commit, with no model call and without reading individual questions,
+reproduced it exactly with claims-v1 (29 of 41 answers to answer questions verified) and gave
+26 of 41 with claims-v2, which is stricter on this set (statements not found 21 of 117, against
+16). For 4 questions the current conflict check would send the model a different note than
+the recorded run did. These numbers were not used to change anything.
+
+A larger local model would most likely help with what the model gets wrong here (refusals,
+citation format, stating conflicts); it would not change the checks' limits. On this laptop a
+7B model in 4-bit quantisation needs about 4–5 GB of memory and would take several times as
+long per answer as qwen2.5:1.5b (median 18 s); no larger model was run for this release.
+
 ## Reproducing
+
+The PDF journey (no dataset hash; the sample PDFs are rebuilt by `scripts/make_sample_pdfs.py`):
+
+```bash
+python scripts/journey_check.py --out evaluation/reports/journey/extractive.json
+HF_HUB_OFFLINE=1 GROUNDEDAI_GENERATION_PROVIDER=huggingface-local \
+  GROUNDEDAI_EMBEDDING_PROVIDER=sentence-transformers GROUNDEDAI_EMBEDDING_MODEL=BAAI/bge-small-en-v1.5 \
+  GROUNDEDAI_EMBEDDING_QUERY_PREFIX="Represent this sentence for searching relevant passages: " \
+  python scripts/journey_check.py --out evaluation/reports/journey/qwen.json
+```
 
 ```bash
 # offline (no models): dataset integrity + lexical/hashing baselines
@@ -409,6 +788,12 @@ groundedai eval generation --provider ollama --model qwen2.5:1.5b \
 python scripts/compare_generation_reports.py BASELINE.json OTHER.json [MORE.json ...]
 # how often the figure-conflict check fires (no model needed)
 python scripts/analyze_conflict_check.py --mode hybrid
+
+# 2026-10-19: revised claims-v2 on the development set (same settings as above)
+GROUNDEDAI_CLAIM_CHECK=claims-v2 groundedai eval generation --provider ollama --model qwen2.5:1.5b \
+  --prompt-version answer-v2 --dataset-dir evaluation/datasets/groundedai-dev-v1 --out evaluation/reports/local/dev
+GROUNDEDAI_GENERATION_PROVIDER=ollama GROUNDEDAI_CLAIM_CHECK=claims-v2 python scripts/journey_check.py --out journey.json
+python scripts/reliability_suite.py score --split dev --checks v2 --out evaluation/reports/reliability/dev
 
 # 2026-10-14 (no language model needed)
 HF_HUB_OFFLINE=1 groundedai eval retrieval --config evaluation/configs/retrieval_app_defaults.json

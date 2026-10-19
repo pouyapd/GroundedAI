@@ -17,6 +17,35 @@ _WS_RE = re.compile(r"\s+")
 # Sentence boundary: end punctuation followed by whitespace and an uppercase
 # letter, digit, quote or bracket; or a blank line / bullet line break.
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+(?=[\"'“(\[A-Z0-9])|\n\s*\n|\n(?=\s*[-*•]\s)")
+# A heading on its own line (as PDF text keeps section titles): short, capitalised, without
+# sentence punctuation, followed by a line that starts a sentence. Wrapped lines of running
+# text are longer or end in a connecting word, and stay in their sentence.
+_HEADING_LINE_RE = re.compile(r"(?m)^([A-Z][^\n.!?;:,]{0,58}[^\s.!?;:,])\n(?=[\"'“(\[]?[A-Z0-9])")
+_HEADING_MAX_WORDS = 8
+_CONNECTING_WORDS = frozenset(
+    [
+        "a",
+        "an",
+        "and",
+        "as",
+        "at",
+        "by",
+        "for",
+        "from",
+        "in",
+        "into",
+        "of",
+        "on",
+        "or",
+        "per",
+        "than",
+        "that",
+        "the",
+        "to",
+        "via",
+        "with",
+    ]
+)
 
 _STOPWORD_TEXT = """
 a about above after again against all am an and any are as at be because been before being
@@ -77,7 +106,16 @@ def content_tokens(text: str) -> list[str]:
     return [light_stem(token) for token in tokenize(text) if token not in STOPWORDS]
 
 
+def _heading_break(match: re.Match[str]) -> str:
+    line = match.group(1)
+    words = line.split()
+    if len(words) > _HEADING_MAX_WORDS or words[-1].lower() in _CONNECTING_WORDS:
+        return match.group(0)
+    return line + "\n\n"
+
+
 def split_sentences(text: str) -> list[str]:
+    text = _HEADING_LINE_RE.sub(_heading_break, text)
     parts = (normalize_whitespace(part) for part in _SENTENCE_SPLIT_RE.split(text))
     return [part for part in parts if part]
 

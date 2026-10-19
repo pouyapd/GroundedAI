@@ -540,3 +540,143 @@ def test_abstention_has_no_claims(settings: Settings) -> None:
         assert response.verification is None
     finally:
         services.close()
+
+
+@pytest.mark.parametrize("version", ["claims-v1", "claims-v2"])
+def test_claims_v2_reports_three_verdicts_and_v1_does_not(
+    make_settings: SettingsFactory, version: str
+) -> None:
+    reply = "The hotel limit in capital cities is EUR 140 per night [S1]."
+    model = FakeListChatModel(responses=[reply])
+    services = _services_with(make_settings(claim_check=version), model)
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="How much is the hotel limit in capital cities?")
+        )
+        verification = response.verification
+        assert verification is not None
+        assert verification.version == version
+        assert verification.verdict == "verified"
+        if version == "claims-v1":
+            assert verification.evidence is None
+            assert response.claims[0].citation_status is None
+        else:
+            assert verification.evidence == "all_found"
+            assert verification.citations == "all_correct"
+            assert verification.addresses_question == "yes"
+            assert response.claims[0].citation_status == "correct"
+    finally:
+        services.close()
+
+
+@pytest.mark.parametrize(("version", "withheld"), [("claims-v1", True), ("claims-v2", False)])
+def test_claims_v2_withholds_only_when_nothing_was_found(
+    make_settings: SettingsFactory, version: str, withheld: bool
+) -> None:
+    # A statement only partly found: v1 calls the answer unverified and withholds it; v2 counts
+    # it as uncertain and returns it labelled.
+    reply = "The hotel limit in capital cities is reviewed by the travel desk [S1]."
+    settings = make_settings(unverified_answers="withhold", claim_check=version)
+    services = _services_with(settings, FakeListChatModel(responses=[reply]))
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        assert [claim.status for claim in response.claims] == ["partial"]
+        assert (response.status == "insufficient_evidence") is withheld
+        if version == "claims-v2":
+            assert response.verification is not None
+            assert response.verification.evidence == "some_uncertain"
+    finally:
+        services.close()
+
+
+# Real Qwen2.5-0.5B replies on the development set (2026-10-18), and the status each version gives.
+# Version 1 keeps its published behaviour, so recorded runs replay unchanged.
+BRACKET_REPLIES = [
+    ("[21]", "invalid_output", "answered"),
+    ("[Travel Policy]\n[Finance FAQ]", "invalid_output", "answered"),
+    ("[Insufficient Evidence: nothing about hotels.]", "insufficient_evidence", None),
+    ("[Travel Policy]: The hotel limit is EUR 140 per night [S1].", "answered", None),
+    # qwen2.5:1.5b wrapped a whole answer in brackets (2026-10-19): it is an answer.
+    ("[The hotel limit in capital cities is EUR 140 per night.]", "answered", None),
+]
+
+
+@pytest.mark.parametrize("version", ["claims-v1", "claims-v2"])
+@pytest.mark.parametrize(("reply", "v2_status", "v1_status"), BRACKET_REPLIES)
+def test_claims_v2_rejects_replies_made_only_of_brackets(
+    make_settings: SettingsFactory, version: str, reply: str, v2_status: str, v1_status: str | None
+) -> None:
+    settings = make_settings(claim_check=version)
+    services = _services_with(settings, FakeListChatModel(responses=[reply]))
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        expected = v2_status if version == "claims-v2" else (v1_status or v2_status)
+        assert response.status == expected
+        if expected == "invalid_output":
+            assert response.answer is None
+            assert any("bracketed fragments" in warning for warning in response.warnings)
+    finally:
+        services.close()
+
+
+UNSTATED = "the answer does not say so"
+
+
+@pytest.mark.parametrize(
+    ("version", "reply", "warned"),
+    [
+        # Both values, but presented as agreeing: the disagreement is not stated.
+        ("claims-v2", "The limit is EUR 140 [S1], and [S2] confirms this with EUR 120.", True),
+        ("claims-v2", "The hotel limit in capital cities is EUR 140 per night [S1].", True),
+        ("claims-v2", "The sources disagree: EUR 140 [S1] or EUR 120 [S2] per night.", False),
+        # Version 1 keeps its published warnings.
+        ("claims-v1", "The hotel limit in capital cities is EUR 140 per night [S1].", False),
+    ],
+)
+def test_claims_v2_warns_when_the_answer_does_not_state_a_conflict(
+    make_settings: SettingsFactory, version: str, reply: str, warned: bool
+) -> None:
+    settings = make_settings(prompt_version="answer-v2", claim_check=version)
+    services = _services_with(settings, RecordingChatModel(seen=[], reply=reply))
+    services.ingestion.ingest_bytes("faq.txt", None, FAQ_TEXT.encode())
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="What is the hotel limit per night in capital cities?")
+        )
+        (conflict,) = response.conflicts
+        assert conflict.kind == "conflict"
+        assert any(UNSTATED in warning for warning in response.warnings) is warned
+    finally:
+        services.close()
+
+
+@pytest.mark.parametrize("version", ["claims-v1", "claims-v2"])
+def test_a_refusal_stays_a_refusal_with_either_check(
+    make_settings: SettingsFactory, version: str
+) -> None:
+    model = FakeListChatModel(responses=["INSUFFICIENT_EVIDENCE: nothing about contractors."])
+    services = _services_with(make_settings(claim_check=version), model)
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="How many leave days do contractors get?")
+        )
+        assert response.status == "insufficient_evidence"
+        assert response.claims == []
+        assert response.verification is None
+    finally:
+        services.close()
+
+
+def test_disagreement_v2_can_be_selected(make_settings: SettingsFactory) -> None:
+    settings = make_settings(prompt_version="answer-v2", conflict_check="disagreement-v2")
+    services = _services_with(settings, RecordingChatModel(seen=[]))
+    services.ingestion.ingest_bytes("faq.txt", None, FAQ_TEXT.encode())
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="What is the hotel limit per night in capital cities?")
+        )
+        (conflict,) = response.conflicts
+        assert conflict.kind == "conflict"
+        assert all(statement.validity_dates == [] for statement in conflict.statements)
+    finally:
+        services.close()

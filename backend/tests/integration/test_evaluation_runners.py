@@ -92,7 +92,7 @@ def test_generation_eval_with_extractive_baseline(settings, tmp_path: Path) -> N
     # Scoring version 4: the checks used are recorded, and the claim check accepts every
     # sentence the baseline quotes from a passage with its label.
     config = report["run_config"]
-    assert (config["scoring_version"], config["claim_check"]) == (4, "claims-v1")
+    assert (config["scoring_version"], config["claim_check"]) == (5, "claims-v1")
     assert config["conflict_check"] == "disagreement-v1"
     assert summary["claim_match_rate"] == 1.0
     assert summary["cited_claim_precision"] == 1.0
@@ -144,6 +144,7 @@ def test_environment_settings_are_recorded_and_reproduce_the_run(
             "rerank_candidates": 9,
             "unverified_answers": "withhold",
             "max_question_chars": 500,
+            "claim_check": "claims-v1",
         }
         assert config["environment_variables"] == sorted(PIPELINE_ENV)
         assert config["timeout_s"] == 300.0

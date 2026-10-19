@@ -103,11 +103,19 @@ class Settings(BaseSettings):
         default="answer-v2",
         description="Answer prompt; answer-v1 reproduces the reports published before 2026-10-13.",
     )
-    conflict_check: Literal["figures-v1", "disagreement-v1"] = Field(
+    conflict_check: Literal["figures-v1", "disagreement-v1", "disagreement-v2"] = Field(
         default="disagreement-v1",
         description=(
             "Check for passages that disagree; figures-v1 reproduces the reports published on "
-            "2026-10-13."
+            "2026-10-13; disagreement-v2 compares ranges as a whole and tells validity dates "
+            "from edit dates (opt-in: it changes the notes the answer-v2 prompt sends)."
+        ),
+    )
+    claim_check: Literal["claims-v1", "claims-v2"] = Field(
+        default="claims-v1",
+        description=(
+            "Check of the answer's statements; claims-v2 adds separate evidence, citation and "
+            "answers-the-question results (opt-in). The verdict field means the same in both."
         ),
     )
     unverified_answers: Literal["label", "withhold"] = Field(

@@ -1,0 +1,173 @@
+{
+  "generated_at": "2026-10-18T15:02:56Z",
+  "code_version": {
+    "commit": "5836f065eaab",
+    "uncommitted_changes": false
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7"
+  },
+  "providers": {
+    "embedding": {
+      "provider": "hashing",
+      "model": "hashing:v1-384",
+      "is_llm": null,
+      "available": true,
+      "detail": "Deterministic hashing embedder (word overlap only, not semantic)."
+    },
+    "generation": {
+      "provider": "extractive-demo",
+      "model": "extractive-demo-v1",
+      "is_llm": false,
+      "available": true,
+      "detail": "Deterministic extractive demo (not an LLM)."
+    },
+    "reranker": {
+      "provider": "none",
+      "model": null,
+      "is_llm": null,
+      "available": null,
+      "detail": "Disabled."
+    }
+  },
+  "documents": {
+    "ferry": "doc_bf26755860f9d7d81f20",
+    "library": "doc_44268f81f2bbd713cfdf"
+  },
+  "as_expected": 5,
+  "questions": 7,
+  "results": [
+    {
+      "question": "How much does a single adult ticket from Kessport to Mirrow cost?",
+      "scope": "ferry",
+      "expected": "14",
+      "as_expected": true,
+      "status": "answered",
+      "answer": "Tickets A single adult ticket from Kessport to Mirrow costs 14 euros [S1].",
+      "verdict": "verified",
+      "claims": [
+        {
+          "text": "Tickets A single adult ticket from Kessport to Mirrow costs 14 euros.",
+          "status": "supported",
+          "pages": [
+            2
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        }
+      ],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 0.1
+    },
+    {
+      "question": "Do young children have to pay for the ferry?",
+      "scope": "ferry",
+      "expected": "free",
+      "as_expected": false,
+      "status": "insufficient_evidence",
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 0.0
+    },
+    {
+      "question": "How much does it cost to take a bicycle?",
+      "scope": "ferry",
+      "expected": "6",
+      "as_expected": true,
+      "status": "answered",
+      "answer": "Bicycles cost 6 euros per trip [S1].",
+      "verdict": "verified",
+      "claims": [
+        {
+          "text": "Bicycles cost 6 euros per trip.",
+          "status": "supported",
+          "pages": [
+            3
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        }
+      ],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 0.0
+    },
+    {
+      "question": "Can I bring my dog on the ferry?",
+      "scope": "ferry",
+      "expected": "lead",
+      "as_expected": false,
+      "status": "insufficient_evidence",
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 0.0
+    },
+    {
+      "question": "What time does the last ferry leave Mirrow?",
+      "scope": "ferry",
+      "expected": null,
+      "as_expected": true,
+      "status": "insufficient_evidence",
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 0.0
+    },
+    {
+      "question": "How many items can library members borrow?",
+      "scope": "ferry",
+      "expected": null,
+      "as_expected": true,
+      "status": "insufficient_evidence",
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 0.0
+    },
+    {
+      "question": "How many items can library members borrow?",
+      "scope": "library",
+      "expected": "12",
+      "as_expected": true,
+      "status": "answered",
+      "answer": "Members may borrow up to 12 items at a time [S1].",
+      "verdict": "verified",
+      "claims": [
+        {
+          "text": "Members may borrow up to 12 items at a time.",
+          "status": "supported",
+          "pages": [
+            1
+          ],
+          "documents": [
+            "doc_44268f81f2bbd713cfdf"
+          ]
+        }
+      ],
+      "source_documents": [
+        "doc_44268f81f2bbd713cfdf"
+      ],
+      "seconds": 0.0
+    }
+  ]
+}

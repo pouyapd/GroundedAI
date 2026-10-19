@@ -1,0 +1,245 @@
+{
+  "generated_at": "2026-10-19T10:25:41Z",
+  "code_version": {
+    "commit": "708297041cb2",
+    "uncommitted_changes": false
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7"
+  },
+  "providers": {
+    "embedding": {
+      "provider": "hashing",
+      "model": "hashing:v1-384",
+      "is_llm": null,
+      "available": true,
+      "detail": "Deterministic hashing embedder (word overlap only, not semantic)."
+    },
+    "generation": {
+      "provider": "ollama",
+      "model": "qwen2.5:1.5b",
+      "is_llm": true,
+      "available": true,
+      "detail": "Ollama is running and the model is available."
+    },
+    "reranker": {
+      "provider": "none",
+      "model": null,
+      "is_llm": null,
+      "available": null,
+      "detail": "Disabled."
+    }
+  },
+  "documents": {
+    "ferry": "doc_bf26755860f9d7d81f20",
+    "library": "doc_44268f81f2bbd713cfdf"
+  },
+  "questions": 7,
+  "outcomes": {
+    "correct": 3,
+    "correct_unverified": 2,
+    "correct_refusal": 2
+  },
+  "results": [
+    {
+      "question": "How much does a single adult ticket from Kessport to Mirrow cost?",
+      "scope": "ferry",
+      "expected": "14",
+      "outcome": "correct",
+      "status": "answered",
+      "answer": "A single adult ticket from Kessport to Mirrow costs 14 euros. Tickets bought on board cost 3 euros more than tickets bought online.",
+      "verdict": "verified",
+      "claims": [
+        {
+          "text": "A single adult ticket from Kessport to Mirrow costs 14 euros.",
+          "status": "added_source",
+          "pages": [
+            2
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        },
+        {
+          "text": "Tickets bought on board cost 3 euros more than tickets bought online.",
+          "status": "added_source",
+          "pages": [
+            2
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        }
+      ],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 10.0
+    },
+    {
+      "question": "Do young children have to pay for the ferry?",
+      "scope": "ferry",
+      "expected": "free",
+      "outcome": "correct_unverified",
+      "status": "answered",
+      "answer": "[Source 1][Source 2]: No, young children do not have to pay for the ferry. They travel free.",
+      "verdict": "partially_verified",
+      "claims": [
+        {
+          "text": "No, young children do not have to pay for the ferry.",
+          "status": "partial",
+          "pages": [
+            2
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        },
+        {
+          "text": "They travel free.",
+          "status": "supported",
+          "pages": [
+            2
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        }
+      ],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 2.7
+    },
+    {
+      "question": "How much does it cost to take a bicycle?",
+      "scope": "ferry",
+      "expected": "6",
+      "outcome": "correct",
+      "status": "answered",
+      "answer": "It costs 6 euros per trip to take a bicycle.",
+      "verdict": "verified",
+      "claims": [
+        {
+          "text": "It costs 6 euros per trip to take a bicycle.",
+          "status": "added_source",
+          "pages": [
+            3
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        }
+      ],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 2.0
+    },
+    {
+      "question": "Can I bring my dog on the ferry?",
+      "scope": "ferry",
+      "expected": "lead",
+      "outcome": "correct_unverified",
+      "status": "answered",
+      "answer": "Yes, you can bring your dog on the ferry. According to the Harbourline Ferries Passenger Guide (S1), dogs are allowed on the open deck if they are kept on a lead. However, it is important to note that this information was provided in 2026 and may have changed since then.",
+      "verdict": "partially_verified",
+      "claims": [
+        {
+          "text": "Yes, you can bring your dog on the ferry.",
+          "status": "partial",
+          "pages": [
+            3
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        },
+        {
+          "text": "Dogs are allowed on the open deck if they are kept on a lead.",
+          "status": "supported",
+          "pages": [
+            3
+          ],
+          "documents": [
+            "doc_bf26755860f9d7d81f20"
+          ]
+        },
+        {
+          "text": "However, it is important to note that this information was provided in 2026 and may have changed since then.",
+          "status": "unsupported",
+          "pages": [],
+          "documents": []
+        }
+      ],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 4.6
+    },
+    {
+      "question": "What time does the last ferry leave Mirrow?",
+      "scope": "ferry",
+      "expected": null,
+      "outcome": "correct_refusal",
+      "status": "insufficient_evidence",
+      "answer": "[INSUFFICIENT_EVIDENCE: The provided source does not contain information about the departure times of Harbourline Ferries.]",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 2.6
+    },
+    {
+      "question": "How many items can library members borrow?",
+      "scope": "ferry",
+      "expected": null,
+      "outcome": "correct_refusal",
+      "status": "insufficient_evidence",
+      "answer": "INSUFFICIENT_EVIDENCE: The provided source does not contain information about how many items library members can borrow.",
+      "verdict": null,
+      "claims": [],
+      "source_documents": [
+        "doc_bf26755860f9d7d81f20"
+      ],
+      "seconds": 2.5
+    },
+    {
+      "question": "How many items can library members borrow?",
+      "scope": "library",
+      "expected": "12",
+      "outcome": "correct",
+      "status": "answered",
+      "answer": "[Source S1] states that library members may borrow up to 12 items at a time. Therefore, the answer is 12 items.",
+      "verdict": "verified",
+      "claims": [
+        {
+          "text": "Library members may borrow up to 12 items at a time.",
+          "status": "supported",
+          "pages": [
+            1
+          ],
+          "documents": [
+            "doc_44268f81f2bbd713cfdf"
+          ]
+        },
+        {
+          "text": "Therefore, the answer is 12 items.",
+          "status": "added_source",
+          "pages": [
+            1
+          ],
+          "documents": [
+            "doc_44268f81f2bbd713cfdf"
+          ]
+        }
+      ],
+      "source_documents": [
+        "doc_44268f81f2bbd713cfdf"
+      ],
+      "seconds": 4.6
+    }
+  ]
+}

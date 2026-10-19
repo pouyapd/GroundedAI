@@ -9,7 +9,8 @@ reports published on 2026-10-13). Steps:
    money, durations, times, counts, percentages, ...) or that deny a requirement ("do not have
    to", "no fixed schedule"). Instruction-like text is skipped.
 3. **About the question.** A statement counts only if it contains at least two of the asked
-   words and at most one fewer than the best-matching statement.
+   words (one, when the question has a single asked word) and at most one fewer than the
+   best-matching statement.
 4. **Pairs from different documents** are then classified:
 
    ``agreement``
@@ -30,6 +31,35 @@ reports published on 2026-10-13). Steps:
 Limits: a pattern-based reading, not language understanding. It misses disagreements that
 need world knowledge or arithmetic, can pair statements about different things that share
 words, and treats any shared value as agreement.
+
+Version 2 (``disagreement-v2``, chosen with :func:`find_disagreements`'s ``version``) keeps
+these steps and changes three things:
+
+* **Ranges as a whole.** "06:00–16:00" and "07:00–16:00" differ although they share an end. A
+  single value agrees with a range when it equals one of its ends, is not compared when it
+  lies inside, and differs when it lies outside.
+* **Two kinds of date.** Dates that say when a value applies ("valid from 1 March 2026",
+  "2025 price list", "autumn term 2026") are kept apart from dates that only say when a
+  document was edited ("last updated", "revised", "published"). ``different_dates`` needs
+  differing dates of the first kind on *both* sides; edit dates only, or a date on one side
+  only, give ``conflict``, and the dates are shown in the explanation.
+* **Word forms.** The asked words are matched with :func:`claim_stem_v2`
+  ("emptied" = "empty").
+
+Revised 2026-10-19 (still ``disagreement-v2``, after errors on the development split):
+
+* **Equivalent words** share a key (:mod:`groundedai.generation.equivalents`: fee / charge,
+  annual / yearly, ...), so "yearly charge" and "annual fee" are about the same thing.
+* **Requirement wording.** The question's own "need", "must", "required" or "compulsory" is
+  not an asked word (it asks *whether* something is required, it is not the thing). "No X is
+  needed", "not compulsory" deny a requirement; "compulsory", "mandatory" affirm one.
+* **FAQ questions** in a passage are not statements; a question answered by "No" ("Do I need
+  to show proof of address? No.") denies what it asks.
+* **About the question.** A statement may have up to two fewer asked words than the best one
+  (one in version 1), since equivalent words raise the best statement's count; a statement
+  that only affirms or denies a requirement needs two asked words, whatever the best has,
+  because the two sides of a requirement conflict are often worded very differently. Both
+  limits were chosen on the development split.
 """
 
 from __future__ import annotations
@@ -39,13 +69,21 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field, replace
 from typing import Literal
 
-from groundedai.core.quantities import MONTHS, Quantity, read_quantities
+from groundedai.core.quantities import MONTHS, Quantity, Range, read_quantities, read_ranges
 from groundedai.core.text import find_normalized_span, split_sentences, tokenize
-from groundedai.generation.claims import QUESTION_FILLERS, claim_stem, claim_words
+from groundedai.generation.claims import (
+    QUESTION_FILLERS,
+    Stemmer,
+    claim_key_v2,
+    claim_stem,
+    claim_words,
+)
 from groundedai.generation.context import SourceBlock
+from groundedai.generation.equivalents import rewrite_phrases
 from groundedai.generation.safety import detect_injection
 
 DisagreementKind = Literal["conflict", "different_dates"]
+DisagreementVersion = Literal["disagreement-v1", "disagreement-v2"]
 MIN_FOCUS_WORDS = 2
 MAX_REPORTED = 3
 
@@ -71,6 +109,27 @@ _EDITION_RE = re.compile(
     re.IGNORECASE,
 )
 _YEAR_IN_TITLE_RE = re.compile(r"\b(?:19|20)\d{2}\b")
+# disagreement-v2: a date that only says when a document was written or edited.
+_REVISION_RE = re.compile(
+    rf"\b(?:last\s+)?(?:updated|revised|edited|reviewed|modified|amended|published|issued|"
+    rf"printed|dated)\b\s*(?:on|in|:)?\s*(?:{_DATE_PHRASE})",
+    re.IGNORECASE,
+)
+_SEASON = r"(?:spring|summer|autumn|fall|winter)"
+# disagreement-v2: a date that says when a value applies.
+_VALIDITY_RE = re.compile(
+    rf"\b(?:valid|effective|applies|apply|applied|applicable|in force|in effect)\b[^.\n]{{0,60}}?"
+    rf"\b(?:from|since|until|till|as of|to)\s+(?:the\s+)?(?:{_DATE_PHRASE})\b"
+    rf"|\b(?:from|since|until|till|as of|effective|starting|beginning|valid from|valid until|"
+    rf"in|for)\s+(?:the\s+)?(?:{_SEASON}\s+)?(?:term\s+|season\s+)?(?:{_DATE_PHRASE})\b"
+    rf"|(?:{_DATE_PHRASE})\s+(?:{_SEASON}\s+)?(?:edition|tariff|version|price list|prices|rates|"
+    rf"fees|charges|season|term|timetable|schedule)\b"
+    rf"|\b(?:edition|tariff|version|price list|season|term|rates|prices)\s+(?:{_DATE_PHRASE})\b"
+    rf"|\b{_SEASON}\s+(?:term|season|semester)\s+(?:{_DATE_PHRASE})\b",
+    re.IGNORECASE,
+)
+_SEASON_RE = re.compile(rf"\b{_SEASON}\b", re.IGNORECASE)
+_YEAR_RE = re.compile(r"\b(?:19|20)\d{2}\b")
 _NEGATED_REQUIREMENT_RE = re.compile(
     r"\b(?:do|does|did)\s+not\s+(?:have|need)\s+to\b"
     r"|\b(?:don't|doesn't)\s+(?:have|need)\s+to\b"
@@ -86,6 +145,17 @@ _AFFIRMED_REQUIREMENT_RE = re.compile(
     r"\b(?:must|has to|have to|needs? to|is required|are required|required to|remember to)\b",
     re.IGNORECASE,
 )
+# disagreement-v2 also reads these.
+_NEGATED_REQUIREMENT_V2_RE = re.compile(
+    r"\bno\s+(?:[\w-]+\s+){0,3}?(?:is|are)\s+(?:needed|required|necessary|compulsory|mandatory)\b"
+    r"|\b(?:is|are)\s+not\s+(?:compulsory|mandatory|obligatory)\b"
+    r"|\bnot\s+(?:required|needed|necessary|compulsory|mandatory)\b",
+    re.IGNORECASE,
+)
+_AFFIRMED_REQUIREMENT_V2_RE = re.compile(r"\b(?:compulsory|mandatory|obligatory)\b", re.I)
+_REQUIREMENT_WORDS = "need needs needed must require required requirement compulsory mandatory"
+_QUESTION_SENTENCE_RE = re.compile(r"\?[\"')\]]*\s*$")
+_ANSWERED_NO_RE = re.compile(r"^\W*no\b", re.IGNORECASE)
 _ASKS_FOR_DATE_RE = re.compile(r"^\s*when\b|\b(?:what|which)\s+date\b|\bby when\b", re.IGNORECASE)
 _CAPITALISED_RE = re.compile(r"\b[A-Z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*")
 # What kind of value a question asks for. Only values of that kind are compared, so a question
@@ -148,6 +218,10 @@ _QUALIFIERS: dict[str, frozenset[str]] = {
     group: frozenset(claim_stem(word) for word in words.split())
     for group, words in _QUALIFIER_GROUPS.items()
 }
+_QUALIFIERS_V2: dict[str, frozenset[str]] = {
+    group: frozenset(claim_key_v2(word) for word in words.split())
+    for group, words in _QUALIFIER_GROUPS.items()
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -165,9 +239,17 @@ class Statement:
     qualifiers: dict[str, frozenset[str]] = field(default_factory=dict)
     dates: tuple[str, ...] = ()
     affirms: bool = False  # "must", "is required"
+    # disagreement-v2 only
+    ranges: tuple[Range, ...] = ()
+    validity_dates: tuple[str, ...] = ()
+    revision_dates: tuple[str, ...] = ()
 
     def value_texts(self) -> list[str]:
-        return [value.text for value in self.values]
+        if not self.ranges:
+            return [value.text for value in self.values]
+        in_ranges = {id(end) for value in self.ranges for end in (value.low, value.high)}
+        texts = [_range_text(value) for value in self.ranges]
+        return texts + [value.text for value in self.values if id(value) not in in_ranges]
 
     def stance(self) -> str:
         """What the statement says about the asked property, for the explanation."""
@@ -178,18 +260,31 @@ class Statement:
         return "it is required"  # a statement without a value either denies or affirms
 
 
+def _range_text(value: Range) -> str:
+    """ "3 days" and "5 days" -> "3–5 days"; times and amounts keep both ends as written."""
+    low, high = value.low.text, value.high.text
+    if value.low.kind == value.high.kind and low.split()[1:] == high.split()[1:] and " " in low:
+        low = low.split()[0]
+    return f"{low}–{high}"
+
+
 @dataclass(frozen=True, slots=True)
 class Disagreement:
     kind: DisagreementKind
     first: Statement
     second: Statement
+    show_dates: bool = False  # disagreement-v2: name each side's dates in a conflict
 
     @property
     def labels(self) -> tuple[str, str]:
         return self.first.label, self.second.label
 
     def _side(self, statement: Statement) -> str:
-        return f"{statement.label} says {statement.stance()}"
+        side = f"{statement.label} says {statement.stance()}"
+        dated = statement.validity_dates + statement.revision_dates
+        if self.show_dates and dated:
+            side += f" ({'; '.join(dated)})"
+        return side
 
     def explanation(self) -> str:
         if self.kind == "different_dates":
@@ -237,16 +332,49 @@ def asked_kinds(question: str) -> frozenset[str] | None:
     return None
 
 
-def asked_words(question: str) -> set[str]:
-    """Content words of the question, without names and without words that only ask."""
-    names = {
-        claim_stem(token)
+def question_names(question: str, stem: Stemmer = claim_stem) -> set[str]:
+    """Names in the question: capitalised words after the first ("Tidewell", "Kestrel")."""
+    return {
+        stem(token)
         for match in _CAPITALISED_RE.finditer(question)
         if match.start() > 0
         for token in tokenize(match.group(0))
     }
-    fillers = {claim_stem(word) for word in QUESTION_FILLERS}
-    return claim_words(question) - names - fillers
+
+
+def _from_named_documents(
+    statements: list[Statement], sources: Sequence[SourceBlock], names: set[str], stem: Stemmer
+) -> list[Statement]:
+    """Statements from documents that mention a name the question gives.
+
+    A question about "Tidewell" is not answered by another organisation's handbook that
+    happens to state a monthly price. When no retrieved document mentions the names, nothing
+    is left out.
+    """
+    if not names:
+        return statements
+    named: dict[str, bool] = {}
+    for block in sources:
+        words = claim_words(f"{block.chunk.document_title} {block.text}", stem)
+        named[block.chunk.document_id] = named.get(block.chunk.document_id, False) or bool(
+            words & names
+        )
+    if not any(named.values()):
+        return statements
+    return [statement for statement in statements if named.get(statement.document_id)]
+
+
+def asked_words(question: str, stem: Stemmer = claim_stem) -> set[str]:
+    """Content words of the question, without names and without words that only ask.
+
+    With the version-2 stemmer, words that ask whether something is required ("need",
+    "compulsory") are left out too.
+    """
+    names = question_names(question, stem)
+    fillers = {stem(word) for word in QUESTION_FILLERS}
+    if stem is claim_key_v2:
+        fillers |= {stem(word) for word in _REQUIREMENT_WORDS.split()}
+    return claim_words(question, stem) - names - fillers
 
 
 def _document_dates(sources: Sequence[SourceBlock]) -> dict[str, tuple[str, ...]]:
@@ -264,32 +392,67 @@ def _document_dates(sources: Sequence[SourceBlock]) -> dict[str, tuple[str, ...]
     return {key: tuple(dict.fromkeys(value)) for key, value in found.items()}
 
 
-def _statements(question: str, focus: set[str], sources: Sequence[SourceBlock]) -> list[Statement]:
+def _statements(
+    question: str, focus: set[str], sources: Sequence[SourceBlock], v2: bool = False
+) -> list[Statement]:
     dates_are_values = bool(_ASKS_FOR_DATE_RE.search(question))
     kinds = asked_kinds(question)
+    stem = claim_key_v2 if v2 else claim_stem
+    qualifier_groups = _QUALIFIERS_V2 if v2 else _QUALIFIERS
     statements = []
     for block in sources:
-        title_words = claim_words(block.chunk.document_title)
-        for sentence in split_sentences(block.text):
+        title_words = claim_words(block.chunk.document_title, stem)
+        sentences = split_sentences(block.text)
+        for index, sentence in enumerate(sentences):
             if detect_injection(sentence):
                 continue
-            words = frozenset(claim_words(sentence))
+            answered_no = False
+            if v2 and _QUESTION_SENTENCE_RE.search(sentence):
+                # An FAQ question states nothing, unless "No" answers it.
+                following = sentences[index + 1] if index + 1 < len(sentences) else ""
+                if not _ANSWERED_NO_RE.match(following):
+                    continue
+                answered_no = True
+            words = frozenset(claim_words(rewrite_phrases(sentence) if v2 else sentence, stem))
             if not words - title_words:
                 continue  # a heading that only repeats the title
+            found_quantities = read_quantities(sentence).quantities
             values = tuple(
                 quantity
-                for quantity in read_quantities(sentence).quantities
+                for quantity in found_quantities
                 if (dates_are_values or quantity.kind not in ("date", "year"))
                 and (kinds is None or quantity.kind in kinds)
             )
             denies = bool(_NEGATED_REQUIREMENT_RE.search(sentence))
+            if v2:
+                denies = denies or bool(_NEGATED_REQUIREMENT_V2_RE.search(sentence))
             # "do not have to" contains "have to": a requirement counts only outside a denial.
-            affirms = bool(
-                _AFFIRMED_REQUIREMENT_RE.search(_NEGATED_REQUIREMENT_RE.sub(" ", sentence))
-            )
+            rest = _NEGATED_REQUIREMENT_RE.sub(" ", sentence)
+            affirms = bool(_AFFIRMED_REQUIREMENT_RE.search(rest))
+            if v2:
+                rest = _NEGATED_REQUIREMENT_V2_RE.sub(" ", rest)
+                affirms = bool(
+                    _AFFIRMED_REQUIREMENT_RE.search(rest)
+                    or _AFFIRMED_REQUIREMENT_V2_RE.search(rest)
+                )
+            if answered_no:
+                # "Do I need to show proof of address? No." denies what the question asks.
+                denies, affirms, values = True, False, ()
             if not values and not denies and not affirms:
                 continue
             span = find_normalized_span(block.text, sentence) or (0, 0)
+            ranges: tuple[Range, ...] = ()
+            validity: tuple[str, ...] = ()
+            revision: tuple[str, ...] = ()
+            if v2:
+                kept = {id(value) for value in values}
+                ranges = tuple(
+                    found
+                    for found in read_ranges(sentence, found_quantities)
+                    if id(found.low) in kept and id(found.high) in kept
+                )
+                revision = tuple(m.group(0) for m in _REVISION_RE.finditer(sentence))
+                validity = tuple(m.group(0) for m in _VALIDITY_RE.finditer(sentence))
             statements.append(
                 Statement(
                     label=block.label,
@@ -304,22 +467,159 @@ def _statements(question: str, focus: set[str], sources: Sequence[SourceBlock]) 
                     focus=len(focus & words),
                     qualifiers={
                         group: words & names
-                        for group, names in _QUALIFIERS.items()
+                        for group, names in qualifier_groups.items()
                         if words & names
                     },
-                    dates=tuple(match.group(0) for match in _SCOPED_DATE_RE.finditer(sentence)),
+                    dates=(
+                        validity
+                        if v2
+                        else tuple(match.group(0) for match in _SCOPED_DATE_RE.finditer(sentence))
+                    ),
                     affirms=affirms,
+                    ranges=ranges,
+                    validity_dates=validity,
+                    revision_dates=revision,
                 )
             )
     return statements
 
 
-def _about_the_question(statements: list[Statement], focus: set[str]) -> list[Statement]:
+def _document_dates_v2(
+    sources: Sequence[SourceBlock],
+) -> dict[str, tuple[tuple[str, ...], tuple[str, ...]]]:
+    """disagreement-v2: per document, the dates its title and passages give, as (dates that
+    say when it applies, dates that only say when it was edited). A bare year in a title
+    counts as the first kind unless it is part of an edit date."""
+    found: dict[str, tuple[list[str], list[str]]] = {}
+    for block in sources:
+        validity, revision = found.setdefault(block.chunk.document_id, ([], []))
+        title = block.chunk.document_title
+        title_revisions = [m.group(0) for m in _REVISION_RE.finditer(title)]
+        revision.extend(title_revisions)
+        title_validity = [m.group(0) for m in _VALIDITY_RE.finditer(title)]
+        validity.extend(title_validity)
+        if not title_validity:
+            stripped = _REVISION_RE.sub(" ", title)
+            years = [m.group(0) for m in _YEAR_IN_TITLE_RE.finditer(stripped)]
+            seasons = [m.group(0) for m in _SEASON_RE.finditer(stripped)]
+            validity.extend(" ".join([*seasons, year]) for year in years)
+        for match in _VALIDITY_RE.finditer(block.text):
+            validity.append(match.group(0))
+        for match in _REVISION_RE.finditer(block.text):
+            revision.append(match.group(0))
+    return {
+        key: (tuple(dict.fromkeys(value[0])), tuple(dict.fromkeys(value[1])))
+        for key, value in found.items()
+    }
+
+
+def _date_key(dates: Sequence[str]) -> tuple[frozenset[str], frozenset[str], frozenset[float]]:
+    """Years, season words and full dates named in ``dates``, for comparing two sides."""
+    text = " ".join(dates)
+    years = frozenset(m.group(0) for m in _YEAR_RE.finditer(text))
+    seasons = frozenset(m.group(0).lower() for m in _SEASON_RE.finditer(text))
+    full = frozenset(
+        q.value for q in read_quantities(text).quantities if q.kind == "date" and q.value > 10000
+    )
+    return years, seasons, full
+
+
+def _dates_differ(first: Sequence[str], second: Sequence[str]) -> bool:
+    years_a, seasons_a, full_a = _date_key(first)
+    years_b, seasons_b, full_b = _date_key(second)
+    if years_a and years_b and years_a != years_b:
+        return True
+    if seasons_a and seasons_b and seasons_a != seasons_b:
+        return True
+    return bool(full_a and full_b and not full_a & full_b)
+
+
+def _relation(first: Statement, second: Statement) -> str:
+    """disagreement-v2: "agree", "differ" or "none" (nothing comparable), ranges as a whole.
+
+    When a range can be compared with the other side, only comparisons that involve a range
+    decide: a stated range is the value asked about, and an incidental shared figure (a year,
+    a count) elsewhere in the sentences does not make two different ranges agree.
+    """
+
+    def items(statement: Statement) -> list[Range | Quantity]:
+        ends = {id(end) for value in statement.ranges for end in (value.low, value.high)}
+        singles = [value for value in statement.values if id(value) not in ends]
+        return [*statement.ranges, *singles]
+
+    def comparable(a: Range | Quantity, b: Range | Quantity) -> bool:
+        if isinstance(a, Range):
+            return a.comparable(b)
+        if isinstance(b, Range):
+            return b.comparable(a)
+        return a.comparable(b)
+
+    pairs = [(a, b) for a in items(first) for b in items(second) if comparable(a, b)]
+    ranged = [(a, b) for a, b in pairs if isinstance(a, Range) or isinstance(b, Range)]
+    differ = False
+    for a, b in ranged or pairs:
+        if isinstance(a, Range) and isinstance(b, Range):
+            if a.same_range(b):
+                return "agree"
+            differ = True
+        elif isinstance(a, Range) or isinstance(b, Range):
+            span, value = (a, b) if isinstance(a, Range) else (b, a)
+            if not isinstance(span, Range) or not isinstance(value, Quantity):
+                continue
+            if span.has_end(value):
+                return "agree"
+            if not span.contains(value):
+                differ = True
+        elif isinstance(a, Quantity) and isinstance(b, Quantity):
+            if a.same_value(b):
+                return "agree"
+            differ = True
+    return "differ" if differ else "none"
+
+
+def _classify_v2(
+    first: Statement,
+    second: Statement,
+    document_dates: dict[str, tuple[tuple[str, ...], tuple[str, ...]]],
+) -> Disagreement | None:
+    relation = _relation(first, second)
+    if relation == "agree":
+        return None
+    if relation == "none" and first.denies == second.denies:
+        return None
+    sides = []
+    for statement in (first, second):
+        validity, revision = document_dates.get(statement.document_id, ((), ()))
+        sides.append(
+            replace(
+                statement,
+                validity_dates=statement.validity_dates or validity,
+                revision_dates=statement.revision_dates or revision,
+                dates=statement.validity_dates or validity,
+            )
+        )
+    a, b = sorted(sides, key=lambda statement: int(statement.label[1:]))
+    if a.validity_dates and b.validity_dates and _dates_differ(a.validity_dates, b.validity_dates):
+        return Disagreement("different_dates", a, b, show_dates=True)
+    if _different_context(first, second):
+        return None
+    return Disagreement("conflict", a, b, show_dates=True)
+
+
+def _about_the_question(
+    statements: list[Statement], focus: set[str], v2: bool = False
+) -> list[Statement]:
     if not statements:
         return []
     needed = min(MIN_FOCUS_WORDS, len(focus))
     best = max(statement.focus for statement in statements)
-    return [s for s in statements if s.focus >= max(needed, best - 1, 1)]
+
+    def kept(statement: Statement) -> bool:
+        if v2 and not statement.values and (statement.denies or statement.affirms):
+            return statement.focus >= max(needed, 1)
+        return statement.focus >= max(needed, best - (2 if v2 else 1), 1)
+
+    return [statement for statement in statements if kept(statement)]
 
 
 def _different_context(first: Statement, second: Statement) -> bool:
@@ -349,20 +649,40 @@ def _classify(
     return Disagreement("conflict", a, b)
 
 
-def find_disagreements(question: str, sources: Sequence[SourceBlock]) -> list[Disagreement]:
-    """Pairs of passages from different documents that disagree about what is asked."""
-    focus = asked_words(question)
+def find_disagreements(
+    question: str,
+    sources: Sequence[SourceBlock],
+    version: DisagreementVersion = "disagreement-v1",
+) -> list[Disagreement]:
+    """Pairs of passages from different documents that disagree about what is asked.
+
+    ``version`` chooses the method. Since 2026-10-19 both versions leave out statements from
+    documents that never mention a name the question gives (a question about one organisation
+    was paired with another organisation's prices); otherwise ``disagreement-v1`` reproduces the
+    earlier results.
+    """
+    v2 = version == "disagreement-v2"
+    focus = asked_words(question, claim_key_v2 if v2 else claim_stem)
     if not focus:
         return []
-    candidates = _about_the_question(_statements(question, focus, sources), focus)
+    stem = claim_key_v2 if v2 else claim_stem
+    statements = _statements(question, focus, sources, v2)
+    # Both versions (fixed 2026-10-19): another organisation's document is not about the question.
+    statements = _from_named_documents(statements, sources, question_names(question, stem), stem)
+    candidates = _about_the_question(statements, focus, v2)
     document_dates = _document_dates(sources)
+    dates_v2 = _document_dates_v2(sources) if v2 else {}
     found: dict[tuple[str, str], Disagreement] = {}
     ranked = sorted(candidates, key=lambda statement: -statement.focus)
     for index, first in enumerate(ranked):
         for second in ranked[index + 1 :]:
             if first.document_id == second.document_id:
                 continue
-            disagreement = _classify(first, second, document_dates)
+            disagreement = (
+                _classify_v2(first, second, dates_v2)
+                if v2
+                else _classify(first, second, document_dates)
+            )
             if disagreement is None:
                 continue
             key = (disagreement.first.document_id, disagreement.second.document_id)

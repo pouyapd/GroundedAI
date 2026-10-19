@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 
 import { ApiError, type Api } from "../api/client";
-import type { AnswerResponse, RetrievalReport, SystemStatus } from "../api/types";
+import type { AnswerResponse, DocumentOut, RetrievalReport, SystemStatus } from "../api/types";
 
 export const STATUS: SystemStatus = {
   version: "0.1.0",
@@ -112,11 +112,41 @@ export const REPORT: RetrievalReport = {
   limitations: ["Small synthetic corpus."],
 };
 
+export function readyDocument(id: string, title: string, filename: string): DocumentOut {
+  return {
+    id,
+    title,
+    filename,
+    media_type: filename.endsWith(".pdf") ? "application/pdf" : "text/plain",
+    size_bytes: 2048,
+    sha256: "0".repeat(64),
+    status: "ready",
+    error_code: null,
+    error_message: null,
+    page_count: filename.endsWith(".pdf") ? 3 : null,
+    char_count: 1200,
+    chunk_count: 2,
+    embedding_model: "hashing:v1-384",
+    attempts: 1,
+    created_at: "2026-10-18T10:00:00Z",
+    updated_at: "2026-10-18T10:00:00Z",
+  };
+}
+
+/** One document of the bundled sample corpus, so the live example questions are offered. */
+export const READY_DOCUMENTS: DocumentOut[] = [
+  readyDocument("doc_aaaaaaaaaaaaaaaaaaaa", "Aldervale Travel Policy", "aldervale-travel-policy.txt"),
+];
+
+export function documentPage(items: DocumentOut[]) {
+  return { items, total: items.length, offset: 0, limit: 100 };
+}
+
 export function fakeApi(overrides: Partial<Api> = {}): Api {
   return {
     mode: "live",
     systemStatus: vi.fn().mockResolvedValue(STATUS),
-    listDocuments: vi.fn().mockResolvedValue({ items: [], total: 0, offset: 0, limit: 20 }),
+    listDocuments: vi.fn().mockResolvedValue(documentPage(READY_DOCUMENTS)),
     listChunks: vi.fn().mockResolvedValue({ items: [], total: 0, offset: 0, limit: 50 }),
     uploadDocument: vi.fn(),
     deleteDocument: vi.fn(),

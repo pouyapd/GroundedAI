@@ -27,7 +27,7 @@ def test_upgrade_creates_schema_and_matches_models(tmp_path: Path) -> None:
     upgrade_database(url, 384)
     engine = create_db_engine(url)
     try:
-        assert current_revision(engine) == head_revision() == "0001"
+        assert current_revision(engine) == head_revision() == "0002"
         tables = set(inspect(engine).get_table_names())
         assert {"documents", "chunks", "chunks_fts", "query_events", "evaluation_runs"} <= tables
         with engine.connect() as connection:
@@ -61,6 +61,37 @@ def test_upgrade_is_idempotent(tmp_path: Path) -> None:
     upgrade_database(url, 384)
     engine = create_db_engine(url)
     try:
-        assert current_revision(engine) == "0001"
+        assert current_revision(engine) == "0002"
+    finally:
+        engine.dispose()
+
+
+def test_0002_adds_page_breaks_to_existing_chunks_and_reverts(tmp_path: Path) -> None:
+    url = f"sqlite:///{(tmp_path / 'm.db').as_posix()}"
+    upgrade_database(url, 384, "0001")
+    engine = create_db_engine(url)
+    try:
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    "INSERT INTO documents (id, title, filename, media_type, size_bytes, sha256, "
+                    "status, chunk_count, attempts, created_at, updated_at) VALUES ('doc_1', 't', "
+                    "'t.pdf', 'application/pdf', 1, 'x', 'ready', 1, 1, '2026-10-18', '2026-10-18')"
+                )
+            )
+            connection.execute(
+                text(
+                    "INSERT INTO chunks (id, document_id, chunk_index, text, char_start, char_end, "
+                    "page_start, page_end, text_sha256) "
+                    "VALUES ('doc_1:0000', 'doc_1', 0, 'old text', 0, 8, 1, 2, 'h')"
+                )
+            )
+        upgrade_database(url, 384)
+        with engine.connect() as connection:
+            row = connection.execute(text("SELECT text, page_breaks FROM chunks")).one()
+        assert tuple(row) == ("old text", None)  # old chunks keep working without breaks
+        downgrade_database(url, 384, "0001")
+        columns = {column["name"] for column in inspect(engine).get_columns("chunks")}
+        assert "page_breaks" not in columns
     finally:
         engine.dispose()

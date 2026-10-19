@@ -6,6 +6,7 @@ from groundedai.ingestion.chunking import (
     chunk_id_for,
     chunk_pages,
     join_pages,
+    page_at,
 )
 from groundedai.ingestion.parsers import PageText
 
@@ -75,3 +76,24 @@ def test_chunk_hash_depends_only_on_text() -> None:
     a = chunk_pages([PageText(None, "Same text.")], ChunkingConfig(100, 10))[0]
     b = chunk_pages([PageText(5, "Same text.")], ChunkingConfig(100, 10))[0]
     assert a.sha256 == b.sha256
+
+
+def test_multi_page_chunks_record_where_each_page_starts() -> None:
+    pages = [PageText(1, "Intro."), PageText(2, "Tickets cost 14 euros."), PageText(4, "Pets.")]
+    (chunk,) = chunk_pages(pages, ChunkingConfig(800, 0))
+    assert (chunk.page_start, chunk.page_end) == (1, 4)
+    assert [number for _, number in chunk.page_breaks] == [2, 4]
+    for offset, number in chunk.page_breaks:
+        assert chunk.text[offset:].startswith(pages[[1, 2, 4].index(number)].text)
+    tickets = chunk.text.index("Tickets")
+    assert page_at(tickets, chunk.page_start, chunk.page_end, chunk.page_breaks) == 2
+    assert page_at(0, chunk.page_start, chunk.page_end, chunk.page_breaks) == 1
+    assert page_at(chunk.text.index("Pets"), 1, 4, chunk.page_breaks) == 4
+
+
+def test_page_at_without_breaks() -> None:
+    assert page_at(5, 3, 3, None) == 3  # single-page chunk
+    assert page_at(5, None, None, None) is None  # text documents have no pages
+    assert page_at(5, 1, 2, None) is None  # multi-page chunk indexed before breaks existed
+    single = chunk_pages([PageText(1, "Only page.")], ChunkingConfig(800, 0))[0]
+    assert single.page_breaks == ()

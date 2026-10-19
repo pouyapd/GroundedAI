@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { compareWithExpected, type RecordedExpectation } from "../api/demo";
 import type { AnswerResponse, RetrievalMode } from "../api/types";
 import { formatMs } from "../lib/format";
-import { AnswerStatusBadge, Badge, SupportBadge, VerdictBadge } from "./Badge";
+import { AnswerStatusBadge, Badge, SupportBadge, VerificationBadges } from "./Badge";
 import { Banner } from "./Banner";
 import { CitedText } from "./CitedText";
 import { ClaimCheck } from "./ClaimCheck";
@@ -95,7 +95,7 @@ export function AnswerView({
       <div className="card-header">
         <h2 id="answer-heading">Answer</h2>
         {response.status === "answered" && verification ? (
-          <VerdictBadge verdict={verification.verdict} />
+          <VerificationBadges verification={verification} />
         ) : (
           <AnswerStatusBadge status={response.status} grounding={response.grounding} />
         )}
@@ -114,7 +114,7 @@ export function AnswerView({
       ) : null}
       {response.status === "insufficient_evidence" ? (
         <p className="answer-text">
-          The indexed documents do not contain enough evidence to answer this question.
+          The searched documents do not contain enough evidence to answer this question.
           {response.abstention_reason ? <span className="secondary"> ({response.abstention_reason})</span> : null}
         </p>
       ) : null}

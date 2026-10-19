@@ -22,6 +22,32 @@ is not reported anywhere: the first 0.5B run includes a Modern Standby period (1
 `scripts/compare_generation_reports.py`, which re-scores every row with the current refusal
 parser so all columns use the same rules.
 
+## 2026-10-18: Qwen2.5-0.5B with the frozen answer-v2 prompt
+
+Two runs with the application's default chunking (800/120 characters), hybrid retrieval with
+bge-small, top 5, greedy decoding, on battery power (latency not meaningful; the first run
+shared the CPU with a diagnosis script):
+
+| Report | Checks | Notes |
+|---|---|---|
+| `…T174909Z` | claims-v1 (default) | code at `6a74774`; marked "uncommitted changes" because `scripts/journey_check.py` and `README.md` were being edited when it was written, neither of which the run uses |
+| `…T181836Z` | claims-v2 | code at `1516dc1`; raw outputs identical to the first run; `[21]`, `[12]` and a title-only reply are now invalid output |
+
+Diagnosis and results: [docs/EVALUATION.md](../../../docs/EVALUATION.md#2026-10-18-the-pdf-journey-with-a-real-local-model).
+
+## 2026-10-19: qwen2.5:1.5b through Ollama 0.14.2
+
+Same settings as the 2026-10-13 runs above (400/60 chunks, at most 200 new tokens), mains
+power, default checks:
+
+| Report | Code | Notes |
+|---|---|---|
+| `generation-ollama-…T085836Z` | `e08d140` | first run; a correct month-first date ("December 31, 2027") was marked not found |
+| `generation-ollama-…T091342Z` | `ddbe192` | after the date fix; raw outputs identical in 25 of 25, that verdict now verified |
+| `generation-ollama-…T103613Z` | `7082970` | `GROUNDEDAI_CLAIM_CHECK=claims-v2` after the claims-v2 revision; raw outputs identical in 25 of 25 ([results](../../../docs/EVALUATION.md#2026-10-19-later-the-revised-claims-v2-on-real-model-answers)) |
+
+Results: [docs/EVALUATION.md](../../../docs/EVALUATION.md#2026-10-19-qwen2515b-through-ollama).
+
 Known weaknesses of the frozen prompt on this set (qwen2.5:1.5b): citation-format compliance
 0.42 (v1: 0.54), malformed citations in 32% of answers (v1: 8%), and one of the two injection
 questions failed: the model copied all sources, including the planted text, into its reply.

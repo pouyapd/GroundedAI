@@ -25,7 +25,17 @@ const CHECKED: AnswerResponse = {
       text: "The hotel limit is €140 per night in capital cities.",
       citations: [],
       status: "added_source",
-      evidence: [{ ...EVIDENCE, label: "S1", quote: "The hotel limit is €140 per night in capital cities.", quote_start: 15, quote_end: 67 }],
+      evidence: [
+        {
+          ...EVIDENCE,
+          page_end: 4,
+          page: 3,
+          label: "S1",
+          quote: "The hotel limit is €140 per night in capital cities.",
+          quote_start: 15,
+          quote_end: 67,
+        },
+      ],
       missing_figures: [],
       word_overlap: 1,
       flags: [],
@@ -80,9 +90,34 @@ describe("claim check in the answer view", () => {
     expect(screen.getByText("Found in a passage, not cited")).toBeInTheDocument();
     expect(screen.getByText("Not found in the sources")).toBeInTheDocument();
     expect(screen.getByText("“The hotel limit is €140 per night in capital cities.”")).toBeInTheDocument();
+    // the quote's own page, not the passage's range (pp. 2–4)
+    expect(screen.getByText(/Travel Policy · p\. 3/)).toBeInTheDocument();
+    expect(screen.queryByText(/Travel Policy · pp\. 2–4/)).not.toBeInTheDocument();
     expect(screen.getByText(/another form than \[S#\]/)).toBeInTheDocument();
     // a passage that supports a claim is listed as evidence even though the model did not cite it
     expect(screen.getByRole("heading", { name: "Passages used as evidence" })).toBeInTheDocument();
+  });
+
+  it("shows three separate checks for claims-v2 answers and one badge for older ones", () => {
+    const v2: AnswerResponse = {
+      ...CHECKED,
+      verification: {
+        ...CHECKED.verification!,
+        version: "claims-v2",
+        evidence: "some_not_found",
+        citations: "some_wrong",
+        addresses_question: "yes",
+      },
+    };
+    const { unmount } = render(<AnswerView response={v2} />);
+    const checks = screen.getByLabelText("Answer checks");
+    expect(within(checks).getByText("Some statements not found")).toBeInTheDocument();
+    expect(within(checks).getByText("Some citations wrong")).toBeInTheDocument();
+    expect(within(checks).getByText("Gives what was asked")).toBeInTheDocument();
+    unmount();
+    render(<AnswerView response={CHECKED} />);
+    expect(screen.queryByLabelText("Answer checks")).toBeNull();
+    expect(screen.getByText("Some statements not found in the sources")).toBeInTheDocument();
   });
 
   it("shows both sides of a disagreement without choosing one", () => {

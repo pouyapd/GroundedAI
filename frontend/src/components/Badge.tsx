@@ -1,6 +1,17 @@
 import type { ReactNode } from "react";
 
-import type { AnswerStatus, ClaimStatus, DocumentStatus, Grounding, SupportLabel, Verdict } from "../api/types";
+import type {
+  AddressesQuestion,
+  AnswerStatus,
+  CitationVerdict,
+  ClaimStatus,
+  DocumentStatus,
+  EvidenceVerdict,
+  Grounding,
+  SupportLabel,
+  Verdict,
+  VerificationOut,
+} from "../api/types";
 import { AlertIcon, CheckIcon, ClockIcon, CrossIcon, InfoIcon, MinusIcon } from "./icons";
 
 type Tone = "good" | "warning" | "critical" | "info" | "neutral";
@@ -65,6 +76,43 @@ export function VerdictBadge({ verdict }: { verdict: Verdict }) {
     default:
       return <Badge tone="neutral">No statements to check</Badge>;
   }
+}
+
+const EVIDENCE_TEXT: Record<EvidenceVerdict, [Tone, string]> = {
+  all_found: ["good", "Every statement found"],
+  some_uncertain: ["warning", "Some statements only partly found"],
+  some_not_found: ["warning", "Some statements not found"],
+  none_found: ["critical", "No statement found"],
+  not_applicable: ["neutral", "No statements to check"],
+};
+const CITATION_TEXT: Record<CitationVerdict, [Tone, string]> = {
+  all_correct: ["good", "Citations correct"],
+  some_wrong: ["critical", "Some citations wrong"],
+  some_unconfirmed: ["warning", "Some citations not confirmed"],
+  none_given: ["neutral", "No citations given"],
+  not_applicable: ["neutral", "No citations to check"],
+};
+const ADDRESSES_TEXT: Record<AddressesQuestion, [Tone, string]> = {
+  yes: ["good", "Gives what was asked"],
+  no: ["warning", "May not give what was asked"],
+  declined: ["neutral", "Says the documents do not give it"],
+  not_checked: ["neutral", "Relevance not checked"],
+};
+
+/** claims-v2: evidence, citations and relevance as three badges. Answers checked by an older
+ * version (or recorded before it) have none of these fields and show the single verdict badge. */
+export function VerificationBadges({ verification }: { verification: VerificationOut }) {
+  const { evidence, citations, addresses_question: addresses } = verification;
+  if (!evidence || !citations || !addresses) return <VerdictBadge verdict={verification.verdict} />;
+  return (
+    <span className="badge-row" aria-label="Answer checks">
+      {[EVIDENCE_TEXT[evidence], CITATION_TEXT[citations], ADDRESSES_TEXT[addresses]].map(([tone, text]) => (
+        <Badge key={text} tone={tone}>
+          {text}
+        </Badge>
+      ))}
+    </span>
+  );
 }
 
 export function ClaimStatusBadge({ status }: { status: ClaimStatus }) {

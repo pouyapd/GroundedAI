@@ -12,9 +12,11 @@
     "typecheck": "tsc -b",
     "lint": "eslint .",
     "test": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:browser": "tsc -b && vite build --mode browser"
   },
   "dependencies": {
+    "@mlc-ai/web-llm": "0.2.85",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },

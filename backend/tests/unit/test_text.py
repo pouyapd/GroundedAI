@@ -34,6 +34,33 @@ def test_split_sentences_keeps_numbers_and_codes() -> None:
     ]
 
 
+def test_a_heading_line_is_not_part_of_the_next_sentence() -> None:
+    # PDF text keeps a section heading on its own line, without punctuation.
+    text = (
+        "Tickets\nA single adult ticket from Kessport to Mirrow costs 14 euros. Children under 5"
+        " travel free.\nLuggage and pets\nEach passenger may bring two bags."
+    )
+    assert split_sentences(text) == [
+        "Tickets",
+        "A single adult ticket from Kessport to Mirrow costs 14 euros.",
+        "Children under 5 travel free.",
+        "Luggage and pets",
+        "Each passenger may bring two bags.",
+    ]
+
+
+def test_a_wrapped_line_stays_in_its_sentence() -> None:
+    text = (
+        "Harbourline Ferries runs passenger boats between Kessport and the island of\n"
+        "Mirrow. Bicycles cost 6 euros\nper trip. Members over 65 ride\nFree on Sundays."
+    )
+    assert split_sentences(text) == [
+        "Harbourline Ferries runs passenger boats between Kessport and the island of Mirrow.",
+        "Bicycles cost 6 euros per trip.",
+        "Members over 65 ride Free on Sundays.",
+    ]
+
+
 def test_extract_numbers_normalises_thousands() -> None:
     assert extract_numbers("10,000 requests and €0.30 per km, 2.5 MB") == ["10000", "0.30", "2.5"]
 
