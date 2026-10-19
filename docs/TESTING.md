@@ -39,6 +39,23 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## Online demo and release (2026-10-19, evening; mains power)
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e | 487 passed, 7 skipped (PostgreSQL tests, run separately) |
+| `tests/unit/test_browser_runtime.py` | the demo's runtime under CPython: extractive answer with quote and page, the two-step page-model flow, an invented figure not found, refusal, changed passages refused, status | 10 passed |
+| Pyodide rehearsal in Node (scratch script, not committed) | the real FastAPI app in Pyodide 314.0.7 with only the pinned wheels: start-up, PDF uploads, a 1.5 MB upload through the disk-spooled path, extractive and page-model answers | worked; ready after 11–12 s |
+| `vitest` | front end, including `BrowserApi` (two-step flow, timings, errors, reset) | 77 passed; three repeated runs without unhandled errors |
+| `scripts/e2e_demo.py` | the demo build in Chromium and in Chrome, served under `/GroundedAI/` | 16 of 16 (start-up 25–47 s with a cold cache; about 26 MB downloaded) |
+| Heading fix (`split_sentences`) | reliability dev split (v1, v2), 30 held-out conflict cases, replays of recorded qwen2.5:1.5b answers (dev, 56-question; v1, v2) | every measure unchanged |
+| CI on pull request #2 | GitHub Actions | first run: backend lint (script line lengths) and a front-end test race failed; both fixed; run 39316142259 on `c95d612`: 7 of 7 jobs passed, including the Docker image build and smoke test |
+
+The in-page model (WebLLM, Qwen2.5-1.5B-Instruct) needs WebGPU. In Playwright's own Chromium on
+Windows the adapter was found but the device failed (`dxil.dll` missing; Chrome ships it); the
+demo then showed "The language model could not be loaded … The extractive generator still
+works", as intended. The model check therefore uses the installed Chrome (`--channel chrome`).
+
 ## Release preparation checks (2026-10-19, later; commit `83c5668` plus this round's changes; mains power)
 
 | Check | Kind | Result |
@@ -113,7 +130,7 @@ Changes: month-first dates are read as dates; evidence quotes ignore document-ti
 | `ruff`, `ruff format --check`, `mypy` (strict, also `--platform linux`) | static | clean |
 | `vitest`, `eslint`, `tsc -b`, `npm run build` | front end | 70 passed; clean; built |
 | `scripts/reliability_suite.py validate`; dev split scored with v1 and v2 before and after each fix | dataset, checks | 0 errors; results unchanged in every category |
-| Development set (25), journey (7), 56-question set (once) | **real model**: qwen2.5:1.5b, Ollama 0.14.2 | no errors or timeouts; results in [EVALUATION.md](EVALUATION.md#2026-10-19-qwen25-15b-through-ollama) |
+| Development set (25), journey (7), 56-question set (once) | **real model**: qwen2.5:1.5b, Ollama 0.14.2 | no errors or timeouts; results in [EVALUATION.md](EVALUATION.md#2026-10-19-qwen2515b-through-ollama) |
 | `scripts/e2e_browser.py` | browser, real server | 24 of 24 with the default generator and 24 of 24 with qwen2.5:1.5b |
 | Docker | – | not run: Docker Desktop is not running |
 

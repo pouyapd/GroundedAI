@@ -1,5 +1,20 @@
 # Screenshots
 
+## Online demo (2026-10-19)
+
+Taken by `scripts/e2e_demo.py --screenshots docs/images` from the demo build running in Chrome
+(GroundedAI in the browser, extractive generator, the two sample PDFs from `examples/`).
+
+| Start page: generator choice, question form, sample questions | An answer: status, quoted sentence and page |
+|---|---|
+| ![The live demo's start page with the extractive generator selected, the Qwen2.5-1.5B-Instruct option, the question form and example questions about the two sample PDFs](images/demo-start.png) | ![Answer that a single adult ticket costs 14 euros, marked Supported by the cited passage, with the quoted sentence from page 2](images/demo-answer-card.png) |
+| **A question the selected PDF cannot answer** | **Phone width** |
+| ![Answer panel saying the searched documents do not contain enough evidence, for a library question asked of the ferry guide](images/demo-not-enough-evidence.png) | ![The demo at 390 px width with an answer about bicycle prices quoted from page 3](images/demo-mobile.png) |
+
+Full-page version of the answer: [images/demo-answer.png](images/demo-answer.png).
+
+## Full application
+
 All taken from the running application on the development laptop. The journey screenshots use
 the sample PDFs in `examples/`; the others use the sample corpus in
 `evaluation/datasets/groundedai-synthetic-v1` with bge-small embeddings. Dates are when each was

@@ -121,3 +121,20 @@ candidate, and the content of every commit on all branches.
   uploaded user documents are tracked.
 * Workflows: no repository secrets are used; jobs have read-only permissions except the Pages
   deployment, which runs only for a public repository.
+
+## Online demo (GitHub Pages, 2026-10-19)
+
+* **No server, no credentials.** The demo is static files; the application runs in the
+  visitor's browser. No API key, token or secret is built into the site, and the Pages
+  workflow uses only the job token GitHub issues for deployment.
+* **Visitor data stays in the tab.** Uploaded files and questions are processed in a Web Worker
+  and kept in memory; nothing is sent to this project. A reload or *Reset demo* deletes them.
+* **Third parties the browser contacts:** jsDelivr (the pinned Pyodide release and its
+  packages), and, only if the visitor chooses the language model, Hugging Face (model weights)
+  and GitHub (the model's WebGPU library, through the MLC project's URLs). Their own privacy
+  terms apply to those requests.
+* **Pinned code.** The wheels served with the site are checked against SHA-256 hashes in
+  `frontend/browser-runtime.lock.json` when the site is built; Pyodide is pinned to one
+  release. The CDN files themselves are not hash-checked in the browser.
+* **Headers.** GitHub Pages does not allow custom response headers, so the demo has no Content
+  Security Policy. It renders documents as text, never as HTML.

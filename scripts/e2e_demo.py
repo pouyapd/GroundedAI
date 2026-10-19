@@ -89,6 +89,13 @@ def _ask_example(page: Any, label: str, question: str, timeout: int = ANSWER_TIM
     return str(page.inner_text("main"))
 
 
+def _full_page(page: Any, path: str) -> None:
+    """A full-page screenshot taken from the top, so the sticky header stays at the top."""
+    page.evaluate("window.scrollTo(0, 0)")
+    page.wait_for_timeout(200)
+    page.screenshot(path=path, full_page=True)
+
+
 def _answer_card(page: Any) -> str:
     return str(
         page.locator(".card", has=page.locator("text=Passages used as evidence")).first.inner_text()
@@ -122,7 +129,7 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
     checks.check("the answer says which generator wrote it", "not an LLM" in card)
     checks.check("the quote does not start with the section heading", "“Tickets" not in card)
     if shots:
-        page.screenshot(path=str(shots / "demo-answer.png"), full_page=True)
+        _full_page(page, str(shots / "demo-answer.png"))
         page.locator(".card", has=page.locator("text=Passages used as evidence")).first.screenshot(
             path=str(shots / "demo-answer-card.png")
         )
@@ -134,7 +141,7 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
         "do not contain enough evidence" in card,
     )
     if shots:
-        page.screenshot(path=str(shots / "demo-not-enough-evidence.png"), full_page=True)
+        _full_page(page, str(shots / "demo-not-enough-evidence.png"))
     _ask_example(page, "Library rules", "How many items can members borrow?")
     checks.check("the other PDF answers it", "12 items" in _answer_card(page))
 
@@ -180,7 +187,7 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
     _ask_example(page, "Ferry guide", "How much does it cost to take a bicycle?")
     checks.check("questions work on a phone-sized screen", "6 euros" in _answer_card(page))
     if shots:
-        page.screenshot(path=str(shots / "demo-mobile.png"), full_page=True)
+        _full_page(page, str(shots / "demo-mobile.png"))
     page.set_viewport_size({"width": 1280, "height": 900})
 
     unexpected = [m for m in console if "WebGPU" not in m and "adapter" not in m.lower()]
@@ -229,7 +236,7 @@ def run_llm(page: Any, checks: Checks, shots: Path | None) -> None:
         f"{time.monotonic() - started:.0f} s",
     )
     if shots:
-        page.screenshot(path=str(shots / "demo-llm-answer.png"), full_page=True)
+        _full_page(page, str(shots / "demo-llm-answer.png"))
         page.locator(".card", has=page.locator("text=Passages used as evidence")).first.screenshot(
             path=str(shots / "demo-llm-answer-card.png")
         )
@@ -244,7 +251,7 @@ def run_llm(page: Any, checks: Checks, shots: Path | None) -> None:
         "a paraphrased question gets an answer with a verdict", bool(verdicts), ", ".join(verdicts)
     )
     if shots:
-        page.screenshot(path=str(shots / "demo-llm-paraphrase.png"), full_page=True)
+        _full_page(page, str(shots / "demo-llm-paraphrase.png"))
 
 
 def main() -> int:
@@ -286,7 +293,7 @@ def main() -> int:
         with sync_playwright() as playwright:
             options: dict[str, Any] = {
                 "headless": not args.headed,
-                "args": WEBGPU_ARGS if args.llm else [],
+                "args": WEBGPU_ARGS,
             }
             if args.channel:
                 options["channel"] = args.channel

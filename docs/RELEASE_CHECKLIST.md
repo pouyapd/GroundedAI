@@ -23,44 +23,35 @@ everything under "Owner decisions" and "Publish" needs the repository owner.
       behaviour reported separately (`docs/EVALUATION.md`); browser check with qwen2.5:1.5b
       passed on the first run (`docs/TESTING.md`).
 
-## Owner decisions before publication
+## Decisions taken for the release (2026-10-19)
 
-1. **Author email in history.** Every commit (63, author and committer) carries the owner's
-   personal address (`p***@gmail.com`). Checked on 2026-10-19: the same address is already
-   public in commits of the owner's public repositories (for example 83 commits of TrustRAG),
-   and the GitHub profile shows no public email. Publishing this repository adds no new
-   exposure of the address. Changing it means rewriting all 63 commits, including the 28 that
-   are on GitHub (`main`, PR #1), and force-pushing; it was not done. Future commits can use the
-   account's `noreply` address (`<id>+pouyapd@users.noreply.github.com`) with
-   `git config user.email`.
-2. **Release branch.** `main` holds only the initial commit. PR #1
-   (`feature/groundedai-v0.1`, at `100f124`) is open; this branch adds commits on top of it.
-   Choose: merge PR #1 and open a second PR from `feature/reliability-v1`, or open one PR from
-   `feature/reliability-v1`. Nothing has been pushed.
-3. **CI on the release commits.** CI last ran (7 of 7 green) on `100f124`. Push the branch and
-   let CI run before merging; the Docker job is the only check of the current image.
-4. **Default checks.** `claims-v1` stays the default. Switching to `claims-v2` should wait for
-   human labels on `groundedai-claims-review-v1` (two labellers), then
-   `scripts/claim_review.py score`.
-5. **GitHub Actions artifacts** from earlier runs (offline benchmark report, Docker build
-   records with event data) become visible with the repository; delete them first if unwanted.
-6. **GitHub Pages.** A push to `main` that changes `frontend/` starts the Pages workflow. Until
-   Pages is enabled (Settings → Pages → GitHub Actions) that run fails at `configure-pages`;
-   once it is enabled, the merge deploys the static demo. Decide before merging.
+1. **Author email in history.** Kept. Every commit carries the owner's personal address
+   (`p***@gmail.com`); the same address is already public in the owner's other public
+   repositories, so publishing adds no new exposure. No history was rewritten.
+2. **Release branch.** PR #1 (`feature/groundedai-v0.1`) is merged first, then PR #2
+   (`feature/reliability-v1`, which contains it) after CI passes. Merge commits, no
+   force-push.
+3. **CI.** Run on the release branch before merging (7 of 7 on `c95d612`).
+4. **Default checks.** `claims-v1` and `disagreement-v1` stay the defaults.
+5. **Old GitHub Actions artifacts** (offline benchmark report, Docker build records with the
+   pull-request text, the public account login and masked headers) are kept; they contain no
+   secrets or private data.
+6. **GitHub Pages** serves the live demo, built by the Pages workflow from `main`.
 
-## Publish (after the decisions above)
+## Publish
 
-1. Push the branch, open or update the pull request, wait for CI to pass.
-2. Merge into `main` (no force-push, no history rewrite unless decided in item 1).
-3. Change the repository visibility to public.
-4. Tag `v0.1.0` on the merge commit and publish a GitHub release with the CHANGELOG text.
-5. Optional: enable GitHub Pages (Settings → Pages → GitHub Actions) for the static demo, and
-   set the social preview image (`docs/assets/social-preview.png`).
-6. Check the public page: README images render, badges resolve, links work.
+1. Push the branch, open the pull request, wait for CI to pass.
+2. Merge PR #1, then the release pull request, into `main`.
+3. Change the repository visibility to public (Pages on a free plan needs it).
+4. Enable Pages with GitHub Actions as the source; run the Pages workflow; it checks the built
+   site and the deployed URL in a browser.
+5. Tag `v0.1.0` on the merge commit and publish a GitHub release with the CHANGELOG text and the
+   demo URL.
+6. Check the public page: README images render, badges resolve, links work, the demo opens.
 
-## Not verified in this release candidate
+## Not verified in this release
 
-- The Docker Compose stack locally (Docker Desktop was not running; last full run 2026-10-13).
-- CI on any commit after `100f124`.
+- The Docker Compose stack locally since 2026-10-13 (CI builds and smoke-tests the image and
+  validates the Compose file).
 - Human-labelled accuracy of either claim-check version.
-- Any model larger than qwen2.5:1.5b.
+- Any model larger than qwen2.5:1.5b; no evaluation of the demo's in-browser model build.

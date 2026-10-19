@@ -12,6 +12,11 @@
 </p>
 
 <p align="center">
+  <a href="https://pouyapd.github.io/GroundedAI/"><img alt="Open the live demo" src="https://img.shields.io/badge/%E2%96%B6%20Live%20demo-runs%20in%20your%20browser-2ea043?style=for-the-badge"></a>
+</p>
+
+<p align="center">
+  <a href="#live-demo">Live demo</a> ·
   <a href="#what-it-does">What it does</a> ·
   <a href="#engineering-challenges">Engineering challenges</a> ·
   <a href="#results">Results</a> ·
@@ -31,7 +36,14 @@ usually taken on trust. **GroundedAI** is a local RAG application that checks th
 - Sources that disagree are shown side by side.
 - When the documents don't say, the reply is a plain "not enough evidence".
 
-Everything runs on a laptop CPU, with no paid service or cloud API.
+Everything runs on a laptop CPU, with no paid service or cloud API, and the
+[live demo](https://pouyapd.github.io/GroundedAI/) runs it entirely in your browser.
+
+<p align="center">
+  <a href="https://pouyapd.github.io/GroundedAI/"><img src="docs/images/demo-answer-card.png" width="860"
+     alt="GroundedAI live demo: the answer that a single adult ticket from Kessport to Mirrow costs 14 euros, marked as supported by the cited passage, with the quoted sentence from page 2 of the Harbourline Ferries Passenger Guide"></a>
+</p>
+<p align="center"><sub>A real answer from the live demo: each statement with its status, the quoted sentence and its page.</sub></p>
 
 This is a portfolio and research project, evaluated on small synthetic datasets. It has not
 been independently validated, and its checks are rule-based ([Limitations](#limitations)).
@@ -39,6 +51,27 @@ been independently validated, and its checks are rule-based ([Limitations](#limi
 **Built with:** Python 3.12, FastAPI, LangChain, SQLAlchemy + Alembic, SQLite FTS5 or
 PostgreSQL + pgvector, sentence-transformers, Ollama, React 19 + TypeScript (Vite), pytest,
 Playwright (browser check), Docker, GitHub Actions.
+
+## Live demo
+
+**[Open the live demo →](https://pouyapd.github.io/GroundedAI/)** No installation and no
+account; nothing you type or upload leaves the browser tab.
+
+- **The real backend, in your browser.** GroundedAI's Python code runs as WebAssembly
+  (Pyodide): upload checks, PDF extraction, hybrid retrieval, the prompt and the claim check.
+  Two synthetic sample PDFs are loaded, with example questions; you can also upload a PDF.
+- **Two generators.** The default extractive generator answers instantly and is not a language
+  model. Optionally, Qwen2.5-1.5B-Instruct runs on your GPU (WebGPU, about 880 MB downloaded
+  once); its answers go through the same claim check.
+- **Limits.** The first load takes about 15–60 s (about 26 MB, then cached). The demo uses the
+  word-overlap embedder, keeps data only in the tab, and has no evaluation runs. Its model is a
+  different 4-bit build from the one evaluated below, so its answers can differ. Details:
+  [docs/ONLINE_DEMO.md](docs/ONLINE_DEMO.md).
+
+<p align="center">
+  <img src="docs/images/demo-start.png" width="860"
+       alt="The live demo's start page: a short explanation, the choice between the extractive generator and Qwen2.5-1.5B-Instruct on the GPU, the question form with the document selector, and example questions about the two sample PDFs">
+</p>
 
 ## What it does
 
@@ -62,8 +95,9 @@ Playwright (browser check), Docker, GitHub Actions.
   <img src="docs/screenshots/journey-answer-qwen15-light.png" width="860"
        alt="Ask page with the Harbourline Ferries Passenger Guide selected: the qwen2.5:1.5b answer that a single adult ticket costs 14 euros, the claim check, and the supporting quote attributed to page 2">
 </p>
-<p align="center"><sub>The running application with qwen2.5:1.5b through Ollama, on one of the sample PDFs in
-<code>examples/</code>. More screenshots: <a href="docs/SCREENSHOTS.md">docs/SCREENSHOTS.md</a>.</sub></p>
+<p align="center"><sub>The full application run locally with qwen2.5:1.5b through Ollama (an earlier version of
+the interface), on one of the sample PDFs in <code>examples/</code>. More screenshots:
+<a href="docs/SCREENSHOTS.md">docs/SCREENSHOTS.md</a>.</sub></p>
 
 ## How answers are checked
 
@@ -108,6 +142,10 @@ Upload → validate → extract text with page numbers → chunk → embed and i
 check for disagreement and planted instructions → generate from numbered passages → validate
 citations and check every statement → answer with quotes, pages and warnings. Design
 decisions: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+The [live demo](docs/ONLINE_DEMO.md) runs this same application in the browser: the UI sends
+its requests to a Web Worker running the Python package in Pyodide instead of a server, and the
+optional model runs on the visitor's GPU with WebLLM.
 
 ## Engineering challenges
 
@@ -236,8 +274,8 @@ If Ollama or the model is missing, questions return `503 model_unavailable` with
 Optional semantic embeddings: [docs/MODELS.md](docs/MODELS.md). Docker Compose (PostgreSQL +
 pgvector): [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). Common problems:
 [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
-The Compose stack was last run end to end on 2026-10-13; the image was not rebuilt locally
-for this release.
+The Compose stack was last run end to end locally on 2026-10-13; CI builds and smoke-tests the
+image and validates the Compose file on every pull request.
 
 ### Configuration
 
@@ -265,18 +303,20 @@ cd backend && ruff check groundedai tests && ruff format --check groundedai test
 cd frontend && npm run lint && npm run typecheck && npm test && npm run build
 python scripts/dev_postgres.py -- python -m pytest backend/tests -m postgres   # real PostgreSQL, no Docker
 python scripts/e2e_browser.py      # browser journey; needs playwright (not a project dependency)
+python scripts/e2e_demo.py         # the online demo in a browser (see docs/ONLINE_DEMO.md)
 ```
 
 The default suite is offline: SQLite, deterministic providers and a fake Ollama HTTP server.
 No model, key or network is needed.
 
 - **Latest local run (2026-10-19):**
-  - backend: 475 tests passed, plus 7 PostgreSQL tests run separately against a local
+  - backend: 487 tests passed, plus 7 PostgreSQL tests run separately against a local
     PostgreSQL + pgvector; strict mypy and ruff clean;
-  - front end: 70 tests passed;
-  - browser journey: 24 of 24, with the default generator and with qwen2.5:1.5b.
-- **CI** (Python 3.12 and 3.13, PostgreSQL, front end, dependency audit, Docker build) has
-  not yet run on the latest commits.
+  - front end: 77 tests passed;
+  - browser journey: 24 of 24, with the default generator and with qwen2.5:1.5b;
+  - online demo: 16 of 16 browser checks.
+- **CI** (Python 3.12 and 3.13, PostgreSQL + pgvector, front end, offline benchmark,
+  dependency audit, Docker image and Compose file): all 7 jobs pass on the release branch.
 
 Details: [docs/TESTING.md](docs/TESTING.md).
 

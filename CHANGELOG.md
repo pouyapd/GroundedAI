@@ -1,9 +1,23 @@
 # Changelog
 
-## 0.1.0 — release candidate (unreleased)
+## 0.1.0 — 2026-10-19
 
-The first public version. Everything below runs locally on a CPU; no hosted service is part of
-the release.
+The first public version. Everything below runs locally on a CPU, and the online demo runs in
+the visitor's browser; no hosted inference service is part of the release.
+
+### Online demo
+
+- **Live:** https://pouyapd.github.io/GroundedAI/ (GitHub Pages, static files only).
+- The unchanged FastAPI application runs in the browser (Pyodide in a Web Worker): uploads,
+  PDF extraction, indexing, retrieval, the prompt and all checks. Two synthetic sample PDFs
+  and example questions; files uploaded by visitors stay in the tab.
+- Optional language model in the page: Qwen2.5-1.5B-Instruct (MLC 4-bit build) on WebGPU
+  through WebLLM, asked in two steps so its reply goes through the same claim check.
+- Pinned runtime: wheels with SHA-256 in `frontend/browser-runtime.lock.json`;
+  `scripts/build_browser_runtime.py` builds it, `scripts/e2e_demo.py` checks the demo in a
+  browser (also the deployed URL, from the Pages workflow). See `docs/ONLINE_DEMO.md`.
+- Interface: demo panel with start-up progress, generator choice and reset; sample questions;
+  refined styling (header, cards, answer, evidence quotes); header static on phones.
 
 ### Application
 
@@ -46,6 +60,9 @@ the release.
 
 ### Fixed in the release candidate
 
+- A section heading on its own line is no longer part of the next sentence, so quotes and
+  extractive answers no longer start with it ("Tickets A single adult ticket ..."). No
+  evaluation measure changed.
 - Conflict reports no longer pair statements from a document that never mentions the
   organisation the question names (both check versions).
 - claims-v2 no longer hides a whole answer that a model wrapped in brackets.
