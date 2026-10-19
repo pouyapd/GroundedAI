@@ -51,3 +51,24 @@ Set `PYTHONIOENCODING=utf-8` (or use Windows Terminal). Report files are always 
 **Tests pick up my local settings.**
 The test suite clears all `GROUNDEDAI_*` variables and ignores `.env`; if a test still behaves
 differently, check `HF_HUB_OFFLINE` and proxy variables.
+
+**`ollama` is not recognised after installing it (Windows).**
+The installer adds Ollama to the user `PATH` and starts the tray app; open a new terminal. The
+API is at `http://127.0.0.1:11434` (`curl http://127.0.0.1:11434/api/version`). Models are
+stored in `OLLAMA_MODELS` if that variable is set, otherwise in your profile.
+
+**Ollama runs but answers are refused or very short.**
+Check that the pulled model is the configured one: `ollama list` must show
+`GROUNDEDAI_OLLAMA_MODEL` (default `qwen2.5:1.5b`). Very small models (0.5B) often refuse
+answerable questions; see `docs/EVALUATION.md`.
+
+**A correct statement is shown as "Partly found".**
+The claim check compares words and figures, not meaning. A paraphrase with other words, or a
+statement that adds a detail the passage does not give ("young children" for "children under
+5"), is only partly found. Read the quoted passage; `GROUNDEDAI_CLAIM_CHECK=claims-v2` reads
+some equivalent wordings but is still lexical.
+
+**`scripts/e2e_browser.py` fails with `No module named 'playwright'`.**
+The browser check needs Playwright, which is not a project dependency:
+`pip install playwright && python -m playwright install chromium` (about 150 MB), in the
+environment that has the backend installed.

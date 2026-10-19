@@ -25,6 +25,19 @@ cd frontend && npm run lint && npm run typecheck && npm test && npm run build
 * Do not change files in `evaluation/datasets/groundedai-synthetic-v1/`. A dataset change needs
   a new dataset version (new directory), because reports refer to the dataset fingerprint.
 * Never commit `.env` files, credentials, model weights, databases or uploaded documents.
+* The held-out reliability test split (`evaluation/datasets/groundedai-reliability-v1/test/`
+  and the other ignored folders listed in `.gitignore`) is private: it is not in the repository,
+  and changes to the checks must not be tuned against it. Develop on the `dev` split.
+* Changes to the claim or disagreement checks go into a new or opt-in version unless they fix a
+  demonstrated bug; `claims-v1` and `disagreement-v1` reproduce the published reports.
+
+## Labelling claims (human review)
+
+`scripts/claim_review.py collect` exports real model answers from
+`evaluation/datasets/groundedai-claims-review-v1` to a self-contained `review.html`. Label each
+statement from the passages alone, without opening `checks.json`, download your labels file, and
+add it to the review folder in a pull request. Two independent labellers per statement are
+planned; see `evaluation/reviews/claims-review-v1/README.md`.
 
 ## Dependencies
 

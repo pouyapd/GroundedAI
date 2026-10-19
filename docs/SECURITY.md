@@ -93,3 +93,27 @@ proof of safety.
   psycopg (LGPL-3.0, used unmodified as a library; listed in `THIRD_PARTY_NOTICES.md`); the front
   end ships React, React DOM and Scheduler (MIT). `pgserver`, used only by the developer
   PostgreSQL script, has no licence metadata.
+
+## Release-candidate review (2026-10-19)
+
+Scope: every tracked file on `feature/reliability-v1`, the new and changed files of the release
+candidate, and the content of every commit on all branches.
+
+* Secrets: no API keys, tokens, private keys or passwords other than the documented placeholders
+  (`change-me...` in `.env.example`, `ci-only-password` for the CI database service).
+* Local paths and machine details: no absolute local paths or user names in tracked files or in
+  any commit's content. Reports record the CPU model, RAM, operating system and power source on
+  purpose (they explain the timings); they contain no host names or paths.
+* Personal data: the author's name and GitHub handle appear as authorship; every commit carries
+  the author's personal email address (unchanged from the 2026-10-14 review: owner's decision).
+* Private evaluation data: the reliability suite's test split, its documents, the writer notes,
+  private audit files and sealed reports are git-ignored and were never committed (checked
+  across all history). The committed manifest lists test documents by id only, with file hashes;
+  `REVISIONS.jsonl` holds test case ids and hashes only; the committed test reports are
+  aggregates without per-case rows. The development split, the synthetic evaluation set, the
+  claim-review set and their reports are public by design (fictional organisations).
+* Binary files: screenshots of the application with synthetic data, two generated sample PDFs,
+  one synthetic corpus PDF, and the social-preview image. No databases, model weights, caches or
+  uploaded user documents are tracked.
+* Workflows: no repository secrets are used; jobs have read-only permissions except the Pages
+  deployment, which runs only for a public repository.

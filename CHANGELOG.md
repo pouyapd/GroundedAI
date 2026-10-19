@@ -1,0 +1,50 @@
+# Changelog
+
+## 0.1.0 — release candidate (unreleased)
+
+The first public version. Everything below runs locally on a CPU; no hosted service is part of
+the release.
+
+### Application
+
+- PDF, text and Markdown upload with validation (type, size, magic bytes, encoding), page-aware
+  chunking, and deletion of unreadable files with the reason kept; re-upload retries.
+- Hybrid retrieval (BM25 + embeddings, Reciprocal Rank Fusion, optional cross-encoder rerank) on
+  SQLite FTS5 or PostgreSQL + pgvector; questions can be limited to selected documents.
+- Generators: a deterministic extractive demo (default), Ollama (tested with qwen2.5:1.5b) and
+  transformers (tested with Qwen2.5-0.5B-Instruct). A missing model gives `503
+  model_unavailable` with setup guidance, never a silent fallback.
+- After generation: citation-label validation, a claim check that gives every statement a
+  status with the exact quote and page, refusal recognition, and `invalid_output` for replies
+  without answer text.
+- Before generation: a disagreement check that shows conflicting sources with both quotes
+  (values for different dates or groups kept apart), and flags for instruction-like passages.
+- React UI: Documents, Ask (document selector, claim check, disagreement panel, evidence with
+  pages), Evaluation dashboards and Operations status; light and dark themes; phone layout.
+- FastAPI with OpenAPI docs, Alembic migrations, health and readiness probes, Prometheus metrics,
+  rate limits, optional API key; Docker image and Compose file.
+
+### Checks, two versions
+
+- `claims-v1` (default) and `claims-v2` (opt-in, `GROUNDEDAI_CLAIM_CHECK=claims-v2`): claims-v2
+  judges each statement on the few sentences that carry it, reads a short list of equivalent
+  wordings, compares negation sentence by sentence, reads ordinals and names, reports
+  unresolvable citation labels, gives separate evidence / citation / relevance verdicts, and
+  warns when an answer does not mention a conflict.
+- `disagreement-v1` (default) and `disagreement-v2` (opt-in): ranges compared as a whole,
+  validity dates kept apart from edit dates, requirement wording, equivalent words.
+
+### Evaluation
+
+- Retrieval and answer benchmarks on a 56-question synthetic set, a 25-question development set,
+  and a 660-case reliability suite for the checks (frozen test split, model-written labels).
+- Recorded runs with qwen2.5:1.5b (Ollama) and Qwen2.5-0.5B (transformers), with hardware,
+  model revision and power source in every report.
+- `groundedai-claims-review-v1` and `scripts/claim_review.py`: real model answers exported for
+  blind human labelling of every statement, and a scorer for false acceptance and false
+  rejection. Labels have not been collected yet.
+
+### Known limitations
+
+See the README's Limitations section: lexical checks, small local models, synthetic and small
+evaluation data, no OCR, single-tenant.
