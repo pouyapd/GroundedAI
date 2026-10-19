@@ -690,11 +690,14 @@ def _evidence(
         for sentence in split_sentences(passage.source.text)
         if _title_key(sentence) != title and not detect_injection(sentence)
     ] or [passage.source.text]
+    # As in _match, words of the document title do not count: a sentence that only names the
+    # document ("Harbourline Ferries runs ...") must not be quoted for "you can bring a dog".
+    content = (claim_words - passage.title_words) or claim_words
     scored = []
     for sentence in sentences:
         sentence_figures = read_quantities(sentence).quantities
         hits = sum(1 for f in figures if figure_present(f, sentence_figures))
-        overlap = len(claim_words & _words(sentence, stem))
+        overlap = len(content & _words(sentence, stem))
         scored.append((hits, overlap, sentence))
     scored.sort(key=lambda item: (item[0], item[1]), reverse=True)
     if not scored[0][0] and not scored[0][1]:
