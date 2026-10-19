@@ -46,7 +46,7 @@ power, default checks:
 | `generation-ollama-…T091342Z` | `ddbe192` | after the date fix; raw outputs identical in 25 of 25, that verdict now verified |
 | `generation-ollama-…T103613Z` | `7082970` | `GROUNDEDAI_CLAIM_CHECK=claims-v2` after the claims-v2 revision; raw outputs identical in 25 of 25 ([results](../../../docs/EVALUATION.md#2026-10-19-later-the-revised-claims-v2-on-real-model-answers)) |
 
-Results: [docs/EVALUATION.md](../../../docs/EVALUATION.md#2026-10-19-qwen25-15b-through-ollama).
+Results: [docs/EVALUATION.md](../../../docs/EVALUATION.md#2026-10-19-qwen2515b-through-ollama).
 
 Known weaknesses of the frozen prompt on this set (qwen2.5:1.5b): citation-format compliance
 0.42 (v1: 0.54), malformed citations in 32% of answers (v1: 8%), and one of the two injection
