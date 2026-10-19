@@ -38,6 +38,8 @@ from groundedai.evaluation.pdf_fixture import make_pdf  # noqa: E402
 from groundedai.evaluation.sample_documents import FERRY_GUIDE, LIBRARY_RULES  # noqa: E402
 
 TIMEOUT_MS = 20_000
+# A local model on a laptop CPU can take a minute or more per answer (longer on battery).
+ANSWER_TIMEOUT_MS = 300_000
 
 
 class Checks:
@@ -109,7 +111,9 @@ def run(page: Any, base: str, files: dict[str, Path], shots: Path | None) -> Che
         page.fill("#question", question)
         page.get_by_role("button", name="Ask question").click()
         # The previous answer is cleared on submit; wait for the new one to finish.
-        page.get_by_text("Retrieving passages and generating an answer").wait_for(state="hidden")
+        page.get_by_text("Retrieving passages and generating an answer").wait_for(
+            state="hidden", timeout=ANSWER_TIMEOUT_MS
+        )
         page.get_by_text("Searched ", exact=False).first.wait_for()
         return str(page.locator("main").inner_text())
 

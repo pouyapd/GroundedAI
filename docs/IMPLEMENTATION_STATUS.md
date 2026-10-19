@@ -29,6 +29,10 @@ Later the same day: claims-v2 and disagreement-v2 revised (support from sentence
 wordings, requirement conflicts, an unstated-conflict warning); measured on the development
 split and real-model answers only, defaults unchanged
 ([RELIABILITY_V2.md](RELIABILITY_V2.md#revision-of-2026-10-19-development-split-only)).
+Release candidate (2026-10-19): README rewritten, release checklist and changelog, security
+review, a claim-review set with real model answers awaiting human labels, and two fixes found
+on it (cross-organisation conflict reports; bracketed answers hidden as invalid output)
+([RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)).
 
 Still open: push and CI (owner's approval), a Docker image build with these changes, conflict
 questions (no model run states a conflict), and a public demo (needs a public repository or a

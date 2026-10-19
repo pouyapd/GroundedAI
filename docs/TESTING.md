@@ -39,6 +39,28 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## Release-candidate checks (2026-10-19, commit `cca6670` plus the e2e timeout change; laptop on battery)
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e; scripted fake models | 467 passed, 7 skipped (PostgreSQL tests, run separately below) |
+| `scripts/dev_postgres.py -- pytest -m postgres` | PostgreSQL 16 + pgvector, bundled local server | 7 passed |
+| `ruff`, `ruff format --check` (backend and scripts), `mypy` strict (Windows and `--platform linux`) | static | clean |
+| `eslint`, `tsc -b`, `vitest`, `npm run build`, `npm run build:demo` | front end | clean; 70 passed; both builds succeed |
+| Workflow files | YAML parse only (no `actionlint` available) | both parse; jobs unchanged |
+| `scripts/reliability_suite.py score --split dev` (v1, v2) | checks, model-written labels | unchanged by the release fixes: v1 A 37, B 31, C 21, D 35; v2 A 47, B 34, C 41, D 47 |
+| `scripts/journey_check.py` with Ollama | **real model** (qwen2.5:1.5b), API | 2 correct and verified, 3 correct but not fully verified, 2 correct refusals; 2–6 s per answer |
+| `scripts/e2e_browser.py` | browser, real server | 24 of 24 with the default generator; 24 of 24 with qwen2.5:1.5b (see note) |
+| `scripts/claim_review.py collect` | **real model**, new review set | 30 questions, 56 statements exported; labels not collected |
+| Docker image and Compose | – | **not run**: Docker Desktop is not running (CI builds and smoke-tests the image) |
+| CI | – | **not run** on these commits: nothing pushed |
+
+Note on the browser check with Ollama: the first two runs failed, both while the model was
+loading on battery power. One timed out after 20 s waiting for the first answer (the script now
+allows 300 s for an answer), and one timed out at an upload step that does not use the model.
+The third run, with the model loaded, passed 24 of 24. Running `npm run build:demo` after
+`npm run build` replaces the UI the check serves; build the normal UI before running it.
+
 ## Results recorded after the claims-v2 revision (2026-10-19, mains power, commit `7082970`)
 
 Changes: claims-v2 judges claims on supporting sentences, reads equivalent wordings, names,

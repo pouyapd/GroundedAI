@@ -44,6 +44,12 @@ the release.
   blind human labelling of every statement, and a scorer for false acceptance and false
   rejection. Labels have not been collected yet.
 
+### Fixed in the release candidate
+
+- Conflict reports no longer pair statements from a document that never mentions the
+  organisation the question names (both check versions).
+- claims-v2 no longer hides a whole answer that a model wrapped in brackets.
+
 ### Known limitations
 
 See the README's Limitations section: lexical checks, small local models, synthetic and small

@@ -1,0 +1,1572 @@
+{
+ "dataset": "groundedai-claims-review-v1",
+ "dataset_fingerprint": "effba3249a7fd99d",
+ "generated_at": "2026-10-19T11:51:27+00:00",
+ "code": {
+  "commit": "cca66703ef55",
+  "uncommitted_changes": false
+ },
+ "provider": {
+  "name": "ollama",
+  "model": "qwen2.5:1.5b"
+ },
+ "settings": {
+  "chunk_size": 800,
+  "chunk_overlap": 120,
+  "embedding": "hashing:v1-384",
+  "retrieval_mode": "hybrid",
+  "top_k": 5,
+  "prompt_version": "answer-v2",
+  "conflict_check": "disagreement-v1"
+ },
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "battery",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "langchain-huggingface": "1.2.3",
+   "sentence-transformers": "6.1.0",
+   "transformers": "5.19.0",
+   "torch": "2.10.0",
+   "numpy": "2.4.1",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "cca66703ef55",
+   "uncommitted_changes": false
+  }
+ },
+ "questions": [
+  {
+   "id": "r01",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "The model gave no citation for 1 statement(s); GroundedAI found the passages that contain them."
+   ],
+   "claims": {
+    "claims-v1": {
+     "a tidewell monthly pass costs 12": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S2"
+      ]
+     }
+    },
+    "claims-v2": {
+     "a tidewell monthly pass costs 12": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S2"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r02",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [
+    "different_dates"
+   ],
+   "warnings": [
+    "Sources S1 and S3 give different values that apply to different dates (S1: valid from 1 March 2026; S3: 2025 edition). Check which date applies.",
+    "1 of 2 statements could not be matched to a retrieved passage; they are marked in the claim check.",
+    "The model gave no citation for 1 statement(s); GroundedAI found the passages that contain them.",
+    "The answer gives only the value from S1; S3 states a different one (see the disagreement below)."
+   ],
+   "claims": {
+    "claims-v1": {
+     "yes students get 25 off the annual pass": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "this discount applies to the 96 annual pass": {
+      "status": "partial",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "yes students get 25 off the annual pass": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "this discount applies to the 96 annual pass": {
+      "status": "partial",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r03",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [],
+   "claims": {
+    "claims-v1": {
+     "bikes left outside a docking station are charged a recovery fee of 25": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "bikes left outside a docking station are charged a recovery fee of 25": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r04",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "The model gave no citation for 2 statement(s); GroundedAI found the passages that contain them."
+   ],
+   "claims": {
+    "claims-v1": {
+     "if a tidewell docking station is full the app shows the nearest station with a free dock": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "additionally if a station is full a bike left outside must be charged a recovery fee of 25": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "if a tidewell docking station is full the app shows the nearest station with a free dock": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "additionally if a station is full a bike left outside must be charged a recovery fee of 25": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r05",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "1 of 2 statements could not be matched to a retrieved passage; they are marked in the claim check.",
+    "The model gave no citation for 1 statement(s); GroundedAI found the passages that contain them."
+   ],
+   "claims": {
+    "claims-v1": {
+     "no source directly answers this question but based on general information no you will not be charged for a stolen bike": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [],
+      "evidence": []
+     },
+     "the tidewell bike share policy states that if both reports of theft are made within 48 hours the member pays nothing for the bike": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "no source directly answers this question but based on general information no you will not be charged for a stolen bike": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [],
+      "evidence": []
+     },
+     "the tidewell bike share policy states that if both reports of theft are made within 48 hours the member pays nothing for the bike": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r06",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [
+    "different_dates"
+   ],
+   "warnings": [
+    "Sources S1 and S3 give different values that apply to different dates (S1: valid from 1 March 2026; S3: 2025 edition). Check which date applies.",
+    "For 3 statement(s) the model cited a passage that does not contain it; the passage that does is shown instead.",
+    "The answer gives only the value from S1; S3 states a different one (see the disagreement below)."
+   ],
+   "claims": {
+    "claims-v1": {
+     "yes you can get your money back if you cancel a tidewell annual pass within 14 days of purchase for a full refund": {
+      "status": "partial",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "after 14 days annual passes are not refunded": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "a monthly pass can be cancelled at any time and ends at the close of the month already paid": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "an annual pass can be cancelled within 14 days of purchase for a full refund": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "a monthly pass costs 12 and includes unlimited rides of up to 45 minutes each": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "a day pass costs 4 and can be bought at any docking station with a contactless card": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "students with a valid university card get 25 off the annual pass": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "how long can i keep a bike before extra charges start": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S3"
+      ]
+     },
+     "you can ride for 30 minutes on any pass before extra time is charged": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S3"
+      ]
+     },
+     "after that every additional 15 minutes costs 1": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S3"
+      ]
+     }
+    },
+    "claims-v2": {
+     "yes you can get your money back if you cancel a tidewell annual pass within 14 days of purchase for a full refund": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "after 14 days annual passes are not refunded": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "a monthly pass can be cancelled at any time and ends at the close of the month already paid": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "an annual pass can be cancelled within 14 days of purchase for a full refund": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "a monthly pass costs 12 and includes unlimited rides of up to 45 minutes each": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1",
+       "S1"
+      ]
+     },
+     "a day pass costs 4 and can be bought at any docking station with a contactless card": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "students with a valid university card get 25 off the annual pass": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "how long can i keep a bike before extra charges start": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S3"
+      ]
+     },
+     "you can ride for 30 minutes on any pass before extra time is charged": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S3"
+      ]
+     },
+     "after that every additional 15 minutes costs 1": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S3"
+      ],
+      "evidence": [
+       "S3"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r07",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "1 of 3 statements could not be matched to a retrieved passage; they are marked in the claim check.",
+    "For 2 statement(s) the model cited a passage that does not contain it; the passage that does is shown instead."
+   ],
+   "claims": {
+    "claims-v1": {
+     "you must be at least 16 years old to ride a tidewell bike": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "riders aged 16 or 17 need a parent or guardian to accept these terms on their behalf": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "riders under the age of 18 must be accompanied by an adult member when using power tools but they can use them without supervision if supervised by staff": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S4"
+      ],
+      "evidence": []
+     }
+    },
+    "claims-v2": {
+     "you must be at least 16 years old to ride a tidewell bike": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "riders aged 16 or 17 need a parent or guardian to accept these terms on their behalf": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     },
+     "riders under the age of 18 must be accompanied by an adult member when using power tools but they can use them without supervision if supervised by staff": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S4"
+      ],
+      "evidence": []
+     }
+    }
+   }
+  },
+  {
+   "id": "r08",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "1 of 2 statements could not be matched to a retrieved passage; they are marked in the claim check."
+   ],
+   "claims": {
+    "claims-v1": {
+     "yes there is an extra charge for tidewell electric bikes": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "riders must be at least 16 years old riders aged 16 or 17 need a parent or guardian to accept these terms on their behalf": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "yes there is an extra charge for tidewell electric bikes": {
+      "status": "partial",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "riders must be at least 16 years old riders aged 16 or 17 need a parent or guardian to accept these terms on their behalf": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r09",
+   "expected_behavior": "flag_conflict",
+   "status": "answered",
+   "conflicts": [
+    "different_dates"
+   ],
+   "warnings": [
+    "Sources S1 and S2 give different values that apply to different dates (S1: 2025 edition; S2: valid from 1 March 2026). Check which date applies."
+   ],
+   "claims": {
+    "claims-v1": {
+     "you can ride for 30 minutes on any pass before extra time is charged": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S4"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "after that every additional 15 minutes costs 1": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S4"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "if a ride lasts longer than 45 minutes each additional 15 minutes costs 1": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     }
+    },
+    "claims-v2": {
+     "you can ride for 30 minutes on any pass before extra time is charged": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S4"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "after that every additional 15 minutes costs 1": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S4"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "if a ride lasts longer than 45 minutes each additional 15 minutes costs 1": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S3"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r10",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [
+    "different_dates"
+   ],
+   "warnings": [
+    "Sources S1 and S2 give different values that apply to different dates (S1: valid from 1 March 2026; S2: 2025 edition). Check which date applies."
+   ],
+   "claims": {
+    "claims-v1": {
+     "an annual pass costs 96 while it is 84 for the same year": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S3",
+       "S2",
+       "S5"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "an annual pass costs 96 while it is 84 for the same year": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S3",
+       "S2",
+       "S5"
+      ],
+      "evidence": [
+       "S1",
+       "S2"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r11",
+   "expected_behavior": "flag_conflict",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "The model gave no citation for 1 statement(s); GroundedAI found the passages that contain them."
+   ],
+   "claims": {
+    "claims-v1": {
+     "yes members must complete a one hour laser induction before using the laser cutter": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S2"
+      ]
+     }
+    },
+    "claims-v2": {
+     "yes members must complete a one hour laser induction before using the laser cutter": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S2"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r12",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "For 1 statement(s) the model cited a passage that does not contain it; the passage that does is shown instead."
+   ],
+   "claims": {
+    "claims-v1": {
+     "you can ride for 30 minutes on any pass before extra time is charged": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "after that every additional 15 minutes costs 1": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "tidewell bikes may not be taken on trains or buses because they must stay within the service area": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S3",
+       "S4"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "you can ride for 30 minutes on any pass before extra time is charged": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "after that every additional 15 minutes costs 1": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "tidewell bikes may not be taken on trains or buses because they must stay within the service area": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S3",
+       "S4"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r13",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "For 2 statement(s) the model cited a passage that does not contain it; the passage that does is shown instead."
+   ],
+   "claims": {
+    "claims-v1": {
+     "yes helmets are recommended but not required": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S5"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "tidewell does not provide helmets": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S3"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "helmets are recommended but not required": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S3"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "yes helmets are recommended but not required": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S5"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "tidewell does not provide helmets": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S3"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "helmets are recommended but not required": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S3"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r14",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [
+    "different_dates"
+   ],
+   "warnings": [
+    "Sources S1 and S2 give different values that apply to different dates (S1: 2025 edition; S2: valid from 1 March 2026). Check which date applies.",
+    "1 of 4 statements could not be matched to a retrieved passage; they are marked in the claim check.",
+    "For 2 statement(s) the model cited a passage that does not contain it; the passage that does is shown instead.",
+    "The answer gives only the value from S1; S2 states a different one (see the disagreement below)."
+   ],
+   "claims": {
+    "claims-v1": {
+     "replacement cards for lost or damaged memberships can be obtained through the app where a replacement card costs 3": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "the process takes approximately five working days": {
+      "status": "partial",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "a replacement membership card is available via the app and costs 3": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S5"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "it arrives within five working days": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S5"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "replacement cards for lost or damaged memberships can be obtained through the app where a replacement card costs 3": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1",
+       "S1"
+      ]
+     },
+     "the process takes approximately five working days": {
+      "status": "partial",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "a replacement membership card is available via the app and costs 3": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S5"
+      ],
+      "evidence": [
+       "S1",
+       "S1"
+      ]
+     },
+     "it arrives within five working days": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2",
+       "S5"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r15",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [],
+   "claims": {
+    "claims-v1": {
+     "you can reserve a bike for up to 10 minutes before you reach the station": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "reservations are free but you can only hold one reservation at a time": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "you can reserve a bike for up to 10 minutes before you reach the station": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "reservations are free but you can only hold one reservation at a time": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r16",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "The model gave no citation for 1 statement(s); GroundedAI found the passages that contain them."
+   ],
+   "claims": {
+    "claims-v1": {
+     "copperfield makerspace is open from 09 00 to 18 00 on weekends": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "copperfield makerspace is open from 09 00 to 18 00 on weekends": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r17",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "The model gave no citation for 2 statement(s); GroundedAI found the passages that contain them."
+   ],
+   "claims": {
+    "claims-v1": {
+     "off peak membership costs 20 per month and is limited to weekdays before 16 00": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "members can bring one guest per visit guests must sign the visitor book and stay with the member at all times": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "off peak membership costs 20 per month and is limited to weekdays before 16 00": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "members can bring one guest per visit guests must sign the visitor book and stay with the member at all times": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r18",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "2 of 3 statements could not be matched to a retrieved passage; they are marked in the claim check.",
+    "For 1 statement(s) the model cited a passage that does not contain it; the passage that does is shown instead."
+   ],
+   "claims": {
+    "claims-v1": {
+     "no guests must sign the visitor book and stay with the member at all times": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "therefore no friends can be brought along without explicit permission from a staff member": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": []
+     },
+     "can a copperfield member bring a friend along": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": []
+     }
+    },
+    "claims-v2": {
+     "no guests must sign the visitor book and stay with the member at all times": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "therefore no friends can be brought along without explicit permission from a staff member": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": []
+     },
+     "can a copperfield member bring a friend along": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": []
+     }
+    }
+   }
+  },
+  {
+   "id": "r19",
+   "expected_behavior": "answer",
+   "status": "invalid_output",
+   "conflicts": [],
+   "warnings": [
+    "The model replied only with bracketed fragments (labels, titles or a bare value) and no answer sentence, so it is not shown as an answer."
+   ],
+   "claims": {}
+  },
+  {
+   "id": "r20",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "The model gave no citation for 1 statement(s); GroundedAI found the passages that contain them."
+   ],
+   "claims": {
+    "claims-v1": {
+     "states that before using the laser cutter every member must complete a one hour laser induction which costs 15 therefore members can book the laser cutter for up to two hours per session": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S2"
+      ]
+     }
+    },
+    "claims-v2": {
+     "before using the laser cutter every member must complete a one hour laser induction which costs 15 therefore members can book the laser cutter for up to two hours per session": {
+      "status": "added_source",
+      "flags": [],
+      "cited": [],
+      "evidence": [
+       "S2",
+       "S2"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r21",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [],
+   "claims": {
+    "claims-v1": {
+     "members may bring their own filament to the 3d printers without booking but it is sold at reception for 5p per gram": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "the annual pass costs 84 which covers unlimited rides of up to 45 minutes": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": [
+       "S2"
+      ]
+     }
+    },
+    "claims-v2": {
+     "members may bring their own filament to the 3d printers without booking but it is sold at reception for 5p per gram": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "the annual pass costs 84 which covers unlimited rides of up to 45 minutes": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": [
+       "S2",
+       "S2"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r22",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [],
+   "claims": {
+    "claims-v1": {
+     "nobody may use the table saw alone a second member must be in the room therefore you cannot use the table saw alone": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "nobody may use the table saw alone a second member must be in the room therefore you cannot use the table saw alone": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r23",
+   "expected_behavior": "answer",
+   "status": "invalid_output",
+   "conflicts": [],
+   "warnings": [
+    "The model replied only with bracketed fragments (labels, titles or a bare value) and no answer sentence, so it is not shown as an answer."
+   ],
+   "claims": {}
+  },
+  {
+   "id": "r24",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [],
+   "claims": {
+    "claims-v1": {
+     "yes copperfield provides lead free solder": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "yes copperfield provides lead free solder": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r25",
+   "expected_behavior": "abstain",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "None of the 1 statement(s) in the answer could be matched to a retrieved passage. Treat the answer as unsupported."
+   ],
+   "claims": {
+    "claims-v1": {
+     "each standard member gets one storage box therefore the answer is 0": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "each standard member gets one storage box therefore the answer is 0": {
+      "status": "unsupported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r26",
+   "expected_behavior": "abstain",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [],
+   "claims": {
+    "claims-v1": {
+     "rides lasting longer than 45 minutes cost an additional 1 per minute on every pass": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S3"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "rides lasting longer than 45 minutes cost an additional 1 per minute on every pass": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1",
+       "S3"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "r27",
+   "expected_behavior": "abstain",
+   "status": "insufficient_evidence",
+   "conflicts": [],
+   "warnings": [],
+   "claims": {}
+  },
+  {
+   "id": "r28",
+   "expected_behavior": "abstain",
+   "status": "insufficient_evidence",
+   "conflicts": [],
+   "warnings": [],
+   "claims": {}
+  },
+  {
+   "id": "r29",
+   "expected_behavior": "answer",
+   "status": "insufficient_evidence",
+   "conflicts": [],
+   "warnings": [],
+   "claims": {}
+  },
+  {
+   "id": "r30",
+   "expected_behavior": "answer",
+   "status": "answered",
+   "conflicts": [],
+   "warnings": [
+    "For 1 statement(s) the model cited a passage that does not contain it; the passage that does is shown instead."
+   ],
+   "claims": {
+    "claims-v1": {
+     "report every accident however small to the duty manager on the same day": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "first aid kits are next to the main door and in the wood shop": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    },
+    "claims-v2": {
+     "report every accident however small to the duty manager on the same day": {
+      "status": "supported",
+      "flags": [],
+      "cited": [
+       "S1"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     },
+     "first aid kits are next to the main door and in the wood shop": {
+      "status": "wrong_source",
+      "flags": [],
+      "cited": [
+       "S2"
+      ],
+      "evidence": [
+       "S1"
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

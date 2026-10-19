@@ -50,3 +50,5 @@ everything under "Owner decisions" and "Publish" needs the repository owner.
 - The Docker Compose stack locally (Docker Desktop was not running; last full run 2026-10-13).
 - CI on any commit after `100f124`.
 - Human-labelled accuracy of either claim-check version.
+- The browser check with Ollama passed on its third run; the first two timed out while the
+  model was loading on battery power (see `docs/TESTING.md`).

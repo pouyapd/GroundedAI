@@ -562,6 +562,27 @@ Reports: `evaluation/reports/dev/generation-ollama-groundedai-dev-v1-20261019T10
 `...-claims-v2.json`, `evaluation/reports/reliability/dev/dev-v1-20261019T103650Z.*` and
 `dev-v2-20261019T103653Z.*`.
 
+### 2026-10-19 (release candidate): a claim-review set for human labels
+
+`groundedai-claims-review-v1` (four new invented documents, 30 questions) was written after
+the checks were frozen, and qwen2.5:1.5b answered it once through the application's defaults
+(`evaluation/reviews/claims-review-v1`, commit `cca6670`, battery power, no timings used).
+Outcomes by the dataset author's expected behaviour, not human-checked:
+
+| Outcome | Count |
+|---|---|
+| Answer questions (24): answered / refused / invalid output (bracket-only reply) | 21 / 1 / 2 |
+| Conflict questions (2): answered; the conflict stated by the model | 2; 0 |
+| Should refuse (4): refused / answered | 2 / 2 (one with an invented "£0", one with an invented rate) |
+| Statements exported for labelling | 56 |
+| Conflict reports (default check) | 5: two on the asked dated difference, two on a real but unasked dated difference, one false pair; the requirement conflict was missed |
+
+A first collection found two bugs that were fixed before this one (`92a46f5`): conflict
+reports pairing one organisation's prices with another's, and a whole answer in brackets hidden
+as invalid output. One wrong statement that both claim-check versions accept was seen and left
+unfixed ("£1 per minute" for "£1 per 15 minutes"). Accuracy of the checks on this set will be
+measured only from human labels ([README](../evaluation/reviews/claims-review-v1/README.md)).
+
 ## Reproducing
 
 The PDF journey (no dataset hash; the sample PDFs are rebuilt by `scripts/make_sample_pdfs.py`):
