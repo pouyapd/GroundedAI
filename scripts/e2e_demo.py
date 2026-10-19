@@ -2,7 +2,7 @@
 
     python scripts/e2e_demo.py                      # the local build in frontend/dist
     python scripts/e2e_demo.py --url https://pouyapd.github.io/GroundedAI/
-    python scripts/e2e_demo.py --llm --profile .cache/demo-browser   # also the WebGPU model
+    python scripts/e2e_demo.py --llm --profile .cache/demo-browser --channel chrome   # + model
 
 Without ``--url`` it serves ``frontend/dist`` (``npm run build:browser`` after
 ``python scripts/build_browser_runtime.py build``) under ``/GroundedAI/``, as GitHub Pages
@@ -46,7 +46,8 @@ WEBGPU_ARGS = ["--enable-unsafe-webgpu", "--enable-features=Vulkan,WebGPU"] + (
 )
 UPLOAD_TEXT = (
     "Kestrel Bay Kayak Club - Member Notes\n\n"
-    "Kayak hire\nA single kayak costs 18 euros for two hours. Life jackets are included in the price."
+    "Kayak hire\nA single kayak costs 18 euros for two hours. "
+    "Life jackets are included in the price."
 )
 
 
@@ -56,7 +57,10 @@ class Checks:
 
     def check(self, name: str, condition: bool, detail: str = "") -> None:
         self.results.append((name, condition, detail))
-        print(f"{'PASS' if condition else 'FAIL'}  {name}{f'  ({detail})' if detail else ''}", flush=True)
+        print(
+            f"{'PASS' if condition else 'FAIL'}  {name}{f'  ({detail})' if detail else ''}",
+            flush=True,
+        )
 
     @property
     def failed(self) -> int:
@@ -64,7 +68,7 @@ class Checks:
 
 
 class _QuietHandler(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format: str, *args: Any) -> None:  # noqa: A002 - stdlib signature
+    def log_message(self, format: str, *args: Any) -> None:
         pass
 
 
@@ -86,7 +90,9 @@ def _ask_example(page: Any, label: str, question: str, timeout: int = ANSWER_TIM
 
 
 def _answer_card(page: Any) -> str:
-    return str(page.locator(".card", has=page.locator("text=Passages used as evidence")).first.inner_text())
+    return str(
+        page.locator(".card", has=page.locator("text=Passages used as evidence")).first.inner_text()
+    )
 
 
 def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> None:
@@ -95,7 +101,8 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
     page.on("pageerror", lambda e: console.append(str(e)))
     started = time.monotonic()
     page.goto(url)
-    checks.check("the demo explains that it runs in the browser", page.is_visible("text=Live demo"))
+    page.wait_for_selector("text=Live demo", timeout=BOOT_TIMEOUT_MS)
+    checks.check("the demo explains that it runs in the browser", page.is_visible(".demo-panel"))
     page.wait_for_selector("button.chip-example", timeout=BOOT_TIMEOUT_MS)
     checks.check(
         "the in-browser backend starts and indexes the two sample PDFs",
@@ -109,11 +116,16 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
     card = _answer_card(page)
     checks.check("a sample question is answered from the PDF", "14 euros" in card)
     checks.check("the quote names its page", "p. 2" in card)
-    checks.check("every statement is marked as found", "Every statement found in the sources" in text)
+    checks.check(
+        "every statement is marked as found", "Every statement found in the sources" in text
+    )
     checks.check("the answer says which generator wrote it", "not an LLM" in card)
     checks.check("the quote does not start with the section heading", "“Tickets" not in card)
     if shots:
         page.screenshot(path=str(shots / "demo-answer.png"), full_page=True)
+        page.locator(".card", has=page.locator("text=Passages used as evidence")).first.screenshot(
+            path=str(shots / "demo-answer-card.png")
+        )
 
     _ask_example(page, "Ferry guide", "How many items can members borrow?")
     card = str(page.locator("main").inner_text())
@@ -138,7 +150,9 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
     new_pdf.write_bytes(make_pdf([UPLOAD_TEXT], title="Kestrel Bay Kayak Club - Member Notes"))
     page.set_input_files("input[type=file]", str(new_pdf))
     page.click("button[type=submit]:has-text('Upload')")
-    page.wait_for_selector("tr:has-text('Kestrel Bay Kayak Club') >> text=Ready", timeout=ANSWER_TIMEOUT_MS)
+    page.wait_for_selector(
+        "tr:has-text('Kestrel Bay Kayak Club') >> text=Ready", timeout=ANSWER_TIMEOUT_MS
+    )
     checks.check("an uploaded PDF is indexed in the browser", True)
     page.locator("tr", has_text="Kestrel Bay Kayak Club").locator("button:has-text('Ask')").click()
     page.fill("#question", "How much does a single kayak cost?")
@@ -148,15 +162,20 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
 
     page.click("button:has-text('Reset demo')")
     page.wait_for_selector("button.chip-example", timeout=BOOT_TIMEOUT_MS)
-    page.wait_for_function("document.querySelectorAll('#scope option').length === 3", timeout=BOOT_TIMEOUT_MS)
+    page.wait_for_function(
+        "document.querySelectorAll('#scope option').length === 3", timeout=BOOT_TIMEOUT_MS
+    )
     checks.check(
         "reset leaves only the two sample PDFs and no answer",
-        "Kestrel Bay" not in page.inner_text("#scope") and page.locator("text=Passages used as evidence").count() == 0,
+        "Kestrel Bay" not in page.inner_text("#scope")
+        and page.locator("text=Passages used as evidence").count() == 0,
     )
 
     page.set_viewport_size({"width": 390, "height": 844})
     page.wait_for_timeout(300)
-    overflow = page.evaluate("document.documentElement.scrollWidth - document.documentElement.clientWidth")
+    overflow = page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
     checks.check("no horizontal scrolling on a phone-sized screen", overflow <= 0, f"{overflow}px")
     _ask_example(page, "Ferry guide", "How much does it cost to take a bicycle?")
     checks.check("questions work on a phone-sized screen", "6 euros" in _answer_card(page))
@@ -165,7 +184,9 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
     page.set_viewport_size({"width": 1280, "height": 900})
 
     unexpected = [m for m in console if "WebGPU" not in m and "adapter" not in m.lower()]
-    checks.check("no unexpected browser console errors", not unexpected, "; ".join(unexpected)[:300])
+    checks.check(
+        "no unexpected browser console errors", not unexpected, "; ".join(unexpected)[:300]
+    )
 
 
 def run_llm(page: Any, checks: Checks, shots: Path | None) -> None:
@@ -175,18 +196,32 @@ def run_llm(page: Any, checks: Checks, shots: Path | None) -> None:
         return
     started = time.monotonic()
     option.locator("input").click()  # selected only once the model has loaded
-    selected = "document.querySelector('label.option-card.is-selected')?.textContent.includes('on your GPU')"
+    selected = (
+        "document.querySelector('label.option-card.is-selected')"
+        "?.textContent.includes('on your GPU')"
+    )
     deadline = time.monotonic() + MODEL_TIMEOUT_MS / 1000
     while not page.evaluate(selected):
         if time.monotonic() > deadline or page.locator("text=could not be loaded").count():
-            checks.check("the language model loads in the browser", False, page.inner_text(".demo-panel")[-200:])
+            checks.check(
+                "the language model loads in the browser",
+                False,
+                page.inner_text(".demo-panel")[-200:],
+            )
             return
         progress = page.locator(".model-progress")
         print(f"  model: {progress.inner_text() if progress.count() else 'starting'}", flush=True)
         page.wait_for_timeout(30_000)
-    checks.check("the language model loads in the browser", True, f"{time.monotonic() - started:.0f} s")
+    checks.check(
+        "the language model loads in the browser", True, f"{time.monotonic() - started:.0f} s"
+    )
     started = time.monotonic()
-    _ask_example(page, "Ferry guide", "How much does a single adult ticket to Mirrow cost?", LLM_ANSWER_TIMEOUT_MS)
+    _ask_example(
+        page,
+        "Ferry guide",
+        "How much does a single adult ticket to Mirrow cost?",
+        LLM_ANSWER_TIMEOUT_MS,
+    )
     card = _answer_card(page)
     checks.check(
         "the model's answer is checked against the PDF",
@@ -195,10 +230,19 @@ def run_llm(page: Any, checks: Checks, shots: Path | None) -> None:
     )
     if shots:
         page.screenshot(path=str(shots / "demo-llm-answer.png"), full_page=True)
-    _ask_example(page, "Ferry guide", "Do young children have to pay for the ferry?", LLM_ANSWER_TIMEOUT_MS)
+        page.locator(".card", has=page.locator("text=Passages used as evidence")).first.screenshot(
+            path=str(shots / "demo-llm-answer-card.png")
+        )
+    _ask_example(
+        page, "Ferry guide", "Do young children have to pay for the ferry?", LLM_ANSWER_TIMEOUT_MS
+    )
     card = _answer_card(page)
-    verdicts = [v for v in ("Every statement found", "Some statements", "No statement") if v in card]
-    checks.check("a paraphrased question gets an answer with a verdict", bool(verdicts), ", ".join(verdicts))
+    verdicts = [
+        v for v in ("Every statement found", "Some statements", "No statement") if v in card
+    ]
+    checks.check(
+        "a paraphrased question gets an answer with a verdict", bool(verdicts), ", ".join(verdicts)
+    )
     if shots:
         page.screenshot(path=str(shots / "demo-llm-paraphrase.png"), full_page=True)
 
@@ -207,9 +251,16 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--url", help="test this deployed demo instead of frontend/dist")
     parser.add_argument("--llm", action="store_true", help="also load and use the WebGPU model")
-    parser.add_argument("--profile", type=Path, help="browser profile folder (keeps the model cache)")
+    parser.add_argument(
+        "--profile", type=Path, help="browser profile folder (keeps the model cache)"
+    )
     parser.add_argument("--screenshots", type=Path)
     parser.add_argument("--headed", action="store_true")
+    parser.add_argument(
+        "--channel",
+        help="browser build, e.g. 'chrome' (Playwright's Chromium lacks the Direct3D shader "
+        "compiler that WebGPU needs on Windows)",
+    )
     args = parser.parse_args()
     try:
         from playwright.sync_api import sync_playwright
@@ -221,8 +272,10 @@ def main() -> int:
     if not url:
         dist = ROOT / "frontend" / "dist"
         if not (dist / "runtime" / "manifest.json").is_file():
-            print("Build the demo first: python scripts/build_browser_runtime.py build && "
-                  "cd frontend && npm run build:browser")
+            print(
+                "Build the demo first: python scripts/build_browser_runtime.py build && "
+                "cd frontend && npm run build:browser"
+            )
             return 2
         server, url, site = _serve(dist)
     if args.screenshots:
@@ -231,7 +284,12 @@ def main() -> int:
     work = Path(tempfile.mkdtemp(prefix="groundedai-demo-e2e-"))
     try:
         with sync_playwright() as playwright:
-            options: dict[str, Any] = {"headless": not args.headed, "args": WEBGPU_ARGS if args.llm else []}
+            options: dict[str, Any] = {
+                "headless": not args.headed,
+                "args": WEBGPU_ARGS if args.llm else [],
+            }
+            if args.channel:
+                options["channel"] = args.channel
             if args.profile:
                 context = playwright.chromium.launch_persistent_context(
                     str(args.profile), viewport={"width": 1280, "height": 900}, **options

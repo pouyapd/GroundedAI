@@ -40,6 +40,8 @@ function first(runtimes: FakeRuntime[]): FakeRuntime {
   return runtime;
 }
 
+const created: BrowserApi[] = [];
+
 function makeApi(handler: (request: RequestBody) => unknown) {
   stubSamples();
   const runtimes: FakeRuntime[] = [];
@@ -48,6 +50,7 @@ function makeApi(handler: (request: RequestBody) => unknown) {
     runtimes.push(runtime);
     return runtime;
   });
+  created.push(api);
   return { api, runtimes };
 }
 
@@ -61,7 +64,9 @@ function server(request: RequestBody): unknown {
   return true;
 }
 
-afterEach(() => {
+afterEach(async () => {
+  // Sample loading continues after a test's last call; let it finish before removing the stub.
+  await Promise.allSettled(created.splice(0).map((api) => api.whenReady()));
   vi.unstubAllGlobals();
 });
 

@@ -95,6 +95,12 @@ export class BrowserApi implements Api {
     this.runtime = this.boot();
     this.live = this.liveApi();
     this.seeded = this.seed();
+    this.seeded.catch(() => undefined); // reported through the runtime state; API calls rethrow
+  }
+
+  /** Resolves when the runtime has started and the sample PDFs are indexed. */
+  whenReady(): Promise<void> {
+    return this.seeded;
   }
 
   // ------------------------------------------------------------------ runtime state
@@ -154,6 +160,7 @@ export class BrowserApi implements Api {
     this.runtime = this.boot();
     this.live = this.liveApi();
     this.seeded = this.seed();
+    this.seeded.catch(() => undefined);
     return this.seeded;
   }
 

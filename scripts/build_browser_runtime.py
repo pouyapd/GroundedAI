@@ -39,7 +39,7 @@ def lock() -> None:
     python_tag = data["pyodide"]["python_tag"]
     for wheel in data["wheels"]:
         url = f"https://pypi.org/pypi/{wheel['name']}/{wheel['version']}/json"
-        with urllib.request.urlopen(url, timeout=30) as response:  # noqa: S310 - fixed host
+        with urllib.request.urlopen(url, timeout=30) as response:
             files = json.load(response)["urls"]
         pure = [f for f in files if f["filename"].endswith("-none-any.whl")]
         built = [f for f in files if f["filename"].endswith(f"{python_tag}-{abi}_wasm32.whl")]
@@ -72,10 +72,8 @@ def build() -> None:
         if not wheel.get("sha256"):
             raise SystemExit(f"{wheel['name']} has no hash; run the 'lock' command first")
         _download(wheel["url"], wheel["sha256"], wheels / wheel["file"])
-    subprocess.run(  # noqa: S603 - fixed arguments
-        [sys.executable, "-m", "pip", "wheel", "--no-deps", "-q", str(ROOT / "backend"), "-w", str(wheels)],
-        check=True,
-    )
+    command = [sys.executable, "-m", "pip", "wheel", "--no-deps", "-q", str(ROOT / "backend")]
+    subprocess.run([*command, "-w", str(wheels)], check=True)  # noqa: S603 - fixed arguments
     own = sorted(path.name for path in wheels.glob("groundedai-*.whl"))
     if len(own) != 1:
         raise SystemExit(f"expected one GroundedAI wheel, found {own}")
