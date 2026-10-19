@@ -39,6 +39,23 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## Results recorded after the claims-v2 revision (2026-10-19, mains power, commit `7082970`)
+
+Changes: claims-v2 judges claims on supporting sentences, reads equivalent wordings, names,
+ordinals and unresolved labels, and warns when an answer does not state a conflict;
+disagreement-v2 reads requirement wording and equivalent words (both opt-in; defaults unchanged).
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e; scripted fake models where a model is needed | 464 passed, 7 skipped (PostgreSQL); 33 new tests, invented examples |
+| `ruff`, `ruff format --check`, `mypy` (strict, also `--platform linux`), scripts lint | static | clean |
+| `vitest`, `eslint`, `tsc -b`, `npm run build` | front end (unchanged) | 70 passed; clean; built |
+| `scripts/reliability_suite.py validate`; dev split with v1 and v2 | dataset, checks (labels written by models) | 0 errors; v1 identical in every case; v2 in [RELIABILITY_V2.md](RELIABILITY_V2.md#revision-of-2026-10-19-development-split-only) |
+| Development set (25, claims-v2) and journey (7, both versions) | **real model**: qwen2.5:1.5b, Ollama 0.14.2 | outputs identical to the earlier runs; results in [EVALUATION.md](EVALUATION.md#2026-10-19-later-the-revised-claims-v2-on-real-model-answers) |
+| 56-question set, once | recorded real-model outputs re-checked with both versions (no model call) | same section |
+| `scripts/e2e_browser.py` | browser, real server | 24 of 24 with the default checks, with claims-v2, and with claims-v2 and qwen2.5:1.5b (the script now accepts the claims-v2 label "Every statement found") |
+| Docker | – | not run: Docker Desktop is not running |
+
 ## Results recorded with qwen2.5:1.5b (2026-10-19, mains power)
 
 Changes: month-first dates are read as dates; evidence quotes ignore document-title words.

@@ -44,6 +44,7 @@ power, default checks:
 |---|---|---|
 | `generation-ollama-…T085836Z` | `e08d140` | first run; a correct month-first date ("December 31, 2027") was marked not found |
 | `generation-ollama-…T091342Z` | `ddbe192` | after the date fix; raw outputs identical in 25 of 25, that verdict now verified |
+| `generation-ollama-…T103613Z` | `7082970` | `GROUNDEDAI_CLAIM_CHECK=claims-v2` after the claims-v2 revision; raw outputs identical in 25 of 25 ([results](../../../docs/EVALUATION.md#2026-10-19-later-the-revised-claims-v2-on-real-model-answers)) |
 
 Results: [docs/EVALUATION.md](../../../docs/EVALUATION.md#2026-10-19-qwen25-15b-through-ollama).
 

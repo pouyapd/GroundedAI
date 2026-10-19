@@ -103,10 +103,64 @@ the run log `test-runs.jsonl`. Per-case outcomes are sealed in a private, git-ig
 - **Targets:** of the 14 measures, version 2 reaches the 80% target (or the 20% ceiling) on 7; it
   is *established* (interval bound past the target) on 6. A recall, A precision, A false flags,
   A paraphrase, C off-target recall, C refusal and D recall stay below target.
-- **Not fixed by design (out of this round's scope):** synonyms ("fee" / "charge"), missing
+- **Not fixed by design (out of this round's scope; partly addressed by the revision of
+  2026-10-19 below):** synonyms ("fee" / "charge"), missing
   denial phrases ("no booking is needed"), statements dropped by the topic filter, an
   incidental shared value counting as agreement, "€3 million" and ordinals ("10th") not read as
   numbers, and wrong-subject statements.
+
+## Revision of 2026-10-19 (development split only)
+
+Version 2 was revised after the qwen2.5:1.5b runs of 2026-10-19 showed three kinds of error:
+correct paraphrases not confirmed ("do not have to pay" for "travel free"), claims "supported"
+by words scattered over a passage ("bring" in one sentence, "dog" in another), and conflicts
+between documents that the check could not see. The changes (commit `7082970`) are opt-in, like
+all of version 2; version 1 and every default are unchanged.
+
+| Area | Revised version 2 |
+|---|---|
+| Support | A claim is compared with the few sentences of one passage that carry it: the best sentence, plus at most two more, each adding at least two of the claim's words (or a missing figure and one word). The quotes are those sentences, word for word. An FAQ question is evidence only together with its answer |
+| Wording | A short list of equivalent phrases and words (`generation/equivalents.py`): "do not have to pay" / "at no cost" / "free of charge"; fee / charge / cost / price; annual / yearly; and a few others |
+| Negation | Compared part by part for every quoted sentence, after the rewrite; a condition ("if you have not paid") is not a negation; an FAQ question answered "No" is |
+| Names and figures | A name in the claim ("the Minnow class") must be in the evidence or its document's title; ordinals ("the 10th") are figures; a figure from the question is exempt only inside a condition; a date without a year matches when the evidence gives the year |
+| Labels | A bracketed reference that names no passage ("[Source A]", a title that is not one of the documents) is an invalid citation, and its words are not part of the claim |
+| Conflicts (`disagreement-v2`) | Equivalent words; "no X is needed", "not compulsory", "compulsory"; FAQ questions are not statements unless answered "No"; the question's "need" / "must" / "compulsory" is not an asked word; a statement may have two fewer asked words than the best one (one before), and a requirement statement needs two |
+| Answers | With claims-v2, a warning when the passages conflict and the answer does not say so |
+
+**Development split, version 2 before → after** (198 cases; the labels were written by models,
+see "Evaluation protocol actually used"):
+
+| Measure | Before (`b80a13a`) | After (`7082970`) |
+|---|---|---|
+| A. unsupported statements caught (recall) | 23 / 27 | 25 / 27 |
+| A. unsupported statements accepted (false negatives) | 4 / 27 | 2 / 27 |
+| A. supported statements flagged (false flags) | 8 / 27 | 5 / 27 |
+| A. paraphrases accepted | 8 / 15 | 10 / 15 |
+| A. all cases right | 42 / 54 | 47 / 54 |
+| B. all cases right | 34 / 36 | 34 / 36 |
+| C. all cases right | 41 / 48 | 41 / 48 |
+| D. disagreements found (recall) | 15 / 33 | 22 / 33 |
+| D. reports that are real disagreements (precision) | 15 / 16 | 22 / 24 |
+| D. false alarms | 1 / 27 | 2 / 27 |
+| D. kind right | 15 / 15 | 22 / 22 |
+| D. all cases right | 41 / 60 | 47 / 60 |
+
+Version 1 gives the same result in every case before and after.
+
+**What this does not show.** The changes were designed against the development split and the
+journey, and three choices were made by measuring on it: the "two added words" rule for further
+sentences, the conflict check's looser topic limit, and which equivalent words to list. The
+development numbers are therefore optimistic. The frozen test split was **not** rescored: the
+2026-10-18 test results above describe version 2 as it was then (code `b5fe83b`), and the
+previous round showed that development gains on statement support did not carry over to the
+test split. A fair test of this revision needs a new, versioned test set.
+
+Still wrong on the development split: two wrong-subject statements are accepted (a person named
+in the other clause of the same sentence; a price attached to the wrong pontoons in a sentence
+that gives both prices), five paraphrases are not confirmed ("split the fee into three
+payments" for "pay in three instalments", "billed" for "pay"), two false alarms pair values for
+different groups whose sentences do not name the group (two berth sizes; two courses), and 11 of
+33 disagreements are missed.
 
 ## Limitations
 

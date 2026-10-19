@@ -56,7 +56,12 @@ and local models (sentence-transformers, Ollama, transformers) are optional.
   unanswerable questions were refused, and the browser check passes with this model too (24 of
   24). Qwen2.5-0.5B, by contrast, refused 3 of the 5 with the answer in its prompt; prompt
   variants only traded refusals for invented facts
-  ([details](docs/EVALUATION.md#2026-10-19-qwen25-15b-through-ollama)).
+  ([details](docs/EVALUATION.md#2026-10-19-qwen25-15b-through-ollama)). The opt-in claims-v2
+  check, revised the same day, no longer counts words scattered over a passage as support
+  ("bring" in one sentence, "dog" in another), confirms some paraphrases ("at no cost" for
+  "free of charge") and warns when an answer does not mention a conflict between sources;
+  measured on the development split only
+  ([details](docs/RELIABILITY_V2.md#revision-of-2026-10-19-development-split-only)).
 - **Answer checks, version 2, measured once on a frozen test split.** On a 462-case synthetic
   test split, version 2 caught 69% of answers that miss the question (version 1: none) and every
   wrong citation. Disagreement recall rose from 0.38 to 0.47, and paraphrase acceptance fell from

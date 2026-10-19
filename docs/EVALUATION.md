@@ -502,6 +502,66 @@ Reports: `evaluation/reports/dev/generation-ollama-groundedai-dev-v1-20261019T*`
 `evaluation/reports/journey/journey-qwen2.5-1.5b-ollama-20261019.json`,
 `evaluation/reports/published/generation-ollama-groundedai-synthetic-v1-20261019T093836Z.*`.
 
+### 2026-10-19 (later): the revised claims-v2 on real model answers
+
+`claims-v2` and `disagreement-v2` were revised (commit `7082970`; what changed and the
+reliability-suite results are in [RELIABILITY_V2.md](RELIABILITY_V2.md#revision-of-2026-10-19-development-split-only)).
+The defaults (claims-v1, disagreement-v1) are unchanged. Model: qwen2.5:1.5b through Ollama
+0.14.2, mains power, temperature 0, seed 0, answer-v2.
+
+How each set was run:
+
+- **Development set (25):** a real model run with `GROUNDEDAI_CLAIM_CHECK=claims-v2` and the
+  2026-10-13 settings, at `7082970`. Its raw outputs were identical to the earlier run's in
+  25 of 25, so the claims-v1 column is the earlier run's result, replayed at
+  `7082970` (no difference from the recorded results).
+- **Journey (7):** two real model runs at `7082970`, one per claim-check version (the model's
+  answers were the same in both).
+- **56-question set:** run once, as a replay: the outputs recorded on 2026-10-19 (`adc86f2`)
+  were checked again with each version, without a model call; no setting was chosen on this
+  set. Its questions were not inspected one by one.
+
+| Outcome | Dev, v1 | Dev, v2 | Journey, v1 | Journey, v2 | 56-question, v1 | 56-question, v2 |
+|---|---|---|---|---|---|---|
+| Answer questions | 17 | 17 | 5 | 5 | 41 | 41 |
+| — correct, every statement verified | 13 | 13 | 2 | 3 | 29 | 26 |
+| — correct facts, not every statement verified | 1 | 1 | 3 | 2 | 10 | 13 |
+| — partly correct / wrong | 1 / 0 | 1 / 0 | 0 / 0 | 0 / 0 | 0 / 1 | 0 / 1 |
+| — false refusals | 2 | 2 | 0 | 0 | 1 | 1 |
+| Should refuse: refused / answered | 5 / 1 | 5 / 1 | 2 / 0 | 2 / 0 | 8 / 2 | 8 / 2 |
+| Conflict questions: conflict stated by the model | 0 of 2 | 0 of 2 | – | – | 0 of 2 | 0 of 2 |
+| Answers with the unstated-conflict warning (claims-v2 only) | – | 1 | – | 0 | – | 1 |
+| Invalid outputs | 0 | 0 | 0 | 0 | 0 | 0 |
+
+(The development set's two conflict questions are counted separately here; the table of the
+earlier run counted them among its 19 answer questions.)
+
+Notes, all from answers that could be read (development set and journey):
+
+- **Paraphrase now confirmed:** "bring up to two guests per day without any additional cost"
+  for "at no charge" (development set), and "Therefore, the answer is 12 items" (journey).
+- **Pooled words no longer support a claim:** "Yes, you can bring your dog on the ferry" is now
+  *partly found* (the guide says dogs are allowed on the open deck on a lead; no sentence says
+  "bring"), where version 1 marks it found.
+- **Evidence quotes:** "Yes, you can bring your dog on the train for free" was quoted with the
+  FAQ question "Can I take my dog on the train?"; it is now quoted with the question *and* its
+  answer "Dogs travel free of charge." A compound statement about bicycles is quoted with the
+  two sentences that carry it.
+- **Still only partly found, correctly:** "No, young children do not have to pay" (the guide
+  says "Children under 5 travel free"; "young" is wider than "under 5"). An inference the model
+  added ("... which implies a non-free membership") is now partly found instead of found.
+- **Still wrong:** a true statement about a different subject answering a should-refuse question
+  is found (the "beside the question" weakness), and an answer that says one source "confirms"
+  another while they disagree has every statement found; the new warning is the only signal.
+- **56-question set:** with version 2, four answers that version 1 marks verified are partly
+  verified (five statements found by version 1 are partly found by version 2). Whether those are
+  correct catches or false rejections was not checked, to keep the set held out.
+
+Reports: `evaluation/reports/dev/generation-ollama-groundedai-dev-v1-20261019T103613Z.*` (claims-v2),
+`evaluation/reports/journey/journey-qwen2.5-1.5b-ollama-20261019-claims-v1.json` and
+`...-claims-v2.json`, `evaluation/reports/reliability/dev/dev-v1-20261019T103650Z.*` and
+`dev-v2-20261019T103653Z.*`.
+
 ## Reproducing
 
 The PDF journey (no dataset hash; the sample PDFs are rebuilt by `scripts/make_sample_pdfs.py`):
@@ -541,6 +601,11 @@ groundedai eval generation --provider ollama --model qwen2.5:1.5b \
 python scripts/compare_generation_reports.py BASELINE.json OTHER.json [MORE.json ...]
 # how often the figure-conflict check fires (no model needed)
 python scripts/analyze_conflict_check.py --mode hybrid
+
+# 2026-10-19: revised claims-v2 on the development set (same settings as above)
+GROUNDEDAI_CLAIM_CHECK=claims-v2 groundedai eval generation --provider ollama --model qwen2.5:1.5b \n  --prompt-version answer-v2 --dataset-dir evaluation/datasets/groundedai-dev-v1 --out evaluation/reports/local/dev
+GROUNDEDAI_GENERATION_PROVIDER=ollama GROUNDEDAI_CLAIM_CHECK=claims-v2 python scripts/journey_check.py --out journey.json
+python scripts/reliability_suite.py score --split dev --checks v2 --out evaluation/reports/reliability/dev
 
 # 2026-10-14 (no language model needed)
 HF_HUB_OFFLINE=1 groundedai eval retrieval --config evaluation/configs/retrieval_app_defaults.json
