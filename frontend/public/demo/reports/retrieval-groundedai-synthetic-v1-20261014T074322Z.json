@@ -1,0 +1,658 @@
+{
+ "report_id": "retrieval-groundedai-synthetic-v1-20261014T074322Z",
+ "kind": "retrieval",
+ "title": "Retrieval benchmark at the application's default settings (800/120-character chunks, 20 candidates)",
+ "generated_at": "2026-10-14T07:43:22+00:00",
+ "measured": true,
+ "dataset": {
+  "name": "groundedai-synthetic-v1",
+  "version": "1.0.0",
+  "fingerprint": "fa56ebd64e3b1eee",
+  "documents": 14,
+  "questions_total": 56,
+  "questions_evaluated": 43,
+  "chunks": 41
+ },
+ "settings": {
+  "title": "Retrieval benchmark at the application's default settings (800/120-character chunks, 20 candidates)",
+  "chunking": {
+   "chunk_size": 800,
+   "chunk_overlap": 120
+  },
+  "k_values": [
+   1,
+   3,
+   5,
+   10
+  ],
+  "candidate_k": 20,
+  "rerank_candidates": 20,
+  "bootstrap": {
+   "samples": 2000,
+   "seed": 13
+  },
+  "baseline": "A-lexical-bm25",
+  "backend": "SQLite: FTS5 BM25 (porter stemmer) + exact cosine scan in NumPy",
+  "relevance": "chunk relevant if it covers >= 50% of an evidence quote span"
+ },
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "ac",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "langchain-huggingface": "1.2.3",
+   "sentence-transformers": "6.1.0",
+   "transformers": "5.19.0",
+   "torch": "2.10.0",
+   "numpy": "2.4.1",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "425969760e2a",
+   "uncommitted_changes": false
+  }
+ },
+ "embedders": {
+  "bge-small": {
+   "model_id": "sentence-transformers:BAAI/bge-small-en-v1.5",
+   "dim": 384,
+   "query_prefix": "Represent this sentence for searching relevant passages: ",
+   "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+   "index_seconds": 5.455
+  },
+  "hashing": {
+   "model_id": "hashing:v1-384",
+   "dim": 384,
+   "query_prefix": null,
+   "revision": null,
+   "index_seconds": 0.294
+  }
+ },
+ "rerankers": {},
+ "configurations": [
+  {
+   "name": "A-lexical-bm25",
+   "description": "SQLite FTS5 BM25 with Porter stemming",
+   "mode": "lexical",
+   "embedder": null,
+   "embedding_model": null,
+   "fusion": null,
+   "alpha": null,
+   "rrf_k": null,
+   "reranker": null,
+   "metrics": {
+    "mrr": {
+     "mean": 0.9845,
+     "ci95": [
+      0.9535,
+      1.0
+     ],
+     "n": 43
+    },
+    "recall@1": {
+     "mean": 0.9186,
+     "ci95": [
+      0.8488,
+      0.9767
+     ],
+     "n": 43
+    },
+    "ndcg@1": {
+     "mean": 0.9767,
+     "ci95": [
+      0.9302,
+      1.0
+     ],
+     "n": 43
+    },
+    "recall@3": {
+     "mean": 0.9884,
+     "ci95": [
+      0.9651,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@3": {
+     "mean": 0.9839,
+     "ci95": [
+      0.9516,
+      1.0
+     ],
+     "n": 43
+    },
+    "recall@5": {
+     "mean": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@5": {
+     "mean": 0.99,
+     "ci95": [
+      0.97,
+      1.0
+     ],
+     "n": 43
+    },
+    "recall@10": {
+     "mean": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@10": {
+     "mean": 0.99,
+     "ci95": [
+      0.97,
+      1.0
+     ],
+     "n": 43
+    }
+   },
+   "latency_ms": {
+    "n": 43,
+    "mean": 3.08,
+    "p50": 2.765,
+    "p95": 5.241,
+    "max": 5.858
+   }
+  },
+  {
+   "name": "B0-dense-hashing",
+   "description": "Feature-hashing vectors: the default embedder (word overlap only, not semantic)",
+   "mode": "dense",
+   "embedder": "hashing",
+   "embedding_model": "hashing:v1-384",
+   "fusion": null,
+   "alpha": null,
+   "rrf_k": null,
+   "reranker": null,
+   "metrics": {
+    "mrr": {
+     "mean": 0.9147,
+     "ci95": [
+      0.8411,
+      0.9767
+     ],
+     "n": 43
+    },
+    "recall@1": {
+     "mean": 0.8256,
+     "ci95": [
+      0.7093,
+      0.9302
+     ],
+     "n": 43
+    },
+    "ndcg@1": {
+     "mean": 0.8605,
+     "ci95": [
+      0.7442,
+      0.9535
+     ],
+     "n": 43
+    },
+    "recall@3": {
+     "mean": 0.9302,
+     "ci95": [
+      0.8605,
+      0.9884
+     ],
+     "n": 43
+    },
+    "ndcg@3": {
+     "mean": 0.9041,
+     "ci95": [
+      0.8294,
+      0.9659
+     ],
+     "n": 43
+    },
+    "recall@5": {
+     "mean": 0.9419,
+     "ci95": [
+      0.8721,
+      0.9884
+     ],
+     "n": 43
+    },
+    "ndcg@5": {
+     "mean": 0.9096,
+     "ci95": [
+      0.8391,
+      0.9666
+     ],
+     "n": 43
+    },
+    "recall@10": {
+     "mean": 0.9651,
+     "ci95": [
+      0.907,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@10": {
+     "mean": 0.919,
+     "ci95": [
+      0.8507,
+      0.9734
+     ],
+     "n": 43
+    }
+   },
+   "latency_ms": {
+    "n": 43,
+    "mean": 4.512,
+    "p50": 3.381,
+    "p95": 6.821,
+    "max": 39.646
+   }
+  },
+  {
+   "name": "C0-hybrid-rrf-hashing",
+   "description": "The application's default: RRF of BM25 and hashing vectors",
+   "mode": "hybrid",
+   "embedder": "hashing",
+   "embedding_model": "hashing:v1-384",
+   "fusion": "rrf",
+   "alpha": 0.5,
+   "rrf_k": 60,
+   "reranker": null,
+   "metrics": {
+    "mrr": {
+     "mean": 0.9496,
+     "ci95": [
+      0.8837,
+      1.0
+     ],
+     "n": 43
+    },
+    "recall@1": {
+     "mean": 0.8721,
+     "ci95": [
+      0.7791,
+      0.9535
+     ],
+     "n": 43
+    },
+    "ndcg@1": {
+     "mean": 0.9302,
+     "ci95": [
+      0.8372,
+      1.0
+     ],
+     "n": 43
+    },
+    "recall@3": {
+     "mean": 0.9651,
+     "ci95": [
+      0.907,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@3": {
+     "mean": 0.9502,
+     "ci95": [
+      0.8865,
+      0.9981
+     ],
+     "n": 43
+    },
+    "recall@5": {
+     "mean": 0.9767,
+     "ci95": [
+      0.9302,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@5": {
+     "mean": 0.9563,
+     "ci95": [
+      0.8968,
+      0.9981
+     ],
+     "n": 43
+    },
+    "recall@10": {
+     "mean": 0.9767,
+     "ci95": [
+      0.9302,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@10": {
+     "mean": 0.9563,
+     "ci95": [
+      0.8968,
+      0.9981
+     ],
+     "n": 43
+    }
+   },
+   "latency_ms": {
+    "n": 43,
+    "mean": 4.767,
+    "p50": 4.137,
+    "p95": 7.837,
+    "max": 9.16
+   }
+  },
+  {
+   "name": "B1-dense-bge-small",
+   "description": "BAAI/bge-small-en-v1.5 with query instruction",
+   "mode": "dense",
+   "embedder": "bge-small",
+   "embedding_model": "sentence-transformers:BAAI/bge-small-en-v1.5",
+   "fusion": null,
+   "alpha": null,
+   "rrf_k": null,
+   "reranker": null,
+   "metrics": {
+    "mrr": {
+     "mean": 0.8845,
+     "ci95": [
+      0.8062,
+      0.9535
+     ],
+     "n": 43
+    },
+    "recall@1": {
+     "mean": 0.7558,
+     "ci95": [
+      0.6279,
+      0.8605
+     ],
+     "n": 43
+    },
+    "ndcg@1": {
+     "mean": 0.814,
+     "ci95": [
+      0.6977,
+      0.9302
+     ],
+     "n": 43
+    },
+    "recall@3": {
+     "mean": 0.9419,
+     "ci95": [
+      0.8721,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@3": {
+     "mean": 0.8869,
+     "ci95": [
+      0.8086,
+      0.9536
+     ],
+     "n": 43
+    },
+    "recall@5": {
+     "mean": 0.9535,
+     "ci95": [
+      0.8953,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@5": {
+     "mean": 0.8924,
+     "ci95": [
+      0.8194,
+      0.954
+     ],
+     "n": 43
+    },
+    "recall@10": {
+     "mean": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@10": {
+     "mean": 0.9097,
+     "ci95": [
+      0.8509,
+      0.9603
+     ],
+     "n": 43
+    }
+   },
+   "latency_ms": {
+    "n": 43,
+    "mean": 60.268,
+    "p50": 58.0,
+    "p95": 73.673,
+    "max": 114.205
+   }
+  },
+  {
+   "name": "C1-hybrid-rrf-bge-small",
+   "description": "RRF of BM25 and bge-small (the recommended model setup)",
+   "mode": "hybrid",
+   "embedder": "bge-small",
+   "embedding_model": "sentence-transformers:BAAI/bge-small-en-v1.5",
+   "fusion": "rrf",
+   "alpha": 0.5,
+   "rrf_k": 60,
+   "reranker": null,
+   "metrics": {
+    "mrr": {
+     "mean": 0.9593,
+     "ci95": [
+      0.907,
+      1.0
+     ],
+     "n": 43
+    },
+    "recall@1": {
+     "mean": 0.8721,
+     "ci95": [
+      0.7791,
+      0.9535
+     ],
+     "n": 43
+    },
+    "ndcg@1": {
+     "mean": 0.9302,
+     "ci95": [
+      0.8372,
+      1.0
+     ],
+     "n": 43
+    },
+    "recall@3": {
+     "mean": 0.9767,
+     "ci95": [
+      0.9302,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@3": {
+     "mean": 0.9577,
+     "ci95": [
+      0.8965,
+      0.9981
+     ],
+     "n": 43
+    },
+    "recall@5": {
+     "mean": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@5": {
+     "mean": 0.9694,
+     "ci95": [
+      0.9327,
+      0.9981
+     ],
+     "n": 43
+    },
+    "recall@10": {
+     "mean": 1.0,
+     "ci95": [
+      1.0,
+      1.0
+     ],
+     "n": 43
+    },
+    "ndcg@10": {
+     "mean": 0.9694,
+     "ci95": [
+      0.9327,
+      0.9981
+     ],
+     "n": 43
+    }
+   },
+   "latency_ms": {
+    "n": 43,
+    "mean": 61.194,
+    "p50": 56.878,
+    "p95": 98.24,
+    "max": 105.116
+   }
+  }
+ ],
+ "comparisons": [
+  {
+   "configuration": "B0-dense-hashing",
+   "baseline": "A-lexical-bm25",
+   "metric": "recall@5",
+   "mean_diff": -0.0581,
+   "ci95_low": -0.1279,
+   "ci95_high": -0.0116,
+   "distinguishable": true
+  },
+  {
+   "configuration": "B0-dense-hashing",
+   "baseline": "A-lexical-bm25",
+   "metric": "mrr",
+   "mean_diff": -0.0698,
+   "ci95_low": -0.1395,
+   "ci95_high": -0.0233,
+   "distinguishable": true
+  },
+  {
+   "configuration": "B0-dense-hashing",
+   "baseline": "A-lexical-bm25",
+   "metric": "ndcg@5",
+   "mean_diff": -0.0804,
+   "ci95_low": -0.1459,
+   "ci95_high": -0.027,
+   "distinguishable": true
+  },
+  {
+   "configuration": "C0-hybrid-rrf-hashing",
+   "baseline": "A-lexical-bm25",
+   "metric": "recall@5",
+   "mean_diff": -0.0233,
+   "ci95_low": -0.0698,
+   "ci95_high": 0.0,
+   "distinguishable": false
+  },
+  {
+   "configuration": "C0-hybrid-rrf-hashing",
+   "baseline": "A-lexical-bm25",
+   "metric": "mrr",
+   "mean_diff": -0.0349,
+   "ci95_low": -0.093,
+   "ci95_high": 0.0,
+   "distinguishable": false
+  },
+  {
+   "configuration": "C0-hybrid-rrf-hashing",
+   "baseline": "A-lexical-bm25",
+   "metric": "ndcg@5",
+   "mean_diff": -0.0337,
+   "ci95_low": -0.0888,
+   "ci95_high": 0.0,
+   "distinguishable": false
+  },
+  {
+   "configuration": "B1-dense-bge-small",
+   "baseline": "A-lexical-bm25",
+   "metric": "recall@5",
+   "mean_diff": -0.0465,
+   "ci95_low": -0.1047,
+   "ci95_high": 0.0,
+   "distinguishable": false
+  },
+  {
+   "configuration": "B1-dense-bge-small",
+   "baseline": "A-lexical-bm25",
+   "metric": "mrr",
+   "mean_diff": -0.1,
+   "ci95_low": -0.1698,
+   "ci95_high": -0.038,
+   "distinguishable": true
+  },
+  {
+   "configuration": "B1-dense-bge-small",
+   "baseline": "A-lexical-bm25",
+   "metric": "ndcg@5",
+   "mean_diff": -0.0976,
+   "ci95_low": -0.1631,
+   "ci95_high": -0.0408,
+   "distinguishable": true
+  },
+  {
+   "configuration": "C1-hybrid-rrf-bge-small",
+   "baseline": "A-lexical-bm25",
+   "metric": "recall@5",
+   "mean_diff": 0.0,
+   "ci95_low": 0.0,
+   "ci95_high": 0.0,
+   "distinguishable": false
+  },
+  {
+   "configuration": "C1-hybrid-rrf-bge-small",
+   "baseline": "A-lexical-bm25",
+   "metric": "mrr",
+   "mean_diff": -0.0252,
+   "ci95_low": -0.0601,
+   "ci95_high": 0.0,
+   "distinguishable": false
+  },
+  {
+   "configuration": "C1-hybrid-rrf-bge-small",
+   "baseline": "A-lexical-bm25",
+   "metric": "ndcg@5",
+   "mean_diff": -0.0206,
+   "ci95_low": -0.0464,
+   "ci95_high": -0.0016,
+   "distinguishable": true
+  }
+ ],
+ "limitations": [
+  "Small synthetic corpus written for this project; results are indicative only and do not transfer to other domains.",
+  "95% intervals are percentile bootstrap over questions; with this sample size many differences between configurations are not distinguishable.",
+  "Latency is single-process wall-clock time on the listed CPU, including query embedding and reranking; the SQLite vector search is an exact linear scan."
+ ]
+}

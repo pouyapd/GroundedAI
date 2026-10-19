@@ -1,0 +1,130 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Title (Solvane SX-5 Hybrid Inverter - Installation and Service Manual) /Producer (GroundedAI fixture writer) >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 933 >>
+stream
+BT
+/F1 10 Tf
+13 TL
+50 752 Td
+(Solvane SX-5 Hybrid Inverter - Installation and Service Manual) Tj T*
+(Document SX5-IM-EN, edition 2.) Tj T*
+() Tj T*
+(1. Safety) Tj T*
+(Only qualified electricians may install or open the SX-5. Before any work on the device, switch) Tj T*
+(off the AC breaker and the DC isolator and wait at least 5 minutes so that the internal) Tj T*
+(capacitors can discharge. Never disconnect the DC connectors under load.) Tj T*
+() Tj T*
+(2. Technical data) Tj T*
+(The SX-5 has a rated AC output power of 5 kW. The DC input voltage range is 150 to 850 V. The) Tj T*
+(inverter has two MPPT trackers, and the maximum PV input current is 16 A per MPPT. The) Tj T*
+(enclosure is rated IP65 and the device can be installed outdoors in a shaded place. The) Tj T*
+(operating temperature range is -25 ∞C to +60 ∞C. Above 45 ∞C the inverter reduces its output) Tj T*
+(power to protect the electronics \(derating\).) Tj T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 793 >>
+stream
+BT
+/F1 10 Tf
+13 TL
+50 752 Td
+(3. Mounting) Tj T*
+(Mount the inverter vertically on a non-flammable wall. Keep at least 30 cm of free space above) Tj T*
+(and below the device so that air can circulate around the heat sink. Do not install the device) Tj T*
+(in direct sunlight or in rooms where ammonia is present, for example near animal stables.) Tj T*
+(Tighten the AC terminal screws to a torque of 1.2 Nm.) Tj T*
+() Tj T*
+(4. Commissioning) Tj T*
+(After the cabling has been checked, switch on the DC isolator first and then the AC breaker.) Tj T*
+(The display shows the start-up sequence. Select the country grid code in the setup menu before) Tj T*
+(the inverter connects to the grid. The inverter waits 60 seconds of stable grid voltage before) Tj T*
+(it starts exporting power.) Tj T*
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 883 >>
+stream
+BT
+/F1 10 Tf
+13 TL
+50 752 Td
+(5. Error codes) Tj T*
+(E01 means grid overvoltage. E02 means grid undervoltage. E03 means the grid frequency is out of) Tj T*
+(range. E05 means the insulation resistance of the PV array is too low; check the PV cabling for) Tj T*
+(damaged insulation. E07 means fan failure; check that the fan is not blocked and replace it if) Tj T*
+(it does not turn. E09 means over-temperature; improve ventilation around the inverter. E12) Tj T*
+(means the communication with the battery has been lost; check the battery communication cable.) Tj T*
+() Tj T*
+(6. Maintenance) Tj T*
+(Clean the heat sink every 6 months with a dry brush; never use water jets. Check the cable) Tj T*
+(glands and connectors once a year. Firmware updates are installed from a USB stick formatted) Tj T*
+(with FAT32; the update file must be placed in the root folder of the stick.) Tj T*
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 510 >>
+stream
+BT
+/F1 10 Tf
+13 TL
+50 752 Td
+(7. Warranty) Tj T*
+(The standard warranty is 10 years if the inverter is registered online within 90 days of) Tj T*
+(installation. Without registration the warranty is 5 years. The warranty does not cover damage) Tj T*
+(caused by lightning, flooding or installation errors.) Tj T*
+() Tj T*
+(8. Disposal) Tj T*
+(At the end of its life the inverter must not be disposed of with household waste. Return it to) Tj T*
+(an authorised collection point for electronic equipment.) Tj T*
+ET
+endstream
+endobj
+xref
+0 13
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000140 00000 n 
+0000000237 00000 n 
+0000000368 00000 n 
+0000000494 00000 n 
+0000001478 00000 n 
+0000001604 00000 n 
+0000002448 00000 n 
+0000002575 00000 n 
+0000003510 00000 n 
+0000003638 00000 n 
+trailer
+<< /Size 13 /Root 1 0 R /Info 4 0 R >>
+startxref
+4200
+%%EOF

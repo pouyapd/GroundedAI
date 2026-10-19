@@ -1,0 +1,264 @@
+{
+ "report_id": "generation-extractive-demo-groundedai-synthetic-v1-20261011T182213Z",
+ "kind": "generation",
+ "title": "Answer evaluation: extractive-demo (extractive-demo-v1)",
+ "generated_at": "2026-10-11T18:22:13+00:00",
+ "measured": true,
+ "dataset": {
+  "name": "groundedai-synthetic-v1",
+  "version": "1.0.0",
+  "fingerprint": "5a04e91e09086368",
+  "questions_evaluated": 56
+ },
+ "provider": {
+  "name": "extractive-demo",
+  "model": "extractive-demo-v1",
+  "is_llm": false,
+  "revision": null
+ },
+ "retrieval": {
+  "mode": "hybrid",
+  "fusion": "rrf",
+  "top_k": 5,
+  "embedding_model": "sentence-transformers:BAAI/bge-small-en-v1.5",
+  "reranker": null,
+  "max_context_chars": 6000
+ },
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "battery",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "langchain-huggingface": "1.2.3",
+   "sentence-transformers": "6.1.0",
+   "transformers": "5.19.0",
+   "torch": "2.10.0",
+   "numpy": "2.4.1",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  }
+ },
+ "summary": {
+  "n": 56,
+  "answered": 38,
+  "abstained": 18,
+  "errors": 0,
+  "failure_rate": 0.0,
+  "behavior_accuracy": 0.6604,
+  "abstention_recall": 0.5,
+  "abstention_precision": 0.2778,
+  "citation_validity": 1.0,
+  "grounded_rate": 1.0,
+  "evidence_coverage": 0.6628,
+  "key_fact_recall": 0.5581,
+  "token_f1": 0.3744,
+  "injection_resistance": 1.0,
+  "latency_ms": {
+   "n": 56,
+   "mean": 38.041,
+   "p50": 37.0,
+   "p95": 58.9,
+   "max": 72.6
+  }
+ },
+ "by_category": {
+  "ambiguous": {
+   "n": 3,
+   "answered": 3,
+   "abstained": 0,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": null,
+   "abstention_recall": null,
+   "abstention_precision": null,
+   "citation_validity": 1.0,
+   "grounded_rate": 1.0,
+   "evidence_coverage": null,
+   "key_fact_recall": null,
+   "token_f1": null,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 3,
+    "mean": 38.8,
+    "p50": 41.5,
+    "p95": 41.7,
+    "max": 41.7
+   }
+  },
+  "conflicting": {
+   "n": 2,
+   "answered": 0,
+   "abstained": 2,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.0,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": null,
+   "grounded_rate": null,
+   "evidence_coverage": 0.0,
+   "key_fact_recall": 0.0,
+   "token_f1": null,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 2,
+    "mean": 52.8,
+    "p50": 46.7,
+    "p95": 58.9,
+    "max": 58.9
+   }
+  },
+  "factual": {
+   "n": 30,
+   "answered": 25,
+   "abstained": 5,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.8333,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": 1.0,
+   "grounded_rate": 1.0,
+   "evidence_coverage": 0.8,
+   "key_fact_recall": 0.6667,
+   "token_f1": 0.3716,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 30,
+    "mean": 38.373,
+    "p50": 36.3,
+    "p95": 72.4,
+    "max": 72.6
+   }
+  },
+  "injection": {
+   "n": 3,
+   "answered": 2,
+   "abstained": 1,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.6667,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": 1.0,
+   "grounded_rate": 1.0,
+   "evidence_coverage": 0.6667,
+   "key_fact_recall": 0.6667,
+   "token_f1": 0.4794,
+   "injection_resistance": 1.0,
+   "latency_ms": {
+    "n": 3,
+    "mean": 36.633,
+    "p50": 38.7,
+    "p95": 41.1,
+    "max": 41.1
+   }
+  },
+  "multi_chunk": {
+   "n": 5,
+   "answered": 3,
+   "abstained": 2,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.6,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": 1.0,
+   "grounded_rate": 1.0,
+   "evidence_coverage": 0.5,
+   "key_fact_recall": 0.4,
+   "token_f1": 0.3276,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 5,
+    "mean": 36.08,
+    "p50": 38.0,
+    "p95": 39.9,
+    "max": 39.9
+   }
+  },
+  "out_of_scope": {
+   "n": 3,
+   "answered": 1,
+   "abstained": 2,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.6667,
+   "abstention_recall": 0.6667,
+   "abstention_precision": 1.0,
+   "citation_validity": 1.0,
+   "grounded_rate": 1.0,
+   "evidence_coverage": null,
+   "key_fact_recall": null,
+   "token_f1": null,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 3,
+    "mean": 35.733,
+    "p50": 35.2,
+    "p95": 37.6,
+    "max": 37.6
+   }
+  },
+  "synthesis": {
+   "n": 3,
+   "answered": 0,
+   "abstained": 3,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.0,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": null,
+   "grounded_rate": null,
+   "evidence_coverage": 0.0,
+   "key_fact_recall": 0.0,
+   "token_f1": null,
+   "injection_resistance": 1.0,
+   "latency_ms": {
+    "n": 3,
+    "mean": 35.167,
+    "p50": 35.4,
+    "p95": 36.5,
+    "max": 36.5
+   }
+  },
+  "unanswerable": {
+   "n": 7,
+   "answered": 4,
+   "abstained": 3,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.4286,
+   "abstention_recall": 0.4286,
+   "abstention_precision": 1.0,
+   "citation_validity": 1.0,
+   "grounded_rate": 1.0,
+   "evidence_coverage": null,
+   "key_fact_recall": null,
+   "token_f1": null,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 7,
+    "mean": 36.3,
+    "p50": 37.6,
+    "p95": 39.0,
+    "max": 39.0
+   }
+  }
+ },
+ "limitations": [
+  "Deterministic string and overlap checks only; no human or model judge.",
+  "Key-fact recall can miss correct paraphrases and credit wrong conclusions.",
+  "The support check is lexical: it detects missing words and invented numbers, not entailment.",
+  "The provider is the extractive demo generator, not a language model; these numbers describe that baseline only."
+ ]
+}

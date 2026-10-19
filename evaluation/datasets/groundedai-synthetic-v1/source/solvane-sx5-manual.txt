@@ -1,0 +1,29 @@
+Solvane SX-5 Hybrid Inverter - Installation and Service Manual
+Document SX5-IM-EN, edition 2.
+
+1. Safety
+Only qualified electricians may install or open the SX-5. Before any work on the device, switch off the AC breaker and the DC isolator and wait at least 5 minutes so that the internal capacitors can discharge. Never disconnect the DC connectors under load.
+
+2. Technical data
+The SX-5 has a rated AC output power of 5 kW. The DC input voltage range is 150 to 850 V. The inverter has two MPPT trackers, and the maximum PV input current is 16 A per MPPT. The enclosure is rated IP65 and the device can be installed outdoors in a shaded place. The operating temperature range is -25 °C to +60 °C. Above 45 °C the inverter reduces its output power to protect the electronics (derating).
+
+===PAGE===
+3. Mounting
+Mount the inverter vertically on a non-flammable wall. Keep at least 30 cm of free space above and below the device so that air can circulate around the heat sink. Do not install the device in direct sunlight or in rooms where ammonia is present, for example near animal stables. Tighten the AC terminal screws to a torque of 1.2 Nm.
+
+4. Commissioning
+After the cabling has been checked, switch on the DC isolator first and then the AC breaker. The display shows the start-up sequence. Select the country grid code in the setup menu before the inverter connects to the grid. The inverter waits 60 seconds of stable grid voltage before it starts exporting power.
+
+===PAGE===
+5. Error codes
+E01 means grid overvoltage. E02 means grid undervoltage. E03 means the grid frequency is out of range. E05 means the insulation resistance of the PV array is too low; check the PV cabling for damaged insulation. E07 means fan failure; check that the fan is not blocked and replace it if it does not turn. E09 means over-temperature; improve ventilation around the inverter. E12 means the communication with the battery has been lost; check the battery communication cable.
+
+6. Maintenance
+Clean the heat sink every 6 months with a dry brush; never use water jets. Check the cable glands and connectors once a year. Firmware updates are installed from a USB stick formatted with FAT32; the update file must be placed in the root folder of the stick.
+
+===PAGE===
+7. Warranty
+The standard warranty is 10 years if the inverter is registered online within 90 days of installation. Without registration the warranty is 5 years. The warranty does not cover damage caused by lightning, flooding or installation errors.
+
+8. Disposal
+At the end of its life the inverter must not be disposed of with household waste. Return it to an authorised collection point for electronic equipment.

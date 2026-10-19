@@ -1,0 +1,17 @@
+{
+  "title": "Retrieval benchmark (offline profile: no model downloads)",
+  "chunking": {"chunk_size": 400, "chunk_overlap": 60},
+  "k_values": [1, 3, 5, 10],
+  "candidate_k": 30,
+  "rerank_candidates": 20,
+  "bootstrap": {"samples": 2000, "seed": 13},
+  "baseline": "A-lexical-bm25",
+  "embedders": {
+    "hashing": {"provider": "hashing", "model": "v1", "dim": 384}
+  },
+  "configurations": [
+    {"name": "A-lexical-bm25", "mode": "lexical", "description": "SQLite FTS5 BM25 with Porter stemming"},
+    {"name": "B0-dense-hashing", "mode": "dense", "embedder": "hashing", "description": "Feature-hashing vectors (word overlap only; sanity baseline, not semantic)"},
+    {"name": "C0-hybrid-rrf-hashing", "mode": "hybrid", "embedder": "hashing", "fusion": "rrf", "rrf_k": 60, "description": "RRF of BM25 and hashing vectors"}
+  ]
+}

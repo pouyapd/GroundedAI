@@ -1,0 +1,16 @@
+{
+  "name": "groundedai-conflicts-v1",
+  "version": "1.0.0",
+  "license": "MIT (same as the repository). All passages are synthetic and describe fictional organisations.",
+  "description": "Held-out cases for the source-disagreement check: true conflicts, values for different dates, values for different contexts, agreeing sources and incomplete evidence. Committed before the check it tests was written.",
+  "created": "2026-10-13",
+  "cases_file": "cases.jsonl",
+  "cases_sha256": "256eaad3e44a8f8a9d4bd3b25e8c440dbf55e6e191417db9a7b97a465f442a12",
+  "classes": {
+    "conflict": 10,
+    "temporal": 6,
+    "context": 6,
+    "agreement": 4,
+    "incomplete": 4
+  }
+}

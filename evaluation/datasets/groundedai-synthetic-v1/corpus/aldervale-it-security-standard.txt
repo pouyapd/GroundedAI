@@ -1,0 +1,26 @@
+Aldervale Systems IT Security Standard
+Version 3.0, approved by the Information Security Board in April 2025.
+
+Passwords and sign-in
+
+Passwords must be at least 14 characters long. Long passphrases made of several unrelated words are recommended. Passwords do not have to be changed on a fixed schedule; a password must be changed immediately if there is any suspicion that it has been disclosed. Multi-factor authentication is mandatory for email, the VPN and all administrative accounts. Password managers approved by IT may be used to store work passwords.
+
+Devices
+
+All company laptops use full-disk encryption, which is enabled by IT before a device is handed out. Screens lock automatically after 5 minutes without activity. Operating system updates must be installed within 7 days of release; critical security updates must be installed within 48 hours. USB storage devices are blocked, except approved encrypted drives issued by IT.
+
+Email and phishing
+
+Suspicious emails must be reported with the Report Phish button in the mail client. Employees must not forward suspicious emails to colleagues. Reported messages are analysed by the security team within one working day.
+
+Data classification
+
+Information is classified as Public, Internal, Confidential or Restricted. Confidential and Restricted information may only be stored in approved company systems. Restricted information must never be sent by email without encryption.
+
+Training
+
+Every employee completes security awareness training once per year. New employees complete the training within their first 30 days.
+
+Exceptions
+
+Exceptions to this standard need written approval from the Information Security Board and are reviewed every six months.

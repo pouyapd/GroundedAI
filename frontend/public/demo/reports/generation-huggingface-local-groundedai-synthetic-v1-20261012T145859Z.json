@@ -1,0 +1,281 @@
+{
+ "report_id": "generation-huggingface-local-groundedai-synthetic-v1-20261012T145859Z",
+ "kind": "generation",
+ "title": "Answer evaluation: huggingface-local (Qwen/Qwen2.5-0.5B-Instruct)",
+ "generated_at": "2026-10-12T14:58:59+00:00",
+ "measured": true,
+ "dataset": {
+  "name": "groundedai-synthetic-v1",
+  "version": "1.0.0",
+  "fingerprint": "5a04e91e09086368",
+  "questions_evaluated": 56
+ },
+ "provider": {
+  "name": "huggingface-local",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "is_llm": true,
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775"
+ },
+ "retrieval": {
+  "mode": "hybrid",
+  "fusion": "rrf",
+  "top_k": 5,
+  "embedding_model": "sentence-transformers:BAAI/bge-small-en-v1.5",
+  "reranker": null,
+  "max_context_chars": 6000
+ },
+ "run_config": {
+  "scoring_version": 2,
+  "dataset_fingerprint": "5a04e91e09086368",
+  "provider": "huggingface-local",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "retrieval_mode": "hybrid",
+  "fusion": "rrf",
+  "top_k": 5,
+  "reranker": null,
+  "embedding_model": "sentence-transformers:BAAI/bge-small-en-v1.5",
+  "max_context_chars": 6000,
+  "chunk_size": 400,
+  "chunk_overlap": 60,
+  "max_new_tokens": 200,
+  "temperature": 0.0,
+  "limit": null
+ },
+ "resumed_from_checkpoint": 0,
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "ac",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "langchain-huggingface": "1.2.3",
+   "sentence-transformers": "6.1.0",
+   "transformers": "5.19.0",
+   "torch": "2.10.0",
+   "numpy": "2.4.1",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  }
+ },
+ "summary": {
+  "n": 56,
+  "answered": 10,
+  "abstained": 42,
+  "errors": 0,
+  "failure_rate": 0.0,
+  "behavior_accuracy": 0.3774,
+  "abstention_recall": 1.0,
+  "abstention_precision": 0.2381,
+  "citation_validity": 1.0,
+  "grounded_rate": 0.1,
+  "evidence_coverage": 0.0233,
+  "key_fact_recall": 0.1628,
+  "token_f1": 0.2494,
+  "injection_resistance": 1.0,
+  "latency_ms": {
+   "n": 56,
+   "mean": 106369.173,
+   "p50": 32336.8,
+   "p95": 52250.8,
+   "max": 4093321.8
+  }
+ },
+ "by_category": {
+  "ambiguous": {
+   "n": 3,
+   "answered": 0,
+   "abstained": 3,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": null,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": null,
+   "grounded_rate": null,
+   "evidence_coverage": null,
+   "key_fact_recall": null,
+   "token_f1": null,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 3,
+    "mean": 33791.0,
+    "p50": 32104.9,
+    "p95": 37680.2,
+    "max": 37680.2
+   }
+  },
+  "conflicting": {
+   "n": 2,
+   "answered": 0,
+   "abstained": 2,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.0,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": null,
+   "grounded_rate": null,
+   "evidence_coverage": 0.0,
+   "key_fact_recall": 0.0,
+   "token_f1": null,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 2,
+    "mean": 30061.2,
+    "p50": 29672.3,
+    "p95": 30450.1,
+    "max": 30450.1
+   }
+  },
+  "factual": {
+   "n": 30,
+   "answered": 8,
+   "abstained": 21,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.2667,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": 1.0,
+   "grounded_rate": 0.125,
+   "evidence_coverage": 0.0333,
+   "key_fact_recall": 0.2,
+   "token_f1": 0.2965,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 30,
+    "mean": 169263.937,
+    "p50": 33975.4,
+    "p95": 52250.8,
+    "max": 4093321.8
+   }
+  },
+  "injection": {
+   "n": 3,
+   "answered": 0,
+   "abstained": 3,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.0,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": null,
+   "grounded_rate": null,
+   "evidence_coverage": 0.0,
+   "key_fact_recall": 0.0,
+   "token_f1": null,
+   "injection_resistance": 1.0,
+   "latency_ms": {
+    "n": 3,
+    "mean": 32147.3,
+    "p50": 31928.1,
+    "p95": 33815.3,
+    "max": 33815.3
+   }
+  },
+  "multi_chunk": {
+   "n": 5,
+   "answered": 1,
+   "abstained": 1,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.2,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": 1.0,
+   "grounded_rate": 0.0,
+   "evidence_coverage": 0.0,
+   "key_fact_recall": 0.0,
+   "token_f1": 0.0,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 5,
+    "mean": 33555.36,
+    "p50": 32727.8,
+    "p95": 39877.8,
+    "max": 39877.8
+   }
+  },
+  "out_of_scope": {
+   "n": 3,
+   "answered": 0,
+   "abstained": 3,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 1.0,
+   "abstention_recall": 1.0,
+   "abstention_precision": 1.0,
+   "citation_validity": null,
+   "grounded_rate": null,
+   "evidence_coverage": null,
+   "key_fact_recall": null,
+   "token_f1": null,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 3,
+    "mean": 29665.9,
+    "p50": 30185.7,
+    "p95": 32042.6,
+    "max": 32042.6
+   }
+  },
+  "synthesis": {
+   "n": 3,
+   "answered": 1,
+   "abstained": 2,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 0.3333,
+   "abstention_recall": null,
+   "abstention_precision": 0.0,
+   "citation_validity": 1.0,
+   "grounded_rate": 0.0,
+   "evidence_coverage": 0.0,
+   "key_fact_recall": 0.3333,
+   "token_f1": 0.1216,
+   "injection_resistance": 1.0,
+   "latency_ms": {
+    "n": 3,
+    "mean": 43466.6,
+    "p50": 33964.9,
+    "p95": 64637.5,
+    "max": 64637.5
+   }
+  },
+  "unanswerable": {
+   "n": 7,
+   "answered": 0,
+   "abstained": 7,
+   "errors": 0,
+   "failure_rate": 0.0,
+   "behavior_accuracy": 1.0,
+   "abstention_recall": 1.0,
+   "abstention_precision": 1.0,
+   "citation_validity": null,
+   "grounded_rate": null,
+   "evidence_coverage": null,
+   "key_fact_recall": null,
+   "token_f1": null,
+   "injection_resistance": null,
+   "latency_ms": {
+    "n": 7,
+    "mean": 33377.714,
+    "p50": 32680.1,
+    "p95": 46083.2,
+    "max": 46083.2
+   }
+  }
+ },
+ "limitations": [
+  "Deterministic string and overlap checks only; no human or model judge.",
+  "Key-fact recall can miss correct paraphrases and credit wrong conclusions.",
+  "The support check is lexical: it detects missing words and invented numbers, not entailment."
+ ]
+}

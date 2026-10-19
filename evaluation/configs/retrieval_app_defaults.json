@@ -1,0 +1,25 @@
+{
+  "title": "Retrieval benchmark at the application's default settings (800/120-character chunks, 20 candidates)",
+  "chunking": {"chunk_size": 800, "chunk_overlap": 120},
+  "k_values": [1, 3, 5, 10],
+  "candidate_k": 20,
+  "rerank_candidates": 20,
+  "bootstrap": {"samples": 2000, "seed": 13},
+  "baseline": "A-lexical-bm25",
+  "embedders": {
+    "hashing": {"provider": "hashing", "model": "v1", "dim": 384},
+    "bge-small": {
+      "provider": "sentence-transformers",
+      "model": "BAAI/bge-small-en-v1.5",
+      "dim": 384,
+      "query_prefix": "Represent this sentence for searching relevant passages: "
+    }
+  },
+  "configurations": [
+    {"name": "A-lexical-bm25", "mode": "lexical", "description": "SQLite FTS5 BM25 with Porter stemming"},
+    {"name": "B0-dense-hashing", "mode": "dense", "embedder": "hashing", "description": "Feature-hashing vectors: the default embedder (word overlap only, not semantic)"},
+    {"name": "C0-hybrid-rrf-hashing", "mode": "hybrid", "embedder": "hashing", "fusion": "rrf", "rrf_k": 60, "alpha": 0.5, "description": "The application's default: RRF of BM25 and hashing vectors"},
+    {"name": "B1-dense-bge-small", "mode": "dense", "embedder": "bge-small", "description": "BAAI/bge-small-en-v1.5 with query instruction"},
+    {"name": "C1-hybrid-rrf-bge-small", "mode": "hybrid", "embedder": "bge-small", "fusion": "rrf", "rrf_k": 60, "alpha": 0.5, "description": "RRF of BM25 and bge-small (the recommended model setup)"}
+  ]
+}

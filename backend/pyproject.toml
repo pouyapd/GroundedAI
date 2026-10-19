@@ -1,0 +1,125 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "groundedai"
+version = "0.1.0"
+description = "Grounded question answering over your own documents: hybrid retrieval, validated citations and reproducible evaluation."
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "Pouya" }]
+# Core runtime dependencies. Every entry has a single, documented purpose
+# (see docs/ARCHITECTURE.md, "Dependencies"). Heavy ML packages are optional.
+dependencies = [
+    "fastapi>=0.143,<1.0",           # HTTP API
+    "uvicorn>=0.54,<1.0",            # ASGI server
+    "pydantic>=2.14,<3",             # schemas and validation
+    "pydantic-settings>=2.15,<3",    # environment-based configuration
+    "sqlalchemy>=2.1,<2.2",          # persistence (SQLite and PostgreSQL)
+    "alembic>=1.20,<2",              # schema migrations
+    "pypdf>=6.20,<7",                # pure-Python PDF text extraction
+    "python-multipart>=0.0.32,<0.1", # multipart file uploads
+    "numpy>=2.2,<3",                 # vector maths for the SQLite vector search
+    "langchain-core>=1.6,<2",        # prompts, documents, retriever and chat-model interfaces
+    "langchain-text-splitters>=1.1,<2", # deterministic recursive chunking
+    "langchain-ollama>=1.1,<2",      # optional local LLM runtime (client only, no model)
+    "httpx>=0.28,<1",                # provider health checks
+]
+
+[project.optional-dependencies]
+# PostgreSQL + pgvector backend (used by Docker Compose and the CI Postgres job).
+postgres = ["psycopg[binary]>=3.3,<4", "pgvector>=0.5,<0.6"]
+# Real local embedding, reranking and transformer generation. Pulls in PyTorch.
+# Nothing is downloaded at install time; models are fetched only by
+# scripts/download_models.py or when GROUNDEDAI_HF_OFFLINE=false.
+ml = [
+    "langchain-huggingface>=1.2,<2",
+    "sentence-transformers>=6.1,<7",
+    "transformers>=5.19,<6",
+]
+dev = [
+    "pytest>=9.1,<10",
+    "pytest-cov>=7.1,<8",
+    "ruff==0.17.0",
+    "mypy>=2.4,<3",
+    "pip-audit>=2.10,<3",
+]
+
+[project.scripts]
+groundedai = "groundedai.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["groundedai*"]
+
+[tool.setuptools.package-data]
+groundedai = ["py.typed", "persistence/migrations/*.py", "persistence/migrations/*.mako", "persistence/migrations/versions/*.py"]
+
+# ---------------------------------------------------------------- ruff
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F",   # pycodestyle / pyflakes
+    "I",             # import order
+    "B",             # bugbear
+    "UP",            # pyupgrade
+    "S",             # flake8-bandit (security)
+    "SIM",           # simplifications
+    "RUF",           # ruff-specific
+    "N",             # naming
+    "PT",            # pytest style
+]
+ignore = [
+    "RUF001", "RUF002", "RUF003", # ambiguous unicode in strings (the corpus uses € and dashes)
+    "N818",                       # domain exception names (NotFound, Conflict) read better without "Error"
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106", "S108"]  # asserts and dummy secrets are fine in tests
+# Only a constant filter clause is interpolated into these SQL strings; values are bound.
+"groundedai/persistence/search.py" = ["S608"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["groundedai"]  # also when scripts/ and tools/ are linted from the repo root
+
+[tool.ruff.format]
+quote-style = "double"
+
+# ---------------------------------------------------------------- mypy
+[tool.mypy]
+python_version = "3.12"
+packages = ["groundedai"]
+strict = true
+warn_unreachable = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = [
+    "pgvector.*",
+    "sentence_transformers.*",
+    "transformers.*",
+    "langchain_huggingface.*",
+    "psycopg.*",
+    "huggingface_hub.*",
+]
+ignore_missing_imports = true
+
+# ---------------------------------------------------------------- pytest
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "postgres: needs a PostgreSQL+pgvector database (set GROUNDEDAI_TEST_POSTGRES_URL)",
+    "ml: needs the optional [ml] extra and locally cached models",
+    "ollama: needs a running Ollama server with the configured model",
+]
+filterwarnings = [
+    "error::DeprecationWarning:groundedai.*",
+]
+
+[tool.coverage.run]
+source = ["groundedai"]
+omit = ["groundedai/persistence/migrations/*"]
