@@ -45,6 +45,21 @@ these steps and changes three things:
   only, give ``conflict``, and the dates are shown in the explanation.
 * **Word forms.** The asked words are matched with :func:`claim_stem_v2`
   ("emptied" = "empty").
+
+Revised 2026-10-19 (still ``disagreement-v2``, after errors on the development split):
+
+* **Equivalent words** share a key (:mod:`groundedai.generation.equivalents`: fee / charge,
+  annual / yearly, ...), so "yearly charge" and "annual fee" are about the same thing.
+* **Requirement wording.** The question's own "need", "must", "required" or "compulsory" is
+  not an asked word (it asks *whether* something is required, it is not the thing). "No X is
+  needed", "not compulsory" deny a requirement; "compulsory", "mandatory" affirm one.
+* **FAQ questions** in a passage are not statements; a question answered by "No" ("Do I need
+  to show proof of address? No.") denies what it asks.
+* **About the question.** A statement may have up to two fewer asked words than the best one
+  (one in version 1), since equivalent words raise the best statement's count; a statement
+  that only affirms or denies a requirement needs two asked words, whatever the best has,
+  because the two sides of a requirement conflict are often worded very differently. Both
+  limits were chosen on the development split.
 """
 
 from __future__ import annotations
@@ -59,11 +74,12 @@ from groundedai.core.text import find_normalized_span, split_sentences, tokenize
 from groundedai.generation.claims import (
     QUESTION_FILLERS,
     Stemmer,
+    claim_key_v2,
     claim_stem,
-    claim_stem_v2,
     claim_words,
 )
 from groundedai.generation.context import SourceBlock
+from groundedai.generation.equivalents import rewrite_phrases
 from groundedai.generation.safety import detect_injection
 
 DisagreementKind = Literal["conflict", "different_dates"]
@@ -129,6 +145,17 @@ _AFFIRMED_REQUIREMENT_RE = re.compile(
     r"\b(?:must|has to|have to|needs? to|is required|are required|required to|remember to)\b",
     re.IGNORECASE,
 )
+# disagreement-v2 also reads these.
+_NEGATED_REQUIREMENT_V2_RE = re.compile(
+    r"\bno\s+(?:[\w-]+\s+){0,3}?(?:is|are)\s+(?:needed|required|necessary|compulsory|mandatory)\b"
+    r"|\b(?:is|are)\s+not\s+(?:compulsory|mandatory|obligatory)\b"
+    r"|\bnot\s+(?:required|needed|necessary|compulsory|mandatory)\b",
+    re.IGNORECASE,
+)
+_AFFIRMED_REQUIREMENT_V2_RE = re.compile(r"\b(?:compulsory|mandatory|obligatory)\b", re.I)
+_REQUIREMENT_WORDS = "need needs needed must require required requirement compulsory mandatory"
+_QUESTION_SENTENCE_RE = re.compile(r"\?[\"')\]]*\s*$")
+_ANSWERED_NO_RE = re.compile(r"^\W*no\b", re.IGNORECASE)
 _ASKS_FOR_DATE_RE = re.compile(r"^\s*when\b|\b(?:what|which)\s+date\b|\bby when\b", re.IGNORECASE)
 _CAPITALISED_RE = re.compile(r"\b[A-Z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*")
 # What kind of value a question asks for. Only values of that kind are compared, so a question
@@ -192,7 +219,7 @@ _QUALIFIERS: dict[str, frozenset[str]] = {
     for group, words in _QUALIFIER_GROUPS.items()
 }
 _QUALIFIERS_V2: dict[str, frozenset[str]] = {
-    group: frozenset(claim_stem_v2(word) for word in words.split())
+    group: frozenset(claim_key_v2(word) for word in words.split())
     for group, words in _QUALIFIER_GROUPS.items()
 }
 
@@ -306,7 +333,11 @@ def asked_kinds(question: str) -> frozenset[str] | None:
 
 
 def asked_words(question: str, stem: Stemmer = claim_stem) -> set[str]:
-    """Content words of the question, without names and without words that only ask."""
+    """Content words of the question, without names and without words that only ask.
+
+    With the version-2 stemmer, words that ask whether something is required ("need",
+    "compulsory") are left out too.
+    """
     names = {
         stem(token)
         for match in _CAPITALISED_RE.finditer(question)
@@ -314,6 +345,8 @@ def asked_words(question: str, stem: Stemmer = claim_stem) -> set[str]:
         for token in tokenize(match.group(0))
     }
     fillers = {stem(word) for word in QUESTION_FILLERS}
+    if stem is claim_key_v2:
+        fillers |= {stem(word) for word in _REQUIREMENT_WORDS.split()}
     return claim_words(question, stem) - names - fillers
 
 
@@ -337,15 +370,23 @@ def _statements(
 ) -> list[Statement]:
     dates_are_values = bool(_ASKS_FOR_DATE_RE.search(question))
     kinds = asked_kinds(question)
-    stem = claim_stem_v2 if v2 else claim_stem
+    stem = claim_key_v2 if v2 else claim_stem
     qualifier_groups = _QUALIFIERS_V2 if v2 else _QUALIFIERS
     statements = []
     for block in sources:
         title_words = claim_words(block.chunk.document_title, stem)
-        for sentence in split_sentences(block.text):
+        sentences = split_sentences(block.text)
+        for index, sentence in enumerate(sentences):
             if detect_injection(sentence):
                 continue
-            words = frozenset(claim_words(sentence, stem))
+            answered_no = False
+            if v2 and _QUESTION_SENTENCE_RE.search(sentence):
+                # An FAQ question states nothing, unless "No" answers it.
+                following = sentences[index + 1] if index + 1 < len(sentences) else ""
+                if not _ANSWERED_NO_RE.match(following):
+                    continue
+                answered_no = True
+            words = frozenset(claim_words(rewrite_phrases(sentence) if v2 else sentence, stem))
             if not words - title_words:
                 continue  # a heading that only repeats the title
             found_quantities = read_quantities(sentence).quantities
@@ -356,10 +397,20 @@ def _statements(
                 and (kinds is None or quantity.kind in kinds)
             )
             denies = bool(_NEGATED_REQUIREMENT_RE.search(sentence))
+            if v2:
+                denies = denies or bool(_NEGATED_REQUIREMENT_V2_RE.search(sentence))
             # "do not have to" contains "have to": a requirement counts only outside a denial.
-            affirms = bool(
-                _AFFIRMED_REQUIREMENT_RE.search(_NEGATED_REQUIREMENT_RE.sub(" ", sentence))
-            )
+            rest = _NEGATED_REQUIREMENT_RE.sub(" ", sentence)
+            affirms = bool(_AFFIRMED_REQUIREMENT_RE.search(rest))
+            if v2:
+                rest = _NEGATED_REQUIREMENT_V2_RE.sub(" ", rest)
+                affirms = bool(
+                    _AFFIRMED_REQUIREMENT_RE.search(rest)
+                    or _AFFIRMED_REQUIREMENT_V2_RE.search(rest)
+                )
+            if answered_no:
+                # "Do I need to show proof of address? No." denies what the question asks.
+                denies, affirms, values = True, False, ()
             if not values and not denies and not affirms:
                 continue
             span = find_normalized_span(block.text, sentence) or (0, 0)
@@ -528,12 +579,20 @@ def _classify_v2(
     return Disagreement("conflict", a, b, show_dates=True)
 
 
-def _about_the_question(statements: list[Statement], focus: set[str]) -> list[Statement]:
+def _about_the_question(
+    statements: list[Statement], focus: set[str], v2: bool = False
+) -> list[Statement]:
     if not statements:
         return []
     needed = min(MIN_FOCUS_WORDS, len(focus))
     best = max(statement.focus for statement in statements)
-    return [s for s in statements if s.focus >= max(needed, best - 1, 1)]
+
+    def kept(statement: Statement) -> bool:
+        if v2 and not statement.values and (statement.denies or statement.affirms):
+            return statement.focus >= max(needed, 1)
+        return statement.focus >= max(needed, best - (2 if v2 else 1), 1)
+
+    return [statement for statement in statements if kept(statement)]
 
 
 def _different_context(first: Statement, second: Statement) -> bool:
@@ -573,10 +632,10 @@ def find_disagreements(
     ``version`` chooses the method; ``disagreement-v1`` reproduces every earlier result.
     """
     v2 = version == "disagreement-v2"
-    focus = asked_words(question, claim_stem_v2 if v2 else claim_stem)
+    focus = asked_words(question, claim_key_v2 if v2 else claim_stem)
     if not focus:
         return []
-    candidates = _about_the_question(_statements(question, focus, sources, v2), focus)
+    candidates = _about_the_question(_statements(question, focus, sources, v2), focus, v2)
     document_dates = _document_dates(sources)
     dates_v2 = _document_dates_v2(sources) if v2 else {}
     found: dict[tuple[str, str], Disagreement] = {}

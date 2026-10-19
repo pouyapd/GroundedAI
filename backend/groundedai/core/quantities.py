@@ -52,6 +52,7 @@ QuantityKind = Literal[
     "current",
     "count",
     "number",
+    "ordinal",  # "the 5th"; read only by claims-v2 (see claims.read_ordinals)
 ]
 
 NUMBER_WORDS: dict[str, int] = {

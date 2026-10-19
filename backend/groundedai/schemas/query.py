@@ -160,7 +160,11 @@ class ClaimOut(BaseModel):
         ),
     )
     invalid_citations: list[str] = Field(
-        default_factory=list, description="claims-v2: cited labels that are not passages"
+        default_factory=list,
+        description=(
+            "claims-v2: cited labels that are not passages ('S7'), and bracketed references "
+            "that name no passage ('[Source A]')"
+        ),
     )
 
 

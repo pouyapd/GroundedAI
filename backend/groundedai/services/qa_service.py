@@ -40,6 +40,7 @@ from groundedai.generation.citations import (
     bracketed_only,
     labels_in,
     parse_answer,
+    states_conflict,
     strip_citations,
 )
 from groundedai.generation.claims import ClaimReport, EvidenceSource, check_claims
@@ -299,6 +300,28 @@ def conflicts_out(
             )
         )
     return result
+
+
+UNSTATED_CONFLICT_WARNING = (
+    "The sources disagree (see the disagreement below), but the answer does not say so; it "
+    "may present one side as the only answer, or call the sources consistent."
+)
+
+
+def unstated_conflict_warnings(
+    conflicts: Sequence[ConflictOut], answer: str | None, report: ClaimReport | None
+) -> list[str]:
+    """claims-v2: a warning when the passages conflict and the answer does not say so.
+
+    Only ``conflict`` counts: values for different dates are not a contradiction. Whether
+    the answer says so is the lexical test of :func:`states_conflict` ("disagree",
+    "conflicting", "the sources differ", "but the FAQ says ...").
+    """
+    if report is None or report.version != "claims-v2" or not answer:
+        return []
+    if any(conflict.kind == "conflict" for conflict in conflicts) and not states_conflict(answer):
+        return [UNSTATED_CONFLICT_WARNING]
+    return []
 
 
 def one_sided_warnings(conflicts: Sequence[ConflictOut]) -> list[str]:
@@ -621,6 +644,7 @@ class QAService:
             disagreements, context, None if parsed.is_abstention else parsed.text
         )
         warnings.extend(one_sided_warnings(conflicts))
+        warnings.extend(unstated_conflict_warnings(conflicts, parsed.text, report))
         status: AnswerStatus = "insufficient_evidence" if parsed.is_abstention else "answered"
         answer: str | None = parsed.text
         abstention_reason = parsed.abstention_reason

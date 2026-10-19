@@ -617,6 +617,54 @@ def test_claims_v2_rejects_replies_made_only_of_brackets(
         services.close()
 
 
+UNSTATED = "the answer does not say so"
+
+
+@pytest.mark.parametrize(
+    ("version", "reply", "warned"),
+    [
+        # Both values, but presented as agreeing: the disagreement is not stated.
+        ("claims-v2", "The limit is EUR 140 [S1], and [S2] confirms this with EUR 120.", True),
+        ("claims-v2", "The hotel limit in capital cities is EUR 140 per night [S1].", True),
+        ("claims-v2", "The sources disagree: EUR 140 [S1] or EUR 120 [S2] per night.", False),
+        # Version 1 keeps its published warnings.
+        ("claims-v1", "The hotel limit in capital cities is EUR 140 per night [S1].", False),
+    ],
+)
+def test_claims_v2_warns_when_the_answer_does_not_state_a_conflict(
+    make_settings: SettingsFactory, version: str, reply: str, warned: bool
+) -> None:
+    settings = make_settings(prompt_version="answer-v2", claim_check=version)
+    services = _services_with(settings, RecordingChatModel(seen=[], reply=reply))
+    services.ingestion.ingest_bytes("faq.txt", None, FAQ_TEXT.encode())
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="What is the hotel limit per night in capital cities?")
+        )
+        (conflict,) = response.conflicts
+        assert conflict.kind == "conflict"
+        assert any(UNSTATED in warning for warning in response.warnings) is warned
+    finally:
+        services.close()
+
+
+@pytest.mark.parametrize("version", ["claims-v1", "claims-v2"])
+def test_a_refusal_stays_a_refusal_with_either_check(
+    make_settings: SettingsFactory, version: str
+) -> None:
+    model = FakeListChatModel(responses=["INSUFFICIENT_EVIDENCE: nothing about contractors."])
+    services = _services_with(make_settings(claim_check=version), model)
+    try:
+        response = services.qa.answer(
+            QueryRequest(question="How many leave days do contractors get?")
+        )
+        assert response.status == "insufficient_evidence"
+        assert response.claims == []
+        assert response.verification is None
+    finally:
+        services.close()
+
+
 def test_disagreement_v2_can_be_selected(make_settings: SettingsFactory) -> None:
     settings = make_settings(prompt_version="answer-v2", conflict_check="disagreement-v2")
     services = _services_with(settings, RecordingChatModel(seen=[]))
