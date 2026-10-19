@@ -24,19 +24,25 @@ bracket-only (invalid output) and 3 questions were refused (one of them answerab
 
 ## How to label
 
-1. Open `review.html`. For each statement, read only the passages shown.
-2. *Supported*: the passages state it (other words are fine). *Partly supported*: part of it is
-   stated, part is not. *Not supported*: not stated, or the passages say otherwise.
-   *Unclear*: you cannot decide. Judge the statement, not whether the answer is helpful or
-   cites a passage.
-3. Tick the passages that support it, then *Download labels*.
-4. Two people should label independently. Then:
-   `python scripts/claim_review.py score --run evaluation/reviews/claims-review-v1 --labels labels-a.json labels-b.json`
+Labellers follow [`REVIEWER_GUIDE.md`](REVIEWER_GUIDE.md): two people, independently, each in
+their own browser profile; open `review.html`, label every statement from the passages shown,
+tick the supporting passages, *Download labels*. Then:
+
+```bash
+python scripts/claim_review.py score --run evaluation/reviews/claims-review-v1 \
+  --labels labels-a.json labels-b.json [--adjudication labels-agreed.json]
+```
 
 `score` reports for each check version: false acceptance (accepted, people say not supported),
-false rejection (not accepted, people say supported), whether the quoted evidence is among the
-passages people ticked, and how often the two labellers agree. Conflict detection is compared
-with the dataset's own `expected_behavior`, written by the dataset author, not by labellers.
+false rejection (not accepted, people say supported) and whether the quoted evidence is among
+the passages people ticked. With two label files it scores only the statements both labellers
+agree on, lists the disputed ones, and reports how often the two agree; an adjudication file
+settles disputed statements only. Conflict detection is compared with the dataset's own
+`expected_behavior`, written by the dataset author, not by labellers.
+
+`python scripts/claim_review.py page --run evaluation/reviews/claims-review-v1` rebuilds
+`review.html` from `answers.json` without a model (done on 2026-10-19 to add the notice about
+labels restored from the browser and the *Clear all labels* button; the answers are unchanged).
 
 ## How independent this is, honestly
 

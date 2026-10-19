@@ -18,8 +18,14 @@ both claim-check versions. It writes:
 
 ``score`` compares the human labels with each version: a statement the check accepts (found
 by a cited or uncited passage) but people mark "not supported" is a false acceptance; one the
-check does not accept but people mark "supported" is a false rejection. With two label files it
-also reports how often the two people agree. Nothing is scored without human labels.
+check does not accept but people mark "supported" is a false rejection. With two or more label
+files only the statements on which every labeller agrees are scored; disputed statements are
+listed and can be settled with ``--adjudication labels-agreed.json`` (labels the labellers agree
+on after discussion; used for disputed statements only). With one file the result says so. With
+two files it also reports how often the two people agree. Nothing is scored without human
+labels.
+
+    python scripts/claim_review.py page --run OUT     # rebuild review.html from answers.json
 """
 
 from __future__ import annotations
@@ -199,20 +205,38 @@ _PAGE = (Path(__file__).with_name("claim_review_page.html")).read_text(encoding=
 
 
 # ------------------------------------------------------------------------ score
-def score(run: Path, label_files: list[Path]) -> dict[str, Any]:
+def score(run: Path, label_files: list[Path], adjudication: Path | None = None) -> dict[str, Any]:
     checks = json.loads((run / "checks.json").read_text(encoding="utf-8"))
     people = [json.loads(path.read_text(encoding="utf-8")) for path in label_files]
-    for person in people:
+    decided = json.loads(adjudication.read_text(encoding="utf-8")) if adjudication else None
+    for person in [*people, *([decided] if decided else [])]:
         if person.get("dataset") != checks["dataset"]:
             raise SystemExit("labels are for another dataset")
     result: dict[str, Any] = {"dataset": checks["dataset"], "annotators": len(people)}
-    first = people[0]["labels"] if people else {}
+    agreed, disputed = _agreed_labels([person["labels"] for person in people])
+    settled = 0
+    for key in list(disputed):
+        label = (decided or {}).get("labels", {}).get(key, {})
+        if label.get("label") in LABELS:
+            agreed[key] = label
+            disputed.remove(key)
+            settled += 1
+    result["label_basis"] = (
+        "one annotator, not adjudicated"
+        if len(people) == 1
+        else f"statements on which all {len(people)} annotators agree"
+        + (", disputed ones settled by the adjudication file" if decided else "")
+    )
     for version in CLAIM_CHECK_VERSIONS:
         counts: Counter[str] = Counter()
         attributed = attributable = 0
         for question in checks["questions"]:
             for key, claim in question["claims"].get(version, {}).items():
-                human = first.get(f"{question['id']}|{key}", {})
+                labelled = f"{question['id']}|{key}"
+                if labelled in disputed:
+                    counts["disputed"] += 1
+                    continue
+                human = agreed.get(labelled, {})
                 label = human.get("label")
                 if label not in LABELS:
                     counts["unlabelled"] += 1
@@ -235,6 +259,9 @@ def score(run: Path, label_files: list[Path]) -> dict[str, Any]:
         both = [k for k in a if a[k].get("label") in LABELS and b.get(k, {}).get("label") in LABELS]
         same = sum(1 for k in both if a[k]["label"] == b[k]["label"])
         result["agreement_between_two_annotators"] = _rate(same, len(both))
+        result["disagreements"] = sorted(disputed)
+        if decided:
+            result["adjudicated"] = settled
     conflicts = [q for q in checks["questions"] if q["expected_behavior"] == "flag_conflict"]
     reported = [q for q in checks["questions"] if q["conflicts"]]
     result["conflicts_dataset_labels"] = {
@@ -245,6 +272,27 @@ def score(run: Path, label_files: list[Path]) -> dict[str, Any]:
         "reports_on_other_questions": len([q for q in reported if q not in conflicts]),
     }
     return result
+
+
+def _agreed_labels(
+    people: list[dict[str, dict[str, Any]]],
+) -> tuple[dict[str, dict[str, Any]], set[str]]:
+    """Labels every annotator who labelled a statement agrees on, and the disputed statements.
+
+    The supporting passages of an agreed label are those any of the annotators ticked.
+    """
+    agreed: dict[str, dict[str, Any]] = {}
+    disputed: set[str] = set()
+    for key in sorted({key for labels in people for key in labels}):
+        given = [labels[key] for labels in people if labels.get(key, {}).get("label") in LABELS]
+        if not given:
+            continue
+        if len({entry["label"] for entry in given}) > 1:
+            disputed.add(key)
+            continue
+        sources = sorted({source for entry in given for source in entry.get("sources") or []})
+        agreed[key] = {"label": given[0]["label"], "sources": sources}
+    return agreed, disputed
 
 
 def _rate(k: int, n: int) -> dict[str, Any]:
@@ -260,11 +308,21 @@ def main() -> int:
     rate = commands.add_parser("score", help="compare human labels with both check versions")
     rate.add_argument("--run", type=Path, required=True)
     rate.add_argument("--labels", type=Path, nargs="+", required=True)
+    rate.add_argument(
+        "--adjudication", type=Path, help="labels agreed after discussion, for disputed statements"
+    )
+    page = commands.add_parser("page", help="rebuild review.html from answers.json (no model)")
+    page.add_argument("--run", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "collect":
         collect(args.dataset_dir, args.out)
+    elif args.command == "page":
+        meta = json.loads((args.run / "answers.json").read_text(encoding="utf-8"))
+        (args.run / "review.html").write_text(
+            review_page(meta, meta["questions"]), encoding="utf-8", newline="\n"
+        )
     else:
-        print(json.dumps(score(args.run, args.labels), indent=2))
+        print(json.dumps(score(args.run, args.labels, args.adjudication), indent=2))
     return 0
 
 

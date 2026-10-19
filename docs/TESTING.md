@@ -39,6 +39,31 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## Release preparation checks (2026-10-19, later; commit `83c5668` plus this round's changes; mains power)
+
+| Check | Kind | Result |
+|---|---|---|
+| `pytest` (default suite) | unit, integration, API, e2e; scripted fake models | 475 passed, 7 skipped (PostgreSQL tests, run separately below) |
+| `scripts/dev_postgres.py -- pytest -m postgres` | PostgreSQL 16 + pgvector, bundled local server | 7 passed |
+| `ruff`, `ruff format --check` (backend and scripts), `mypy` strict (Windows and `--platform linux`) | static | clean |
+| `eslint`, `tsc -b`, `vitest`, `npm run build:demo`, `npm run build` | front end | clean; 70 passed; both builds succeed |
+| Workflow files | YAML parse (no `actionlint` available) | both parse; `contents: read`; Pages jobs only add `pages`/`id-token` write |
+| `scripts/reliability_suite.py score --split dev` (v1, v2) | checks, model-written labels | unchanged: v1 A 37, B 31, C 21, D 35; v2 A 47, B 34, C 41, D 47 |
+| `scripts/evaluate_conflict_cases.py` | 30 held-out conflict cases, aggregate only | 12 of 16 found, 0 of 14 false alarms (unchanged) |
+| `groundedai eval generation` on the development set | **real model** (qwen2.5:1.5b) | 16 of 19 answerable correct, 2 false refusals, 5 of 6 refusals; outputs identical to the earlier run ([EVALUATION.md](EVALUATION.md#2026-10-19-release-preparation-each-behaviour-separately)) |
+| `scripts/journey_check.py` with Ollama | **real model**, API, PDF upload | 2 correct and verified, 3 correct but not fully verified, 2 correct refusals; 2–7 s per answer |
+| `scripts/e2e_browser.py` | browser, real server | 24 of 24 with the default generator; 24 of 24 with qwen2.5:1.5b on the first run; no test folder left behind |
+| `review.html` in a browser (two browser profiles) | tooling, placeholder labels | restored-label notice, *Clear all labels* and the download work; `score` reads the files |
+| Docker image and Compose | – | **not run**: Docker Desktop is not running |
+| CI | – | **not run** on any commit after `100f124`: nothing pushed |
+
+Fixed in this round, each with a test: `claim_review.py score` scored only the first labeller's
+file (now: only statements all labellers agree on, disputed ones listed, optional adjudication
+file); the review page could show one labeller's stored labels to the next labeller in the
+same browser; `e2e_browser.py` silently left its test folder (uploaded files and database) in
+the temporary directory on Windows, because the server's database is still locked for a moment
+after the server is stopped.
+
 ## Release-candidate checks (2026-10-19, commit `cca6670` plus the e2e timeout change; laptop on battery)
 
 | Check | Kind | Result |

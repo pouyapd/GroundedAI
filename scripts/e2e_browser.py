@@ -20,6 +20,7 @@ this script. Exit status 0 means every check passed.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import os
 import shutil
 import socket
@@ -309,9 +310,25 @@ def main() -> int:
         server.terminate()
         server.wait(timeout=30)
         if not args.keep_data:
-            shutil.rmtree(work, ignore_errors=True)
+            remove_workdir(work)
     print(f"\n{len(checks.results) - checks.failed} of {len(checks.results)} checks passed")
     return 1 if checks.failed else 0
+
+
+def remove_workdir(work: Path, attempts: int = 40, delay_s: float = 0.25) -> bool:
+    """Delete the run's folder (uploaded files, database); say so if that is not possible.
+
+    On Windows the database stays locked for a moment after ``terminate()``: a virtual
+    environment's ``python.exe`` is a launcher, and the server it started exits after it.
+    """
+    for _ in range(attempts):
+        with contextlib.suppress(OSError):
+            shutil.rmtree(work)
+        if not work.exists():
+            return True
+        time.sleep(delay_s)
+    print(f"Could not delete the test folder {work}; delete it by hand.")
+    return False
 
 
 if __name__ == "__main__":

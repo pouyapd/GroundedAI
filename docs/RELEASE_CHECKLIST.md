@@ -16,13 +16,23 @@ everything under "Owner decisions" and "Publish" needs the repository owner.
 - [x] `.env.example` with placeholders only; `.gitignore` excludes data, models, caches,
       virtual environments, secrets and the private reliability split.
 - [x] Public-release audit of tracked files and full history (see `docs/SECURITY.md`).
-- [x] Claim-review set and tool for human labels (`evaluation/reviews/claims-review-v1`).
+- [x] Claim-review set and tool for human labels (`evaluation/reviews/claims-review-v1`),
+      with a guide for two independent labellers; the scoring path was tested with placeholder
+      labels only.
+- [x] Final checks on mains power (2026-10-19): development set with qwen2.5:1.5b, each
+      behaviour reported separately (`docs/EVALUATION.md`); browser check with qwen2.5:1.5b
+      passed on the first run (`docs/TESTING.md`).
 
 ## Owner decisions before publication
 
-1. **Author email in history.** Every commit carries the author's personal email address, and
-   it becomes public with the repository. Keeping it needs no action; changing it means
-   rewriting history (all branches, PR #1) before the first public push, which was not done.
+1. **Author email in history.** Every commit (63, author and committer) carries the owner's
+   personal address (`p***@gmail.com`). Checked on 2026-10-19: the same address is already
+   public in commits of the owner's public repositories (for example 83 commits of TrustRAG),
+   and the GitHub profile shows no public email. Publishing this repository adds no new
+   exposure of the address. Changing it means rewriting all 63 commits, including the 28 that
+   are on GitHub (`main`, PR #1), and force-pushing; it was not done. Future commits can use the
+   account's `noreply` address (`<id>+pouyapd@users.noreply.github.com`) with
+   `git config user.email`.
 2. **Release branch.** `main` holds only the initial commit. PR #1
    (`feature/groundedai-v0.1`, at `100f124`) is open; this branch adds commits on top of it.
    Choose: merge PR #1 and open a second PR from `feature/reliability-v1`, or open one PR from
@@ -34,6 +44,9 @@ everything under "Owner decisions" and "Publish" needs the repository owner.
    `scripts/claim_review.py score`.
 5. **GitHub Actions artifacts** from earlier runs (offline benchmark report, Docker build
    records with event data) become visible with the repository; delete them first if unwanted.
+6. **GitHub Pages.** A push to `main` that changes `frontend/` starts the Pages workflow. Until
+   Pages is enabled (Settings → Pages → GitHub Actions) that run fails at `configure-pages`;
+   once it is enabled, the merge deploys the static demo. Decide before merging.
 
 ## Publish (after the decisions above)
 
@@ -50,5 +63,4 @@ everything under "Owner decisions" and "Publish" needs the repository owner.
 - The Docker Compose stack locally (Docker Desktop was not running; last full run 2026-10-13).
 - CI on any commit after `100f124`.
 - Human-labelled accuracy of either claim-check version.
-- The browser check with Ollama passed on its third run; the first two timed out while the
-  model was loading on battery power (see `docs/TESTING.md`).
+- Any model larger than qwen2.5:1.5b.

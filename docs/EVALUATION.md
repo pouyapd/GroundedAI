@@ -583,6 +583,55 @@ as invalid output. One wrong statement that both claim-check versions accept was
 unfixed ("£1 per minute" for "£1 per 15 minutes"). Accuracy of the checks on this set will be
 measured only from human labels ([README](../evaluation/reviews/claims-review-v1/README.md)).
 
+### 2026-10-19 (release preparation): each behaviour separately
+
+One more run of the development set with qwen2.5:1.5b (Ollama 0.14.2, mains power, default
+checks, code `83c5668`; the uncommitted changes were documentation and scripts the run does
+not use). Its 25 raw outputs were identical to those of `…T091342Z`, so every measure below is
+the same as in that committed report; replaying them with claims-v2 gave the same values as
+`…T103613Z`. Table: `python scripts/answer_behaviours.py REPORT.json [...]`. Labels of this set
+were written by the project author; no human checked the answers.
+
+| Behaviour (development set, 25 questions) | claims-v1 | claims-v2 |
+|---|---|---|
+| 1. Answerable questions answered with every key fact | 16/19 | 16/19 |
+| 2. False refusals | 2/19 | 2/19 |
+| 3. Correct refusals / unanswerable questions answered | 5/6 / 1/6 | 5/6 / 1/6 |
+| 4. Statements not found or partly found | 4/32 | 3/32 |
+| 5. Correct answers not fully verified | 3/16 | 2/16 |
+| 6. Statements with an exact quote | 28/32 | 29/32 |
+| 7. Key facts quoted from the expected document (mean); statements quoted from a passage the model did not cite | 0.88; 19/32 | 0.88; 20/32 |
+| 8. Answers citing a label that does not exist; answers with malformed citations | 0/18; 6/18 | 0/18; 6/18 |
+| 9. Conflict questions with a conflict report; conflict stated by the model | 2/2; 0/2 | 2/2; 0/2 |
+| 10. Conflict reports on other questions | 0/23 | 0/23 |
+
+Where the remaining errors come from (development set only):
+
+- **Retrieval is not the cause here.** For all 19 answerable questions every expected evidence
+  sentence was among the 5 passages the model received (same settings, rebuilt index).
+- **The model:** both false refusals (the fact was in the passages); one unanswerable question
+  answered with a true but unrelated fact; neither conflict stated, although GroundedAI
+  reported both; one answer to a prompt-injection question concluded "Yes, membership … is
+  free for guests" next to the right price; 6 of 18 answers wrote citations in another format
+  (`[Source S1]`, `[Source id="S2"]`, a document title), which GroundedAI recovers by quoting
+  the passage itself.
+- **The checks:** a true but unrelated fact is "found" by both versions (neither judges whether
+  a statement answers the question); claims-v1 marked the injection answer above verified
+  (claims-v2: partly verified); 3 (claims-v1) and 2 (claims-v2) correct answers were not fully
+  verified because a paraphrase did not match.
+
+Secondary comparison, recorded outputs only: replaying the 56-question qwen2.5:1.5b run
+(`…T093836Z`) at this commit, with no model call and without reading individual questions,
+reproduced it exactly with claims-v1 (29 of 41 answers to answer questions verified) and gave
+26 of 41 with claims-v2, which is stricter on this set (statements not found 21 of 117, against
+16). For 4 questions the current conflict check would send the model a different note than
+the recorded run did. These numbers were not used to change anything.
+
+A larger local model would most likely help with what the model gets wrong here (refusals,
+citation format, stating conflicts); it would not change the checks' limits. On this laptop a
+7B model in 4-bit quantisation needs about 4–5 GB of memory and would take several times as
+long per answer as qwen2.5:1.5b (median 18 s); no larger model was run for this release.
+
 ## Reproducing
 
 The PDF journey (no dataset hash; the sample PDFs are rebuilt by `scripts/make_sample_pdfs.py`):
@@ -624,7 +673,8 @@ python scripts/compare_generation_reports.py BASELINE.json OTHER.json [MORE.json
 python scripts/analyze_conflict_check.py --mode hybrid
 
 # 2026-10-19: revised claims-v2 on the development set (same settings as above)
-GROUNDEDAI_CLAIM_CHECK=claims-v2 groundedai eval generation --provider ollama --model qwen2.5:1.5b \n  --prompt-version answer-v2 --dataset-dir evaluation/datasets/groundedai-dev-v1 --out evaluation/reports/local/dev
+GROUNDEDAI_CLAIM_CHECK=claims-v2 groundedai eval generation --provider ollama --model qwen2.5:1.5b \
+  --prompt-version answer-v2 --dataset-dir evaluation/datasets/groundedai-dev-v1 --out evaluation/reports/local/dev
 GROUNDEDAI_GENERATION_PROVIDER=ollama GROUNDEDAI_CLAIM_CHECK=claims-v2 python scripts/journey_check.py --out journey.json
 python scripts/reliability_suite.py score --split dev --checks v2 --out evaluation/reports/reliability/dev
 

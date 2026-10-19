@@ -49,6 +49,13 @@ the release.
 - Conflict reports no longer pair statements from a document that never mentions the
   organisation the question names (both check versions).
 - claims-v2 no longer hides a whole answer that a model wrapped in brackets.
+- `scripts/claim_review.py score` scores only the statements all labellers agree on (it used
+  the first label file alone), lists disputed statements and accepts an adjudication file; the
+  review page announces labels restored from the browser and can clear them; a labelling guide
+  for two independent reviewers.
+- `scripts/e2e_browser.py` no longer leaves its test folder (uploaded files and database)
+  behind on Windows.
+- `scripts/answer_behaviours.py` splits answer-evaluation reports into separate behaviours.
 
 ### Known limitations
 

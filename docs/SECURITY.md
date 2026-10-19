@@ -105,7 +105,11 @@ candidate, and the content of every commit on all branches.
   any commit's content. Reports record the CPU model, RAM, operating system and power source on
   purpose (they explain the timings); they contain no host names or paths.
 * Personal data: the author's name and GitHub handle appear as authorship; every commit carries
-  the author's personal email address (unchanged from the 2026-10-14 review: owner's decision).
+  the author's personal email address and the author's time zone offset (unchanged from the
+  2026-10-14 review: owner's decision). Rechecked later on 2026-10-19: the same address is
+  already public in commits of the owner's public repositories, and the GitHub profile shows no
+  public email, so publishing this repository adds no new exposure of the address
+  (`docs/RELEASE_CHECKLIST.md`, item 1).
 * Private evaluation data: the reliability suite's test split, its documents, the writer notes,
   private audit files and sealed reports are git-ignored and were never committed (checked
   across all history). The committed manifest lists test documents by id only, with file hashes;

@@ -27,9 +27,12 @@ whether the answer is helpful, and whether it cites a passage. <b>Supported</b>:
 state it (a paraphrase is fine). <b>Partly supported</b>: some of it is stated, some is not.
 <b>Not supported</b>: the passages do not state it, or say the opposite. <b>Unclear</b>: you
 cannot decide. Tick the passages that support it. Your work is kept in this browser until you
-download it.</p>
+download it, so each labeller should use their own browser or browser profile.</p>
+<p id="restored" hidden><b>Labels saved earlier in this browser were restored.</b> If they are
+not yours, press <i>Clear all labels</i> before you start.</p>
 <header><label>Your initials <input type="text" id="who" size="6"></label>
 <span id="count" class="muted"></span> <button id="save" type="button">Download labels</button>
+<button id="clear" type="button">Clear all labels</button>
 </header>
 <div id="list"></div></main>
 <script>
@@ -37,6 +40,12 @@ const DATA = {"dataset": "groundedai-claims-review-v1", "questions": [{"id": "r0
 const KEY = "claim-review:" + DATA.dataset;
 let labels = {};
 try { labels = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { labels = {}; }
+if (Object.keys(labels).length) document.getElementById("restored").hidden = false;
+document.getElementById("clear").addEventListener("click", () => {
+  if (!confirm("Remove every label stored in this browser for this review?")) return;
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  location.reload();
+});
 const LABELS = [["supported","Supported"],["partly_supported","Partly supported"],
   ["not_supported","Not supported"],["unclear","Unclear"]];
 function esc(s){return String(s ?? "").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
