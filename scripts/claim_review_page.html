@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claim review</title>
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#59636e;--line:#d1d9e0;--card:#f6f8fa;--accent:#0969da}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;
+--line:#3d444d;--card:#151b23;--accent:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif;margin:0}
+main{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem}h2{font-size:1.05rem;margin:0 0 4px}
+.q{border:1px solid var(--line);border-radius:8px;padding:12px;margin:16px 0}
+.muted{color:var(--muted)}.src{background:var(--card);border-radius:6px;padding:8px;
+margin:6px 0;white-space:pre-wrap;font-size:13px}
+.st{border-top:1px solid var(--line);padding:8px 0}fieldset{border:0;padding:0;margin:4px 0}
+label{margin-right:12px;white-space:nowrap}textarea{width:100%;min-height:2.2em;
+background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px}
+button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:8px 14px;
+font-size:15px;cursor:pointer}header{position:sticky;top:0;background:var(--bg);
+border-bottom:1px solid var(--line);padding:8px 0;z-index:1}
+input[type=text]{background:var(--bg);color:var(--fg);border:1px solid var(--line);
+border-radius:6px;padding:6px}
+</style></head><body><main>
+<h1>Claim review: __TITLE__</h1>
+<p>For each statement, decide only from the passages shown whether they support it. Ignore
+whether the answer is helpful, and whether it cites a passage. <b>Supported</b>: the passages
+state it (a paraphrase is fine). <b>Partly supported</b>: some of it is stated, some is not.
+<b>Not supported</b>: the passages do not state it, or say the opposite. <b>Unclear</b>: you
+cannot decide. Tick the passages that support it. Your work is kept in this browser until you
+download it.</p>
+<header><label>Your initials <input type="text" id="who" size="6"></label>
+<span id="count" class="muted"></span> <button id="save" type="button">Download labels</button>
+</header>
+<div id="list"></div></main>
+<script>
+const DATA = __DATA__;
+const KEY = "claim-review:" + DATA.dataset;
+let labels = {};
+try { labels = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { labels = {}; }
+const LABELS = [["supported","Supported"],["partly_supported","Partly supported"],
+  ["not_supported","Not supported"],["unclear","Unclear"]];
+function esc(s){return String(s ?? "").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function store(){try{localStorage.setItem(KEY, JSON.stringify(labels));}catch(e){}count();}
+function count(){let n=0,d=0;for(const q of DATA.questions)for(const s of q.statements){n++;
+  if(labels[q.id+"|"+s.key]?.label)d++;}document.getElementById("count").textContent=d+" of "+n+" labelled";}
+const list=document.getElementById("list");
+for(const q of DATA.questions){
+  const box=document.createElement("section");box.className="q";
+  let h="<h2>"+esc(q.id)+": "+esc(q.question)+"</h2><p class='muted'>Status: "+esc(q.status)+"</p>";
+  h+="<p><b>Answer:</b> "+esc(q.answer||"(no answer)")+"</p>";
+  h+="<details><summary>Passages the model received ("+q.sources.length+")</summary>";
+  for(const s of q.sources)h+="<div class='src'><b>"+esc(s.label)+"</b> "+esc(s.title)+"\n"+esc(s.text)+"</div>";
+  h+="</details>";
+  if(!q.statements.length)h+="<p class='muted'>No statements to label.</p>";
+  q.statements.forEach((s,i)=>{const id=q.id+"|"+s.key, name="l-"+q.id+"-"+i;
+    h+="<div class='st'><div><b>Statement:</b> "+esc(s.text)+"</div><fieldset><legend class='muted'>Label</legend>";
+    for(const [v,t] of LABELS)h+="<label><input type='radio' name='"+name+"' data-id='"+esc(id)+"' value='"+v+"'> "+t+"</label>";
+    h+="</fieldset><fieldset><legend class='muted'>Supporting passages</legend>";
+    for(const src of q.sources)h+="<label><input type='checkbox' data-src='"+esc(id)+"' value='"+esc(src.label)+"'> "+esc(src.label)+"</label>";
+    h+="</fieldset><textarea data-note='"+esc(id)+"' placeholder='Comment (optional)'></textarea></div>";});
+  box.innerHTML=h;list.appendChild(box);}
+for(const el of document.querySelectorAll("input[type=radio]")){const v=labels[el.dataset.id];
+  if(v&&v.label===el.value)el.checked=true;el.addEventListener("change",()=>{
+  (labels[el.dataset.id]??={}).label=el.value;store();});}
+for(const el of document.querySelectorAll("input[type=checkbox]")){const v=labels[el.dataset.src];
+  if(v&&(v.sources||[]).includes(el.value))el.checked=true;el.addEventListener("change",()=>{
+  const e=(labels[el.dataset.src]??={});const set=new Set(e.sources||[]);
+  el.checked?set.add(el.value):set.delete(el.value);e.sources=[...set];store();});}
+for(const el of document.querySelectorAll("textarea")){const v=labels[el.dataset.note];
+  if(v&&v.note)el.value=v.note;el.addEventListener("input",()=>{(labels[el.dataset.note]??={}).note=el.value;store();});}
+document.getElementById("save").addEventListener("click",()=>{
+  const who=document.getElementById("who").value.trim()||"anonymous";
+  const out={dataset:DATA.dataset,annotator:who,saved_at:new Date().toISOString(),labels};
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,1)],{type:"application/json"}));
+  a.download="labels-"+who.replace(/[^A-Za-z0-9_-]/g,"")+".json";a.click();});
+count();
+</script></body></html>

@@ -198,3 +198,22 @@ def test_asked_kinds() -> None:
     assert asked_kinds("How often is the filter replaced?") == {"count", "duration"}
     assert asked_kinds("What time does the pool open?") == {"time_of_day"}
     assert asked_kinds("Who signs the form?") is None
+
+
+def test_another_organisations_document_is_not_paired_with_the_asked_one() -> None:
+    # Regression (2026-10-19): a question about one organisation got a "different dates" report
+    # pairing its price with another organisation's monthly fee.
+    question = "How much does a Wrenfield monthly pass cost?"
+    found = check(
+        question,
+        chunk(1, "wrenfield-terms", "A monthly pass costs £12.", "Wrenfield Bikes - Terms (2026)"),
+        chunk(2, "other-club", "Standard membership costs £35 per month.", "Alder Club Handbook"),
+    )
+    assert found == []
+    # The same values from two documents of the asked organisation are still compared.
+    (same,) = check(
+        question,
+        chunk(1, "wrenfield-terms", "A monthly pass costs £12.", "Wrenfield Bikes - Terms"),
+        chunk(2, "wrenfield-faq", "A monthly pass costs £15.", "Wrenfield Bikes - FAQ"),
+    )
+    assert same.kind == "conflict"

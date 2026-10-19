@@ -186,12 +186,25 @@ _ANY_BRACKETS_RE = re.compile(r"\[[^\[\]\n]*\]")
 _WORD_RE = re.compile(r"[^\W_]")
 
 
+# A bracket holding a sentence ("[No, you will not be charged ... within 48 hours.]") is answer
+# text that a model wrapped in brackets, not a label or a title.
+_SENTENCE_IN_BRACKETS_RE = re.compile(r"\[(?=(?:[^\[\]\n]*?\w+\b){6})([^\[\]\n]*?[.!?])\]")
+
+
+def unwrap_bracketed_sentences(text: str) -> str:
+    """``text`` with the brackets removed around bracketed sentences (six or more words that
+    end a sentence); labels, titles and bare values stay bracketed."""
+    return _SENTENCE_IN_BRACKETS_RE.sub(lambda match: match.group(1), text)
+
+
 def bracketed_only(text: str) -> bool:
     """Whether every letter and digit of a reply sits inside square brackets.
 
     Small models sometimes reply with only labels, titles or a bare value ("[21]",
-    "[Travel Policy]"); such a reply has no answer sentence to check.
+    "[Travel Policy]"); such a reply has no answer sentence to check. A sentence in brackets
+    is answer text and does not count.
     """
+    text = unwrap_bracketed_sentences(text)
     return bool(_WORD_RE.search(text)) and not _WORD_RE.search(_ANY_BRACKETS_RE.sub(" ", text))
 
 

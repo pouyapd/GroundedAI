@@ -227,3 +227,8 @@ def test_bracketed_only_finds_replies_without_text_outside_brackets() -> None:
     assert not bracketed_only("The limit is EUR 140 [S1].")
     assert not bracketed_only("[S1] 12")  # a bare value outside brackets is checked as a claim
     assert not bracketed_only("")
+    # A sentence wrapped in brackets is answer text (qwen2.5:1.5b, 2026-10-19); a short
+    # fragment is not.
+    assert not bracketed_only("[No, you will not be charged for a stolen bike within 48 hours.]")
+    assert bracketed_only("[No source cited]")
+    assert bracketed_only("[Yes][S1][No][S2]")

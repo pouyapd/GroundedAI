@@ -332,18 +332,45 @@ def asked_kinds(question: str) -> frozenset[str] | None:
     return None
 
 
+def question_names(question: str, stem: Stemmer = claim_stem) -> set[str]:
+    """Names in the question: capitalised words after the first ("Tidewell", "Kestrel")."""
+    return {
+        stem(token)
+        for match in _CAPITALISED_RE.finditer(question)
+        if match.start() > 0
+        for token in tokenize(match.group(0))
+    }
+
+
+def _from_named_documents(
+    statements: list[Statement], sources: Sequence[SourceBlock], names: set[str], stem: Stemmer
+) -> list[Statement]:
+    """Statements from documents that mention a name the question gives.
+
+    A question about "Tidewell" is not answered by another organisation's handbook that
+    happens to state a monthly price. When no retrieved document mentions the names, nothing
+    is left out.
+    """
+    if not names:
+        return statements
+    named: dict[str, bool] = {}
+    for block in sources:
+        words = claim_words(f"{block.chunk.document_title} {block.text}", stem)
+        named[block.chunk.document_id] = named.get(block.chunk.document_id, False) or bool(
+            words & names
+        )
+    if not any(named.values()):
+        return statements
+    return [statement for statement in statements if named.get(statement.document_id)]
+
+
 def asked_words(question: str, stem: Stemmer = claim_stem) -> set[str]:
     """Content words of the question, without names and without words that only ask.
 
     With the version-2 stemmer, words that ask whether something is required ("need",
     "compulsory") are left out too.
     """
-    names = {
-        stem(token)
-        for match in _CAPITALISED_RE.finditer(question)
-        if match.start() > 0
-        for token in tokenize(match.group(0))
-    }
+    names = question_names(question, stem)
     fillers = {stem(word) for word in QUESTION_FILLERS}
     if stem is claim_key_v2:
         fillers |= {stem(word) for word in _REQUIREMENT_WORDS.split()}
@@ -629,13 +656,20 @@ def find_disagreements(
 ) -> list[Disagreement]:
     """Pairs of passages from different documents that disagree about what is asked.
 
-    ``version`` chooses the method; ``disagreement-v1`` reproduces every earlier result.
+    ``version`` chooses the method. Since 2026-10-19 both versions leave out statements from
+    documents that never mention a name the question gives (a question about one organisation
+    was paired with another organisation's prices); otherwise ``disagreement-v1`` reproduces the
+    earlier results.
     """
     v2 = version == "disagreement-v2"
     focus = asked_words(question, claim_key_v2 if v2 else claim_stem)
     if not focus:
         return []
-    candidates = _about_the_question(_statements(question, focus, sources, v2), focus, v2)
+    stem = claim_key_v2 if v2 else claim_stem
+    statements = _statements(question, focus, sources, v2)
+    # Both versions (fixed 2026-10-19): another organisation's document is not about the question.
+    statements = _from_named_documents(statements, sources, question_names(question, stem), stem)
+    candidates = _about_the_question(statements, focus, v2)
     document_dates = _document_dates(sources)
     dates_v2 = _document_dates_v2(sources) if v2 else {}
     found: dict[tuple[str, str], Disagreement] = {}

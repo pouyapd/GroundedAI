@@ -596,6 +596,8 @@ BRACKET_REPLIES = [
     ("[Travel Policy]\n[Finance FAQ]", "invalid_output", "answered"),
     ("[Insufficient Evidence: nothing about hotels.]", "insufficient_evidence", None),
     ("[Travel Policy]: The hotel limit is EUR 140 per night [S1].", "answered", None),
+    # qwen2.5:1.5b wrapped a whole answer in brackets (2026-10-19): it is an answer.
+    ("[The hotel limit in capital cities is EUR 140 per night.]", "answered", None),
 ]
 
 

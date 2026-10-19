@@ -92,6 +92,7 @@ from groundedai.generation.citations import (
     is_source_note,
     labels_in,
     strip_citations,
+    unwrap_bracketed_sentences,
 )
 from groundedai.generation.equivalents import keyed_stemmer, rewrite_phrases
 from groundedai.generation.safety import detect_injection
@@ -1092,6 +1093,8 @@ def check_claims(
     """
     method = _METHODS[version]
     stem = method.stem
+    if method.sentences:
+        answer = unwrap_bracketed_sentences(answer)  # claims-v2: "[Yes, it is free.]" is text
     working, references = resolve_references(answer, sources)
     passages = {source.label: _passage(source, method=method) for source in sources}
     pool = list(passages.values())
