@@ -123,6 +123,9 @@ export function DocumentsPage() {
         <p className="page-intro">
           Upload PDF, plain-text or Markdown files. They are parsed, split into chunks with page numbers, embedded and
           indexed for lexical and vector search.
+          {api.mode === "browser"
+            ? " In this demo everything happens in your browser: files are processed in this tab, are not uploaded anywhere, and are gone when you close it or reset the demo."
+            : ""}
         </p>
       </div>
 

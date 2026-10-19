@@ -32,5 +32,23 @@ keeps its own licence; versions are pinned in `backend/requirements/*.txt` and
 | cross-encoder/ms-marco-MiniLM-L-6-v2 | Apache-2.0 | trained on MS MARCO, which has its own data terms |
 | Qwen/Qwen2.5-0.5B-Instruct, Qwen2.5-1.5B-Instruct (`qwen2.5:1.5b` in Ollama) | Apache-2.0 | |
 
+## Online demo (GitHub Pages)
+
+The demo site redistributes unmodified copies of these wheels, pinned with their SHA-256 in
+`frontend/browser-runtime.lock.json`, and bundles WebLLM into its JavaScript:
+
+| Package | Licence |
+|---|---|
+| alembic, fastapi, langchain-core, langchain-protocol, langchain-text-splitters, langsmith, mako, pydantic-settings | MIT |
+| httpx2, httpx2-jsfetch, pypdf, python-dotenv, starlette, uuid-utils, websockets | BSD-3-Clause |
+| opentelemetry-api, python-multipart, requests-toolbelt, tenacity | Apache-2.0 |
+| @mlc-ai/web-llm (WebLLM) | Apache-2.0 |
+
+Loaded by the visitor's browser from their publishers, not redistributed by this project:
+Pyodide and its packages (MPL-2.0 for Pyodide; each package keeps its licence) from the
+jsDelivr CDN, and, only when the visitor chooses it, `mlc-ai/Qwen2.5-1.5B-Instruct-q4f16_1-MLC`
+(Qwen2.5-1.5B-Instruct converted by the MLC project; Apache-2.0) from Hugging Face with its
+WebGPU library from the MLC project.
+
 Container images referenced by `Dockerfile` and `docker-compose.yml` (python, node,
 pgvector/pgvector, ollama/ollama) are pulled from their publishers and keep their own licences.

@@ -13,6 +13,9 @@ export interface AppContextValue {
   setAskScope: (scope: string) => void;
   /** Opens the Ask page with one document selected. */
   askAbout: (documentId: string) => void;
+  /** Online demo: increases when the demo is reset (the pages are remounted). */
+  demoVersion: number;
+  resetDemo: () => void;
 }
 
 export const AppContext = createContext<AppContextValue | null>(null);

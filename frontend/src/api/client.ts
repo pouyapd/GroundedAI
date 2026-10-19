@@ -33,7 +33,9 @@ export class ApiError extends Error {
 }
 
 export interface Api {
-  readonly mode: "live" | "static-demo";
+  /** live: a GroundedAI server; browser: the application running in this tab (online demo);
+   * static-demo: recorded answers only. */
+  readonly mode: "live" | "browser" | "static-demo";
   systemStatus(): Promise<SystemStatus>;
   listDocuments(offset: number, limit: number): Promise<Page<DocumentOut>>;
   listChunks(documentId: string): Promise<Page<ChunkOut>>;
@@ -67,7 +69,7 @@ export function storeApiKey(key: string): void {
   }
 }
 
-async function toApiError(response: Response): Promise<ApiError> {
+export async function toApiError(response: Response): Promise<ApiError> {
   const requestId = response.headers.get("x-request-id");
   try {
     const body = (await response.json()) as {

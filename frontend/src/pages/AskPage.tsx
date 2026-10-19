@@ -5,6 +5,8 @@ import type { AnswerResponse, DocumentOut, RetrievalMode } from "../api/types";
 import { AnswerView } from "../components/AnswerView";
 import { ErrorBanner } from "../components/ErrorBanner";
 import { Loading } from "../components/Banner";
+import type { BrowserApi } from "../browser/BrowserApi";
+import { DemoPanel } from "../browser/DemoPanel";
 import { useApp } from "../context";
 
 export const MODES: { value: RetrievalMode; label: string; description: string }[] = [
@@ -28,6 +30,15 @@ const LIVE_EXAMPLES = [
   "How many vacation days do contractors receive at Aldervale?",
 ];
 
+/** Online demo: questions about the two sample PDFs, each asked of one document. */
+const BROWSER_EXAMPLES: { question: string; file: string; label: string }[] = [
+  { question: "How much does a single adult ticket to Mirrow cost?", file: "harbourline-ferry-guide.pdf", label: "Ferry guide" },
+  { question: "How much does it cost to take a bicycle?", file: "harbourline-ferry-guide.pdf", label: "Ferry guide" },
+  { question: "Do young children have to pay for the ferry?", file: "harbourline-ferry-guide.pdf", label: "Ferry guide" },
+  { question: "How many items can members borrow?", file: "harbourline-ferry-guide.pdf", label: "Ferry guide" },
+  { question: "How many items can members borrow?", file: "orchard-library-rules.pdf", label: "Library rules" },
+];
+
 /** The settings a displayed answer was produced with. */
 interface AskedWith {
   question: string;
@@ -45,6 +56,7 @@ export function modeLabel(mode: RetrievalMode): string {
 
 export function AskPage({ active = true }: { active?: boolean }) {
   const { api, status, askScope, setAskScope: setScope } = useApp();
+  const browserApi = api.mode === "browser" ? (api as BrowserApi) : null;
   const [question, setQuestion] = useState("");
   const [mode, setMode] = useState<RetrievalMode>("hybrid");
   const [topK, setTopK] = useState(5);
@@ -58,6 +70,7 @@ export function AskPage({ active = true }: { active?: boolean }) {
   const latestRequest = useRef(0);
 
   const isDemo = api instanceof StaticDemoApi;
+
   useEffect(() => {
     if (api instanceof StaticDemoApi) {
       api.recordedAnswers().then(setRecorded).catch(setError);
@@ -99,8 +112,16 @@ export function AskPage({ active = true }: { active?: boolean }) {
         : "all documents"
       : `“${readyDocs?.find((doc) => doc.id === scope)?.title ?? scope}”`;
 
-  async function ask(text: string) {
-    const settings: AskedWith = { question: text, mode, topK, diagnostics, scope, scopeLabel };
+  async function ask(text: string, scopeOverride?: { id: string; label: string }) {
+    const askedScope = scopeOverride?.id ?? scope;
+    const settings: AskedWith = {
+      question: text,
+      mode,
+      topK,
+      diagnostics,
+      scope: askedScope,
+      scopeLabel: scopeOverride ? `“${scopeOverride.label}”` : scopeLabel,
+    };
     // Only the newest request may update the page, so a slow earlier answer never replaces it.
     const requestId = ++latestRequest.current;
     setLoading(true);
@@ -113,7 +134,7 @@ export function AskPage({ active = true }: { active?: boolean }) {
         retrieval_mode: mode,
         top_k: topK,
         include_diagnostics: diagnostics,
-        ...(scope === "all" ? {} : { document_ids: [scope] }),
+        ...(askedScope === "all" ? {} : { document_ids: [askedScope] }),
       });
       if (requestId === latestRequest.current) setResponse(result);
     } catch (caught) {
@@ -143,14 +164,18 @@ export function AskPage({ active = true }: { active?: boolean }) {
 
   return (
     <>
-      <div>
-        <h1 className="page-title">Ask your documents</h1>
-        <p className="page-intro">
-          Upload a PDF, ask a question, and get an answer built only from passages of your documents. Each statement is
-          checked against those passages and shown with its quote and page, and the system says so when the evidence
-          is not enough.
-        </p>
-      </div>
+      {browserApi ? (
+        <DemoPanel api={browserApi} />
+      ) : (
+        <div>
+          <h1 className="page-title">Ask your documents</h1>
+          <p className="page-intro">
+            Upload a PDF, ask a question, and get an answer built only from passages of your documents. Each statement
+            is checked against those passages and shown with its quote and page, and the system says so when the
+            evidence is not enough.
+          </p>
+        </div>
+      )}
 
       {noDocuments ? (
         <div className="notice" role="status">
@@ -237,12 +262,40 @@ export function AskPage({ active = true }: { active?: boolean }) {
           {MODES.find((item) => item.value === mode)?.description} Up to {topK} passages go to the{" "}
           {status?.generation.is_llm ? "language model" : "answer generator"}.
           {mode !== "lexical" && status?.embedding.provider === "hashing"
-            ? " This server uses the hashing embedder, which matches words, not meaning."
+            ? ` ${browserApi ? "The demo" : "This server"} uses the hashing embedder, which matches words, not meaning.`
             : ""}
           {isDemo
             ? " Static demo: each combination of mode and passage count replays a recording made with exactly that setting."
             : ""}
         </p>
+        {browserApi && readyDocs ? (
+          <div style={{ marginTop: 16 }}>
+            <p className="small secondary" style={{ margin: "0 0 6px" }}>
+              Try a question about the sample PDFs (each one searches the document shown)
+            </p>
+            <div className="chips">
+              {BROWSER_EXAMPLES.map((example) => {
+                const doc = readyDocs.find((item) => item.filename === example.file);
+                if (!doc) return null;
+                return (
+                  <button
+                    key={`${example.file}|${example.question}`}
+                    type="button"
+                    className="chip chip-example"
+                    disabled={loading}
+                    onClick={() => {
+                      setQuestion(example.question);
+                      setScope(doc.id);
+                      void ask(example.question, { id: doc.id, label: doc.title });
+                    }}
+                  >
+                    <span className="chip-doc">{example.label}</span> {example.question}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
         {examples.length > 0 ? (
           <div style={{ marginTop: 16 }}>
             <p className="small secondary" style={{ margin: "0 0 6px" }}>
@@ -285,7 +338,15 @@ export function AskPage({ active = true }: { active?: boolean }) {
           </button>
         </div>
       ) : null}
-      {loading ? <Loading label="Retrieving passages and generating an answer" /> : null}
+      {loading ? (
+        <Loading
+          label={
+            browserApi?.generator === "webllm"
+              ? "Retrieving passages, then generating on your GPU (often 10–60 s)"
+              : "Retrieving passages and generating an answer"
+          }
+        />
+      ) : null}
       {error ? <ErrorBanner error={error} /> : null}
       {response && asked && !isDemo ? (
         <p className="small secondary" style={{ margin: 0 }}>

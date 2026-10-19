@@ -3,8 +3,8 @@
 
 :root {
   color-scheme: light;
-  --page: #f9f9f7;
-  --surface: #fcfcfb;
+  --page: #f4f4f1;
+  --surface: #ffffff;
   --surface-2: #f2f1ee;
   --border: rgba(11, 11, 11, 0.1);
   --border-strong: rgba(11, 11, 11, 0.18);
@@ -29,9 +29,9 @@
   --critical-ink: #a32a2a;
   --critical-soft: #fbe9e9;
   --neutral-soft: #ecebe7;
-  --shadow: 0 1px 2px rgba(11, 11, 11, 0.05);
-  --radius: 10px;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --shadow: 0 1px 2px rgba(11, 11, 11, 0.04), 0 8px 24px -14px rgba(11, 11, 11, 0.14);
+  --radius: 12px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
 }
 
@@ -137,7 +137,11 @@ code,
 
 /* ---------------------------------------------------------------- layout */
 .app-header {
-  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
   border-bottom: 1px solid var(--border);
 }
 
@@ -158,7 +162,7 @@ code,
 
 .brand {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
   font-weight: 650;
   font-size: 1.1rem;
@@ -302,6 +306,10 @@ code,
   padding: 7px 14px;
   border-radius: 8px;
   cursor: pointer;
+}
+
+a.btn {
+  text-decoration: none;
 }
 
 .btn:hover:not(:disabled) {
@@ -572,8 +580,8 @@ label {
 
 /* ---------------------------------------------------------------- answer */
 .answer-text {
-  font-size: 1.04rem;
-  line-height: 1.7;
+  font-size: 1.12rem;
+  line-height: 1.65;
   margin: 0;
 }
 
@@ -962,8 +970,8 @@ th.num {
 
 .evidence {
   margin: 6px 0 0;
-  padding: 6px 10px;
-  border-left: 3px solid var(--border);
+  padding: 8px 12px;
+  border-left: 3px solid var(--accent);
   background: var(--surface-2);
   border-radius: 0 6px 6px 0;
   display: grid;
@@ -1005,4 +1013,193 @@ th.num {
   flex-wrap: wrap;
   gap: 6px;
   justify-content: flex-end;
+}
+
+/* ---------------------------------------------------------------- brand */
+.brand-mark {
+  display: block;
+  flex: none;
+}
+
+.live-pill {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--good-soft);
+  color: var(--good-ink);
+}
+
+@media (max-width: 640px) {
+  .brand small {
+    display: none;
+  }
+
+  /* On a phone the header wraps to several rows; keeping it pinned would cover the page. */
+  .app-header {
+    position: static;
+  }
+}
+
+/* ---------------------------------------------------------------- online demo */
+.demo-panel {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(120% 140% at 100% 0%, var(--accent-soft) 0%, transparent 55%),
+    var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.demo-head {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 0.76rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.demo-title {
+  margin: 0;
+  font-size: clamp(1.35rem, 1.1rem + 1.2vw, 1.9rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  max-width: 28ch;
+}
+
+.demo-lead {
+  margin: 10px 0 0;
+  color: var(--text-2);
+  max-width: 72ch;
+}
+
+.demo-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  font-size: 0.92rem;
+}
+
+.demo-status-error {
+  background: var(--critical-soft);
+  color: var(--critical-ink);
+}
+
+.generator-choice {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.generator-choice legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-size: 0.86rem;
+  color: var(--text-2);
+}
+
+.option-card {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.option-card input {
+  margin-top: 4px;
+  accent-color: var(--accent);
+}
+
+.option-card > span {
+  display: grid;
+  gap: 2px;
+}
+
+.option-card.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.option-card.is-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.option-meta {
+  font-size: 0.8rem;
+  color: var(--text-3);
+}
+
+.option-text {
+  font-size: 0.86rem;
+  color: var(--text-2);
+}
+
+.model-progress {
+  display: grid;
+  gap: 6px;
+}
+
+.progress {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.chip-example {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip-doc {
+  font-size: 0.72rem;
+  font-weight: 650;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .demo-panel {
+    padding: 18px;
+  }
+
+  .demo-head {
+    flex-direction: column;
+  }
 }
