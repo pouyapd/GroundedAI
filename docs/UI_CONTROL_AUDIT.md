@@ -18,7 +18,7 @@ Each control is classed as:
 | Hybrid / Lexical / Dense (static demo) | Clicking did nothing | The buttons were deliberately `disabled` in demo mode because only one retrieval setting had been recorded. `.segmented button` had no disabled style and no text explained it, so they looked like working buttons. |
 | Passages selector (static demo) | Could not be changed | Same as above: `disabled` in demo mode, without an explanation. |
 | Retrieval diagnostics checkbox (static demo) | Ticking or unticking changed nothing | `StaticDemoApi.query` ignored `include_diagnostics` and always returned the recorded diagnostics. |
-| Top navigation (any embedding frame) | Reported not to work in the claude.ai preview | The click handler assigned `window.location.hash` **before** updating the React state. If the hosting frame blocks or ignores that assignment, the state update never runs. **Not reproduced here**: the preview needs a signed-in claude.ai browser, which this environment does not have. The dependency was removed. |
+| Top navigation (any embedding frame) | Reported not to work in a hosted preview | The click handler assigned `window.location.hash` **before** updating the React state. If the hosting frame blocks or ignores that assignment, the state update never runs. **Not reproduced here**: the preview needed a signed-in browser session, which this environment did not have. The dependency was removed. |
 | Ask page after visiting another tab | The answer and the chosen settings were lost | Only the active page was mounted; switching tabs unmounted the Ask page and its state. |
 | Operations "Refresh" (static demo) | Clicking appeared to do nothing | It reloaded the same recorded snapshot. |
 | Settings vs. displayed answer (both modes) | After changing the mode, the old answer stayed on screen with no sign that it came from the previous setting | Nothing recorded which settings produced the answer. |
@@ -82,7 +82,7 @@ The static demo was re-recorded on 2026-10-14 with these fields.
 
 ## Limits of this audit
 
-* The claude.ai preview itself could not be opened signed-in from this environment. The fix
+* The hosted preview itself could not be opened signed-in from this environment. The fix
   removes the suspected cause and was checked in a local sandboxed iframe that blocks history
   changes, which is an approximation of the real host, not the host itself.
 * In the static demo the mode and passage controls select between **recordings**; nothing is

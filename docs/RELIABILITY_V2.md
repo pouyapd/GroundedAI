@@ -34,8 +34,8 @@ labelling. The protocol used instead:
    11 unconfirmed cases were replaced. Round 2 was prepared but **not performed**.
 2. **Replacements reviewed.** A separate agent checked the 11 replacements against the
    specification and the source passages: 11 valid, 0 invalid, 0 ambiguous.
-3. **Blind model review of the whole test split.** Agents running Claude Sonnet 5.5 (the cases
-   were written with Claude Opus 5.5) labelled all 462 test cases from anonymised files without
+3. **Blind model review of the whole test split.** Agents running a second large language
+   model (a smaller model of the same family as the one that wrote the cases) labelled all 462 test cases from anonymised files without
    ids, subtypes, labels or rationales. Their transcripts show they opened only their own
    file and the rules. They agreed with the writer's labels on **462 of 462**.
 4. **Frozen before any scoring** (commit `babca1b`): test split SHA-256

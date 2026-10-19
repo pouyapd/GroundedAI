@@ -248,7 +248,7 @@
     },
     "human_audit_round_2": "not performed (auditor not available)",
     "independent_model_review": {
-      "model": "claude-sonnet-5-5",
+      "model": "a second large language model, same family as the case writer",
       "blind": true,
       "agreed": 462,
       "of": 462
