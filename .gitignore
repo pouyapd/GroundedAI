@@ -55,6 +55,7 @@ evaluation/reports/reliability/sealed/
 .env.*
 !.env.example
 !frontend/.env.demo
+!frontend/.env.browser
 *.pem
 *.key
 
