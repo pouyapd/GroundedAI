@@ -13,6 +13,10 @@ Taken by `scripts/e2e_demo.py --screenshots docs/images` from the demo build run
 
 Full-page version of the answer: [images/demo-answer.png](images/demo-answer.png).
 
+| The in-browser model (Qwen2.5-1.5B-Instruct, WebGPU) on the live site | Animated preview (`scripts/record_demo_preview.py`) |
+|---|---|
+| ![Answer from the in-browser model: 14 euros supported by the cited passage on page 2; an invented citation S2 struck through and flagged as invalid; Children under 5 travel free found on page 2 without a citation](images/demo-llm-answer-card.png) | ![Recording of the live demo in the dark theme: a document is selected, the question is typed and sent, and the answer appears with its claim check, quote and page](images/demo-preview.gif) |
+
 ## Full application
 
 All taken from the running application on the development laptop. The journey screenshots use

@@ -51,6 +51,14 @@ flowchart LR
 | First load | about 15–40 s (Python runtime, ~30 MB, cached afterwards) | instant |
 | Model download | about 880 MB once, then cached by the browser | `ollama pull` |
 
+**Checked on the live site (2026-10-20, Chrome with WebGPU on an Intel Iris Xe laptop):** the
+model downloaded and loaded (about 27 minutes on a 0.2–0.4 MB/s connection, with one resumed
+download; 30 s on later visits, from the browser cache), answered the ticket question in 8–25 s,
+and its answer went through the claim check: the price was supported by the cited passage on
+page 2, a citation the model invented (`S2`) was flagged as invalid, and an uncited statement
+was matched to its passage ([screenshot](images/demo-llm-answer-card.png)). It refused the
+paraphrased children's-fare question. `scripts/e2e_demo.py --llm` passed 19 of 19.
+
 The evaluation results in the README were measured with qwen2.5:1.5b through **Ollama**
 (Q4_K_M build). The demo's model is the same base model in a different 4-bit build and
 runtime, so its answers can differ; no evaluation was run on it.

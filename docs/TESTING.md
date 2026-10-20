@@ -52,6 +52,7 @@ cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 | CI on pull request #2 | GitHub Actions | first run: backend lint (script line lengths) and a front-end test race failed; both fixed; run 39316142259 on `c95d612`: 7 of 7 jobs passed, including the Docker image build and smoke test |
 | First Pages build (run 39317852549) | GitHub Actions | failed: the page never rendered on the Linux runner. Cause: `frontend/.env.browser` was excluded by `.gitignore`, so CI built the ordinary UI. Fixed in PR #3, which also adds the demo check to CI |
 | CI on `main` after PR #3 | GitHub Actions | run 39392655791 on `ef1dd43`: 8 of 8 jobs, including the demo in a browser (16 of 16) |
+| Live site with the in-browser model (`e2e_demo.py --url … --llm --channel chrome`) | Chrome, WebGPU, Qwen2.5-1.5B-Instruct (MLC build) | first attempt: one weight file failed to download on a slow connection (fixed: downloads resume); then 19 of 19, three times: model loaded (30 s from cache), answer checked against the PDF (8–25 s), paraphrased question refused |
 | Pages workflow after PR #3 | GitHub Actions | run 39392655930: built and checked (16 of 16), deployed, then the deployed URL checked from GitHub's runner (16 of 16, start-up 13 s) |
 
 The in-page model (WebLLM, Qwen2.5-1.5B-Instruct) needs WebGPU. In Playwright's own Chromium on

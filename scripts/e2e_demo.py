@@ -96,10 +96,17 @@ def _full_page(page: Any, path: str) -> None:
     page.screenshot(path=path, full_page=True)
 
 
+def _card_shot(page: Any, path: str) -> None:
+    """The answer card from a full-page capture, so the sticky header does not cover it."""
+    page.evaluate("window.scrollTo(0, 0)")
+    page.wait_for_timeout(200)
+    box = page.locator(".card", has=page.locator(".answer-text")).first.bounding_box()
+    page.screenshot(path=path, full_page=True, clip=box)
+
+
 def _answer_card(page: Any) -> str:
-    return str(
-        page.locator(".card", has=page.locator("text=Passages used as evidence")).first.inner_text()
-    )
+    """The answer card, whether the question was answered or refused."""
+    return str(page.locator(".card", has=page.locator(".answer-text")).first.inner_text())
 
 
 def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> None:
@@ -135,9 +142,7 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
     checks.check("the quote does not start with the section heading", "“Tickets" not in card)
     if shots:
         _full_page(page, str(shots / "demo-answer.png"))
-        page.locator(".card", has=page.locator("text=Passages used as evidence")).first.screenshot(
-            path=str(shots / "demo-answer-card.png")
-        )
+        _card_shot(page, str(shots / "demo-answer-card.png"))
 
     _ask_example(page, "Ferry guide", "How many items can members borrow?")
     card = str(page.locator("main").inner_text())
@@ -242,19 +247,24 @@ def run_llm(page: Any, checks: Checks, shots: Path | None) -> None:
     )
     if shots:
         _full_page(page, str(shots / "demo-llm-answer.png"))
-        page.locator(".card", has=page.locator("text=Passages used as evidence")).first.screenshot(
-            path=str(shots / "demo-llm-answer-card.png")
-        )
+        _card_shot(page, str(shots / "demo-llm-answer-card.png"))
     _ask_example(
         page, "Ferry guide", "Do young children have to pay for the ferry?", LLM_ANSWER_TIMEOUT_MS
     )
     card = _answer_card(page)
-    verdicts = [
-        v for v in ("Every statement found", "Some statements", "No statement") if v in card
+    outcomes = [
+        label
+        for label in (
+            "Every statement found in the sources",
+            "Some statements not found",
+            "Not found in the sources",
+            "Not enough evidence",
+            "Invalid model output",
+        )
+        if label in card
     ]
-    checks.check(
-        "a paraphrased question gets an answer with a verdict", bool(verdicts), ", ".join(verdicts)
-    )
+    found = ", ".join(outcomes)
+    checks.check("a paraphrased question gets a checked outcome", bool(outcomes), found)
     if shots:
         _full_page(page, str(shots / "demo-llm-paraphrase.png"))
 

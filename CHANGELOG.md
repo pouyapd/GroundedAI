@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- `scripts/record_demo_preview.py`: an animated preview recorded from the live demo (real
+  screenshots of a real answer); `scripts/make_social_preview.py`: the repository's social
+  preview image from two real fragments of a live answer.
+- `scripts/e2e_demo.py` accepts refusals in the model step and takes card screenshots without
+  the sticky header.
+- The in-browser model was checked end to end on the live site (`docs/ONLINE_DEMO.md`).
+
 ## 0.1.0 — 2026-10-19
 
 The first public version. Everything below runs locally on a CPU, and the online demo runs in
