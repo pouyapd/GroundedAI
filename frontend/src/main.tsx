@@ -15,10 +15,19 @@ async function demoApi(): Promise<Api | undefined> {
   return new BrowserApi();
 }
 
-void demoApi().then((api) =>
-  createRoot(root).render(
-    <StrictMode>
-      <App api={api} />
-    </StrictMode>,
-  ),
+demoApi().then(
+  (api) =>
+    createRoot(root).render(
+      <StrictMode>
+        <App api={api} />
+      </StrictMode>,
+    ),
+  (error: unknown) => {
+    // Never a blank page: say what failed and how to try again.
+    const message = document.createElement("p");
+    message.setAttribute("role", "alert");
+    message.style.cssText = "max-width:60ch;margin:48px auto;padding:0 16px;font-family:system-ui,sans-serif";
+    message.textContent = `The demo could not start (${error instanceof Error ? error.message : String(error)}). Reload the page to try again; it needs a current browser with JavaScript modules and Web Workers.`;
+    root.replaceChildren(message);
+  },
 );

@@ -108,7 +108,12 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
     page.on("pageerror", lambda e: console.append(str(e)))
     started = time.monotonic()
     page.goto(url)
-    page.wait_for_selector("text=Live demo", timeout=BOOT_TIMEOUT_MS)
+    try:
+        page.wait_for_selector("text=Live demo", timeout=BOOT_TIMEOUT_MS)
+    except Exception:
+        print("The page did not render. Browser console:\n" + "\n".join(console)[:3000])
+        print("Page text:\n" + page.inner_text("body")[:1000])
+        raise
     checks.check("the demo explains that it runs in the browser", page.is_visible(".demo-panel"))
     page.wait_for_selector("button.chip-example", timeout=BOOT_TIMEOUT_MS)
     checks.check(
@@ -293,7 +298,8 @@ def main() -> int:
         with sync_playwright() as playwright:
             options: dict[str, Any] = {
                 "headless": not args.headed,
-                "args": WEBGPU_ARGS,
+                # WebGPU flags only for the model check: on GPU-less runners they are not needed.
+                "args": WEBGPU_ARGS if args.llm or args.channel else [],
             }
             if args.channel:
                 options["channel"] = args.channel
