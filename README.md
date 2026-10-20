@@ -40,10 +40,14 @@ Everything runs on a laptop CPU, with no paid service or cloud API, and the
 [live demo](https://pouyapd.github.io/GroundedAI/) runs it entirely in your browser.
 
 <p align="center">
-  <a href="https://pouyapd.github.io/GroundedAI/"><img src="docs/images/demo-answer-card.png" width="860"
-     alt="GroundedAI live demo: the answer that a single adult ticket from Kessport to Mirrow costs 14 euros, marked as supported by the cited passage, with the quoted sentence from page 2 of the Harbourline Ferries Passenger Guide"></a>
+  <a href="https://pouyapd.github.io/GroundedAI/"><picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/images/demo-preview.png">
+    <img src="docs/images/demo-preview.gif" width="760"
+         alt="Recording of the live demo: the Harbourline Ferries Passenger Guide is selected, the question How much does a single adult ticket to Mirrow cost? is typed and sent, and the answer appears: 14 euros, marked Every statement found in the sources, with the claim Supported by the cited passage and the quoted sentence from page 2">
+  </picture></a>
 </p>
-<p align="center"><sub>A real answer from the live demo: each statement with its status, the quoted sentence and its page.</sub></p>
+<p align="center"><sub>Recorded from the live demo in a browser (extractive generator, sample PDF): select a
+document, ask, and every statement comes back with its status, quoted sentence and page.</sub></p>
 
 This is a portfolio and research project, evaluated on small synthetic datasets. It has not
 been independently validated, and its checks are rule-based ([Limitations](#limitations)).
@@ -62,7 +66,8 @@ account; nothing you type or upload leaves the browser tab.
   Two synthetic sample PDFs are loaded, with example questions; you can also upload a PDF.
 - **Two generators.** The default extractive generator answers instantly and is not a language
   model. Optionally, Qwen2.5-1.5B-Instruct runs on your GPU (WebGPU, about 880 MB downloaded
-  once); its answers go through the same claim check.
+  once); its answers go through the same claim check, which flags, for example, a citation
+  the model invented ([screenshot](docs/images/demo-llm-answer-card.png)).
 - **Limits.** The first load takes about 15–60 s (about 26 MB, then cached). The demo uses the
   word-overlap embedder, keeps data only in the tab, and has no evaluation runs. Its model is a
   different 4-bit build from the one evaluated below, so its answers can differ. Details:
@@ -312,9 +317,10 @@ No model, key or network is needed.
 - **Latest local run (2026-10-19):**
   - backend: 487 tests passed, plus 7 PostgreSQL tests run separately against a local
     PostgreSQL + pgvector; strict mypy and ruff clean;
-  - front end: 77 tests passed;
+  - front end: 81 tests passed;
   - browser journey: 24 of 24, with the default generator and with qwen2.5:1.5b;
-  - online demo: 16 of 16 browser checks.
+  - online demo: 16 of 16 browser checks, and 19 of 19 on the live site in Chrome including
+    the in-browser model (loaded, answered, answer checked against the PDF).
 - **CI** (Python 3.12 and 3.13, PostgreSQL + pgvector, front end, the online demo in a browser,
   offline benchmark, dependency audit, Docker image and Compose file): all 8 jobs pass on
   `main`. The Pages workflow checks the deployed demo in a browser after each deployment.
