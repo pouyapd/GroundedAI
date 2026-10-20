@@ -50,6 +50,9 @@ cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 | `scripts/e2e_demo.py` | the demo build in Chromium and in Chrome, served under `/GroundedAI/` | 16 of 16 (start-up 25–47 s with a cold cache; about 26 MB downloaded) |
 | Heading fix (`split_sentences`) | reliability dev split (v1, v2), 30 held-out conflict cases, replays of recorded qwen2.5:1.5b answers (dev, 56-question; v1, v2) | every measure unchanged |
 | CI on pull request #2 | GitHub Actions | first run: backend lint (script line lengths) and a front-end test race failed; both fixed; run 39316142259 on `c95d612`: 7 of 7 jobs passed, including the Docker image build and smoke test |
+| First Pages build (run 39317852549) | GitHub Actions | failed: the page never rendered on the Linux runner. Cause: `frontend/.env.browser` was excluded by `.gitignore`, so CI built the ordinary UI. Fixed in PR #3, which also adds the demo check to CI |
+| CI on `main` after PR #3 | GitHub Actions | run 39392655791 on `ef1dd43`: 8 of 8 jobs, including the demo in a browser (16 of 16) |
+| Pages workflow after PR #3 | GitHub Actions | run 39392655930: built and checked (16 of 16), deployed, then the deployed URL checked from GitHub's runner (16 of 16, start-up 13 s) |
 
 The in-page model (WebLLM, Qwen2.5-1.5B-Instruct) needs WebGPU. In Playwright's own Chromium on
 Windows the adapter was found but the device failed (`dxil.dll` missing; Chrome ships it); the
