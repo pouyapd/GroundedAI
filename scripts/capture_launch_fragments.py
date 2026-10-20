@@ -6,9 +6,10 @@ Asks the ferry-guide question twice on https://pouyapd.github.io/GroundedAI/ in 
 once with the extractive generator and once with Qwen2.5-1.5B-Instruct running in the page
 (WebLLM, WebGPU). For each answer it saves a screenshot of the answer card (twice the pixel
 density) and the positions of its parts (answer text, warning, claims, quotes), so the visual
-can point at them. The screenshots are not edited. ``--profile`` should be a Chrome profile
-that already holds the model (about 880 MB, cached per origin); needs Chrome and
-``playwright``.
+can point at them. It then widens the same page to 1280 pixels and saves the whole page
+(``interface.png``), with the model's answer on it. The screenshots are not edited.
+``--profile`` should be a Chrome profile that already holds the model (about 880 MB, cached
+per origin); needs Chrome and ``playwright``.
 """
 
 from __future__ import annotations
@@ -72,6 +73,21 @@ def card_shot(page: Any, out: Path, name: str) -> dict[str, Any]:
     return info
 
 
+def interface_shot(page: Any, out: Path) -> None:
+    """The same page and answer at desktop width: the whole page, plus where the warning ends."""
+    page.set_viewport_size({"width": 1280, "height": 860})
+    page.wait_for_timeout(800)
+    page.evaluate("window.scrollTo(0, 0)")
+    page.wait_for_timeout(300)
+    banner = page.locator(".card .banner").first.bounding_box()
+    if banner is None:
+        raise SystemExit("no warning on the model answer")
+    page.screenshot(path=str(out / "interface.png"), full_page=True)
+    info = {"scale": SCALE, "width": 1280, "banner_bottom": banner["y"] + banner["height"]}
+    (out / "interface.json").write_text(json.dumps(info, indent=1), encoding="utf-8")
+    print("interface", info)
+
+
 def main() -> int:
     from playwright.sync_api import sync_playwright
 
@@ -130,6 +146,7 @@ def main() -> int:
         info = card_shot(page, args.out, "model-card")
         print("model card", info["size"])
         print(info["text"][:600])
+        interface_shot(page, args.out)
         context.close()
     return 0
 

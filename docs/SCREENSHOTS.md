@@ -53,5 +53,10 @@ edited; the gaps between them are marked, and the numbered rings only point at p
 interface. Regenerate with `scripts/capture_launch_fragments.py` (needs a Chrome profile with the
 cached model) and `scripts/make_linkedin_visual.py`.
 
+The launch post's other images are plain crops of the same screenshots, with nothing drawn on
+them: `linkedin-post-2-invalid-citation.png` (the answer, the model and the warning about S2),
+`linkedin-post-3-verified-evidence.png` (the claim check with both quotes and pages) and
+`linkedin-post-4-interface.png` (the whole Ask page at desktop width with the model's answer).
+
 ![LinkedIn launch visual: the GroundedAI name and tagline on the left with three numbered points, and on the right three crops of a real answer card with numbered rings on the invalid citation S2, the status Supported by the cited passage, and the quote from page 2](images/linkedin-launch.png)
 

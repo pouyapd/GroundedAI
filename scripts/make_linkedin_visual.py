@@ -4,7 +4,10 @@
     python scripts/make_linkedin_visual.py --capture <capture folder>
 
 Writes ``docs/images/linkedin-launch.png`` and ``docs/images/linkedin-launch-minimal.png``
-(1200 x 675) and ``@2x`` versions (2400 x 1350) for uploading.
+(1200 x 675) and ``@2x`` versions (2400 x 1350) for uploading, and the post's screenshots
+``linkedin-post-2-invalid-citation.png``, ``-3-verified-evidence.png`` and ``-4-interface.png``:
+plain crops of the captured screenshots, without overlays (``--screenshots-only`` writes just
+these).
 
 The interface pieces are crops of one answer card captured from the live demo: Qwen2.5-1.5B-Instruct
 running in the browser answered the ferry-guide question, cited a source (S2) it was never given,
@@ -269,9 +272,42 @@ def render(html: str, name: str) -> None:
         print(f"{f.relative_to(ROOT).as_posix()}: {w} x {h}, {f.stat().st_size / 1024:.0f} KB")
 
 
+def screenshots(capture: Path, info: dict) -> None:
+    """Plain crops of the captured screenshots for the post, after the cover. No overlays."""
+    card = Image.open(capture / "model-card.png").convert("RGB")
+    s = info["scale"]
+    banner = info["parts"]["banner"][0]
+    evidence = info["parts"]["evidence"][-1]
+    cut = banner["y"] + banner["height"] + 14  # just below the warning
+    shots = {
+        # the answer with the invalid S2, the model and the warning
+        "linkedin-post-2-invalid-citation": card.crop((0, 0, card.width, int(cut * s))),
+        # the claim check: method note, both statements, their quotes and pages
+        "linkedin-post-3-verified-evidence": card.crop(
+            (0, int(cut * s), card.width, int((evidence["y"] + evidence["height"] + 16) * s))
+        ),
+    }
+    page = json.loads((capture / "interface.json").read_text(encoding="utf-8"))
+    full = Image.open(capture / "interface.png").convert("RGB")
+    top = full.crop((0, 0, full.width, int((page["banner_bottom"] + 18) * page["scale"])))
+    shots["linkedin-post-4-interface"] = top.resize(
+        (1600, round(top.height * 1600 / top.width)), Image.LANCZOS
+    )
+    for name, image in shots.items():
+        f = OUT / f"{name}.png"
+        image.save(f, optimize=True)
+        w, h = image.size
+        print(f"{f.relative_to(ROOT).as_posix()}: {w} x {h}, {f.stat().st_size / 1024:.0f} KB")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--capture", type=Path, required=True)
+    parser.add_argument(
+        "--screenshots-only",
+        action="store_true",
+        help="write only the post screenshots (2-4), not the cover images",
+    )
     args = parser.parse_args()
     info = json.loads((args.capture / "model-card.json").read_text(encoding="utf-8"))
     for needle in (
@@ -282,6 +318,10 @@ def main() -> int:
     ):
         if needle not in info["text"]:
             raise SystemExit(f"the captured model answer lacks {needle!r}; nothing was written")
+    if (args.capture / "interface.png").exists():
+        screenshots(args.capture, info)
+    if args.screenshots_only:
+        return 0
     card = Image.open(args.capture / "model-card.png").convert("RGB")
     scale = info["scale"]
     slices = {k: crop(card, scale, *v) for k, v in SLICES.items()}
