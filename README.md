@@ -315,8 +315,9 @@ No model, key or network is needed.
   - front end: 77 tests passed;
   - browser journey: 24 of 24, with the default generator and with qwen2.5:1.5b;
   - online demo: 16 of 16 browser checks.
-- **CI** (Python 3.12 and 3.13, PostgreSQL + pgvector, front end, offline benchmark,
-  dependency audit, Docker image and Compose file): all 7 jobs pass on the release branch.
+- **CI** (Python 3.12 and 3.13, PostgreSQL + pgvector, front end, the online demo in a browser,
+  offline benchmark, dependency audit, Docker image and Compose file): all 8 jobs pass on
+  `main`. The Pages workflow checks the deployed demo in a browser after each deployment.
 
 Details: [docs/TESTING.md](docs/TESTING.md).
 

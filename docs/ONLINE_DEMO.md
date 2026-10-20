@@ -61,6 +61,10 @@ runtime, so its answers can differ; no evaluation was run on it.
 - For the language model: WebGPU (current Chrome or Edge on desktop; some other browsers and
   most phones do not offer it), about 2 GB of free GPU memory, and the one-time download. The
   page checks for WebGPU and disables the option, with the reason, when it is missing.
+- On a slow or unstable connection a weight file can fail to download. The page then resumes
+  automatically (up to three attempts; files already stored in the browser cache are kept), and
+  if it still fails it says so and the extractive generator keeps working; choosing the model
+  again continues from the cache.
 
 ## Build and test locally
 
