@@ -98,6 +98,25 @@ def test_invalid_citation_is_reported(settings: Settings) -> None:
         services.close()
 
 
+def test_partial_abstention_still_checks_the_stated_facts(settings: Settings) -> None:
+    # Regression (2026-11-09): "<fact> [S1]. INSUFFICIENT_EVIDENCE: ..." was returned as
+    # insufficient_evidence with the invented figure visible and unchecked.
+    model = FakeListChatModel(
+        responses=[
+            "The hotel limit is EUR 999 per night [S1]. INSUFFICIENT_EVIDENCE: no Tokyo rate."
+        ]
+    )
+    services = _services_with(settings, model)
+    try:
+        response = services.qa.answer(QueryRequest(question="hotel limit capital cities"))
+        assert response.status == "answered"
+        assert [claim.status for claim in response.claims] == ["unsupported"]
+        assert response.claims[0].missing_figures
+        assert any("answered part of the question" in warning for warning in response.warnings)
+    finally:
+        services.close()
+
+
 def test_hallucinated_number_is_flagged(settings: Settings) -> None:
     model = FakeListChatModel(responses=["The hotel limit is EUR 999 per night [S1]."])
     services = _services_with(settings, model)

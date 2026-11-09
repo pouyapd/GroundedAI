@@ -182,8 +182,8 @@ export class BrowserApi implements Api {
   async listDocuments(offset: number, limit: number) {
     return (await this.ready()).listDocuments(offset, limit);
   }
-  async listChunks(documentId: string) {
-    return (await this.ready()).listChunks(documentId);
+  async listChunks(documentId: string, offset = 0) {
+    return (await this.ready()).listChunks(documentId, offset);
   }
   async uploadDocument(file: File, title?: string): Promise<DocumentOut> {
     return (await this.ready()).uploadDocument(file, title);

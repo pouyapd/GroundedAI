@@ -103,6 +103,27 @@ class ParsedAnswer:
     sentences: list[SentenceAssessment]
     check: CitationCheck
     grounding: GroundingLabel | None
+    # Set when the reply answers part of the question and then says the rest cannot be answered
+    # ("costs 14 euros [S1]. INSUFFICIENT_EVIDENCE: returns are not covered."): the reason given,
+    # and the answer part that the claim check must still examine.
+    partial_abstention: str | None = None
+    answer_part: str | None = None
+
+
+def asserting_sentences(text: str, sources: Mapping[str, str]) -> list[str]:
+    """Sentences of ``text`` that assert something checkable: a figure, or a valid citation.
+
+    Remarks about the sources ("The sources do not mention X.") are left out. Used to tell a
+    reply that only refuses from one that states facts before an abstention marker.
+    """
+    found = []
+    for sentence in split_answer_sentences(text):
+        if is_source_note(sentence):
+            continue
+        cited = any(label in sources for label in labels_in(sentence))
+        if cited or extract_numbers(strip_citations(sentence)):
+            found.append(sentence)
+    return found
 
 
 def labels_in(text: str) -> list[str]:
@@ -273,6 +294,21 @@ def parse_answer(raw: str, sources: Mapping[str, str]) -> ParsedAnswer:
     phrase_abstention = (not valid and bool(_ABSTENTION_PHRASES.search(text))) or (
         opens_with_refusal(text)
     )
+    if explicit_abstention and not leading and asserting_sentences(text[:marker_index], sources):
+        # Facts (a figure or a cited sentence) come before the marker: this is a partial answer.
+        # Treating it as a refusal would show those facts without checking them.
+        answer_part = text[:marker_index].rstrip(" \n[(")
+        tail = text[marker_index + len(ABSTAIN_MARKER) :]
+        parsed = parse_answer(answer_part, sources)
+        parsed.raw = raw
+        parsed.text = text
+        parsed.check = CitationCheck(
+            cited, valid, invalid, parsed.check.sentences_total, parsed.check.sentences_cited
+        )
+        remark = strip_citations(tail.strip(" :-\n[]()")).rstrip(" .")
+        parsed.partial_abstention = remark or "no reason given"
+        parsed.answer_part = answer_part
+        return parsed
     if explicit_abstention or leading or phrase_abstention:
         if explicit_abstention:
             tail = text[marker_index + len(ABSTAIN_MARKER) :]

@@ -30,7 +30,7 @@ export function DocumentsPage() {
   const [validation, setValidation] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const [openChunks, setOpenChunks] = useState<{ id: string; chunks: ChunkOut[] } | null>(null);
+  const [openChunks, setOpenChunks] = useState<{ id: string; chunks: ChunkOut[]; total: number } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const allowed = status?.limits.allowed_extensions ?? [".pdf", ".txt", ".md"];
@@ -104,7 +104,17 @@ export function DocumentsPage() {
     }
     try {
       const chunks = await api.listChunks(documentId);
-      setOpenChunks({ id: documentId, chunks: chunks.items });
+      setOpenChunks({ id: documentId, chunks: chunks.items, total: chunks.total });
+    } catch (error) {
+      setLoadError(error);
+    }
+  }
+
+  async function moreChunks() {
+    if (!openChunks) return;
+    try {
+      const page = await api.listChunks(openChunks.id, openChunks.chunks.length);
+      setOpenChunks({ ...openChunks, chunks: [...openChunks.chunks, ...page.items], total: page.total });
     } catch (error) {
       setLoadError(error);
     }
@@ -236,6 +246,8 @@ export function DocumentsPage() {
                     doc={doc}
                     readOnly={readOnly}
                     chunks={openChunks?.id === doc.id ? openChunks.chunks : null}
+                    chunkTotal={openChunks?.id === doc.id ? openChunks.total : 0}
+                    onMoreChunks={() => void moreChunks()}
                     onToggleChunks={() => void toggleChunks(doc.id)}
                     onAsk={() => askAbout(doc.id)}
                     onReingest={() => void act(() => api.reingestDocument(doc.id))}
@@ -270,6 +282,8 @@ function DocumentRow({
   doc,
   readOnly,
   chunks,
+  chunkTotal,
+  onMoreChunks,
   onToggleChunks,
   onAsk,
   onReingest,
@@ -278,6 +292,8 @@ function DocumentRow({
   doc: DocumentOut;
   readOnly: boolean;
   chunks: ChunkOut[] | null;
+  chunkTotal: number;
+  onMoreChunks: () => void;
   onToggleChunks: () => void;
   onAsk: () => void;
   onReingest: () => void;
@@ -338,6 +354,9 @@ function DocumentRow({
         <tr>
           <td colSpan={7}>
             <div className="source-list">
+              <p className="small muted" role="status">
+                Showing {chunks.length} of {chunkTotal} chunks
+              </p>
               {chunks.map((chunk) => (
                 <div key={chunk.id} className="source">
                   <div className="source-head">
@@ -347,6 +366,11 @@ function DocumentRow({
                   <pre className="passage">{chunk.text}</pre>
                 </div>
               ))}
+              {chunks.length < chunkTotal ? (
+                <button type="button" className="btn btn-small" onClick={onMoreChunks}>
+                  Show more chunks
+                </button>
+              ) : null}
             </div>
           </td>
         </tr>

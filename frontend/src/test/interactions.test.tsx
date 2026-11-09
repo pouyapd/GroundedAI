@@ -209,6 +209,25 @@ describe("choosing which documents to search", () => {
     expect(await screen.findByLabelText("Search in")).toHaveValue(FERRY.id);
   });
 
+  it("pages through all chunks of a long document instead of stopping at the first page", async () => {
+    // Regression (2026-11-09): the Chunks view requested 50 chunks and showed no more, so most of
+    // a long PDF's extracted text could not be inspected.
+    const chunk = (index: number) => ({ id: `c${index}`, chunk_index: index, text: `Chunk text ${index}`, page_start: 1, page_end: 1 });
+    const listChunks = vi
+      .fn()
+      .mockResolvedValueOnce({ items: [0, 1].map(chunk), total: 3, offset: 0, limit: 2 })
+      .mockResolvedValueOnce({ items: [chunk(2)], total: 3, offset: 2, limit: 2 });
+    render(<App api={fakeApi({ listChunks })} />);
+    await userEvent.click(screen.getByRole("button", { name: "Documents" }));
+    await userEvent.click(await screen.findByRole("button", { name: /^Chunks/ }));
+    expect(await screen.findByText("Showing 2 of 3 chunks")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Show more chunks" }));
+    expect(await screen.findByText("Chunk text 2")).toBeInTheDocument();
+    expect(screen.getByText("Showing 3 of 3 chunks")).toBeInTheDocument();
+    expect(listChunks).toHaveBeenLastCalledWith(READY_DOCUMENTS[0]?.id, 2);
+    expect(screen.queryByRole("button", { name: "Show more chunks" })).not.toBeInTheDocument();
+  });
+
   it("disables re-ingest for a failed document whose unreadable file was not kept", async () => {
     const failed = {
       ...readyDocument("doc_cccccccccccccccccccc", "damaged", "damaged.pdf"),
