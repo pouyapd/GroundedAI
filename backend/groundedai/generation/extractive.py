@@ -11,7 +11,7 @@ output with ``is_llm: false`` and the UI labels it as demo output.
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import Any, Literal
 
 from langchain_core.callbacks import CallbackManagerForLLMRun
 from langchain_core.language_models.chat_models import BaseChatModel
@@ -26,11 +26,35 @@ _QUESTION_RE = re.compile(r"<question>\s*(.*?)\s*</question>", re.DOTALL)
 _SOURCE_RE = re.compile(r'<source id="(S\d+)"[^>]*>\n(.*?)\n</source>', re.DOTALL)
 
 EXTRACTIVE_MODEL_NAME = "extractive-demo-v1"
+EXTRACTIVE_PREFIX_MODEL_NAME = "extractive-demo-v2-prefix"
+MIN_SHARED_PREFIX = 5
+
+
+def shared_prefix(a: str, b: str) -> int:
+    length = 0
+    for left, right in zip(a, b, strict=False):
+        if left != right:
+            break
+        length += 1
+    return length
+
+
+def words_match(a: str, b: str) -> bool:
+    """Same word, or two forms of one word: a shared prefix of at least five letters that
+    leaves at most three letters of the shorter word ("reauthenticated" / "reauthentication",
+    "minutes" / "minute"). A heuristic; it also joins some unrelated words."""
+    if a == b:
+        return True
+    shared = shared_prefix(a, b)
+    return shared >= max(MIN_SHARED_PREFIX, min(len(a), len(b)) - 3)
 
 
 class ExtractiveDemoChatModel(BaseChatModel):
     min_overlap: float = 0.5
     max_sentences: int = 3
+    # "exact": a question word counts only when the sentence has the same word (v1, published
+    # results); "prefix": also when it has another form of it (see words_match).
+    matching: Literal["exact", "prefix"] = "exact"
 
     @property
     def _llm_type(self) -> str:
@@ -38,7 +62,11 @@ class ExtractiveDemoChatModel(BaseChatModel):
 
     @property
     def _identifying_params(self) -> dict[str, Any]:
-        return {"min_overlap": self.min_overlap, "max_sentences": self.max_sentences}
+        return {
+            "min_overlap": self.min_overlap,
+            "max_sentences": self.max_sentences,
+            "matching": self.matching,
+        }
 
     def _generate(
         self,
@@ -52,7 +80,8 @@ class ExtractiveDemoChatModel(BaseChatModel):
         question = question_match.group(1) if question_match else ""
         sources = _SOURCE_RE.findall(prompt)
         answer = self.compose(question, sources)
-        message = AIMessage(content=answer, response_metadata={"model_name": EXTRACTIVE_MODEL_NAME})
+        name = EXTRACTIVE_MODEL_NAME if self.matching == "exact" else EXTRACTIVE_PREFIX_MODEL_NAME
+        message = AIMessage(content=answer, response_metadata={"model_name": name})
         return ChatResult(generations=[ChatGeneration(message=message)])
 
     def compose(self, question: str, sources: list[tuple[str, str]]) -> str:
@@ -65,9 +94,7 @@ class ExtractiveDemoChatModel(BaseChatModel):
             for sentence_index, sentence in enumerate(split_sentences(body)):
                 if looks_like_instruction(sentence):
                     continue  # never repeat instruction-like text from documents
-                overlap = len(question_tokens & set(content_tokens(sentence))) / len(
-                    question_tokens
-                )
+                overlap = self._overlap(question_tokens, set(content_tokens(sentence)))
                 if overlap > 0:
                     candidates.append((overlap, source_index, sentence_index, label, sentence))
         if not candidates:
@@ -105,3 +132,13 @@ class ExtractiveDemoChatModel(BaseChatModel):
             body = body[:-1] if body and body[-1] in ".!?" else body
             parts.append(f"{body} [{label}]{ending}")
         return " ".join(parts)
+
+    def _overlap(self, question_tokens: set[str], sentence_tokens: set[str]) -> float:
+        if self.matching == "exact":
+            return len(question_tokens & sentence_tokens) / len(question_tokens)
+        matched = sum(
+            1
+            for word in question_tokens
+            if word in sentence_tokens or any(words_match(word, other) for other in sentence_tokens)
+        )
+        return matched / len(question_tokens)

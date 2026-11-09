@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from groundedai.ingestion.parsers import PageText
+from groundedai.ingestion.pdf_cleanup import TextCleanup
 
 PAGE_SEPARATOR = "\n\n"
 CHUNKER_VERSION = 1
@@ -25,14 +26,19 @@ CHUNKER_VERSION = 1
 class ChunkingConfig:
     chunk_size: int
     chunk_overlap: int
+    # How PDF text is prepared before chunking ("v1": as extracted; "v2": see pdf_cleanup).
+    text_cleanup: TextCleanup = "v1"
 
     def as_dict(self) -> dict[str, object]:
-        return {
+        record: dict[str, object] = {
             "chunk_size": self.chunk_size,
             "chunk_overlap": self.chunk_overlap,
             "splitter": "langchain_text_splitters.RecursiveCharacterTextSplitter",
             "version": CHUNKER_VERSION,
         }
+        if self.text_cleanup != "v1":  # v1 records stay byte-identical to earlier reports
+            record["text_cleanup"] = self.text_cleanup
+        return record
 
 
 @dataclass(frozen=True, slots=True)

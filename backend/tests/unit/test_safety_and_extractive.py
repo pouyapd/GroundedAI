@@ -116,3 +116,31 @@ def test_extractive_model_is_deterministic() -> None:
     messages = _prompt("hotel limit capital cities", ["The hotel limit is €140 in capital cities."])
     model = ExtractiveDemoChatModel()
     assert model.invoke(messages).content == model.invoke(messages).content
+
+
+def test_prefix_matching_finds_other_forms_of_the_question_words() -> None:
+    # Live demo, 2026-11-09: "After how many minutes of inactivity must an AAL3 session be
+    # reauthenticated?" was refused although the top passage answers it, because exact matching
+    # does not see "reauthenticated" in "Reauthentication".
+    sources = [
+        (
+            "S1",
+            "Reauthentication of the subscriber SHALL be repeated following any "
+            "period of inactivity lasting 15 minutes or longer.",
+        )
+    ]
+    question = "After how many minutes of inactivity must an AAL3 session be reauthenticated?"
+    exact = ExtractiveDemoChatModel().compose(question, sources)
+    prefix = ExtractiveDemoChatModel(matching="prefix").compose(question, sources)
+    assert exact.startswith("INSUFFICIENT_EVIDENCE")
+    assert "15 minutes" in prefix
+    assert "[S1]" in prefix
+
+
+def test_prefix_matching_does_not_join_short_or_different_words() -> None:
+    from groundedai.generation.extractive import words_match
+
+    assert words_match("reauthenticated", "reauthentication")
+    assert words_match("minutes", "minute")
+    assert not words_match("password", "passport")
+    assert not words_match("map", "maps")  # shorter than five letters: exact match only

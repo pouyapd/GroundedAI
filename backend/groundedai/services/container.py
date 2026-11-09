@@ -119,7 +119,7 @@ def build_services(
         session_factory=session_factory,
         file_store=file_store,
         embedding_provider=embedding.get,
-        chunking=ChunkingConfig(settings.chunk_size, settings.chunk_overlap),
+        chunking=ChunkingConfig(settings.chunk_size, settings.chunk_overlap, settings.text_cleanup),
         limits=IngestionLimits(
             max_upload_bytes=settings.max_upload_bytes,
             max_pdf_pages=settings.max_pdf_pages,

@@ -15,6 +15,7 @@ from typing import Any
 
 from groundedai.core.errors import DocumentParseError, EmptyDocument, GroundedAIError
 from groundedai.core.text import clean_extracted_text
+from groundedai.ingestion.pdf_cleanup import TextCleanup, clean_pdf_pages
 
 logger = logging.getLogger(__name__)
 
@@ -40,10 +41,10 @@ class ParsedDocument:
 
 
 def parse_document(
-    data: bytes, extension: str, *, max_pages: int, max_chars: int
+    data: bytes, extension: str, *, max_pages: int, max_chars: int, cleanup: TextCleanup = "v1"
 ) -> ParsedDocument:
     if extension == ".pdf":
-        return parse_pdf(data, max_pages=max_pages, max_chars=max_chars)
+        return parse_pdf(data, max_pages=max_pages, max_chars=max_chars, cleanup=cleanup)
     if extension in {".txt", ".md"}:
         return parse_text(data, markdown=extension == ".md", max_chars=max_chars)
     raise DocumentParseError(f"No parser for '{extension}' files.")
@@ -77,7 +78,10 @@ def _first_line_title(text: str) -> str | None:
     return None
 
 
-def parse_pdf(data: bytes, *, max_pages: int, max_chars: int) -> ParsedDocument:
+def parse_pdf(
+    data: bytes, *, max_pages: int, max_chars: int, cleanup: TextCleanup = "v1"
+) -> ParsedDocument:
+    """Text of every page; ``cleanup="v2"`` also removes layout text (see ``pdf_cleanup``)."""
     from pypdf import PdfReader
 
     try:
@@ -102,6 +106,9 @@ def parse_pdf(data: bytes, *, max_pages: int, max_chars: int) -> ParsedDocument:
                     details={"max_chars": max_chars},
                 )
             pages.append(PageText(number=number, text=text))
+        if cleanup == "v2":
+            cleaned = clean_pdf_pages([page.text for page in pages])
+            pages = [PageText(page.number, text) for page, text in zip(pages, cleaned, strict=True)]
         title = _pdf_title(reader)
     except GroundedAIError:
         raise

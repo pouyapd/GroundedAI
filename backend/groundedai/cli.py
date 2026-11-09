@@ -206,7 +206,7 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
         corpus = build_index(
             dataset,
             embedding,
-            ChunkingConfig(settings.chunk_size, settings.chunk_overlap),
+            ChunkingConfig(settings.chunk_size, settings.chunk_overlap, settings.text_cleanup),
             Path(tmp),
             "generation",
             progress=lambda message: print(message, flush=True),

@@ -83,6 +83,7 @@ PIPELINE_SETTINGS: tuple[str, ...] = (
 INDEX_AND_MODEL_SETTINGS: tuple[str, ...] = (
     "chunk_size",
     "chunk_overlap",
+    "text_cleanup",
     "embedding_provider",
     "embedding_model",
     "embedding_dim",
@@ -94,6 +95,7 @@ INDEX_AND_MODEL_SETTINGS: tuple[str, ...] = (
     "prompt_version",
     "conflict_check",
     "generation_provider",
+    "extractive_matching",
     "ollama_model",
     "hf_generation_model",
     "generation_timeout_s",
