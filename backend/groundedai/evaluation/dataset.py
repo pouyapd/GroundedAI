@@ -55,6 +55,18 @@ class EvalQuestion(BaseModel):
     reference_answer: str | None = None
     forbidden_output: list[str] = Field(default_factory=list)
     notes: str | None = None
+    tags: list[str] = Field(
+        default_factory=list,
+        description="Finer categories, e.g. 'numeric', 'paraphrase:t01' (a reworded copy of t01).",
+    )
+    scope: list[str] = Field(
+        default_factory=list,
+        description="Document keys the question is asked against (the UI's 'Search in'); "
+        "empty means the whole corpus.",
+    )
+    evidence_pages: list[int | None] = Field(
+        default_factory=list, description="Page of each evidence quote, as found when written."
+    )
 
     @property
     def has_evidence(self) -> bool:
@@ -69,6 +81,8 @@ class CorpusDocument(BaseModel):
     title: str
     sha256: str
     description: str | None = None
+    source_url: str | None = None
+    split: Literal["train", "validation", "test"] | None = None
 
 
 class DatasetManifest(BaseModel):
@@ -80,6 +94,9 @@ class DatasetManifest(BaseModel):
     description: str
     created: str
     documents: list[CorpusDocument]
+    fetch: str | None = Field(
+        default=None, description="How to download corpus files that are not committed."
+    )
 
 
 @dataclass(frozen=True)
@@ -128,6 +145,9 @@ def load_dataset(root: Path, *, verify_hashes: bool = True) -> EvalDataset:
         path = (root / document.file).resolve()
         if root.resolve() not in path.parents:
             raise DatasetError(f"document path escapes dataset: {document.file}")
+        if not path.is_file():
+            hint = f" ({manifest.fetch})" if manifest.fetch else ""
+            raise DatasetError(f"missing corpus file {document.file}{hint}")
         if verify_hashes:
             actual = hashlib.sha256(path.read_bytes()).hexdigest()
             if actual != document.sha256:
@@ -149,6 +169,11 @@ def load_dataset(root: Path, *, verify_hashes: bool = True) -> EvalDataset:
         for item in question.evidence:
             if item.doc not in keys:
                 raise DatasetError(f"{question.id}: unknown document key {item.doc}")
+        for key in question.scope:
+            if key not in keys:
+                raise DatasetError(f"{question.id}: unknown document key {key} in scope")
+        if question.scope and any(item.doc not in question.scope for item in question.evidence):
+            raise DatasetError(f"{question.id}: evidence outside the question's scope")
         if question.expected_behavior in ("answer", "flag_conflict") and not question.evidence:
             raise DatasetError(f"{question.id}: answerable questions need evidence")
         questions.append(question)

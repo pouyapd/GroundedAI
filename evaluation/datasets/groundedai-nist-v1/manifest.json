@@ -1,0 +1,37 @@
+{
+  "name": "groundedai-nist-v1",
+  "version": "1.0.0",
+  "license": "Documents: publications of the U.S. National Institute of Standards and Technology, works of the U.S. Government, not subject to copyright in the United States (17 U.S.C. 105); they are not committed here and are downloaded from nvlpubs.nist.gov by scripts/fetch_nist_corpus.py, which checks the SHA-256 hashes below. Questions and labels: MIT, same as the repository.",
+  "description": "Held-out test split on real PDFs: 53 questions on three NIST publications, written from the PDF text before any model or retrieval run. Used once per reported configuration; never for choosing settings.",
+  "created": "2026-11-09",
+  "documents": [
+    {
+      "key": "sp800-63b-2017",
+      "file": "corpus/NIST.SP.800-63b.pdf",
+      "title": "Digital Identity Guidelines: Authentication and Lifecycle Management",
+      "sha256": "ccfce7510a1267933f912d023306c6e7d485f21be63d271108b61aad6139127e",
+      "description": "NIST SP 800-63B, June 2017 (updates as of 2020-03-02), 80 pages; withdrawn 2025-08-01 and superseded by SP 800-63B-4.",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63b.pdf",
+      "split": "test"
+    },
+    {
+      "key": "sp800-63b4-2025",
+      "file": "corpus/NIST.SP.800-63B-4.pdf",
+      "title": "Digital Identity Guidelines: Authentication and Authenticator Management",
+      "sha256": "d9ab89576b5ae2cfb3ba37781110788dea27a85a5079496dbfc1a79834670afd",
+      "description": "NIST SP 800-63B-4, July 2025, 129 pages. Several requirements differ from the 2017 version (conflict questions).",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63B-4.pdf",
+      "split": "test"
+    },
+    {
+      "key": "ai-rmf-1.0",
+      "file": "corpus/NIST.AI.100-1.pdf",
+      "title": "Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+      "sha256": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
+      "description": "NIST AI 100-1, January 2023, 48 pages.",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+      "split": "test"
+    }
+  ],
+  "fetch": "python scripts/fetch_nist_corpus.py"
+}

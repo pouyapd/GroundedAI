@@ -1,0 +1,28 @@
+{
+  "name": "groundedai-nist-val-v1",
+  "version": "1.0.0",
+  "license": "Documents: publications of the U.S. National Institute of Standards and Technology, works of the U.S. Government, not subject to copyright in the United States (17 U.S.C. 105); they are not committed here and are downloaded from nvlpubs.nist.gov by scripts/fetch_nist_corpus.py, which checks the SHA-256 hashes below. Questions and labels: MIT, same as the repository.",
+  "description": "Validation split on real PDFs: 18 questions on two other NIST publications. Used to choose settings; it shares no document with the test split.",
+  "created": "2026-11-09",
+  "documents": [
+    {
+      "key": "ai-600-1-genai",
+      "file": "corpus/NIST.AI.600-1.pdf",
+      "title": "Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile",
+      "sha256": "6e73620ab6b64e90ef2c04bf0e0d6246185a2f4b1b13cab0df494496cff89b6a",
+      "description": "NIST AI 600-1, July 2024, 64 pages.",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+      "split": "validation"
+    },
+    {
+      "key": "ir-8312-xai",
+      "file": "corpus/NIST.IR.8312.pdf",
+      "title": "Four Principles of Explainable Artificial Intelligence",
+      "sha256": "cbfd3f8cd92a3dd01affdab036e9c30aa878588b336c6cba0938a9892a564546",
+      "description": "NISTIR 8312, September 2021, 43 pages.",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/ir/2021/NIST.IR.8312.pdf",
+      "split": "validation"
+    }
+  ],
+  "fetch": "python scripts/fetch_nist_corpus.py"
+}

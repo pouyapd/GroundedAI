@@ -65,3 +65,10 @@ evaluation/reports/reliability/sealed/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# --- Real-PDF evaluation corpora: downloaded by scripts/fetch_nist_corpus.py (hash-checked) ---
+evaluation/datasets/groundedai-nist-v1/corpus/
+evaluation/datasets/groundedai-nist-val-v1/corpus/
+experiments/finetune/corpus/
+experiments/finetune/data/
+experiments/finetune/runs/
