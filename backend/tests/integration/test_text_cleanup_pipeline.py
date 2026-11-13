@@ -152,3 +152,41 @@ def test_a_question_the_manual_does_not_answer_is_still_refused_with_prefix_matc
     )
     (response,) = _ask(settings, "Who manufactures the control cable?")
     assert response.status == "insufficient_evidence"
+
+
+def test_a_document_indexed_with_v1_keeps_working_and_reingest_applies_v2(
+    make_settings: SettingsFactory, tmp_path: Path
+) -> None:
+    # Documents indexed before the default changed keep their v1 text; questions still work,
+    # and re-ingesting a document applies the current setting.
+    old = build_services(make_settings(data_dir=tmp_path / "shared", text_cleanup="v1"))
+    try:
+        row = old.ingestion.ingest_bytes("manual.pdf", "application/pdf", _manual())
+        assert row.chunking is not None
+        assert "text_cleanup" not in row.chunking
+    finally:
+        old.close()
+    new = build_services(make_settings(data_dir=tmp_path / "shared", text_cleanup="v2"))
+    try:
+        response = new.qa.answer(QueryRequest(question="What is the maximum discharge pressure?"))
+        assert response.status == "answered"
+        assert response.answer
+        assert "16 bar" in response.answer
+        assert all(claim.status == "supported" for claim in response.claims)
+        with session_scope(new.session_factory) as session:
+            texts = [c.text for c in session.scalars(select(ChunkRow)).all()]
+        assert any(HEADER in text for text in texts)  # still the v1 text
+        new.ingestion.prepare_reingest(row.id)
+        again = new.ingestion.process(row.id)
+        assert again.status == DocumentStatus.READY
+        assert again.chunking is not None
+        assert again.chunking["text_cleanup"] == "v2"
+        with session_scope(new.session_factory) as session:
+            texts = [c.text for c in session.scalars(select(ChunkRow)).all()]
+        assert not any(HEADER in text for text in texts)
+        pressure = new.qa.answer(QueryRequest(question="What is the maximum discharge pressure?"))
+        quotes = [e for claim in pressure.claims for e in claim.evidence if "16 bar" in e.quote]
+        assert quotes
+        assert all(e.page == 3 for e in quotes)
+    finally:
+        new.close()
