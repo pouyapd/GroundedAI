@@ -109,6 +109,15 @@ class Settings(BaseSettings):
             "sentence has the same word (the behaviour before 2026-11)."
         ),
     )
+    extractive_relevance: Literal["v1", "v2"] = Field(
+        default="v2",
+        description=(
+            "Extractive generator: 'v1' scores a sentence by the share of the question's words it "
+            "contains; 'v2' leaves out words of the documents' own titles (every passage of a "
+            "document is about its title) and abstains when no sentence covers half of the "
+            "remaining question words."
+        ),
+    )
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "qwen2.5:1.5b"
     hf_generation_model: str = "Qwen/Qwen2.5-0.5B-Instruct"
@@ -120,12 +129,16 @@ class Settings(BaseSettings):
         default="answer-v2",
         description="Answer prompt; answer-v1 reproduces the reports published before 2026-10-13.",
     )
-    conflict_check: Literal["figures-v1", "disagreement-v1", "disagreement-v2"] = Field(
-        default="disagreement-v1",
+    conflict_check: Literal[
+        "figures-v1", "disagreement-v1", "disagreement-v2", "disagreement-v3"
+    ] = Field(
+        default="disagreement-v3",
         description=(
-            "Check for passages that disagree; figures-v1 reproduces the reports published on "
-            "2026-10-13; disagreement-v2 compares ranges as a whole and tells validity dates "
-            "from edit dates (opt-in: it changes the notes the answer-v2 prompt sends)."
+            "Check for passages that disagree. disagreement-v3 (default) finds differences "
+            "between versions of the same document (values and SHALL/SHOULD/MAY wording) and "
+            "leaves other pairs to disagreement-v1; figures-v1 reproduces the reports published "
+            "on 2026-10-13; disagreement-v2 compares ranges as a whole and tells validity dates "
+            "from edit dates."
         ),
     )
     claim_check: Literal["claims-v1", "claims-v2"] = Field(
@@ -133,6 +146,14 @@ class Settings(BaseSettings):
         description=(
             "Check of the answer's statements; claims-v2 adds separate evidence, citation and "
             "answers-the-question results (opt-in). The verdict field means the same in both."
+        ),
+    )
+    claim_detail_check: Literal["off", "v1"] = Field(
+        default="v1",
+        description=(
+            "'v1': a statement that matches a passage but contains two or more consecutive "
+            "words that no retrieved passage states (an added detail) counts as partly "
+            "found. 'off' reproduces the results before 2026-11-13."
         ),
     )
     unverified_answers: Literal["label", "withhold"] = Field(

@@ -73,7 +73,9 @@ def main() -> int:
         doc["sha256"] = digest
     if not args.check:
         manifest_path.write_text(
-            json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
+            json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+            newline="\n",
         )
     for problem in problems:
         print(problem)

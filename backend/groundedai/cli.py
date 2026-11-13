@@ -250,9 +250,11 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
 
 
 RecordedSettings = tuple[dict[str, Any], dict[str, Any], dict[str, Any]]
+PIPELINE_SETTINGS_BEFORE_THEY_EXISTED: dict[str, Any] = {"claim_detail_check": "off"}
 SETTINGS_BEFORE_THEY_EXISTED: dict[str, Any] = {
     "text_cleanup": "v1",
     "extractive_matching": "exact",
+    "extractive_relevance": "v1",
 }
 
 
@@ -276,6 +278,7 @@ def _load_recorded_settings(path: Path) -> RecordedSettings:
     # Settings added after reports were first recorded: a report without them was made with
     # the only behaviour that existed then.
     settings = {**SETTINGS_BEFORE_THEY_EXISTED, **settings}
+    pipeline = {**PIPELINE_SETTINGS_BEFORE_THEY_EXISTED, **pipeline}
     missing = sorted(
         (set(INDEX_AND_MODEL_SETTINGS) - set(settings)) | (set(PIPELINE_SETTINGS) - set(pipeline))
     )

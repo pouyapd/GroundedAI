@@ -12,15 +12,17 @@ from __future__ import annotations
 import logging
 import re
 import threading
+from collections import Counter
 from collections.abc import Callable, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FutureTimeout
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from time import perf_counter
 from typing import Any
 
 from langchain_core.messages import AIMessage
 from langchain_core.runnables import Runnable, RunnableLambda, RunnablePassthrough
+from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
 from groundedai.core.config import Settings
@@ -49,11 +51,13 @@ from groundedai.generation.context import AssembledContext, assemble_context, fo
 from groundedai.generation.disagreement import Disagreement, find_disagreements
 from groundedai.generation.prompts import answer_prompt, format_notes
 from groundedai.generation.providers import GenerationProvider, translate_provider_error
+from groundedai.generation.relevance import question_relevance
 from groundedai.generation.safety import detect_injection
+from groundedai.generation.versions import Edition, edition_of, families, same_family
 from groundedai.ingestion.chunking import page_at
 from groundedai.observability.metrics import MetricsRegistry
 from groundedai.persistence.db import session_scope
-from groundedai.persistence.models import QueryEventRow
+from groundedai.persistence.models import ChunkRow, DocumentRow, DocumentStatus, QueryEventRow
 from groundedai.persistence.repositories import DocumentRepository, QueryEventRepository
 from groundedai.retrieval.engine import RetrievalEngine
 from groundedai.retrieval.types import RetrievalDiagnostics, RetrievalRequest, RetrievedChunk
@@ -68,6 +72,7 @@ from groundedai.schemas.query import (
     EvidenceOut,
     ProviderOut,
     QueryRequest,
+    RelevanceOut,
     RetrievalDiagnosticsOut,
     RetrievedChunkOut,
     RetrieveRequest,
@@ -80,6 +85,8 @@ from groundedai.schemas.query import (
 )
 
 logger = logging.getLogger(__name__)
+# disagreement-v3: passages added for an edition that retrieval left out
+EDITION_PASSAGES = 2
 
 MIN_QUESTION_CHARS = 3
 EXCERPT_CHARS = 320
@@ -189,6 +196,7 @@ def claims_out(report: ClaimReport, context: AssembledContext) -> list[ClaimOut]
                 missing_figures=claim.missing_figures,
                 word_overlap=claim.word_overlap,
                 flags=claim.flags,
+                added_details=claim.added_details,
                 citation_status=(citation_status(claim) if report.version == "claims-v2" else None),
                 invalid_citations=claim.invalid_citations,
             )
@@ -287,6 +295,8 @@ def conflicts_out(
                     dates=list(statement.dates),
                     validity_dates=list(statement.validity_dates),
                     revision_dates=list(statement.revision_dates),
+                    edition=statement.edition,
+                    requirement=statement.modal,
                 )
             )
             if any(figure_present(value, answer_figures) for value in statement.values):
@@ -390,6 +400,73 @@ class QAService:
             use_reranker=(settings.reranker != "none") if rerank is None else rerank,
             rerank_candidates=settings.rerank_candidates,
         )
+
+    def document_editions(
+        self, session: Session, document_ids: Sequence[str]
+    ) -> dict[str, Edition]:
+        """Each document's edition, read from its title and first passage."""
+        if not document_ids:
+            return {}
+        rows = session.execute(
+            select(DocumentRow.id, DocumentRow.title, ChunkRow.text)
+            .join(ChunkRow, ChunkRow.document_id == DocumentRow.id)
+            .where(DocumentRow.id.in_(list(document_ids)), ChunkRow.chunk_index == 0)
+        ).all()
+        return {str(row.id): edition_of(str(row.id), row.title, row.text) for row in rows}
+
+    def ensure_editions_retrieved(
+        self, session: Session, request: RetrievalRequest, chunks: list[RetrievedChunk]
+    ) -> tuple[list[RetrievedChunk], dict[str, Edition]]:
+        """disagreement-v3: when two editions of a document are in scope and only one has a
+        retrieved passage, add the other's best passages (replacing the lowest-ranked passages
+        of documents that have several), so that their differences can be found at all.
+
+        Editions are documents in the scope (or, without a scope, retrieved documents and
+        documents whose titles make them editions of a retrieved one).
+        """
+        present = {chunk.document_id for chunk in chunks}
+        if request.document_ids:
+            candidates = set(request.document_ids)
+        else:
+            ready = session.execute(
+                select(DocumentRow.id, DocumentRow.title).where(
+                    DocumentRow.status == DocumentStatus.READY
+                )
+            ).all()
+            by_title = {str(row.id): edition_of(str(row.id), row.title) for row in ready}
+            candidates = set(present) | {
+                doc
+                for doc, edition in by_title.items()
+                if any(
+                    same_family(edition, by_title[other]) for other in present if other in by_title
+                )
+            }
+        editions = self.document_editions(session, sorted(candidates | present))
+        extra: list[RetrievedChunk] = []
+        for group in families(editions):
+            if not present & set(group):
+                continue
+            for document_id in group:
+                if document_id in present:
+                    continue
+                more = self.retrieval_engine.retrieve(
+                    session, replace(request, document_ids=[document_id], top_k=EDITION_PASSAGES)
+                ).chunks
+                extra.extend(more)
+        if not extra:
+            return chunks, editions
+        combined = list(chunks)
+        for chunk in extra:
+            if len(combined) >= request.top_k:
+                counts = Counter(item.document_id for item in combined)
+                for index in range(len(combined) - 1, -1, -1):
+                    if counts[combined[index].document_id] > 1:
+                        combined.pop(index)
+                        break
+                else:
+                    break
+            combined.append(chunk)
+        return combined, editions
 
     def _validate_question(self, text: str) -> str:
         question = normalize_whitespace(text)
@@ -526,8 +603,15 @@ class QAService:
                 diagnostics,
             )
 
+        chunks = retrieval.chunks
+        editions: dict[str, Edition] = {}
+        if self.settings.conflict_check == "disagreement-v3":
+            with session_scope(self.session_factory) as session:
+                chunks, editions = self.ensure_editions_retrieved(
+                    session, retrieval_request, chunks
+                )
         context = assemble_context(
-            retrieval.chunks, self.settings.max_context_chars, self.settings.prompt_version
+            chunks, self.settings.max_context_chars, self.settings.prompt_version
         )
         injection_flags = {block.label: detect_injection(block.text) for block in context.sources}
         for label, flags in injection_flags.items():
@@ -548,6 +632,11 @@ class QAService:
         if self.settings.conflict_check in ("disagreement-v1", "disagreement-v2"):
             disagreements = find_disagreements(
                 question, context.sources, self.settings.conflict_check
+            )
+            warnings.extend(disagreement.explanation() for disagreement in disagreements)
+        elif self.settings.conflict_check == "disagreement-v3":
+            disagreements = find_disagreements(
+                question, context.sources, "disagreement-v3", editions
             )
             warnings.extend(disagreement.explanation() for disagreement in disagreements)
         if self.settings.prompt_version != "answer-v1":  # answer-v1 is kept as published
@@ -646,6 +735,7 @@ class QAService:
                 evidence_sources(context),
                 question,
                 self.settings.claim_check,
+                detail_check=self.settings.claim_detail_check == "v1",
             )
         )
         claims = claims_out(report, context) if report else []
@@ -669,6 +759,31 @@ class QAService:
             if report.version == "claims-v2"
             else report.verdict == "unverified"
         )
+        relevance = question_relevance(
+            question,
+            sorted({block.chunk.document_title for block in context.sources}),
+            [block.text for block in context.sources],
+        )
+        relevance_out = RelevanceOut(
+            asked=sorted(relevance.asked),
+            unmatched=list(relevance.unmatched),
+            answer_coverage=round(relevance.coverage(parsed.text), 3)
+            if not parsed.is_abstention
+            else None,
+        )
+        if relevance.unmatched and not parsed.is_abstention:
+            missing = ", ".join(f'"{word}"' for word in relevance.unmatched)
+            warnings.append(
+                f"The retrieved passages do not mention {missing}, which the question asks "
+                "about. The answer may not address the question, even where its statements "
+                "match the passages."
+            )
+        checks_run = ["citation_labels", "relevance"]
+        if report is not None:
+            checks_run.append("lexical_claims")
+            if self.settings.claim_detail_check == "v1":
+                checks_run.append("added_details")
+        checks_run.append("disagreement")
         if nothing_found and self.settings.unverified_answers == "withhold":
             status, answer, unverified_answer = "insufficient_evidence", None, parsed.text
             abstention_reason = (
@@ -694,6 +809,8 @@ class QAService:
             ],
             claims=claims,
             verification=verification,
+            relevance=relevance_out,
+            checks_run=checks_run,
             conflicts=conflicts,
             unverified_answer=unverified_answer,
             citation_check=CitationCheckOut(

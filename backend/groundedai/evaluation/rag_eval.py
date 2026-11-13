@@ -168,7 +168,12 @@ def score_question(
         "pages_known": pages_known,
         "pages_correct": pages_ok,
     }
-    row["conflict_reported"] = any(conflict.kind == "conflict" for conflict in response.conflicts)
+    # A reported disagreement: "conflict", or (disagreement-v3, 2026-11-13) "different_versions",
+    # two editions of one document that differ. "different_dates" is not counted, as before.
+    # Reports made before v3 have no "different_versions", so their numbers are unchanged.
+    row["conflict_reported"] = any(
+        conflict.kind in ("conflict", "different_versions") for conflict in response.conflicts
+    )
     row["conflict_any"] = bool(response.conflicts)
     row["answer_states_conflict"] = bool(answer) and states_conflict(answer)
     return row

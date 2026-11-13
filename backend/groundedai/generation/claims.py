@@ -249,6 +249,8 @@ class Claim:
     # each cited label whether its passage states at least part of the claim.
     invalid_citations: list[str] = field(default_factory=list)
     label_support: dict[str, bool] = field(default_factory=dict)
+    # claim_detail_check: runs of the claim's words that no retrieved passage contains
+    added_details: list[str] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -1077,11 +1079,49 @@ def _names(text: str, stem: Stemmer) -> frozenset[str]:
 
 
 # --------------------------------------------------------------------- check
+MIN_ADDED_RUN = 2
+
+
+def added_details(
+    text: str,
+    pool: Sequence[_Passage],
+    stem: Stemmer,
+    meta: frozenset[str],
+    rewrite: Callable[[str], str] | None = None,
+) -> list[str]:
+    """Runs of at least two consecutive content words of ``text`` that no passage contains.
+
+    "...costs 14 euros and includes a free hot meal on board" shares most of its words with a
+    passage about the fare, so the word-overlap test finds it; "hot meal board" is in no
+    passage, so the sentence adds a detail the sources do not state. One unmatched word on its
+    own is often a paraphrase ("picks" for "chooses") and is not counted. Stopwords between
+    two unmatched words do not break a run; numbers are checked as figures, not here.
+    """
+    known: set[str] = set()
+    for passage in pool:
+        known |= passage.words
+    runs: list[str] = []
+    current: list[str] = []
+    for token in tokenize(rewrite(text) if rewrite else text):
+        if token in STOPWORDS or token in meta or token.isdigit() or token in _NUMBER_TOKENS:
+            continue
+        if stem(token) in known:
+            if len(current) >= MIN_ADDED_RUN:
+                runs.append(" ".join(current))
+            current = []
+        else:
+            current.append(token)
+    if len(current) >= MIN_ADDED_RUN:
+        runs.append(" ".join(current))
+    return runs
+
+
 def check_claims(
     answer: str,
     sources: Sequence[EvidenceSource],
     question: str | None = None,
     version: ClaimCheckVersion = "claims-v1",
+    detail_check: bool = False,
 ) -> ClaimReport:
     """Check every factual sentence of ``answer`` against every passage in ``sources``.
 
@@ -1089,7 +1129,10 @@ def check_claims(
     appear in a passage, as long as the claim also states a figure of its own that does
     ("you can claim 25%"); a claim whose only figure comes from the question still needs it.
 
-    ``version`` chooses the method; ``claims-v1`` reproduces every earlier result.
+    ``version`` chooses the method; ``claims-v1`` reproduces every earlier result. With
+    ``detail_check``, a claim that matches a passage but contains a run of words that no
+    passage states (:func:`added_details`) is marked ``partial`` with the flag
+    ``added_detail``.
     """
     method = _METHODS[version]
     stem = method.stem
@@ -1162,6 +1205,12 @@ def check_claims(
             if claim.status in MATCHED and _negation_differs(claim, words, stem):
                 claim.status = "partial"
                 claim.flags.append("negation_differs")
+        if detail_check and claim.status in MATCHED:
+            runs = added_details(text, pool, stem, method.meta, method.rewrite)
+            if runs:
+                claim.status = "partial"
+                claim.flags.append("added_detail")
+                claim.added_details = runs
         if detect_injection(text):
             # Text that gives orders to an AI system is not a fact, even when a passage
             # contains it word for word.

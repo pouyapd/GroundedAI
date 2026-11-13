@@ -24,7 +24,15 @@ SETS = {
     "test": ROOT / "evaluation" / "datasets" / "groundedai-claims-nist-v1" / "claims.jsonl",
     "validation": ROOT / "experiments" / "verifier" / "data" / "validation.jsonl",
     "synthetic": ROOT / "experiments" / "verifier" / "data" / "synthetic.jsonl",
+    # hand-written, fictional documents (groundedai-versions-v1): dev and validation halves
+    "versions-dev": ROOT / "evaluation" / "datasets" / "groundedai-versions-v1" / "claims.jsonl",
+    "versions-validation": ROOT
+    / "evaluation"
+    / "datasets"
+    / "groundedai-versions-v1"
+    / "claims.jsonl",
 }
+SPLIT_FILTER = {"versions-dev": "dev", "versions-validation": "validation"}
 
 
 def build(method: str):
@@ -74,6 +82,8 @@ def main() -> int:
         report["results"][method] = {"load_seconds": load_seconds, "size_mb": model_size_mb(method)}
         for name in args.sets.split(","):
             rows = load(SETS[name])
+            if name in SPLIT_FILTER:
+                rows = [row for row in rows if row.get("split") == SPLIT_FILTER[name]]
             scores, predicted = evaluate(verifier, rows)
             report["results"][method][name] = scores
             report["predictions"].setdefault(name, {})[method] = predicted

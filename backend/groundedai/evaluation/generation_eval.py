@@ -77,6 +77,7 @@ PIPELINE_SETTINGS: tuple[str, ...] = (
     "unverified_answers",
     "max_question_chars",
     "claim_check",
+    "claim_detail_check",
 )
 # Read by `groundedai eval generation` to build the index, embedder, reranker and model, and to
 # choose the prompt and checks (environment variables, .env or defaults; some also options).
@@ -96,6 +97,7 @@ INDEX_AND_MODEL_SETTINGS: tuple[str, ...] = (
     "conflict_check",
     "generation_provider",
     "extractive_matching",
+    "extractive_relevance",
     "ollama_model",
     "hf_generation_model",
     "generation_timeout_s",
@@ -210,7 +212,9 @@ def run_generation_eval(
     checkpoint: Path | None = None,
     run_config: dict[str, Any] | None = None,
     prompt_version: PromptVersion = DEFAULT_PROMPT_VERSION,
-    conflict_check: Literal["figures-v1", "disagreement-v1", "disagreement-v2"] = "disagreement-v1",
+    conflict_check: Literal[
+        "figures-v1", "disagreement-v1", "disagreement-v2", "disagreement-v3"
+    ] = "disagreement-v1",
     pipeline_settings: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Evaluate answers on every dataset question.

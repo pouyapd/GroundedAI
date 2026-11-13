@@ -65,7 +65,7 @@ Revised 2026-10-19 (still ``disagreement-v2``, after errors on the development s
 from __future__ import annotations
 
 import re
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field, replace
 from typing import Literal
 
@@ -81,9 +81,10 @@ from groundedai.generation.claims import (
 from groundedai.generation.context import SourceBlock
 from groundedai.generation.equivalents import rewrite_phrases
 from groundedai.generation.safety import detect_injection
+from groundedai.generation.versions import Edition
 
-DisagreementKind = Literal["conflict", "different_dates"]
-DisagreementVersion = Literal["disagreement-v1", "disagreement-v2"]
+DisagreementKind = Literal["conflict", "different_dates", "different_versions"]
+DisagreementVersion = Literal["disagreement-v1", "disagreement-v2", "disagreement-v3"]
 MIN_FOCUS_WORDS = 2
 MAX_REPORTED = 3
 
@@ -243,6 +244,9 @@ class Statement:
     ranges: tuple[Range, ...] = ()
     validity_dates: tuple[str, ...] = ()
     revision_dates: tuple[str, ...] = ()
+    # disagreement-v3 only
+    modal: str | None = None  # SHALL, SHOULD NOT, MAY, ...
+    edition: str | None = None  # the document's edition, for different_versions
 
     def value_texts(self) -> list[str]:
         if not self.ranges:
@@ -255,6 +259,8 @@ class Statement:
         """What the statement says about the asked property, for the explanation."""
         if self.values:
             return ", ".join(self.value_texts())
+        if self.modal:
+            return f'"{self.modal}"'
         if self.denies:
             return "there is no such requirement"
         return "it is required"  # a statement without a value either denies or affirms
@@ -274,6 +280,7 @@ class Disagreement:
     first: Statement
     second: Statement
     show_dates: bool = False  # disagreement-v2: name each side's dates in a conflict
+    reason: str | None = None  # disagreement-v3, different_versions: "values" or "requirement"
 
     @property
     def labels(self) -> tuple[str, str]:
@@ -287,6 +294,16 @@ class Disagreement:
         return side
 
     def explanation(self) -> str:
+        if self.kind == "different_versions":
+            a, b = self.first, self.second
+            what = "requirements" if self.reason == "requirement" else "values"
+            return (
+                f"Sources {a.label} and {b.label} come from two versions of the same document "
+                f"({a.document_title}: {a.edition or 'no edition given'}; {b.document_title}: "
+                f"{b.edition or 'no edition given'}) and state different {what}: "
+                f"{a.label} says {a.stance()}, {b.label} says {b.stance()}. GroundedAI does not "
+                "decide which version applies; check both documents."
+            )
         if self.kind == "different_dates":
             dates = "; ".join(
                 f"{s.label}: {', '.join(s.dates) or 'no date given'}"
@@ -305,6 +322,12 @@ class Disagreement:
     def note(self) -> str:
         """Short instruction for the answer-v2 prompt (passed as an application note)."""
         a, b = self.labels
+        if self.kind == "different_versions":
+            return (
+                f"Application note: sources [{a}] and [{b}] are two versions of the same document "
+                "and state different things. If both answer the question, report what each "
+                "version says, name the version, and cite both sources."
+            )
         if self.kind == "different_dates":
             return (
                 f"Application note: sources [{a}] and [{b}] state different values for different "
@@ -653,6 +676,7 @@ def find_disagreements(
     question: str,
     sources: Sequence[SourceBlock],
     version: DisagreementVersion = "disagreement-v1",
+    editions: Mapping[str, Edition] | None = None,
 ) -> list[Disagreement]:
     """Pairs of passages from different documents that disagree about what is asked.
 
@@ -661,6 +685,10 @@ def find_disagreements(
     was paired with another organisation's prices); otherwise ``disagreement-v1`` reproduces the
     earlier results.
     """
+    if version == "disagreement-v3":
+        from groundedai.generation.disagreement_v3 import find_disagreements_v3
+
+        return find_disagreements_v3(question, sources, editions)
     v2 = version == "disagreement-v2"
     focus = asked_words(question, claim_key_v2 if v2 else claim_stem)
     if not focus:
