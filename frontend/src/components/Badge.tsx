@@ -126,7 +126,7 @@ export function ClaimStatusBadge({ status }: { status: ClaimStatus }) {
     case "partial":
       return <Badge tone="warning">Partial lexical match</Badge>;
     default:
-      return <Badge tone="critical">No statements matched retrieved text</Badge>;
+      return <Badge tone="critical">No lexical match in retrieved passages</Badge>;
   }
 }
 
