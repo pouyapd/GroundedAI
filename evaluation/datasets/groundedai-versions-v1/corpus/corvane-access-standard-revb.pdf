@@ -1,0 +1,140 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Title (Corvane Systems - Access Control Standard CS-AC-01 \(Revision B\)) /Producer (GroundedAI fixture writer) >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 404 >>
+stream
+BT
+/F1 10 Tf
+13 TL
+50 752 Td
+(CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01) Tj T*
+(Revision B. Approved March 2024.) Tj T*
+() Tj T*
+(1 Scope) Tj T*
+(This standard applies to every system operated by Corvane Systems. It defines two assurance) Tj T*
+(levels: AL1 for internal tools and AL2 for systems that hold customer data. It replaces) Tj T*
+(Revision A of November 2018.) Tj T*
+(Page 1) Tj T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 350 >>
+stream
+BT
+/F1 10 Tf
+13 TL
+50 752 Td
+(CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01) Tj T*
+(Revision B. Approved March 2024.) Tj T*
+() Tj T*
+(2 Passwords) Tj T*
+(Passwords SHALL be at least 14 characters long.) Tj T*
+(Accounts SHALL be locked after 5 failed sign-in attempts.) Tj T*
+(Passwords SHALL NOT be stored in plain text.) Tj T*
+(Page 2) Tj T*
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 443 >>
+stream
+BT
+/F1 10 Tf
+13 TL
+50 752 Td
+(CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01) Tj T*
+(Revision B. Approved March 2024.) Tj T*
+() Tj T*
+(3 Sessions) Tj T*
+(At AL1, the inactivity timeout SHALL be no more than 4 hours.) Tj T*
+(At AL2, reauthentication SHALL occur after 1 hour of inactivity.) Tj T*
+(At AL2, the overall session timeout SHALL be no more than 12 hours, after which) Tj T*
+(reauthentication is required.) Tj T*
+(Page 3) Tj T*
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 292 >>
+stream
+BT
+/F1 10 Tf
+13 TL
+50 752 Td
+(CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01) Tj T*
+(Revision B. Approved March 2024.) Tj T*
+() Tj T*
+(4 Administrators) Tj T*
+(Administrators SHALL NOT share accounts.) Tj T*
+(Administrator access SHALL be reviewed every 6 months.) Tj T*
+(Page 4) Tj T*
+ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 296 >>
+stream
+BT
+/F1 10 Tf
+13 TL
+50 752 Td
+(CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01) Tj T*
+(Revision B. Approved March 2024.) Tj T*
+() Tj T*
+(5 Exceptions) Tj T*
+(Exceptions to this standard need written approval from the security officer and expire after 12) Tj T*
+(months.) Tj T*
+(Page 5) Tj T*
+ET
+endstream
+endobj
+xref
+0 15
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000147 00000 n 
+0000000244 00000 n 
+0000000378 00000 n 
+0000000504 00000 n 
+0000000959 00000 n 
+0000001085 00000 n 
+0000001486 00000 n 
+0000001613 00000 n 
+0000002108 00000 n 
+0000002236 00000 n 
+0000002580 00000 n 
+0000002708 00000 n 
+trailer
+<< /Size 15 /Root 1 0 R /Info 4 0 R >>
+startxref
+3056
+%%EOF

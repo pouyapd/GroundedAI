@@ -1,0 +1,89 @@
+{
+  "name": "groundedai-versions-v1",
+  "version": "1.0.0",
+  "license": "MIT (same as the repository). The documents are fictional; the two example PDFs are the repository's own samples.",
+  "description": "Development and validation cases for the version-aware disagreement check, the extractive relevance gate and claim checking: four pairs of fictional document editions whose values, requirement wording (SHALL / SHOULD / MAY) or terminology differ, plus two unrelated documents. Split by document family: Kestrel and Northgate are 'dev' (used while building the checks), Ashby and Corvane are 'validation' (scored once the checks were fixed). Written before the checks; never the test set.",
+  "created": "2026-11-13",
+  "documents": [
+    {
+      "key": "kestrel-2019",
+      "file": "corpus/kestrel-water-standards-2019.pdf",
+      "title": "Kestrel Valley Water - Customer Service Standards (Edition 2019)",
+      "sha256": "6a163d89aaecfd56996778fabc587796b0494af7db4e9790956881eaa30156d1",
+      "split": "validation",
+      "description": "fictional; question split: dev"
+    },
+    {
+      "key": "kestrel-2024",
+      "file": "corpus/kestrel-water-standards-2024.pdf",
+      "title": "Kestrel Valley Water - Customer Service Standards (Edition 2024)",
+      "sha256": "af517645e6acf3ac7282280f61131e5fa1c75b5b6895ed12ebd755d66eee4022",
+      "split": "validation",
+      "description": "fictional; question split: dev"
+    },
+    {
+      "key": "northgate-v2",
+      "file": "corpus/northgate-lending-rules-v2.pdf",
+      "title": "Northgate Library - Lending Rules (Version 2.0)",
+      "sha256": "471f86fa0893025ead766457aa6224de4bf15ecf5b5e5293c99e5fcd09895075",
+      "split": "validation",
+      "description": "fictional; question split: dev"
+    },
+    {
+      "key": "northgate-v3",
+      "file": "corpus/northgate-lending-rules-v3.pdf",
+      "title": "Northgate Library - Lending Rules (Version 3.0)",
+      "sha256": "f51b752785f8e1445ba03a3393984a67e6e8d86e0b8227f15353792cb06aac53",
+      "split": "validation",
+      "description": "fictional; question split: dev"
+    },
+    {
+      "key": "ashby-2021",
+      "file": "corpus/ashby-parking-permits-2021.pdf",
+      "title": "Ashby Council - Residents' Parking Permit Scheme (2021)",
+      "sha256": "4250ffd87cc2db0bf3feb6822e108984015deea6fe32f1709fd88a0d2dcc418f",
+      "split": "validation",
+      "description": "fictional; question split: validation"
+    },
+    {
+      "key": "ashby-2023",
+      "file": "corpus/ashby-parking-permits-2023.pdf",
+      "title": "Ashby Council - Residents' Parking Permit Scheme (2023)",
+      "sha256": "87ec2d1731b327c51254cb1b17c4511144c7ad701b9bb0775510e5959bb51d15",
+      "split": "validation",
+      "description": "fictional; question split: validation"
+    },
+    {
+      "key": "corvane-a",
+      "file": "corpus/corvane-access-standard-reva.pdf",
+      "title": "Corvane Systems - Access Control Standard CS-AC-01 (Revision A)",
+      "sha256": "b22ef71142673019e9cbcbf7cf7729eede7b0f455361b049f09cad49b99a4603",
+      "split": "validation",
+      "description": "fictional; question split: validation"
+    },
+    {
+      "key": "corvane-b",
+      "file": "corpus/corvane-access-standard-revb.pdf",
+      "title": "Corvane Systems - Access Control Standard CS-AC-01 (Revision B)",
+      "sha256": "af82140cfd32a50c684dfbe101d687a0d99463490d6af4789a7a2c5c07dc2777",
+      "split": "validation",
+      "description": "fictional; question split: validation"
+    },
+    {
+      "key": "harbourline",
+      "file": "corpus/harbourline-ferry-guide.pdf",
+      "title": "Harbourline Ferries Passenger Guide",
+      "sha256": "bf26755860f9d7d81f208c51ab145aad3b1e80aca90ce17c2ea7124a5f0a1416",
+      "split": "validation",
+      "description": "fictional; question split: both"
+    },
+    {
+      "key": "orchard",
+      "file": "corpus/orchard-library-rules.pdf",
+      "title": "Orchard Lane Library Card Rules",
+      "sha256": "44268f81f2bbd713cfdf7e94e98dfc62f2ab65a501d1ce08b2922c52cd9de4e1",
+      "split": "validation",
+      "description": "fictional; question split: both"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01
+Revision B. Approved March 2024.
+
+1 Scope
+This standard applies to every system operated by Corvane Systems. It defines two assurance levels: AL1 for internal tools and AL2 for systems that hold customer data. It replaces Revision A of November 2018.
+Page 1
+\f
+CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01
+Revision B. Approved March 2024.
+
+2 Passwords
+Passwords SHALL be at least 14 characters long.
+Accounts SHALL be locked after 5 failed sign-in attempts.
+Passwords SHALL NOT be stored in plain text.
+Page 2
+\f
+CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01
+Revision B. Approved March 2024.
+
+3 Sessions
+At AL1, the inactivity timeout SHALL be no more than 4 hours.
+At AL2, reauthentication SHALL occur after 1 hour of inactivity.
+At AL2, the overall session timeout SHALL be no more than 12 hours, after which reauthentication is required.
+Page 3
+\f
+CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01
+Revision B. Approved March 2024.
+
+4 Administrators
+Administrators SHALL NOT share accounts.
+Administrator access SHALL be reviewed every 6 months.
+Page 4
+\f
+CORVANE SYSTEMS - ACCESS CONTROL STANDARD CS-AC-01
+Revision B. Approved March 2024.
+
+5 Exceptions
+Exceptions to this standard need written approval from the security officer and expire after 12 months.
+Page 5
