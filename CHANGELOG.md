@@ -2,6 +2,33 @@
 
 ## Unreleased
 
+### Real-document evaluation and experiments (November 2026)
+
+Full write-up: `docs/RESEARCH_EVALUATION.md`. The defaults and the public demo are unchanged.
+
+- **Fixed:** facts written before an `INSUFFICIENT_EVIDENCE` marker were treated as part of a
+  refusal and never checked; they are now checked and shown as a partial answer, with a warning.
+- **Fixed:** the chunk viewer showed only the first 50 chunks of a document; it now pages
+  ("Show more chunks").
+- **Added (opt-in):** `GROUNDEDAI_TEXT_CLEANUP=v2` removes repeated page headers and footers,
+  joins words hyphenated at line ends and expands ligatures in PDF text;
+  `GROUNDEDAI_EXTRACTIVE_MATCHING=prefix` lets the extractive generator match other forms of the
+  question's words.
+- **Added:** real-PDF datasets on NIST publications (`groundedai-nist-v1`, 53 test questions;
+  `groundedai-nist-val-v1`, validation; `groundedai-claims-nist-v1`, 108 hand-written claims),
+  `scripts/fetch_nist_corpus.py` (PDFs are downloaded and hash-checked, not committed), and an
+  end-to-end evaluation (`groundedai.evaluation.rag_eval`, `scripts/rag_eval.py`): retrieval,
+  correctness, abstention, citations, quotes, pages, conflicts and time, reported separately.
+- **Added:** `experiments/` (not used by the application): embedding fine-tuning, a claim
+  verifier (rule-based, pretrained NLI, fine-tuned), an answer-level check, ONNX export and int8
+  quantization, and the data and code for a LoRA run that was not completed.
+- **Measured:** reports in `evaluation/reports/research-2026-11/`. The clean-up and matching
+  settings raised correct extractive answers on the test set from .600 to .725; fine-tuned
+  embeddings and the fine-tuned verifier showed no reliable gain; a pretrained NLI model
+  verified hand-written claims much better than the lexical check (macro-F1 .723 against .409).
+
+### Earlier
+
 - `scripts/record_demo_preview.py`: an animated preview recorded from the live demo (real
   screenshots of a real answer); `scripts/make_social_preview.py`: the repository's social
   preview image from two real fragments of a live answer.

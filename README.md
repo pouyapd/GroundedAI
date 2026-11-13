@@ -49,8 +49,9 @@ Everything runs on a laptop CPU, with no paid service or cloud API, and the
 <p align="center"><sub>Recorded from the live demo in a browser (extractive generator, sample PDF): select a
 document, ask, and every statement comes back with its status, quoted sentence and page.</sub></p>
 
-This is a portfolio and research project, evaluated on small synthetic datasets. It has not
-been independently validated, and its checks are rule-based ([Limitations](#limitations)).
+This is a portfolio and research project, evaluated on small synthetic datasets and on one small
+set of real PDFs. It has not been independently validated, and its checks are rule-based
+([Limitations](#limitations)).
 
 **Built with:** Python 3.12, FastAPI, LangChain, SQLAlchemy + Alembic, SQLite FTS5 or
 PostgreSQL + pgvector, sentence-transformers, Ollama, React 19 + TypeScript (Vite), pytest,
@@ -167,10 +168,14 @@ Each challenge in more detail: [docs/EVALUATION.md](docs/EVALUATION.md#engineeri
 
 ## Results
 
-All datasets were written for this project and describe fictional organisations. Expected
-behaviours and key facts were written by the project author; the reliability suite's labels
-were written and reviewed by models. The numbers come from small samples on one laptop and do
-not transfer to other domains.
+There are two groups of results: synthetic documents (below) and
+[real PDFs](#real-pdfs-november-2026). They use different documents and questions and are not
+combined.
+
+The synthetic datasets were written for this project and describe fictional organisations.
+Expected behaviours and key facts were written by the project author; the reliability suite's
+labels were written and reviewed by models. The numbers come from small samples on one laptop
+and do not transfer to other domains.
 
 The development set was used to develop the prompt. The 56-question evaluation set was run
 once, with the frozen prompt.
@@ -207,6 +212,49 @@ once, with the frozen prompt.
 Full tables and methodology: [docs/EVALUATION.md](docs/EVALUATION.md). Reproduce:
 [docs/EVALUATION.md#reproducing](docs/EVALUATION.md#reproducing).
 
+### Real PDFs (November 2026)
+
+Ten public NIST publications, split by document: three for testing (two versions of SP 800-63B
+and the AI Risk Management Framework), two for choosing settings, five for training data. The
+53 test questions and the 108 test claims were written by hand before any run; settings were
+chosen on the validation documents and each configuration was run once on the test set. One
+laptop CPU, no GPU, no paid service. Differences are given with paired bootstrap 95% intervals;
+with 40 answerable questions, one question is 2.5 points.
+
+**End-to-end answers** (53 questions, 40 answerable):
+
+| | Extractive generator | qwen2.5:1.5b (Ollama) |
+|---|---|---|
+| Recall@5 / MRR@10 of the evidence pages, defaults | .807 / .753 | same retrieval |
+| Correct answers, defaults | .600 | .750 |
+| Correct answers, with `TEXT_CLEANUP=v2` and `EXTRACTIVE_MATCHING=prefix` | .725 (+.125, CI +.025 to +.250) | .775 (+.025, CI -.100 to +.150) |
+| Recall@5 / MRR@10 with those settings | .864 / .792 (+.057, CI .000 to +.136 / +.038, CI -.003 to +.094) | same retrieval |
+| Should refuse (6): refused, defaults | 2 | 6 |
+| Answers without a valid source label, defaults | 0 of 46 | 28 of 45 |
+| Quotes verbatim and on the right page | all | all |
+| Version conflicts reported (4) | 0 | 0 |
+| Median time per question | 0.1 s | 22 s |
+
+**Experiments** (details, tables and limits in
+[docs/RESEARCH_EVALUATION.md](docs/RESEARCH_EVALUATION.md)):
+
+| Experiment | Result on the test set |
+|---|---|
+| A. PDF text clean-up and word-form matching (opt-in settings) | More correct extractive answers (.600 to .725; the interval excludes zero). Retrieval gain small, interval touches zero. No clear change for the language model. |
+| B. Fine-tuned embeddings (bge-small, 242 model-written training questions) | No measurable gain: hybrid Recall@5 -.011 (CI -.080 to +.057) against the base model; dense +.057 (CI -.045 to +.170). |
+| C. LoRA fine-tuning of a small answer model | **Not completed** (CPU time). Data, code and commands are in the repository; there are no results. |
+| D. Claim verifier on 108 hand-written claims (macro-F1, four labels) | Lexical check .409; pretrained NLI model (zero-shot) .723; the same model fine-tuned on rule-made pairs .740 (difference +.016, CI -.081 to +.120: not reliable). |
+| D on whole answers | For the language model, the NLI check flagged 7 and 5 of 9 wrong answers (lexical check: 4 and 1) and 6 and 5 of about 30 correct ones (lexical: 2 and 5). For the extractive generator it flags no more than the lexical check: those wrong answers are real sentences that do not answer the question. |
+| Deployment of the verifier | ONNX int8: 83 MB (PyTorch 270 MB), 17-19 ms per claim on the CPU (PyTorch 59-60 ms); 4 and 9 of 108 labels change. Not tested in a browser. |
+
+- The lexical claim check cannot tell a contradiction from a missing fact (F1 0 for
+  "contradicted"), and a wrong answer made of real sentences is shown as "Every statement
+  found". The NLI verifier is an experiment; it is **not** part of the application.
+- The live demo was tested with three of these PDFs
+  ([results](docs/RESEARCH_EVALUATION.md#live-demo-test)); two bugs found in this round are
+  fixed.
+- The new settings are opt-in; the defaults and the public demo are unchanged.
+
 ## Limitations
 
 - **The claim check is lexical, not an entailment model.** A "found" statement can still be
@@ -219,7 +267,11 @@ Full tables and methodology: [docs/EVALUATION.md](docs/EVALUATION.md). Reproduce
 - **The disagreement check is pattern-based.** It misses conflicts that need world knowledge,
   can pair statements about different groups when a sentence doesn't name its group, and
   never decides which source is right.
-- **The evaluation data is synthetic, small and lexically easy.** GroundedAI does not
+- **Version conflicts between real documents were not detected** (0 of 4 test questions on the
+  2017 and 2025 versions of one NIST publication); the cause is described in
+  [docs/RESEARCH_EVALUATION.md](docs/RESEARCH_EVALUATION.md#limitations).
+- **The evaluation data is small.** The synthetic sets are lexically easy; the real-PDF set has
+  53 questions on three documents of one publisher, labelled by one person. GroundedAI does not
   eliminate hallucinations or guarantee that an answer is correct.
 - **No OCR, tables or images;** text processing is English-focused. A quote's page is the
   page on which it starts.
@@ -314,7 +366,11 @@ python scripts/e2e_demo.py         # the online demo in a browser (see docs/ONLI
 The default suite is offline: SQLite, deterministic providers and a fake Ollama HTTP server.
 No model, key or network is needed.
 
-- **Latest local run (2026-10-19):**
+- **Local run of 2026-11-13** (real-document evaluation round): backend 504 tests passed
+  (the 7 PostgreSQL tests were not run this time); strict mypy and ruff clean; front end 82 tests
+  passed, lint, type check and both builds clean; online demo built from the same code: 16 of 16
+  browser checks; the offline retrieval benchmark gives the same results as before the changes.
+- **Earlier full run (2026-10-19):**
   - backend: 487 tests passed, plus 7 PostgreSQL tests run separately against a local
     PostgreSQL + pgvector; strict mypy and ruff clean;
   - front end: 81 tests passed;
@@ -349,6 +405,7 @@ frontend/             React 19 + TypeScript UI (src/) and static-demo data (publ
 evaluation/           datasets/ · configs/ · reports/ · reviews/
 examples/             two small sample PDFs with known content
 scripts/              journey and browser checks, evaluation helpers, model download
+experiments/          optional research code (fine-tuning, claim verifier, ONNX); not used by the app
 docs/                 architecture, API, evaluation, security, deployment, testing
 ```
 

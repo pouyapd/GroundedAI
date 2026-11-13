@@ -39,6 +39,23 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## Real-document evaluation round (2026-11-13; mains power)
+
+| Check | Covers | Result |
+|---|---|---|
+| `ruff check`, `ruff format --check` (backend, tests, scripts, tools, experiments), strict `mypy` | style, types | clean |
+| `pytest` (default suite) | unit, integration, API, e2e | 504 passed, 7 skipped (PostgreSQL tests, not run this round) |
+| `npm run lint`, `npm run typecheck`, `npm test` | front end | clean; 82 passed |
+| `npm run build`, `npm run build:browser` | production and online-demo builds | both succeed |
+| `python scripts/e2e_demo.py` (local build of the online demo) | the application running in a browser | 16 of 16 |
+| `groundedai eval retrieval --config evaluation/configs/retrieval_offline.json`, on this code and on `main` | default retrieval unchanged | identical results (apart from times) |
+
+New tests in this round: a partial answer before an abstention marker (unit and integration),
+refusal sentences before the marker stay refusals, PDF text clean-up (6), prefix matching in the
+extractive generator (2), the end-to-end evaluation module, and chunk paging in the front end.
+No test was removed or relaxed. The live demo was tested by hand-written script on 2026-11-09
+([RESEARCH_EVALUATION.md](RESEARCH_EVALUATION.md#live-demo-test)); it runs the code on `main`.
+
 ## Online demo and release (2026-10-19, evening; mains power)
 
 | Check | Kind | Result |
