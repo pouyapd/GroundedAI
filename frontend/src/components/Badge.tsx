@@ -68,11 +68,11 @@ export function AnswerStatusBadge({ status, grounding }: { status: AnswerStatus;
 export function VerdictBadge({ verdict }: { verdict: Verdict }) {
   switch (verdict) {
     case "verified":
-      return <Badge tone="good">Every statement found in the sources</Badge>;
+      return <Badge tone="good">All statements matched retrieved text</Badge>;
     case "partially_verified":
-      return <Badge tone="warning">Some statements not found in the sources</Badge>;
+      return <Badge tone="warning">Some statements did not match retrieved text</Badge>;
     case "unverified":
-      return <Badge tone="critical">Not found in the sources</Badge>;
+      return <Badge tone="critical">No statements matched retrieved text</Badge>;
     default:
       return <Badge tone="neutral">No statements to check</Badge>;
   }
@@ -126,7 +126,7 @@ export function ClaimStatusBadge({ status }: { status: ClaimStatus }) {
     case "partial":
       return <Badge tone="warning">Partly found</Badge>;
     default:
-      return <Badge tone="critical">Not found in the sources</Badge>;
+      return <Badge tone="critical">No statements matched retrieved text</Badge>;
   }
 }
 
