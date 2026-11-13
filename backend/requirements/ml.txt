@@ -34,7 +34,7 @@ distro==1.9.0
     # via langsmith
 fastapi==0.143.0
     # via groundedai (backend/pyproject.toml)
-filelock==4.1.1
+filelock==4.2.10
     # via
     #   huggingface-hub
     #   torch
@@ -185,7 +185,7 @@ scipy==1.18.1
     #   sentence-transformers
 sentence-transformers==6.1.0
     # via groundedai (backend/pyproject.toml)
-setuptools==84.0.0
+setuptools==84.2.1
     # via torch
 shellingham==1.5.4
     # via typer
