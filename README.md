@@ -56,10 +56,7 @@ account; nothing you type or upload leaves the browser tab.
 - **The real backend, in your browser.** GroundedAI's Python code runs as WebAssembly
   (Pyodide): upload checks, PDF extraction, hybrid retrieval, the prompt and the claim check.
   Two synthetic sample PDFs are loaded, with example questions; you can also upload a PDF.
-- **Two generators.** The default extractive generator answers instantly and is not a language
-  model. Optionally, Qwen2.5-1.5B-Instruct runs on your GPU (WebGPU, about 880 MB downloaded
-  once); its answers go through the same claim check, which flags, for example, a citation
-  the model invented ([screenshot](docs/images/demo-llm-answer-card.png)).
+- **Two answer generators.** The extractive option selects sentences from retrieved passages using lexical word matching. It is deterministic, instant and is not an LLM. The optional Qwen2.5-1.5B-Instruct model generates answers in the browser through WebLLM and WebGPU (about 880 MB downloaded once, then cached). Both use the same retrieval pipeline and lexical claim check. Qwen can handle more flexible phrasing, but it can still produce incorrect or irrelevant answers ([example](docs/images/demo-llm-answer-card.png)).
 - **Limits.** The first load takes about 15–60 s (about 26 MB, then cached). The demo uses a hashing embedder based on word overlap, not semantic meaning; browser data stays in the tab, and evaluation runs are unavailable. The browser's 4-bit Qwen build differs from the Ollama build used in the experiments, so outputs and timings are not directly comparable. Details:
   [docs/ONLINE_DEMO.md](docs/ONLINE_DEMO.md).
 
