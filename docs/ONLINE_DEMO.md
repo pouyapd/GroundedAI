@@ -51,6 +51,11 @@ flowchart LR
 | First load | about 15–40 s (Python runtime, ~30 MB, cached afterwards) | instant |
 | Model download | about 880 MB once, then cached by the browser | `ollama pull` |
 
+**Checked on the live site again (2026-11-13, after the research round):** 16 of 16 checks, and
+19 of 19 with the in-page model; 22 questions on three real NIST PDFs, every quote shown found
+verbatim on the page given, and a blocked model download handled (message, extractive generator
+still working, retry). Details: [RESEARCH_EVALUATION.md](RESEARCH_EVALUATION.md#live-demo-after-deployment-2026-11-13).
+
 **Checked on the live site (2026-10-20, Chrome with WebGPU on an Intel Iris Xe laptop):** the
 model downloaded and loaded (about 27 minutes on a 0.2–0.4 MB/s connection, with one resumed
 download; 30 s on later visits, from the browser cache), answered the ticket question in 8–25 s,

@@ -39,6 +39,21 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## After merging the research round (2026-11-13; `main` at `b3583ab`; mains power)
+
+| Check | Where | Result |
+|---|---|---|
+| CI on `main` (run 43461690313), 8 jobs | GitHub Actions | all pass: backend on Python 3.12 and 3.13 (516 passed, 7 skipped each: the PostgreSQL tests, run in their own job), PostgreSQL + pgvector (7 passed), front end (lint, type check, 82 tests, both builds), online demo in a browser (16 of 16), offline benchmark, dependency audit (pip-audit on all three locks and npm audit: no known vulnerabilities), Docker image and Compose file |
+| Pages run 43461690251 | GitHub Actions | built, checked (16 of 16), deployed, deployed URL checked (16 of 16) |
+| `pytest -m postgres` with `scripts/dev_postgres.py` | local | 7 passed |
+| `scripts/e2e_browser.py` (the full application in Chromium) | local | 24 of 24 with the extractive generator; 24 of 24 with qwen2.5:1.5b through Ollama |
+| `scripts/e2e_demo.py --url https://pouyapd.github.io/GroundedAI/` | live site | 16 of 16; with the in-page model (`--llm`, Chrome, WebGPU): 19 of 19 |
+| The 22 live-test questions, the quote check, crafted replies, a blocked model download | live site | [RESEARCH_EVALUATION.md](RESEARCH_EVALUATION.md#live-demo-after-deployment-2026-11-13) |
+
+On this laptop the front-end suite sometimes times out (a few tests exceed 5 s when the machine
+is busy); the same happens on `main` before this round, and CI passes. No test was removed,
+skipped or relaxed in this round.
+
 ## Real-document evaluation round (2026-11-13; mains power)
 
 | Check | Covers | Result |

@@ -8,7 +8,7 @@
   <img alt="Python 3.12 and 3.13" src="https://img.shields.io/badge/python-3.12%20%7C%203.13-3776ab">
   <img alt="FastAPI, LangChain, React" src="https://img.shields.io/badge/FastAPI%20%C2%B7%20LangChain%20%C2%B7%20React-bf3989">
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-2ea043"></a>
-  <img alt="Scope: local CPU, synthetic evaluation data" src="https://img.shields.io/badge/scope-local%20CPU%20%C2%B7%20synthetic%20eval%20data-6e7681">
+  <img alt="Scope: local CPU, synthetic and real-PDF evaluation" src="https://img.shields.io/badge/scope-local%20CPU%20%C2%B7%20synthetic%20%2B%20real--PDF%20eval-6e7681">
 </p>
 
 <p align="center">
@@ -18,6 +18,7 @@
 <p align="center">
   <a href="#live-demo">Live demo</a> ·
   <a href="#what-it-does">What it does</a> ·
+  <a href="#how-a-question-is-answered">Pipeline</a> ·
   <a href="#engineering-challenges">Engineering challenges</a> ·
   <a href="#results">Results</a> ·
   <a href="#limitations">Limitations</a> ·
@@ -153,6 +154,23 @@ The [live demo](docs/ONLINE_DEMO.md) runs this same application in the browser: 
 its requests to a Web Worker running the Python package in Pyodide instead of a server, and the
 optional model runs on the visitor's GPU with WebLLM.
 
+## How a question is answered
+
+| Stage | What happens | Measured (see [Results](#results)) |
+|---|---|---|
+| **Upload** | Type, size (10 MB), file header and encoding are checked; unreadable or scanned PDFs are refused with a reason. | Damaged, scanned, empty and oversized files refused on the live demo. |
+| **Text extraction** | pypdf extracts each page's text. Text clean-up `v2` (default) expands ligatures, joins words hyphenated at line ends, and removes running headers, footers and page numbers that repeat at page edges. Each page keeps its own text, so page numbers do not move. | On 10 NIST PDFs only layout text was removed (one repeated table header too); all quotes stayed verbatim and on the right page. |
+| **Chunking** | LangChain's recursive splitter, 800 characters with 120 overlap; every chunk records its first and last page and the page breaks inside it. | 400 and 1,200 characters were tested; 800 kept. |
+| **Indexing and retrieval** | BM25 (SQLite FTS5, Porter stemming) and vector search (hashing embedder by default, or sentence-transformers), fused with Reciprocal Rank Fusion (k = 60); top 5 passages, optional cross-encoder reranking; PostgreSQL + pgvector as an alternative store. | Recall@5 of the evidence page .864 on the real-PDF test set. A reranker reached 1.0 on validation but was 25 to 140 times slower. |
+| **Before generation** | Passages that state different values for the same thing are paired (disagreement check); instruction-like text in a passage is flagged and passed as data. | Synthetic held-out set: 12 of 16 disagreements found, 0 false alarms. Real version conflicts: 0 of 4 found. |
+| **Generation** | A versioned LangChain prompt with numbered passages `[S1]`...; the model must cite or reply `INSUFFICIENT_EVIDENCE`. Generators: extractive (default, no model; copies the best-matching sentences, also matching other word forms), a local model through Ollama, transformers, or Qwen2.5-1.5B in the browser (WebLLM). | Correct answers on the real-PDF test set: extractive .725, qwen2.5:1.5b .775. |
+| **After generation** | Citation labels are checked against the passages actually given; every statement is matched to the passages (lexical claim check) and gets a status, the exact quote and its page; partial answers before a refusal marker are checked too. | Invented labels (such as `S2` when only `S1` was given) are flagged. The claim check found .93 to .96 of statements. |
+
+The claim check compares words and figures, not meaning: it cannot tell a contradiction from a
+missing fact. A pretrained NLI model does much better on hand-written claims (macro-F1 .72 against
+.41) and is evaluated in [`experiments/`](experiments/README.md), but it is not part of the
+application yet.
+
 ## Engineering challenges
 
 | Challenge | Engineering decision | Evidence |
@@ -225,12 +243,12 @@ with 40 answerable questions, one question is 2.5 points.
 
 | | Extractive generator | qwen2.5:1.5b (Ollama) |
 |---|---|---|
-| Recall@5 / MRR@10 of the evidence pages, defaults | .807 / .753 | same retrieval |
+| Recall@5 / MRR@10 of the evidence pages, old defaults | .807 / .753 | same retrieval |
 | Correct answers, old defaults (`TEXT_CLEANUP=v1`, `EXTRACTIVE_MATCHING=exact`) | .600 | .750 |
 | Correct answers, with `TEXT_CLEANUP=v2` and `EXTRACTIVE_MATCHING=prefix` (the new defaults) | .725 (+.125, CI +.025 to +.250) | .775 (+.025, CI -.100 to +.150) |
 | Recall@5 / MRR@10 with those settings | .864 / .792 (+.057, CI .000 to +.136 / +.038, CI -.003 to +.094) | same retrieval |
-| Should refuse (6): refused, defaults | 2 | 6 |
-| Answers without a valid source label, defaults | 0 of 46 | 28 of 45 |
+| Should refuse (6): refused, old defaults / new defaults | 2 / 1 | 6 / 5 |
+| Answers without a valid source label, old defaults | 0 of 46 | 28 of 45 |
 | Quotes verbatim and on the right page | all | all |
 | Version conflicts reported (4) | 0 | 0 |
 | Median time per question | 0.1 s | 22 s |
@@ -276,25 +294,36 @@ with 40 answerable questions, one question is 2.5 points.
 - **The evaluation data is small.** The synthetic sets are lexically easy; the real-PDF set has
   53 questions on three documents of one publisher, labelled by one person. GroundedAI does not
   eliminate hallucinations or guarantee that an answer is correct.
+- **The new defaults have known costs.** With word-form matching the extractive generator
+  answered one test question it should have refused (t38), and text clean-up drops a table
+  column header that repeats at the top of pages. Documents indexed before the change keep their
+  old text until they are re-ingested.
+- **Research results with limits.** The LoRA fine-tuning of the answer model was not completed
+  (no results). The NLI verifier was measured on a CPU, including an 83 MB int8 ONNX version,
+  but it has not been run in a browser and is not used by the application.
 - **No OCR, tables or images;** text processing is English-focused. A quote's page is the
   page on which it starts.
 
 ## Future work
 
-1. **Benchmark more local models under the same conditions**, for example Mistral 7B through
-   the existing Ollama provider. The datasets, settings, checks and scoring stay the same, so
-   the comparison is fair. The development-set errors point mostly at the model (refusals,
-   citation format, unstated conflicts).
-2. **Improve claim-level verification and citation quality**: off-topic true statements, rate
-   units, strict paraphrase handling and malformed citations. The method is error analysis on
-   development data, with changes confirmed on a new held-out set.
-3. **Improve conflict detection and refusals**: find conflicts stated in words rather than
-   figures, and reduce false refusals (2 of 19 on the development set) without answering
-   unanswerable questions (1 of 6 answered).
-4. **Expand regression tests** with the failure cases observed in model runs. Bug fixes already
-   come with regression tests ([CONTRIBUTING.md](CONTRIBUTING.md)).
-5. **Compare models on answer quality, verification coverage, latency and memory**, and
-   publish the results next to the qwen2.5:1.5b figures once they have been measured.
+Research directions, in order of expected value:
+
+1. **Detect conflicts between versions of a document.** No configuration found the 2017 against
+   2025 differences in SP 800-63B (0 of 4). The cause is known (the check needs two shared
+   question words, and treats terms such as "AAL2" as names); a fix needs its own validation
+   cases, so that the 4 test questions stay a test.
+2. **Use an entailment model as a second check.** A pretrained NLI model verified hand-written
+   claims far better than the lexical check (macro-F1 .723 against .409) and flagged more of the
+   language model's wrong answers. Next: run the 83 MB int8 ONNX model in the browser, check only
+   statements the lexical check passes, and measure speed and false alarms there.
+3. **Check relevance, not only support.** The extractive generator's wrong answers are real
+   sentences that do not answer the question; no support check can flag them. A
+   question-answer relevance score is the missing signal.
+4. **Run the prepared LoRA experiment** on a GPU (data, configuration and commands are in
+   [`experiments/`](experiments/README.md)), against the base model on the same test set.
+5. **A larger real-document benchmark** with several publishers, a second annotator and
+   agreement figures, and more local models (for example Mistral 7B through the existing Ollama
+   provider) under the same settings and scoring.
 
 ## Quick start
 
@@ -344,8 +373,10 @@ All settings use the `GROUNDEDAI_` prefix ([`.env.example`](.env.example) lists 
 | Setting | Default | Options |
 |---|---|---|
 | `GENERATION_PROVIDER` | `extractive-demo` | `ollama`, `huggingface-local` |
+| `EXTRACTIVE_MATCHING` | `prefix` (also other forms of a question word) | `exact` |
 | `OLLAMA_MODEL`, `OLLAMA_BASE_URL` | `qwen2.5:1.5b`, `http://localhost:11434` | any pulled model; a local or remote Ollama |
 | `EMBEDDING_PROVIDER` | `hashing` (word overlap, no model) | `sentence-transformers`, `ollama` |
+| `TEXT_CLEANUP` | `v2` (ligatures, line-break hyphens, running headers and page numbers) | `v1`: text as extracted (re-ingest after changing it) |
 | `RETRIEVAL_MODE`, `TOP_K` | `hybrid`, `5` | `lexical`, `dense`; 1 to 50 |
 | `CLAIM_CHECK` | `claims-v1` | `claims-v2` |
 | `CONFLICT_CHECK` | `disagreement-v1` | `disagreement-v2`, `figures-v1` |
@@ -369,10 +400,14 @@ python scripts/e2e_demo.py         # the online demo in a browser (see docs/ONLI
 The default suite is offline: SQLite, deterministic providers and a fake Ollama HTTP server.
 No model, key or network is needed.
 
-- **Local run of 2026-11-13** (real-document evaluation round): backend 504 tests passed
-  (the 7 PostgreSQL tests were not run this time); strict mypy and ruff clean; front end 82 tests
-  passed, lint, type check and both builds clean; online demo built from the same code: 16 of 16
-  browser checks; the offline retrieval benchmark gives the same results as before the changes.
+- **After the research round (2026-11-13, `main` at `b3583ab`):**
+  - CI, all 8 jobs: backend 516 passed on Python 3.12 and 3.13, PostgreSQL + pgvector 7 passed,
+    front end 82 passed with lint, type check and builds, the online demo in a browser 16 of 16,
+    offline benchmark, dependency audit (no known vulnerabilities), Docker image and Compose file;
+  - browser journey (local): 24 of 24 with the default generator and with qwen2.5:1.5b;
+  - live site: 16 of 16 browser checks, 19 of 19 with the in-page model, and every quote shown
+    on three real PDFs found verbatim on the page given
+    ([details](docs/RESEARCH_EVALUATION.md#live-demo-after-deployment-2026-11-13)).
 - **Earlier full run (2026-10-19):**
   - backend: 487 tests passed, plus 7 PostgreSQL tests run separately against a local
     PostgreSQL + pgvector; strict mypy and ruff clean;
