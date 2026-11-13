@@ -1,0 +1,619 @@
+{
+ "report": "a03-v2-prefix",
+ "dataset": {
+  "name": "groundedai-nist-val-v1",
+  "fingerprint": "377d90156fdcc888",
+  "questions": 18
+ },
+ "settings_overrides": {
+  "text_cleanup": "v2",
+  "extractive_matching": "prefix"
+ },
+ "nli_model": "cross-encoder/nli-deberta-v3-xsmall",
+ "premise": "passage",
+ "seconds": 35.6,
+ "skipped": {
+  "abstained_or_error": 3,
+  "not_scored": 0,
+  "passages_differ": 0
+ },
+ "lexical_all_found": {
+  "answers": 15,
+  "wrong_answers": 5,
+  "wrong_answers_flagged": 0,
+  "wrong_answers_passed": 5,
+  "correct_answers_flagged": 0,
+  "catch_rate": 0.0,
+  "false_alarm_rate": 0.0
+ },
+ "nli_all_entailed": {
+  "answers": 15,
+  "wrong_answers": 5,
+  "wrong_answers_flagged": 4,
+  "wrong_answers_passed": 1,
+  "correct_answers_flagged": 7,
+  "catch_rate": 0.8,
+  "false_alarm_rate": 0.7
+ },
+ "rows": [
+  {
+   "question_id": "v01",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "This publication is available free of charge from: https://doi.org/10.6028/NIST.AI.600-1.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "12 See also https://doi.org/10.6028/NIST.AI.100-4, to be published.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting through the Director of the National Institute of Standards and Technology (NIST), to develop a companion resource to the AI RMF, NIST AI 100\u20131, for generative AI.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "entailment",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v02",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden\u2019s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v03",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden\u2019s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Risks and Trustworthiness. https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF/Foundational_Information/3-sec-characteristics National Institute of Standards and Technology (2023) AI Risk Management Framework, Chapter 6: AI RMF Profiles. https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF/Core_And_Profiles/6-sec-profile National Institute of Standards and Technology (2023) AI Risk Management Framework, Appendix A: Descriptions of AI Actor Tasks. https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF/Appendices/Appendix_A#:~:text=AI%20actors% 20in%20this%20category,data%20providers%2C%20system%20funders%2C%20product.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "In addition to the suggested actions below, AI risk management activities and actions set forth in the AI RMF 1.0 and Playbook are already applicable for managing GAI risks.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v04",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 0,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "The foundation model subcategory of \u201cdual-use foundation models\u201d is defined by EO 14110 as \u201can AI model that is trained on broad data; generally uses self-supervision; contains at least tens of billions of parameters; is applicable across a wide range of contexts.\u201d 2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v05",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 1,
+   "nli_contradicted": 1,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "Confabulation \u201cConfabulation\u201d refers to a phenomenon in which GAI systems generate and confidently present erroneous or false content in response to prompts. potential confabulation, CBRN, or cyber risks.",
+     "lexical": "supported",
+     "nli": "contradiction",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "9 Confabulations of falsehoods are most commonly a problem for text-based outputs; for audio, image, or video content, creative generation of non-factual content can be a desired behavior.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v07",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "This work was informed by public feedback and consultations with diverse stakeholder groups as part of NIST\u2019s Generative AI Public Working Group (GAI PWG).",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "The focus of the GAI PWG was limited to four primary considerations relevant to GAI: Governance, Content Provenance, Pre-deployment Testing, and Incident Disclosure (further described in Appendix A).",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v08",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 0,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "Current estimates suggest that training a single transformer LLM can emit as much carbon as 300 roundtrip flights between San Francisco and New York.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v10",
+   "expected_behavior": "abstain",
+   "correct": false,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 0,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "This work was informed by public feedback and consultations with diverse stakeholder groups as part of NIST\u2019s Generative AI Public Working Group (GAI PWG).",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v11",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "We introduce four principles for explainable artificial intelligence (AI) that comprise fundamental properties for explainable AI systems.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Discussion and Conclusions We introduced four principles to encapsulate the fundamental elements for explainable AI systems.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Four Principles of Explainable AI We present four fundamental principles for explainable AI systems.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v12",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "NISTIR 8312.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "8312, 43 pages (September 2021) This publication is available free of charge from: https://doi.org/10.6028/NIST.IR.8312.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "contradiction",
+      "S4": "neutral",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v13",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "NISTIR 8312.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "8312, 43 pages (September 2021) This publication is available free of charge from: https://doi.org/10.6028/NIST.IR.8312.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v14",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 0,
+   "nli_contradicted": 1,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "These two principles do not require that an explanation correctly reflects a system\u2019s process for generating its output.",
+     "lexical": "supported",
+     "nli": "contradiction",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "However, for those AI systems that are intended or required to be explainable, we propose that those systems adhere to the following four principles: Explanation: A system delivers or contains accompanying evidence or reason(s) for outputs and/or processes. our four principles, commonalities include concepts which distinguish between the existence of an explanation, how meaningful it is, and how accurate or complete it is.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v16",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 1,
+   "nli_contradicted": 2,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "These four principles are that the system produce an explanation, that the explanation be meaningful to humans, that the explanation reflects the system\u2019s processes accurately, and that the system expresses its knowledge limits.",
+     "lexical": "supported",
+     "nli": "contradiction",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "1 Introduction 1 2 Four Principles of Explainable AI 2 2.1 Explanation 3 2.2 Meaningful 3 2.3 Explanation Accuracy 4 2.4 Knowledge Limits 5 2.5 Summary 5 3 Purposes and styles of explanations 6 4 Risk Management of Explainable AI 8 5 Overview of Principles in the Literature 10 6 Overview of Explainable AI Algorithms 12 6.1 Self-Interpretable Models 12 6.2 Post-Hoc Explanations 13 6.2.1 Local Explanations 13 6.2.2 Global Explanations 14 6.3 Adversarial Attacks on Explainability 15 7 Evaluating Explainable AI Algorithms 15 7.1 Evaluating Meaningfulness 15 7.2 Evaluating Explanation Accuracy 17 8 Humans as a Comparison Group for Explainable AI 18 8.1 Explanation 19 8.2 Meaningful 19 8.3 Explanation Accuracy 20 8.4 Knowledge Limits 20 9 Discussion and Conclusions 21.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "To our knowledge there is limited work on developing and evaluating algorithms\u2019 knowledge limits (Principle 4).",
+     "lexical": "supported",
+     "nli": "contradiction",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v17",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "In addition to explainability and interpretability, among other AI system characteristics proposed to support system trustworthiness are accuracy, privacy, reliability, robustness, safety, security (resilience), mitigation of harmful bias, transparency, fairness, and accountability.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "We introduce four principles for explainable artificial intelligence (AI) that comprise fundamental properties for explainable AI systems.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "However, for those AI systems that are intended or required to be explainable, we propose that those systems adhere to the following four principles: Explanation: A system delivers or contains accompanying evidence or reason(s) for outputs and/or processes.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v18",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden\u2019s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Cross-sectoral profiles can be used to govern, map, measure, and manage risks associated with activities or business processes common across sectors, such as the use of large language models (LLMs), cloud-based services, or acquisition.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "A profile is an implementation of the AI RMF functions, categories, and subcategories for a specific setting, application, or technology \u2013 in this case, Generative AI (GAI) \u2013 based on the requirements, risk.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  }
+ ]
+}

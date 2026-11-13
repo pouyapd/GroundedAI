@@ -632,10 +632,21 @@ class QAService:
                 "The model cited sources that were not provided: "
                 f"{', '.join(parsed.check.invalid)}. Those citations are invalid."
             )
+        if parsed.partial_abstention:
+            warnings.append(
+                "The model answered part of the question and said the rest cannot be answered "
+                f"from the sources ({parsed.partial_abstention}). The statements before that "
+                "remark were checked like any answer."
+            )
         report = (
             None
             if parsed.is_abstention
-            else check_claims(raw, evidence_sources(context), question, self.settings.claim_check)
+            else check_claims(
+                parsed.answer_part or raw,
+                evidence_sources(context),
+                question,
+                self.settings.claim_check,
+            )
         )
         claims = claims_out(report, context) if report else []
         if report:
@@ -649,7 +660,9 @@ class QAService:
         answer: str | None = parsed.text
         abstention_reason = parsed.abstention_reason
         unverified_answer = None
-        verification = verification_out(report, question, raw) if report else None
+        verification = (
+            verification_out(report, question, parsed.answer_part or raw) if report else None
+        )
         # claims-v2 withholds only when nothing was found and nothing is uncertain.
         nothing_found = report is not None and (
             verification is not None and verification.evidence == "none_found"

@@ -148,6 +148,7 @@ class IngestionService:
                 extension,
                 max_pages=self.limits.max_pdf_pages,
                 max_chars=self.limits.max_document_chars,
+                cleanup=self.chunking.text_cleanup,
             )
             specs = chunk_pages(parsed.pages, self.chunking)
             if not specs:

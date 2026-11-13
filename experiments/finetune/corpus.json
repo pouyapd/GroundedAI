@@ -1,0 +1,48 @@
+{
+  "name": "groundedai-finetune-train-corpus",
+  "split": "train",
+  "license": "U.S. Government works (NIST), not subject to copyright in the United States; downloaded by scripts/fetch_nist_corpus.py, not committed.",
+  "note": "Training documents only. None of them is in the validation (groundedai-nist-val-v1) or test (groundedai-nist-v1) datasets.",
+  "documents": [
+    {
+      "key": "csf-2.0",
+      "file": "corpus/NIST.CSWP.29.pdf",
+      "title": "The NIST Cybersecurity Framework (CSF) 2.0",
+      "sha256": "3c31f46fee98cac0c4323453e5109291a213b4de7fef8c058af9bf67f717433c",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf",
+      "split": "train"
+    },
+    {
+      "key": "sp800-61r3",
+      "file": "corpus/NIST.SP.800-61r3.pdf",
+      "title": "Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
+      "sha256": "e5593d6bb85daecec7e8d9549400c7b3473bcc3f06e469c82218073afa7fba2d",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r3.pdf",
+      "split": "train"
+    },
+    {
+      "key": "sp800-88r1",
+      "file": "corpus/NIST.SP.800-88r1.pdf",
+      "title": "Guidelines for Media Sanitization",
+      "sha256": "acd2315cb1823d51db93b180d898fabfdf5e964e3fcb41cf44d14b4c3ec8c5c4",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-88r1.pdf",
+      "split": "train"
+    },
+    {
+      "key": "sp800-207",
+      "file": "corpus/NIST.SP.800-207.pdf",
+      "title": "Zero Trust Architecture",
+      "sha256": "0290d6ece24874287316f4bf430fef770aa4ec08a2227c8f2c1e5b2ff975e03d",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207.pdf",
+      "split": "train"
+    },
+    {
+      "key": "sp800-218",
+      "file": "corpus/NIST.SP.800-218.pdf",
+      "title": "Secure Software Development Framework (SSDF) Version 1.1",
+      "sha256": "617746e553a9e2da49bfbd4eef0dfc3094758a39b869314e4173ac36605cde22",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-218.pdf",
+      "split": "train"
+    }
+  ]
+}

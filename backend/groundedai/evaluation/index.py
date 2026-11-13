@@ -92,6 +92,7 @@ def build_index(
             Path(filename).suffix.lower(),
             max_pages=EVAL_LIMITS.max_pdf_pages,
             max_chars=EVAL_LIMITS.max_document_chars,
+            cleanup=chunking.text_cleanup,
         )
         doc_texts[document.key] = join_pages(parsed.pages)[0]
         if progress:

@@ -232,3 +232,31 @@ def test_bracketed_only_finds_replies_without_text_outside_brackets() -> None:
     assert not bracketed_only("[No, you will not be charged for a stolen bike within 48 hours.]")
     assert bracketed_only("[No source cited]")
     assert bracketed_only("[Yes][S1][No][S2]")
+
+
+def test_facts_before_an_abstention_marker_are_a_partial_answer() -> None:
+    # Regression (2026-11-09): a figure stated before the marker used to make the whole reply
+    # an abstention, so the figure was shown without being checked.
+    parsed = parse_answer(
+        "The hotel limit is €999 per night [S1]. INSUFFICIENT_EVIDENCE: Tokyo is not covered.",
+        SOURCES,
+    )
+    assert not parsed.is_abstention
+    assert parsed.partial_abstention == "Tokyo is not covered"
+    assert parsed.answer_part == "The hotel limit is €999 per night [S1]."
+    assert parsed.check.valid == ["S1"]
+    assert parsed.sentences[0].support == "unsupported"
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "The sources do not provide the Tokyo limit. INSUFFICIENT_EVIDENCE",
+        "Based on the sources, the Tokyo limit is not explicitly stated. [INSUFFICIENT_EVIDENCE]",
+        "[S1][S2]\nINSUFFICIENT_EVIDENCE: nothing about Tokyo.",
+    ],
+)
+def test_refusal_sentences_before_the_marker_stay_an_abstention(text: str) -> None:
+    parsed = parse_answer(text, SOURCES)
+    assert parsed.is_abstention
+    assert parsed.partial_abstention is None

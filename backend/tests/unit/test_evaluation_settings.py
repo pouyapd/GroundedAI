@@ -41,6 +41,21 @@ def test_settings_from_refuses_a_report_that_did_not_record_them(
     assert "does not record its settings" in capsys.readouterr().err
 
 
+def test_a_report_from_before_the_text_settings_existed_is_replayed_with_v1_and_exact() -> None:
+    # Reports published before text_cleanup and extractive_matching existed do not record
+    # them; they were made with v1 text and exact matching, whatever the defaults are now.
+    from groundedai.cli import _load_recorded_settings
+
+    reports = Path(__file__).resolve().parents[3] / "evaluation" / "reports" / "published"
+    old = sorted(reports.glob("generation-*-20261019T*.json"))[-1]
+    recorded = json.loads(old.read_text(encoding="utf-8"))["run_config"]["settings"]
+    assert "text_cleanup" not in recorded
+    assert "extractive_matching" not in recorded
+    settings, _pipeline, _config = _load_recorded_settings(old)
+    assert settings["text_cleanup"] == "v1"
+    assert settings["extractive_matching"] == "exact"
+
+
 def test_settings_from_names_settings_a_report_lacks(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:

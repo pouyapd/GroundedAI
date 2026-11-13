@@ -1,5 +1,10 @@
 # Evaluation
 
+> Results on real PDFs (NIST publications), pipeline ablations and the fine-tuning and
+> verifier experiments of November 2026 are in
+> [RESEARCH_EVALUATION.md](RESEARCH_EVALUATION.md). This document covers the synthetic
+> datasets.
+
 GroundedAI evaluates retrieval and answers offline, on a version-controlled dataset, with
 deterministic metrics. No judge model is used. All numbers below come from report files in
 `evaluation/reports/published/`; nothing was typed in by hand.

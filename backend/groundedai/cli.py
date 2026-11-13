@@ -206,7 +206,7 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
         corpus = build_index(
             dataset,
             embedding,
-            ChunkingConfig(settings.chunk_size, settings.chunk_overlap),
+            ChunkingConfig(settings.chunk_size, settings.chunk_overlap, settings.text_cleanup),
             Path(tmp),
             "generation",
             progress=lambda message: print(message, flush=True),
@@ -250,6 +250,10 @@ def cmd_eval_generation(args: argparse.Namespace) -> int:
 
 
 RecordedSettings = tuple[dict[str, Any], dict[str, Any], dict[str, Any]]
+SETTINGS_BEFORE_THEY_EXISTED: dict[str, Any] = {
+    "text_cleanup": "v1",
+    "extractive_matching": "exact",
+}
 
 
 def _load_recorded_settings(path: Path) -> RecordedSettings:
@@ -269,6 +273,9 @@ def _load_recorded_settings(path: Path) -> RecordedSettings:
             f"{path} does not record its settings (answer reports written before 2026-10-14 do "
             "not); set them as described in docs/EVALUATION.md, 'Reproducing'."
         )
+    # Settings added after reports were first recorded: a report without them was made with
+    # the only behaviour that existed then.
+    settings = {**SETTINGS_BEFORE_THEY_EXISTED, **settings}
     missing = sorted(
         (set(INDEX_AND_MODEL_SETTINGS) - set(settings)) | (set(PIPELINE_SETTINGS) - set(pipeline))
     )

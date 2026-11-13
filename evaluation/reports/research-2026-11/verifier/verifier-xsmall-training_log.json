@@ -1,0 +1,41 @@
+{
+ "base": "cross-encoder/nli-deberta-v3-xsmall",
+ "train_pairs": 2743,
+ "val_pairs": 900,
+ "args": {
+  "base": "cross-encoder/nli-deberta-v3-xsmall",
+  "train": "data\\train.jsonl",
+  "val": "data\\validation.jsonl",
+  "out": "..\\finetune\\runs\\verifier-xsmall",
+  "epochs": "3",
+  "lr": "3e-05",
+  "batch": "16",
+  "max_length": "256",
+  "seed": "13",
+  "threads": "6"
+ },
+ "epochs": [
+  {
+   "epoch": 1,
+   "seconds": 12874.0,
+   "mean_loss": 0.5226,
+   "val_macro_f1": 0.9929,
+   "val_accuracy": 0.9933
+  },
+  {
+   "epoch": 2,
+   "seconds": 3737.6,
+   "mean_loss": 0.0365,
+   "val_macro_f1": 0.9941,
+   "val_accuracy": 0.9944
+  },
+  {
+   "epoch": 3,
+   "seconds": 3489.8,
+   "mean_loss": 0.0209,
+   "val_macro_f1": 0.9941,
+   "val_accuracy": 0.9944
+  }
+ ],
+ "best_epoch": 2
+}

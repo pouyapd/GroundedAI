@@ -11,6 +11,9 @@ import type {
   SystemStatus,
 } from "./types";
 
+/** Chunks fetched per request (the API allows at most 100). */
+export const CHUNK_PAGE = 100;
+
 export class ApiError extends Error {
   readonly status: number;
   readonly code: string;
@@ -38,7 +41,7 @@ export interface Api {
   readonly mode: "live" | "browser" | "static-demo";
   systemStatus(): Promise<SystemStatus>;
   listDocuments(offset: number, limit: number): Promise<Page<DocumentOut>>;
-  listChunks(documentId: string): Promise<Page<ChunkOut>>;
+  listChunks(documentId: string, offset?: number): Promise<Page<ChunkOut>>;
   uploadDocument(file: File, title?: string): Promise<DocumentOut>;
   deleteDocument(documentId: string): Promise<void>;
   reingestDocument(documentId: string): Promise<DocumentOut>;
@@ -122,8 +125,8 @@ export class LiveApi implements Api {
   listDocuments(offset: number, limit: number) {
     return this.request<Page<DocumentOut>>(`/documents?offset=${offset}&limit=${limit}`);
   }
-  listChunks(documentId: string) {
-    return this.request<Page<ChunkOut>>(`/documents/${documentId}/chunks?limit=50`);
+  listChunks(documentId: string, offset = 0) {
+    return this.request<Page<ChunkOut>>(`/documents/${documentId}/chunks?limit=${CHUNK_PAGE}&offset=${offset}`);
   }
   uploadDocument(file: File, title?: string) {
     const form = new FormData();

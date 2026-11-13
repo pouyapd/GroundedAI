@@ -76,6 +76,14 @@ class Settings(BaseSettings):
     # --- chunking --------------------------------------------------------
     chunk_size: int = Field(default=800, ge=100, le=8000)
     chunk_overlap: int = Field(default=120, ge=0, le=2000)
+    text_cleanup: Literal["v1", "v2"] = Field(
+        default="v1",
+        description=(
+            "PDF text preparation: v1 keeps the extracted text; v2 expands ligatures, joins words "
+            "hyphenated at line breaks and removes running headers and footers. Re-ingest "
+            "documents after changing it."
+        ),
+    )
 
     # --- retrieval -------------------------------------------------------
     retrieval_mode: RetrievalMode = "hybrid"
@@ -92,6 +100,14 @@ class Settings(BaseSettings):
 
     # --- generation ------------------------------------------------------
     generation_provider: GenerationProviderName = "extractive-demo"
+    extractive_matching: Literal["exact", "prefix"] = Field(
+        default="exact",
+        description=(
+            "Extractive generator: 'exact' counts a question word only when a sentence has the "
+            "same word; 'prefix' also counts another form of it (reauthenticated / "
+            "reauthentication)."
+        ),
+    )
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "qwen2.5:1.5b"
     hf_generation_model: str = "Qwen/Qwen2.5-0.5B-Instruct"
