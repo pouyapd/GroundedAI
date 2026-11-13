@@ -7,10 +7,15 @@ was prepared but not trained to the end, and has no results. Every number below 
 measured on one laptop CPU (Intel Core i7-1255U, 16 GB RAM, mains power) and is reproducible
 with the commands given. Where a measurement was not made, the table says so.
 
+**Defaults.** "Defaults" and "baseline" in the tables below mean the settings before this round
+(text clean-up v1, exact matching). Experiment A's two settings became the defaults afterwards,
+after the checks in [Making Experiment A the default](#making-experiment-a-the-default-2026-11-13).
+
 Contents: [Protocol](#protocol) · [Live demo test](#live-demo-test) ·
 [Baseline on real PDFs](#baseline-on-real-pdfs) · [Pipeline ablations](#pipeline-ablations) ·
 [Fine-tuning](#fine-tuning) · [Configurations compared](#configurations-compared) ·
-[Deployment](#deployment) · [Limitations](#limitations) · [Reproducing](#reproducing)
+[Deployment](#deployment) ·
+[Making Experiment A the default](#making-experiment-a-the-default-2026-11-13) · [Limitations](#limitations) · [Reproducing](#reproducing)
 
 ## Protocol
 
@@ -96,16 +101,18 @@ Problems found, and what was done:
 
 | Problem | Seen in | Status |
 |---|---|---|
-| Running page headers and footers become "answers" | L07 | fixed (opt-in): `TEXT_CLEANUP=v2` removes repeated edge lines |
-| Words split at line ends ("trustwor- thy") and ligatures | L12, L13 | fixed (opt-in): `TEXT_CLEANUP=v2` |
-| Extractive generator refuses when the question uses another word form ("minutes" / "reauthenticated") | L03 | fixed (opt-in): `EXTRACTIVE_MATCHING=prefix` |
+| Running page headers and footers become "answers" | L07 | fixed: `TEXT_CLEANUP=v2` removes repeated edge lines (opt-in at first, now the default) |
+| Words split at line ends ("trustwor- thy") and ligatures | L12, L13 | fixed: `TEXT_CLEANUP=v2` (now the default) |
+| Extractive generator refuses when the question uses another word form ("minutes" / "reauthenticated") | L03 | fixed: `EXTRACTIVE_MATCHING=prefix` (now the default) |
 | Facts written before an `INSUFFICIENT_EVIDENCE` marker were never checked | crafted model replies | fixed: they are now checked and shown as a partial answer |
 | The chunk viewer showed only the first 50 chunks | 367-chunk PDF | fixed: "Show more chunks" |
 | A wrong answer can be shown as "Every statement found" | L01 (WebLLM), L12, L16 | documented: the check tests that sentences are in the sources, not that they answer the question |
 | Version conflicts (2017 vs 2025) are not reported | L19, L20 | documented with the root cause (see [Limitations](#limitations)); not tuned, because the conflict questions are test data |
 
-The two fixes that change answers are opt-in settings. The defaults, and so the public demo, are
-unchanged until a merge to `main` is approved.
+The two fixes that change answers were added as opt-in settings and evaluated as Experiment A;
+they became the defaults after the checks in
+[Making Experiment A the default](#making-experiment-a-the-default-2026-11-13). The public demo
+gets them when that change is merged and deployed.
 
 ## Baseline on real PDFs
 
@@ -499,8 +506,9 @@ figures above are for a desktop CPU with native onnxruntime.
 * The public demo is unchanged. It still starts with the extractive generator and the hashing
   embedder, with no model download; the WebLLM model stays optional.
 * Experiment A needs no model and no download, so it is the one change that could go into the
-  demo as it is: two settings. It is opt-in on this branch; switching the defaults means merging
-  to `main` and redeploying, which has not been done and needs a decision.
+  demo as it is: two settings. They are now the defaults (see
+  [Making Experiment A the default](#making-experiment-a-the-default-2026-11-13)); the public demo
+  gets them when that change is merged and deployed.
 * An 83 MB int8 verifier is small enough to consider as an optional download for a local
   installation. For the browser demo it would be a second optional download next to the 880 MB
   WebLLM model; whether it runs fast enough there has to be measured first. Plan: load
@@ -508,6 +516,85 @@ figures above are for a desktop CPU with native onnxruntime.
   lexical check marks "found", measure load and per-statement time in Chromium on the same
   laptop, and keep the lexical check as the default.
 * The fine-tuned embedder (127 MiB) is not worth shipping: no measured gain.
+
+## Making Experiment A the default (2026-11-13)
+
+Before `TEXT_CLEANUP=v2` and `EXTRACTIVE_MATCHING=prefix` became the defaults, they were checked
+on every other document and question set available, and the clean-up rules were reviewed.
+Reports: [evaluation/reports/research-2026-11/regression](../evaluation/reports/research-2026-11/regression/).
+
+**What v2 removes, document by document** (`scripts/compare_text_cleanup.py --datasets`, all 15
+local PDFs: the 10 NIST PDFs, the synthetic manual, the two example PDFs and the demo's
+byte-identical copies of them):
+
+* The synthetic manual, both example PDFs and the demo's sample PDFs are **unchanged** (byte for
+  byte): they are too short for the header rule and have no ligatures or broken words.
+* In the 10 NIST PDFs every page keeps its number, no page gains a word that was not on it, and
+  no page becomes empty. The removed lines are running headers ("NIST SP 800-63B DIGITAL IDENTITY
+  GUIDELINES:"), footers ("This publication is available free of charge from: ..."), dates in
+  the header, page numbers and underscore rules, with one exception: in SP 800-61r3 a table's
+  column header line ("CSF Element CSF Element Description Priority Recommendations,
+  Considerations, Notes"), repeated at the top of 23 pages, is removed too. The table rows stay.
+* Per NIST document, up to 402 ligatures and 5 to 235 line-break hyphens were repaired.
+
+**Two rules were made stricter** after this review (before any default changed): a line that
+is only a number is now removed only when it follows the page order (number minus page position
+the same on at least half of the pages), so a table value at a page edge is kept; and only valid
+lower-case roman numerals count as page numbers, so words such as "mix" or a lone "C" are kept.
+On all 15 PDFs the output is identical before and after this change, so every result above still
+holds. Updating pypdf from 6.20.0 to 6.21.4 (security advisories) also left the text of all 15
+PDFs identical.
+
+**Other question sets** (extractive generator; old defaults against v2 + prefix):
+
+| Set | Questions | Answers changed | Effect |
+|---|---:|---:|---|
+| Synthetic evaluation set (`groundedai-synthetic-v1`) | 56 | 1 | q011 gained one more correct sentence ("Without registration the warranty is 5 years"); still verified, same key facts |
+| Development set (`groundedai-dev-v1`) | 25 | 0 | identical |
+| Offline retrieval benchmark (synthetic, 43 questions with evidence) | 3 configurations | - | identical metrics (only the text clean-up applies to retrieval) |
+
+**Language models.** Prefix matching is used only by the extractive generator, so for Qwen
+(Ollama, Hugging Face or WebLLM in the browser) only the text clean-up can matter, and on the
+synthetic and development sets their input is identical. On the NIST documents:
+
+| qwen2.5:1.5b, Ollama | Old defaults | v2 | Paired change (95% CI) |
+|---|---:|---:|---|
+| Test set (40 answerable): correct | .750 | .775 | +.025 (-.100 to +.150); 4 gained, 3 lost |
+| Validation set (15 answerable): correct | .933 | 1.000 | +.067 (.000 to +.200); 1 gained, 0 lost |
+| Validation: should refuse, refused | 2 of 3 | 2 of 3 | same questions |
+| Validation: Recall@5 / MRR@10 | .733 / .633 | .867 / .717 | +.133 (.000 to +.333) / +.084 (+.017 to +.170) |
+| Validation: quotes verbatim / right page | 1.000 / 1.000 | 1.000 / 1.000 | |
+| Statements found by the claim check | test .928, validation .812 | test .934, validation .647 | |
+
+The one measure that fell is the share of statements found on validation (.812 to .647, 32 and 34
+statements). It comes from three answers in which the model wrote different text after seeing
+the cleaner passages: one listed four principles with a definition for each (3 of 5 statements
+not found), one gave the publication month in its own words ("was published on September 2021",
+correct but not matched), and one copied a URL. On the larger test set the share did not fall.
+This is a change in the model's wording, which the lexical check scores sentence by sentence; it
+is not a change in what the documents say.
+
+**Regression tests added** (`tests/unit/test_pdf_cleanup.py`,
+`tests/integration/test_text_cleanup_pipeline.py`, `tests/unit/test_browser_runtime.py`): numbers
+off the page order are kept; words made of roman-numeral letters are kept; every fact of a
+multi-page PDF with a running header keeps its page through ingestion with v2; answers cite and
+quote the right page with v2 and both matching modes; prefix matching gives identical answers
+where exact matching already answers; an unanswerable question is still refused; the defaults are
+v2 and prefix, and the online demo uses them. Reports recorded before the two settings existed
+are replayed with v1 and exact (`--settings-from`).
+
+**Trade-offs of the new defaults.**
+
+* Gains: on the NIST test set, correct extractive answers .600 to .725 (+.125, CI +.025 to
+  +.250), Recall@5 +.057; chunks without running headers; ligature and hyphen repairs.
+* Losses: one question that should be refused (t38) was answered with prefix matching; a
+  repeated table column header is dropped in one document; a PDF of four or more pages whose
+  only text is repeated header lines would be refused as having no extractable text.
+* Unchanged: page numbers, quotes (all verbatim and on the right page in every run), citations,
+  the claim check, refusals on the synthetic and development sets.
+* Documents indexed before the change keep their v1 text until they are re-ingested;
+  `GROUNDEDAI_TEXT_CLEANUP=v1` and `GROUNDEDAI_EXTRACTIVE_MATCHING=exact` restore the old
+  behaviour.
 
 ## Limitations
 
@@ -554,7 +641,7 @@ figures above are for a desktop CPU with native onnxruntime.
 python scripts/fetch_nist_corpus.py     # the ten NIST PDFs, checked by SHA-256 (not committed)
 
 # Baseline and Experiment A on the test set (extractive; add --generator ollama for qwen2.5:1.5b)
-python scripts/rag_eval.py --dataset evaluation/datasets/groundedai-nist-v1 --generator extractive --out baseline.json
+python scripts/rag_eval.py --dataset evaluation/datasets/groundedai-nist-v1 --generator extractive --set text_cleanup=v1 --set extractive_matching=exact --out baseline.json
 python scripts/rag_eval.py --dataset evaluation/datasets/groundedai-nist-v1 --generator extractive --set text_cleanup=v2 --set extractive_matching=prefix --out expA.json
 ```
 

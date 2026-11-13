@@ -1,0 +1,1513 @@
+{
+ "kind": "rag-eval",
+ "rag_eval_version": 1,
+ "dataset": {
+  "name": "groundedai-nist-val-v1",
+  "fingerprint": "377d90156fdcc888",
+  "questions": 18
+ },
+ "summary": {
+  "questions": 18,
+  "retrieval": {
+   "recall@1": {
+    "mean": 0.5333,
+    "n": 15,
+    "ci95": [
+     0.2667,
+     0.8
+    ]
+   },
+   "precision@1": {
+    "mean": 0.5333,
+    "n": 15,
+    "ci95": [
+     0.2667,
+     0.8
+    ]
+   },
+   "recall@3": {
+    "mean": 0.6667,
+    "n": 15,
+    "ci95": [
+     0.4667,
+     0.8667
+    ]
+   },
+   "precision@3": {
+    "mean": 0.2222,
+    "n": 15,
+    "ci95": [
+     0.1556,
+     0.2889
+    ]
+   },
+   "recall@5": {
+    "mean": 0.7333,
+    "n": 15,
+    "ci95": [
+     0.5333,
+     0.9333
+    ]
+   },
+   "precision@5": {
+    "mean": 0.1467,
+    "n": 15,
+    "ci95": [
+     0.1067,
+     0.1867
+    ]
+   },
+   "recall@10": {
+    "mean": 0.8667,
+    "n": 15,
+    "ci95": [
+     0.6667,
+     1.0
+    ]
+   },
+   "precision@10": {
+    "mean": 0.0867,
+    "n": 15,
+    "ci95": [
+     0.0667,
+     0.1
+    ]
+   },
+   "mrr@10": {
+    "mean": 0.6329,
+    "n": 15,
+    "ci95": [
+     0.4281,
+     0.84
+    ]
+   },
+   "ndcg@10": {
+    "mean": 0.6877,
+    "n": 15,
+    "ci95": [
+     0.498,
+     0.8667
+    ]
+   }
+  },
+  "answers": {
+   "answerable": 15,
+   "correct": {
+    "mean": 0.9333,
+    "n": 15,
+    "ci95": [
+     0.8,
+     1.0
+    ]
+   },
+   "completeness": {
+    "mean": 0.9333,
+    "n": 15,
+    "ci95": [
+     0.8,
+     1.0
+    ]
+   },
+   "false_refusals": 0,
+   "invalid_output": 0,
+   "errors": 0
+  },
+  "abstention": {
+   "should_refuse": 3,
+   "refused": 2,
+   "precision": 1.0,
+   "recall": 0.6667,
+   "predicted_abstentions": 2
+  },
+  "citations": {
+   "precision": {
+    "mean": 0.3333,
+    "n": 3,
+    "ci95": [
+     0.0,
+     0.5
+    ]
+   },
+   "recall": {
+    "mean": 0.1333,
+    "n": 15,
+    "ci95": [
+     0.0,
+     0.3333
+    ]
+   },
+   "answers_with_invalid_labels": 0,
+   "answers_without_valid_label": 12
+  },
+  "claims_lexical_check": {
+   "statements": 32,
+   "found_share": 0.8125,
+   "unsupported_share": 0.125,
+   "partial_share": 0.0625
+  },
+  "quotes": {
+   "total": 31,
+   "verbatim_share": 1.0,
+   "page_correct_share": 1.0,
+   "pages_unknown": 0
+  },
+  "false_conflict_reports": 0,
+  "latency_ms": {
+   "total_median": 14527.3,
+   "generation_median": 14451.8,
+   "retrieval_median": 11.6,
+   "total_p90": 20937.2
+  }
+ },
+ "by_category": {
+  "factual": {
+   "questions": 14,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.5714,
+     "n": 14,
+     "ci95": [
+      0.2857,
+      0.7857
+     ]
+    },
+    "precision@1": {
+     "mean": 0.5714,
+     "n": 14,
+     "ci95": [
+      0.2857,
+      0.7857
+     ]
+    },
+    "recall@3": {
+     "mean": 0.7143,
+     "n": 14,
+     "ci95": [
+      0.5,
+      0.9286
+     ]
+    },
+    "precision@3": {
+     "mean": 0.2381,
+     "n": 14,
+     "ci95": [
+      0.1667,
+      0.3095
+     ]
+    },
+    "recall@5": {
+     "mean": 0.7857,
+     "n": 14,
+     "ci95": [
+      0.5714,
+      1.0
+     ]
+    },
+    "precision@5": {
+     "mean": 0.1571,
+     "n": 14,
+     "ci95": [
+      0.1143,
+      0.2
+     ]
+    },
+    "recall@10": {
+     "mean": 0.9286,
+     "n": 14,
+     "ci95": [
+      0.7857,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.0929,
+     "n": 14,
+     "ci95": [
+      0.0786,
+      0.1
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.6781,
+     "n": 14,
+     "ci95": [
+      0.4633,
+      0.8674
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.7368,
+     "n": 14,
+     "ci95": [
+      0.5532,
+      0.8997
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 14,
+    "correct": {
+     "mean": 0.9286,
+     "n": 14,
+     "ci95": [
+      0.7857,
+      1.0
+     ]
+    },
+    "completeness": {
+     "mean": 0.9286,
+     "n": 14,
+     "ci95": [
+      0.7857,
+      1.0
+     ]
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": null,
+    "recall": null,
+    "predicted_abstentions": 0
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.3333,
+     "n": 3,
+     "ci95": [
+      0.0,
+      0.5
+     ]
+    },
+    "recall": {
+     "mean": 0.1429,
+     "n": 14,
+     "ci95": [
+      0.0,
+      0.3571
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 11
+   },
+   "claims_lexical_check": {
+    "statements": 29,
+    "found_share": 0.8276,
+    "unsupported_share": 0.1379,
+    "partial_share": 0.0345
+   },
+   "quotes": {
+    "total": 28,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 14289.5,
+    "generation_median": 14196.0,
+    "retrieval_median": 11.4,
+    "total_p90": 18090.9
+   }
+  },
+  "multi_chunk": {
+   "questions": 1,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@1": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall@3": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@3": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall@5": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@5": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "mrr@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "ndcg@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    }
+   },
+   "answers": {
+    "answerable": 1,
+    "correct": {
+     "mean": 1.0,
+     "n": 1,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": 1.0,
+     "n": 1,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": null,
+    "recall": null,
+    "predicted_abstentions": 0
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 1
+   },
+   "claims_lexical_check": {
+    "statements": 2,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 20951.4,
+    "generation_median": 20800.7,
+    "retrieval_median": 14.8,
+    "total_p90": 20951.4
+   }
+  },
+  "unanswerable": {
+   "questions": 3,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 3,
+    "refused": 2,
+    "precision": 1.0,
+    "recall": 0.6667,
+    "predicted_abstentions": 2
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 1,
+    "found_share": 0.0,
+    "unsupported_share": 0.0,
+    "partial_share": 1.0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 14403.0,
+    "generation_median": 14353.0,
+    "retrieval_median": 14.3,
+    "total_p90": 20207.1
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "v01",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "NIST AI 600-1 was published on July 2024. [S1][S2]",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.93,
+    "generation": 15661.314,
+    "total": 15689.619
+   },
+   "model_output": "NIST AI 600-1 was published on July 2024. [S1][S2]",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 1
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v02",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The Generative AI Profile was developed pursuant to Executive Order 14110, titled \"Safe, Secure, and Trustworthy Artificial Intelligence.\"",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 5.939,
+    "generation": 10472.135,
+    "total": 10519.965
+   },
+   "model_output": "The Generative AI Profile was developed pursuant to Executive Order 14110, titled \"Safe, Secure, and Trustworthy Artificial Intelligence.\"",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v03",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "[Source S1]: Introduction\nThis document is a cross-sectoral proﬁle of and companion resource for the AI Risk Management\nFramework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on\nSafe, Secure, and Trustworthy Artiﬁcial Intelligence.2 The AI RMF was released in January 2023, and is\nintended for voluntary use and to improve the ability of organizations to incorporate trustworthiness\nconsiderations into the design, development, use, and evaluation of AI products, services, and systems.\n\n[Source S2]: Suggested actions\nIn addition to the suggested actions below, AI risk management activities and actions set forth in the AI\nRMF 1.0 and Playbook are already applicable for managing GAI risks. Organizations are encouraged to\napply the activities suggested in the AI RMF and its Playbook when managing the risk of GAI systems.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 7.522,
+    "generation": 18012.875,
+    "total": 18108.201
+   },
+   "model_output": "[Source S1]: Introduction\nThis document is a cross-sectoral proﬁle of and companion resource for the AI Risk Management\nFramework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on\nSafe, Secure, and Trustworthy Artiﬁcial Intelligence.2 The AI RMF was released in January 2023, and is\nintended for voluntary use and to improve the ability of organizations to incorporate trustworthiness\nconsiderations into the design, development, use, and evaluation of AI products, services, and systems.\n\n[Source S2]: Suggested actions\nIn addition to the suggested actions below, AI risk management activities and actions set forth in the AI\nRMF 1.0 and Playbook are already applicable for managing GAI risks. Organizations are encouraged to\napply the activities suggested in the AI RMF and its Playbook when managing the risk of GAI systems.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 5,
+    "found": 5,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 5,
+    "verbatim": 5,
+    "pages_known": 5,
+    "pages_correct": 5
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v04",
+   "category": "factual",
+   "tags": [
+    "numeric",
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "According to EO 14110, a dual-use foundation model contains at least tens of billions of parameters.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 11.897,
+    "generation": 10400.938,
+    "total": 10468.04
+   },
+   "model_output": "According to EO 14110, a dual-use foundation model contains at least tens of billions of parameters.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v05",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "Confabulation refers to a phenomenon in which GAI systems generate and confidently present erroneous or false content in response to prompts. Confabulations also include generated outputs that diverge from the prompts or other input or that contradict previously generated statements in the same context. These phenomena are colloquially also referred to as \"hallucinations\" or \"fabrications.\" Confabulations can occur across GAI outputs and contexts.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 5.439,
+    "generation": 11790.073,
+    "total": 11858.494
+   },
+   "model_output": "Confabulation refers to a phenomenon in which GAI systems generate and confidently present erroneous or false content in response to prompts. Confabulations also include generated outputs that diverge from the prompts or other input or that contradict previously generated statements in the same context. These phenomena are colloquially also referred to as \"hallucinations\" or \"fabrications.\" Confabulations can occur across GAI outputs and contexts.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": true
+  },
+  {
+   "question_id": "v06",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "[NIST] established the U.S. AI Safety Institute and the companion AI Safety Institute Consortium to continue the efforts set in motion by the E.O. to build the science necessary for safe, secure, and trustworthy development and use of AI.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 11.735,
+    "generation": 14550.621,
+    "total": 14651.681
+   },
+   "model_output": "[NIST] established the U.S. AI Safety Institute and the companion AI Safety Institute Consortium to continue the efforts set in motion by the E.O. to build the science necessary for safe, secure, and trustworthy development and use of AI.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v07",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The four primary considerations of the GAI Public Working Group were Governance, Content Provenance, Pre-deployment Testing, and Incident Disclosure. These considerations were derived as overarching themes from the GAI PWG consultation process and are relevant for voluntary use by any organization designing, developing, and using GAI, as well as informing the Actions to Manage GAI risks.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 13.301,
+    "generation": 13841.321,
+    "total": 13927.326
+   },
+   "model_output": "The four primary considerations of the GAI Public Working Group were Governance, Content Provenance, Pre-deployment Testing, and Incident Disclosure. These considerations were derived as overarching themes from the GAI PWG consultation process and are relevant for voluntary use by any organization designing, developing, and using GAI, as well as informing the Actions to Manage GAI risks.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v08",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "According to current estimates, training a single transformer LLM can emit as much carbon as 300 round-trip flights between San Francisco and New York.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 9.79,
+    "generation": 13479.855,
+    "total": 13553.979
+   },
+   "model_output": "According to current estimates, training a single transformer LLM can emit as much carbon as 300 round-trip flights between San Francisco and New York.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v09",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources provided do not contain information about the annual budget of the U.S. AI Safety Institute.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 9.216,
+    "generation": 14327.91,
+    "total": 14374.175
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources provided do not contain information about the annual budget of the U.S. AI Safety Institute.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v10",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "The sources provided do not contain information about which generative AI model scored best in NIST's tests. Therefore, the answer is:\n\nINSUFFICIENT_EVIDENCE: The sources do not provide information on which generative AI model scored best in NIST's tests.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 14.252,
+    "generation": 14352.989,
+    "total": 14402.981
+   },
+   "model_output": "The sources provided do not contain information about which generative AI model scored best in NIST's tests. Therefore, the answer is:\n\nINSUFFICIENT_EVIDENCE: The sources do not provide information on which generative AI model scored best in NIST's tests.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v11",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The four principles of explainable AI, as introduced in the sources, are:\n\n1. **Explanation**: The system produces an explanation.\n2. **Meaningful**: The explanation is understandable to humans.\n3. **Explanation Accuracy**: The explanation reflects the system's processes accurately.\n4. **Knowledge Limits**: The system expresses its knowledge limits.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 11.48,
+    "generation": 15534.412,
+    "total": 15646.698
+   },
+   "model_output": "The four principles of explainable AI, as introduced in the sources, are:\n\n1. **Explanation**: The system produces an explanation.\n2. **Meaningful**: The explanation is understandable to humans.\n3. **Explanation Accuracy**: The explanation reflects the system's processes accurately.\n4. **Knowledge Limits**: The system expresses its knowledge limits.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 5,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 3
+   },
+   "quotes": {
+    "total": 4,
+    "verbatim": 4,
+    "pages_known": 4,
+    "pages_correct": 4
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v12",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.3333333333333333
+   },
+   "status": "answered",
+   "answer": "[S1] This publication is available free of charge from: https://doi.org/10.6028/NIST.IR.8312\n\n[S1] This publication is available free of charge from: https://doi.org/10.6028/NIST.IR.8312",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 8.94,
+    "generation": 12153.377,
+    "total": 12215.265
+   },
+   "model_output": "[S1] This publication is available free of charge from: https://doi.org/10.6028/NIST.IR.8312\n\n[S1] This publication is available free of charge from: https://doi.org/10.6028/NIST.IR.8312",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v13",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.43067655807339306
+   },
+   "status": "answered",
+   "answer": "NISTIR 8312 has 43 pages.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 11.817,
+    "generation": 12606.336,
+    "total": 12716.278
+   },
+   "model_output": "NISTIR 8312 has 43 pages.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 0,
+    "partial": 1,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v14",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.1,
+    "ndcg@10": 0.2890648263178879
+   },
+   "status": "answered",
+   "answer": "The Explanation principle requires that a system provides evidence, support, or reasoning related to an outcome from or a process of an AI system. This principle is independent of whether the explanation is correct, informative, or intelligible. It does not impose any metric of quality on those explanations.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 11.348,
+    "generation": 17904.312,
+    "total": 18050.676
+   },
+   "model_output": "The Explanation principle requires that a system provides evidence, support, or reasoning related to an outcome from or a process of an AI system. This principle is independent of whether the explanation is correct, informative, or intelligible. It does not impose any metric of quality on those explanations.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v15",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "status": "answered",
+   "answer": "NIST recommends the Grad-CAM library for deep networks. [S1][S2]",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 14.521,
+    "generation": 21519.251,
+    "total": 21658.107
+   },
+   "model_output": "NIST recommends the Grad-CAM library for deep networks. [S1][S2]",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 1,
+    "found": 0,
+    "partial": 1,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v16",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "The Meaningful principle states that the explanation should be understandable to humans. The Knowledge Limits principle asserts that systems identify cases where they were not designed or approved to operate or where their answers are not reliable, safeguarding judgments when inappropriate.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 14.787,
+    "generation": 20800.714,
+    "total": 20951.429
+   },
+   "model_output": "The Meaningful principle states that the explanation should be understandable to humans. The Knowledge Limits principle asserts that systems identify cases where they were not designed or approved to operate or where their answers are not reliable, safeguarding judgments when inappropriate.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v17",
+   "category": "factual",
+   "tags": [
+    "paraphrase:v11"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "Explanation, meaningful, explanation accuracy, and knowledge limits.",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 15.787,
+    "generation": 15167.83,
+    "total": 15282.603
+   },
+   "model_output": "Explanation, meaningful, explanation accuracy, and knowledge limits.",
+   "correct": true,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "citation_precision": null,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v18",
+   "category": "factual",
+   "tags": [
+    "paraphrase:v02"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "Based on the sources provided, this profile is based on President Biden's Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence. [S1][S2]",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 16.927,
+    "generation": 20794.546,
+    "total": 20931.148
+   },
+   "model_output": "Based on the sources provided, this profile is based on President Biden's Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence. [S1][S2]",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  }
+ ],
+ "label": "val-qwen15-defaults",
+ "generated_at": "2026-11-13T15:42:06+0100",
+ "generator": "ollama",
+ "provider": {
+  "name": "ollama",
+  "model": "qwen2.5:1.5b",
+  "is_llm": true
+ },
+ "settings_overrides": {},
+ "settings": {
+  "chunk_size": "800",
+  "chunk_overlap": "120",
+  "embedding_provider": "hashing",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "retrieval_mode": "hybrid",
+  "fusion": "rrf",
+  "hybrid_alpha": "0.5",
+  "rrf_k": "60",
+  "top_k": "5",
+  "candidate_k": "20",
+  "reranker": "none",
+  "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+  "prompt_version": "answer-v2",
+  "claim_check": "claims-v1",
+  "conflict_check": "disagreement-v1",
+  "max_context_chars": "6000",
+  "generation_provider": "ollama",
+  "ollama_model": "qwen2.5:1.5b",
+  "hf_generation_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "temperature": "0.0",
+  "max_new_tokens": "384"
+ },
+ "cost": {
+  "index_seconds": 19.2,
+  "model_load_seconds": 1.03,
+  "peak_rss_mb": 145.9,
+  "chunks_indexed": 466
+ },
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "ac",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "numpy": "2.5.4",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "b71dd0ca1e5b",
+   "uncommitted_changes": true
+  }
+ },
+ "code": {
+  "commit": "b71dd0ca1e5b",
+  "uncommitted_changes": true
+ }
+}

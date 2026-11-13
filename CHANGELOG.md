@@ -4,13 +4,23 @@
 
 ### Real-document evaluation and experiments (November 2026)
 
-Full write-up: `docs/RESEARCH_EVALUATION.md`. The defaults and the public demo are unchanged.
+Full write-up: `docs/RESEARCH_EVALUATION.md`.
+
+- **Changed defaults:** `GROUNDEDAI_TEXT_CLEANUP=v2` and `GROUNDEDAI_EXTRACTIVE_MATCHING=prefix`
+  (Experiment A), after checks on every other document and question set
+  (`docs/RESEARCH_EVALUATION.md`, "Making Experiment A the default"). Documents indexed earlier
+  keep their text until they are re-ingested; `v1` and `exact` restore the old behaviour.
+  Reports recorded before these settings existed are replayed with `v1` and `exact`.
+- **Changed:** text clean-up v2 removes a line that is only a number only when it follows the
+  page order, and counts only valid lower-case roman numerals as page numbers.
+- **Security:** pypdf 6.21.4 (from 6.20.0) and certifi 2026.10.23, for published advisories;
+  also in the online demo's runtime.
 
 - **Fixed:** facts written before an `INSUFFICIENT_EVIDENCE` marker were treated as part of a
   refusal and never checked; they are now checked and shown as a partial answer, with a warning.
 - **Fixed:** the chunk viewer showed only the first 50 chunks of a document; it now pages
   ("Show more chunks").
-- **Added (opt-in):** `GROUNDEDAI_TEXT_CLEANUP=v2` removes repeated page headers and footers,
+- **Added (opt-in at first):** `GROUNDEDAI_TEXT_CLEANUP=v2` removes repeated page headers and footers,
   joins words hyphenated at line ends and expands ligatures in PDF text;
   `GROUNDEDAI_EXTRACTIVE_MATCHING=prefix` lets the extractive generator match other forms of the
   question's words.
