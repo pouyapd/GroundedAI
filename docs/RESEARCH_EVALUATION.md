@@ -637,7 +637,9 @@ blocked, the page said the model could not be loaded, kept the extractive genera
 and answered with it; after unblocking, choosing the model again restarted the download (9%
 after 8 s). The message read "...could not be loaded: TypeError: Failed to fetch The extractive
 generator still works." (no sentence break, no hint that a retry works); it now says that
-choosing the model again continues the download.
+choosing the model again continues the download. After that fix was deployed (`3628f16`), the
+whole live test was repeated: the 28 answers were identical, all 64 quotes verbatim on the page
+shown, `e2e_demo.py --llm` 19 of 19, and the blocked download showed the new message.
 
 **Crafted model replies through the deployed code.** The in-page model's reply goes through
 `BrowserDemo.answer`; the same code (loaded from the live site's package) was given crafted
