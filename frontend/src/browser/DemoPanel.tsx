@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useApp } from "../context";
 import type { BrowserApi, Generator, RuntimeState } from "./BrowserApi";
 import { checkWebGpu, PAGE_MODEL, type GpuSupport } from "./gpu";
+import { modelLoadErrorMessage } from "./pageModel";
 
 /** The live demo's controls: runtime start-up, generator choice and reset. */
 export function DemoPanel({ api }: { api: BrowserApi }) {
@@ -33,7 +34,7 @@ export function DemoPanel({ api }: { api: BrowserApi }) {
         await api.pageModel.load((fraction, text) => setModelProgress({ fraction, text }));
       } catch (error) {
         setModelProgress(null);
-        setModelError(error instanceof Error ? error.message : String(error));
+        setModelError(modelLoadErrorMessage(error));
         return;
       }
       setModelProgress(null);
@@ -144,7 +145,7 @@ export function DemoPanel({ api }: { api: BrowserApi }) {
       ) : null}
       {modelError ? (
         <div className="demo-status demo-status-error" role="alert">
-          The language model could not be loaded: {modelError} The extractive generator still works.
+          {modelError}
         </div>
       ) : null}
     </section>

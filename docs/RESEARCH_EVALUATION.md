@@ -15,7 +15,8 @@ Contents: [Protocol](#protocol) · [Live demo test](#live-demo-test) ·
 [Baseline on real PDFs](#baseline-on-real-pdfs) · [Pipeline ablations](#pipeline-ablations) ·
 [Fine-tuning](#fine-tuning) · [Configurations compared](#configurations-compared) ·
 [Deployment](#deployment) ·
-[Making Experiment A the default](#making-experiment-a-the-default-2026-11-13) · [Limitations](#limitations) · [Reproducing](#reproducing)
+[Making Experiment A the default](#making-experiment-a-the-default-2026-11-13) ·
+[Live demo after deployment](#live-demo-after-deployment-2026-11-13) · [Limitations](#limitations) · [Reproducing](#reproducing)
 
 ## Protocol
 
@@ -596,6 +597,67 @@ are replayed with v1 and exact (`--settings-from`).
   `GROUNDEDAI_TEXT_CLEANUP=v1` and `GROUNDEDAI_EXTRACTIVE_MATCHING=exact` restore the old
   behaviour.
 
+## Live demo after deployment (2026-11-13)
+
+After the merges (`main` at `b3583ab`), GitHub Pages run 43461690251 built, checked and
+deployed the demo, then checked the deployed URL from GitHub's runner (16 of 16). The deployed
+version was confirmed independently: the Python package served by the live site is
+byte-identical to `backend/groundedai` on `main`, its pypdf wheel is 6.21.4, and the page's
+script bundle has the same hash as a local build of `main`.
+
+The same 22 questions as in the [first live test](#live-demo-test), written before that test,
+were asked again on the public URL in Chrome (Intel Iris Xe, WebGPU). Reports:
+[evaluation/reports/research-2026-11/live](../evaluation/reports/research-2026-11/live/).
+
+| Check | 2026-11-09 (old defaults) | 2026-11-13 (v2 + prefix) |
+|---|---|---|
+| Upload and indexing, SP 800-63B / AI RMF / SP 800-63B-4 | 8.6 / 2.5 / 8.6 s; 367 / 172 / 468 chunks | 4.5 / 2.5 / 4.5 s; 306 / 173 / 448 chunks |
+| Extractive: answer questions with all key facts | 6 of 17 | 9 of 17 (L03, L07, L17 gained; none lost) |
+| Extractive: should refuse, refused | 1 of 2 (L16 answered) | 1 of 2 (L16 still answered) |
+| Extractive: version conflicts flagged | 0 of 2 | 0 of 2 (L20 now names neither value) |
+| Quotes shown: verbatim in the PDF and on the page shown | 60 of 60 (against the text as then extracted; 7 were running headers, which v2 removes) | 64 of 64 |
+| WebLLM (Qwen2.5-1.5B, cached): load, answer questions with all key facts | 35 s; 2 of 3 | 10 s; 2 of 3 (L01 still wrong) |
+| WebLLM: should refuse, refused | 2 of 2 | 2 of 2 |
+| The invented `S2` citation (asked twice) | flagged both times | flagged both times |
+| Damaged, scanned and empty files; too large; wrong type | refused / blocked with a reason | the same |
+| Page refresh, then upload again and ask | works (uploads cleared by design) | works |
+| Chunk viewer on a 306-chunk PDF | first 50 only | 100 shown, "Show more chunks" |
+| Browser console errors | none | none |
+
+The quote check takes each quote and page label shown on the page and looks for the quote in the
+original PDF's text of that page. "Key facts" are checked as strings against the answers written
+beforehand, as in the first test.
+
+**The repository's own browser checks on the live URL:** `scripts/e2e_demo.py --url ...`: 16 of 16;
+with the model (`--llm`, Chrome with WebGPU): 19 of 19, including loading with download progress,
+an answer checked against the PDF, and a paraphrased question.
+
+**Model download failure on the live site.** With a fresh browser profile and the model files
+blocked, the page said the model could not be loaded, kept the extractive generator selected,
+and answered with it; after unblocking, choosing the model again restarted the download (9%
+after 8 s). The message read "...could not be loaded: TypeError: Failed to fetch The extractive
+generator still works." (no sentence break, no hint that a retry works); it now says that
+choosing the model again continues the download.
+
+**Crafted model replies through the deployed code.** The in-page model's reply goes through
+`BrowserDemo.answer`; the same code (loaded from the live site's package) was given crafted
+replies to the ferry question, where only one passage (S1) is provided:
+
+| Reply | Outcome |
+|---|---|
+| correct, cited `[S1]` | supported; quote from page 2 |
+| correct sentence plus "Children under 5 travel free [S2]" | `S2` reported as a citation to a source that was not provided; the statement itself is found in S1 and shown as found there |
+| correct, cited `[S9]` | `S9` reported as invalid; statement found in S1 |
+| "costs 20 euros" (the PDF says 14) | not found; answer marked unverified |
+| "Children under 5 must pay the full adult fare" (the PDF: they travel free) | partly found; answer marked unverified (not labelled a contradiction) |
+| correct, no citation | found, source added, with a warning that the model cited nothing |
+| a correct sentence, then `INSUFFICIENT_EVIDENCE` for the rest | the sentence is checked; a partial-answer warning |
+| "14 euros and includes a free hot meal on board" | **found (supported)** with the default `claims-v1`: 73% of its words are in the passage. `claims-v2` (opt-in) marks it partly found. |
+
+The last row is a known limit of the lexical check: an added detail that shares enough words
+with the passage passes. The NLI verifier experiment (Experiment D) measures this gap; the NLI
+model is not part of the application, so nothing on the live site is checked for meaning.
+
 ## Limitations
 
 * **Small test sets.** 53 questions (40 answerable) and 108 claims, on three documents of one
@@ -618,6 +680,9 @@ are replayed with v1 and exact (`--settings-from`).
   retrieved passages was not paired. The conflict questions exist only in the test split, so the
   check was not changed in this round (changing it while looking at those 4 questions would make
   them useless as a test). A fix needs its own validation conflict cases.
+* **An added detail can pass the default claim check.** On the live site, "14 euros and includes a
+  free hot meal on board" was reported as found (73% of its words are in the passage);
+  `claims-v2` (opt-in) marks it partly found.
 * **The claim check is lexical.** "Every statement found" means each statement's words and
   figures are in a retrieved passage. It does not mean the statement answers the question, or
   that the passage says the same thing. On the hand-written claims it reported all 15 claims
@@ -629,6 +694,8 @@ are replayed with v1 and exact (`--settings-from`).
   ran at the same time during this round, so the times in the ablation and verifier tables show
   order of size only; [Deployment](#deployment) has times measured with nothing else running.
   No GPU, cloud service or paid API was used.
+* **Documents indexed before the default changed keep their v1 text** until they are re-ingested
+  (tested: they keep answering; re-ingesting applies v2).
 * **Experiment C has no results.** The LoRA fine-tuning of the answer model was prepared but not
   trained to the end (see above); nothing in this document says whether it helps.
 * **Not tried.** A bge-base embedder (the local copy was incomplete), larger answer models than

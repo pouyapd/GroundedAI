@@ -31,6 +31,15 @@ keeps its own licence; versions are pinned in `backend/requirements/*.txt` and
 | sentence-transformers/all-MiniLM-L6-v2 | Apache-2.0 | |
 | cross-encoder/ms-marco-MiniLM-L-6-v2 | Apache-2.0 | trained on MS MARCO, which has its own data terms |
 | Qwen/Qwen2.5-0.5B-Instruct, Qwen2.5-1.5B-Instruct (`qwen2.5:1.5b` in Ollama) | Apache-2.0 | |
+| BAAI/bge-reranker-base | MIT | ablations in `docs/RESEARCH_EVALUATION.md` |
+| cross-encoder/nli-deberta-v3-xsmall, cross-encoder/nli-deberta-v3-base | Apache-2.0 | claim-verifier experiments in `experiments/`; fine-tuned and ONNX copies are not distributed |
+
+## Evaluation documents (not distributed with this repository)
+
+The real-document datasets (`evaluation/datasets/groundedai-nist-*`, `groundedai-claims-nist-v1`)
+use ten NIST publications. They are works of the U.S. Government, not subject to copyright in
+the United States; `scripts/fetch_nist_corpus.py` downloads them from nist.gov and checks their
+SHA-256. The datasets, reports and training-question files quote short passages from them.
 
 ## Online demo (GitHub Pages)
 

@@ -15,6 +15,11 @@ Full write-up: `docs/RESEARCH_EVALUATION.md`.
   page order, and counts only valid lower-case roman numerals as page numbers.
 - **Security:** pypdf 6.21.4 (from 6.20.0) and certifi 2026.10.23, for published advisories;
   also in the online demo's runtime.
+- **Security:** filelock 4.2.10 and setuptools 84.2.1 in the development and ML locks.
+- **Online demo:** when the model cannot be loaded, the message now says how to retry (choose
+  the model again) and keeps its sentences apart; found by blocking the download on the live
+  site. The live site was re-tested after deployment (`docs/RESEARCH_EVALUATION.md`, "Live demo
+  after deployment").
 
 - **Fixed:** facts written before an `INSUFFICIENT_EVIDENCE` marker were treated as part of a
   refusal and never checked; they are now checked and shown as a partial answer, with a warning.

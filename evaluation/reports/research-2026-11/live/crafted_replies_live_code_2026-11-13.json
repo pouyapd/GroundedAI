@@ -1,0 +1,289 @@
+{
+ "valid citation": {
+  "status": "answered",
+  "verdict": "verified",
+  "citations": {
+   "cited": [
+    "S1"
+   ],
+   "valid": [
+    "S1"
+   ],
+   "invalid": [],
+   "all_valid": true,
+   "sentences_total": 1,
+   "sentences_cited": 1
+  },
+  "claims": [
+   [
+    "supported",
+    [
+     [
+      2,
+      "A single adult ticket from Kessport to Mirrow cost"
+     ]
+    ]
+   ]
+  ],
+  "warnings": [],
+  "sources_given": [
+   "S1"
+  ]
+ },
+ "fabricated S2 (only S1 given)": {
+  "status": "answered",
+  "verdict": "verified",
+  "citations": {
+   "cited": [
+    "S1",
+    "S2"
+   ],
+   "valid": [
+    "S1"
+   ],
+   "invalid": [
+    "S2"
+   ],
+   "all_valid": false,
+   "sentences_total": 2,
+   "sentences_cited": 1
+  },
+  "claims": [
+   [
+    "supported",
+    [
+     [
+      2,
+      "A single adult ticket from Kessport to Mirrow cost"
+     ]
+    ]
+   ],
+   [
+    "added_source",
+    [
+     [
+      2,
+      "Children under 5 travel free."
+     ]
+    ]
+   ]
+  ],
+  "warnings": [
+   "The model cited sources that were not provided: S2. Those citations are invalid.",
+   "The model gave no citation for 1 statement(s); GroundedAI found the passages that contain them."
+  ],
+  "sources_given": [
+   "S1"
+  ]
+ },
+ "invalid source id S9": {
+  "status": "answered",
+  "verdict": "verified",
+  "citations": {
+   "cited": [
+    "S9"
+   ],
+   "valid": [],
+   "invalid": [
+    "S9"
+   ],
+   "all_valid": false,
+   "sentences_total": 1,
+   "sentences_cited": 0
+  },
+  "claims": [
+   [
+    "added_source",
+    [
+     [
+      2,
+      "A single adult ticket from Kessport to Mirrow cost"
+     ]
+    ]
+   ]
+  ],
+  "warnings": [
+   "The model cited sources that were not provided: S9. Those citations are invalid.",
+   "The model gave no citation for 1 statement(s); GroundedAI found the passages that contain them."
+  ],
+  "sources_given": [
+   "S1"
+  ]
+ },
+ "invented figure": {
+  "status": "answered",
+  "verdict": "unverified",
+  "citations": {
+   "cited": [
+    "S1"
+   ],
+   "valid": [
+    "S1"
+   ],
+   "invalid": [],
+   "all_valid": true,
+   "sentences_total": 1,
+   "sentences_cited": 1
+  },
+  "claims": [
+   [
+    "unsupported",
+    [
+     [
+      2,
+      "A single adult ticket from Kessport to Mirrow cost"
+     ]
+    ]
+   ]
+  ],
+  "warnings": [
+   "None of the 1 statement(s) in the answer could be matched to a retrieved passage. Treat the answer as unsupported."
+  ],
+  "sources_given": [
+   "S1"
+  ]
+ },
+ "partly supported": {
+  "status": "answered",
+  "verdict": "verified",
+  "citations": {
+   "cited": [
+    "S1"
+   ],
+   "valid": [
+    "S1"
+   ],
+   "invalid": [],
+   "all_valid": true,
+   "sentences_total": 1,
+   "sentences_cited": 1
+  },
+  "claims": [
+   [
+    "supported",
+    [
+     [
+      2,
+      "A single adult ticket from Kessport to Mirrow cost"
+     ]
+    ]
+   ]
+  ],
+  "warnings": [],
+  "sources_given": [
+   "S1"
+  ]
+ },
+ "contradicts the passage": {
+  "status": "answered",
+  "verdict": "unverified",
+  "citations": {
+   "cited": [
+    "S1"
+   ],
+   "valid": [
+    "S1"
+   ],
+   "invalid": [],
+   "all_valid": true,
+   "sentences_total": 1,
+   "sentences_cited": 1
+  },
+  "claims": [
+   [
+    "partial",
+    [
+     [
+      2,
+      "Children under 5 travel free."
+     ]
+    ]
+   ]
+  ],
+  "warnings": [
+   "None of the 1 statement(s) in the answer could be matched to a retrieved passage. Treat the answer as unsupported."
+  ],
+  "sources_given": [
+   "S1"
+  ]
+ },
+ "true but uncited": {
+  "status": "answered",
+  "verdict": "verified",
+  "citations": {
+   "cited": [],
+   "valid": [],
+   "invalid": [],
+   "all_valid": true,
+   "sentences_total": 1,
+   "sentences_cited": 0
+  },
+  "claims": [
+   [
+    "added_source",
+    [
+     [
+      2,
+      "A single adult ticket from Kessport to Mirrow cost"
+     ]
+    ]
+   ]
+  ],
+  "warnings": [
+   "The model gave no citation for 1 statement(s); GroundedAI found the passages that contain them."
+  ],
+  "sources_given": [
+   "S1"
+  ]
+ },
+ "partial answer, then refusal": {
+  "status": "answered",
+  "verdict": "verified",
+  "citations": {
+   "cited": [
+    "S1"
+   ],
+   "valid": [
+    "S1"
+   ],
+   "invalid": [],
+   "all_valid": true,
+   "sentences_total": 1,
+   "sentences_cited": 1
+  },
+  "claims": [
+   [
+    "supported",
+    [
+     [
+      2,
+      "A single adult ticket from Kessport to Mirrow cost"
+     ]
+    ]
+   ]
+  ],
+  "warnings": [
+   "The model answered part of the question and said the rest cannot be answered from the sources (the return fare is not stated). The statements before that remark were checked like any answer."
+  ],
+  "sources_given": [
+   "S1"
+  ]
+ },
+ "refusal": {
+  "status": "insufficient_evidence",
+  "verdict": null,
+  "citations": {
+   "cited": [],
+   "valid": [],
+   "invalid": [],
+   "all_valid": true,
+   "sentences_total": 0,
+   "sentences_cited": 0
+  },
+  "claims": [],
+  "warnings": [],
+  "sources_given": [
+   "S1"
+  ]
+ }
+}
