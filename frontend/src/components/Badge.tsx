@@ -79,10 +79,10 @@ export function VerdictBadge({ verdict }: { verdict: Verdict }) {
 }
 
 const EVIDENCE_TEXT: Record<EvidenceVerdict, [Tone, string]> = {
-  all_found: ["good", "Every statement found"],
-  some_uncertain: ["warning", "Some statements only partly found"],
-  some_not_found: ["warning", "Some statements not found"],
-  none_found: ["critical", "No statement found"],
+  all_found: ["good", "Every statement matched text"],
+  some_uncertain: ["warning", "Some statements partly matched text"],
+  some_not_found: ["warning", "Some statements did not match text"],
+  none_found: ["critical", "No statement matched text"],
   not_applicable: ["neutral", "No statements to check"],
 };
 const CITATION_TEXT: Record<CitationVerdict, [Tone, string]> = {
