@@ -52,10 +52,10 @@ export function ClaimCheck({
   return (
     <details open style={{ marginTop: 16 }}>
       <summary>
-        Claim check ({found} of {verification.claims} statements found in the retrieved passages)
+        Claim check ({found} of {verification.claims} statements matched retrieved text)
       </summary>
       <p className="small muted">
-        {verification.method}
+        {verification.method} These are rule-based text checks, not full semantic entailment or factuality checks. A statement that matches text can still be irrelevant to the question or misleading.
         {verification.references_variant > 0
           ? ` The model wrote ${verification.references_variant} citation(s) in another form than [S#] (for example [Source 1]); they are read here but do not count as valid citations.`
           : ""}

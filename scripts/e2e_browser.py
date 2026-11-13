@@ -198,9 +198,10 @@ def run(page: Any, base: str, files: dict[str, Path], shots: Path | None) -> Che
     )
     checks.check("the quote is the supporting sentence", "costs 14 euros" in evidence)
     checks.check(
-        "the answer is marked as found in the sources",
-        # claims-v1 says "Every statement found in the sources", claims-v2 "Every statement found".
-        "Every statement found" in text,
+        "the answer is marked as matching the retrieved text",
+        # claims-v1 says "All statements matched retrieved text", claims-v2 "Every statement
+        # matched text".
+        "All statements matched retrieved text" in text or "Every statement matched text" in text,
     )
     label = page.locator(".evidence .cite").first.inner_text()
     page.locator(".evidence .cite").first.click()

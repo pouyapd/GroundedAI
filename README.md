@@ -27,32 +27,24 @@
   <a href="docs/ARCHITECTURE.md">Architecture</a>
 </p>
 
-Retrieval-augmented generation (RAG) answers questions from documents, but its citations are
-usually taken on trust. **GroundedAI** is a local RAG application that checks them.
+**GroundedAI is a document-grounded question-answering system that makes the evidence behind each answer inspectable.** It combines hybrid retrieval with statement-level checks, exact source quotes and page references.
 
-- Upload a PDF, ask a question, and every statement in the answer is compared with the
-  passages the model actually received.
-- Statements found in a document come with the exact quoted sentence and its page; statements
-  that are not found are marked.
-- Sources that disagree are shown side by side.
-- When the documents don't say, the reply is a plain "not enough evidence".
-
-Everything runs on a laptop CPU, with no paid service or cloud API, and the
-[live demo](https://pouyapd.github.io/GroundedAI/) runs it entirely in your browser.
+Ask questions across PDFs and other text documents. GroundedAI shows which retrieved passage matches each statement, flags missing evidence and invalid citation labels, and surfaces detected disagreements between documents. The evidence remains visible so readers can inspect the source themselves.
 
 <p align="center">
-  <a href="https://pouyapd.github.io/GroundedAI/"><picture>
-    <source media="(prefers-reduced-motion: reduce)" srcset="docs/images/demo-preview.png">
-    <img src="docs/images/demo-preview.gif" width="760"
-         alt="Recording of the live demo: the Harbourline Ferries Passenger Guide is selected, the question How much does a single adult ticket to Mirrow cost? is typed and sent, and the answer appears: 14 euros, marked Every statement found in the sources, with the claim Supported by the cited passage and the quoted sentence from page 2">
-  </picture></a>
+  <a href="https://pouyapd.github.io/GroundedAI/"><img src="https://img.shields.io/badge/▶%20Try%20the%20live%20demo-Open%20in%20your%20browser-2ea043?style=for-the-badge" alt="Try the live browser demo"></a>
+  <a href="https://github.com/pouyapd/GroundedAI"><img src="https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github" alt="Source code on GitHub"></a>
 </p>
-<p align="center"><sub>Recorded from the live demo in a browser (extractive generator, sample PDF): select a
-document, ask, and every statement comes back with its status, quoted sentence and page.</sub></p>
 
-This is a portfolio and research project, evaluated on small synthetic datasets and on one small
-set of real PDFs. It has not been independently validated, and its checks are rule-based
-([Limitations](#limitations)).
+**What makes it useful**
+- **Inspectable evidence:** statement-level status, exact supporting quote, source label and page.
+- **Two generation paths:** a deterministic extractive baseline or an optional local language model.
+- **Transparent checks:** citation validity, lexical evidence matching and detected source disagreements are reported separately.
+- **Local-first execution:** run the full application locally, or try the browser demo without an account or server.
+
+> **Important:** a checked citation is not a guarantee of a correct answer. The default claim checker compares words and figures, not full meaning. A statement can match a passage and still be irrelevant or misleading. Open the source before relying on an answer.
+
+This is a research and portfolio prototype evaluated on small, author-curated datasets and a limited set of real PDFs. The results describe those test sets and should not be generalized to other domains.
 
 **Built with:** Python 3.12, FastAPI, LangChain, SQLAlchemy + Alembic, SQLite FTS5 or
 PostgreSQL + pgvector, sentence-transformers, Ollama, React 19 + TypeScript (Vite), pytest,
@@ -66,13 +58,8 @@ account; nothing you type or upload leaves the browser tab.
 - **The real backend, in your browser.** GroundedAI's Python code runs as WebAssembly
   (Pyodide): upload checks, PDF extraction, hybrid retrieval, the prompt and the claim check.
   Two synthetic sample PDFs are loaded, with example questions; you can also upload a PDF.
-- **Two generators.** The default extractive generator answers instantly and is not a language
-  model. Optionally, Qwen2.5-1.5B-Instruct runs on your GPU (WebGPU, about 880 MB downloaded
-  once); its answers go through the same claim check, which flags, for example, a citation
-  the model invented ([screenshot](docs/images/demo-llm-answer-card.png)).
-- **Limits.** The first load takes about 15–60 s (about 26 MB, then cached). The demo uses the
-  word-overlap embedder, keeps data only in the tab, and has no evaluation runs. Its model is a
-  different 4-bit build from the one evaluated below, so its answers can differ. Details:
+- **Two answer generators.** The extractive option selects sentences from retrieved passages using lexical word matching. It is deterministic, instant and is not an LLM. The optional Qwen2.5-1.5B-Instruct model generates answers in the browser through WebLLM and WebGPU (about 880 MB downloaded once, then cached). Both use the same retrieval pipeline and lexical claim check. Qwen can handle more flexible phrasing, but it can still produce incorrect or irrelevant answers ([example](docs/images/demo-llm-answer-card.png)).
+- **Limits.** The first load takes about 15–60 s (about 26 MB, then cached). The demo uses a hashing embedder based on word overlap, not semantic meaning; browser data stays in the tab, and evaluation runs are unavailable. The browser's 4-bit Qwen build differs from the Ollama build used in the experiments, so outputs and timings are not directly comparable. Details:
   [docs/ONLINE_DEMO.md](docs/ONLINE_DEMO.md).
 
 <p align="center">
@@ -108,16 +95,15 @@ the interface), on one of the sample PDFs in <code>examples/</code>. More screen
 
 ## How answers are checked
 
-Each statement gets one status. A status says whether the statement's words and figures were
-**found** in a retrieved passage; it is not a judgement of truth.
+Each statement gets one status. By default, the claim checker asks whether the statement's words and figures were **found** in a retrieved passage. This is lexical evidence matching, not semantic entailment, factual validation or a check that the answer addresses the question.
 
 | Status shown | Meaning |
 |---|---|
-| Supported by the cited passage | the passage the model cited contains it |
-| Found in a passage, not cited | another retrieved passage contains it; GroundedAI adds that source |
-| Cited the wrong passage | the cited passage does not contain it, another one does (shown instead) |
-| Partly found | some of it is in a passage, not enough to count as found |
-| Not found in the sources | no retrieved passage contains it |
+| Lexical match in cited passage | the cited passage meets the rule-based word-and-figure overlap threshold |
+| Passage matched, not cited by model | another retrieved passage meets the threshold; GroundedAI attaches that evidence |
+| Lexical match in another passage | the model's cited passage did not match, but another retrieved passage did |
+| Partial lexical match | some statement content overlaps, but the passage does not meet the threshold |
+| No lexical match in retrieved passages | no retrieved passage meets the matching rule |
 
 The answer can also be *Not enough evidence* or *Invalid model output* (no usable answer text),
 and it can come with warnings: conflicting sources (with both quotes), invented citation labels,
@@ -400,14 +386,7 @@ python scripts/e2e_demo.py         # the online demo in a browser (see docs/ONLI
 The default suite is offline: SQLite, deterministic providers and a fake Ollama HTTP server.
 No model, key or network is needed.
 
-- **After the research round (2026-11-13, `main` at `b3583ab`):**
-  - CI, all 8 jobs: backend 516 passed on Python 3.12 and 3.13, PostgreSQL + pgvector 7 passed,
-    front end 82 passed with lint, type check and builds, the online demo in a browser 16 of 16,
-    offline benchmark, dependency audit (no known vulnerabilities), Docker image and Compose file;
-  - browser journey (local): 24 of 24 with the default generator and with qwen2.5:1.5b;
-  - live site: 16 of 16 browser checks, 19 of 19 with the in-page model, and every quote shown
-    on three real PDFs found verbatim on the page given
-    ([details](docs/RESEARCH_EVALUATION.md#live-demo-after-deployment-2026-11-13)).
+- **Research and live-demo check (2026-11-13):** the recorded CI run passed all 8 jobs; backend, PostgreSQL, front-end, security, Docker and browser-demo checks are detailed in [docs/TESTING.md](docs/TESTING.md). The deployed demo passed 16 of 16 browser checks, and 19 of 19 with the in-page model. The live test also checked 22 questions on three real PDFs and verified all 64 displayed quotes against their stated pages ([full report](docs/RESEARCH_EVALUATION.md#live-demo-after-deployment-2026-11-13)).
 - **Earlier full run (2026-10-19):**
   - backend: 487 tests passed, plus 7 PostgreSQL tests run separately against a local
     PostgreSQL + pgvector; strict mypy and ruff clean;

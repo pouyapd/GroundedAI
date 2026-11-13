@@ -105,8 +105,8 @@ export function DemoPanel({ api }: { api: BrowserApi }) {
             <strong>Extractive generator</strong>
             <span className="option-meta">Instant · deterministic · not a language model</span>
             <span className="option-text">
-              Copies the best-matching sentences from the passages. Good for literal questions; it refuses
-              paraphrased ones.
+              Selects sentences from retrieved passages using lexical word matching. It is instant and repeatable, but it
+              does not interpret meaning and may miss paraphrased questions.
             </span>
           </span>
         </label>
@@ -126,7 +126,8 @@ export function DemoPanel({ api }: { api: BrowserApi }) {
               WebGPU · one-time download of about {PAGE_MODEL.downloadMB} MB, then cached
             </span>
             <span className="option-text">
-              A real language model, run in this tab with WebLLM. Its answers go through the same claim check.
+              A real language model, run locally in this tab with WebLLM and WebGPU. It can generate more flexible answers,
+              but it still uses the same lexical claim check and can make mistakes.
               {gpu && !gpu.available ? ` Not available here: ${gpu.reason}` : ""}
             </span>
           </span>

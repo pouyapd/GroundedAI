@@ -136,7 +136,8 @@ def run(page: Any, url: str, checks: Checks, shots: Path | None, work: Path) -> 
     checks.check("a sample question is answered from the PDF", "14 euros" in card)
     checks.check("the quote names its page", "p. 2" in card)
     checks.check(
-        "every statement is marked as found", "Every statement found in the sources" in text
+        "every statement is marked as matching the retrieved text",
+        "All statements matched retrieved text" in text,
     )
     checks.check("the answer says which generator wrote it", "not an LLM" in card)
     checks.check("the quote does not start with the section heading", "“Tickets" not in card)
@@ -255,9 +256,9 @@ def run_llm(page: Any, checks: Checks, shots: Path | None) -> None:
     outcomes = [
         label
         for label in (
-            "Every statement found in the sources",
-            "Some statements not found",
-            "Not found in the sources",
+            "All statements matched retrieved text",
+            "Some statements did not match retrieved text",
+            "No lexical match in retrieved passages",
             "Not enough evidence",
             "Invalid model output",
         )

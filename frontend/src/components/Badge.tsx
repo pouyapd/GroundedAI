@@ -68,21 +68,21 @@ export function AnswerStatusBadge({ status, grounding }: { status: AnswerStatus;
 export function VerdictBadge({ verdict }: { verdict: Verdict }) {
   switch (verdict) {
     case "verified":
-      return <Badge tone="good">Every statement found in the sources</Badge>;
+      return <Badge tone="good">All statements matched retrieved text</Badge>;
     case "partially_verified":
-      return <Badge tone="warning">Some statements not found in the sources</Badge>;
+      return <Badge tone="warning">Some statements did not match retrieved text</Badge>;
     case "unverified":
-      return <Badge tone="critical">Not found in the sources</Badge>;
+      return <Badge tone="critical">No lexical match in retrieved passages</Badge>;
     default:
       return <Badge tone="neutral">No statements to check</Badge>;
   }
 }
 
 const EVIDENCE_TEXT: Record<EvidenceVerdict, [Tone, string]> = {
-  all_found: ["good", "Every statement found"],
-  some_uncertain: ["warning", "Some statements only partly found"],
-  some_not_found: ["warning", "Some statements not found"],
-  none_found: ["critical", "No statement found"],
+  all_found: ["good", "Every statement matched text"],
+  some_uncertain: ["warning", "Some statements partly matched text"],
+  some_not_found: ["warning", "Some statements did not match text"],
+  none_found: ["critical", "No statement matched text"],
   not_applicable: ["neutral", "No statements to check"],
 };
 const CITATION_TEXT: Record<CitationVerdict, [Tone, string]> = {
@@ -118,15 +118,15 @@ export function VerificationBadges({ verification }: { verification: Verificatio
 export function ClaimStatusBadge({ status }: { status: ClaimStatus }) {
   switch (status) {
     case "supported":
-      return <Badge tone="good">Supported by the cited passage</Badge>;
+      return <Badge tone="good">Lexical match in cited passage</Badge>;
     case "wrong_source":
-      return <Badge tone="warning">Cited the wrong passage</Badge>;
+      return <Badge tone="warning">Lexical match in another passage</Badge>;
     case "added_source":
-      return <Badge tone="info">Found in a passage, not cited</Badge>;
+      return <Badge tone="info">Passage matched, not cited by model</Badge>;
     case "partial":
-      return <Badge tone="warning">Partly found</Badge>;
+      return <Badge tone="warning">Partial lexical match</Badge>;
     default:
-      return <Badge tone="critical">Not found in the sources</Badge>;
+      return <Badge tone="critical">No lexical match in retrieved passages</Badge>;
   }
 }
 
