@@ -46,6 +46,44 @@ def test_short_documents_are_left_alone() -> None:
     assert clean_pdf_pages(pages) == pages
 
 
+def test_page_numbers_in_page_order_are_removed_other_edge_numbers_are_kept() -> None:
+    # Printed numbers run two behind the file position (two unnumbered cover pages).
+    pages = ["Cover", "Contents"] + [
+        f"{HEADER}\nSection {n}.\nThe limit is stated below.\n{n * 7}\n{n - 2}"
+        for n in range(3, 11)
+    ]
+    cleaned = clean_pdf_pages(pages)
+    for position, page in enumerate(cleaned[2:], start=3):
+        lines = page.split("\n")
+        assert str(position - 2) not in lines  # the page number is gone
+        assert str(position * 7) in lines  # a value at the page edge is kept
+        assert HEADER not in page
+
+
+def test_a_lone_number_is_kept_when_numbers_do_not_follow_the_pages() -> None:
+    topics = ["passwords", "tokens", "sessions", "biometrics", "recovery", "federation"]
+    labels = ["Attempts", "Retries", "Timeout", "Users", "Devices", "Sessions"]
+    values = [100, 5, 30, 12, 8, 64]
+    pages = [
+        f"Body text about {topic}.\n{label}:\n{value}"
+        for topic, label, value in zip(topics, labels, values, strict=True)
+    ]
+    assert clean_pdf_pages(pages) == pages
+
+
+def test_words_made_of_roman_letters_are_kept_but_roman_page_numbers_are_removed() -> None:
+    edge = ["mix", "C", "civil", "Did", "MIX"]
+    topics = ["passwords", "tokens", "sessions", "biometrics", "recovery"]
+    romans = ["i", "ii", "Page iii", "iv", "v"]
+    pages = [
+        f"{word}\nBody text about {topic}.\n{roman}"
+        for word, topic, roman in zip(edge, topics, romans, strict=True)
+    ]
+    cleaned = clean_pdf_pages(pages)
+    for word, topic, page in zip(edge, topics, cleaned, strict=True):
+        assert page.split("\n") == [word, f"Body text about {topic}."]
+
+
 def test_v1_chunking_record_is_unchanged() -> None:
     # Reports written before the v2 clean-up existed must keep the same chunking record.
     assert "text_cleanup" not in ChunkingConfig(800, 120).as_dict()
