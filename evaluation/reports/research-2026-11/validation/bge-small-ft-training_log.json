@@ -1,0 +1,68 @@
+{
+ "base": "BAAI/bge-small-en-v1.5",
+ "train_pairs": 242,
+ "val_questions": 29,
+ "hard_negatives": 242,
+ "args": {
+  "base": "BAAI/bge-small-en-v1.5",
+  "train": "data\\train_queries.jsonl",
+  "val": "data\\val_queries.jsonl",
+  "out": "runs\\bge-small-ft",
+  "epochs": "3",
+  "batch": "16",
+  "lr": "2e-05",
+  "seed": "13",
+  "prefix": "Represent this sentence for searching relevant passages: ",
+  "threads": "5"
+ },
+ "epochs": [
+  {
+   "epoch": 1,
+   "seconds": 1290.8,
+   "mean_loss": 1.2848,
+   "val": {
+    "n": 29,
+    "passages": 29,
+    "mrr@10": 0.8986,
+    "recall@1": 0.8621,
+    "recall@5": 0.9655,
+    "recall@10": 1.0
+   }
+  },
+  {
+   "epoch": 2,
+   "seconds": 1336.0,
+   "mean_loss": 0.7999,
+   "val": {
+    "n": 29,
+    "passages": 29,
+    "mrr@10": 0.9072,
+    "recall@1": 0.8621,
+    "recall@5": 0.9655,
+    "recall@10": 1.0
+   }
+  },
+  {
+   "epoch": 3,
+   "seconds": 1270.2,
+   "mean_loss": 0.7056,
+   "val": {
+    "n": 29,
+    "passages": 29,
+    "mrr@10": 0.9072,
+    "recall@1": 0.8621,
+    "recall@5": 0.9655,
+    "recall@10": 1.0
+   }
+  }
+ ],
+ "epoch_0": {
+  "n": 29,
+  "passages": 29,
+  "mrr@10": 0.8645,
+  "recall@1": 0.7931,
+  "recall@5": 0.931,
+  "recall@10": 1.0
+ },
+ "best_epoch": 2
+}

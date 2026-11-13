@@ -1,0 +1,1555 @@
+{
+ "kind": "rag-eval",
+ "rag_eval_version": 1,
+ "dataset": {
+  "name": "groundedai-nist-val-v1",
+  "fingerprint": "377d90156fdcc888",
+  "questions": 18
+ },
+ "summary": {
+  "questions": 18,
+  "retrieval": {
+   "recall@1": {
+    "mean": 0.6,
+    "n": 15,
+    "ci95": [
+     0.3333,
+     0.8667
+    ]
+   },
+   "precision@1": {
+    "mean": 0.6,
+    "n": 15,
+    "ci95": [
+     0.3333,
+     0.8667
+    ]
+   },
+   "recall@3": {
+    "mean": 0.7333,
+    "n": 15,
+    "ci95": [
+     0.4667,
+     0.9333
+    ]
+   },
+   "precision@3": {
+    "mean": 0.2444,
+    "n": 15,
+    "ci95": [
+     0.1556,
+     0.3111
+    ]
+   },
+   "recall@5": {
+    "mean": 0.7333,
+    "n": 15,
+    "ci95": [
+     0.4667,
+     0.9333
+    ]
+   },
+   "precision@5": {
+    "mean": 0.1467,
+    "n": 15,
+    "ci95": [
+     0.0933,
+     0.1867
+    ]
+   },
+   "recall@10": {
+    "mean": 0.9333,
+    "n": 15,
+    "ci95": [
+     0.8,
+     1.0
+    ]
+   },
+   "precision@10": {
+    "mean": 0.0933,
+    "n": 15,
+    "ci95": [
+     0.08,
+     0.1
+    ]
+   },
+   "mrr@10": {
+    "mean": 0.6829,
+    "n": 15,
+    "ci95": [
+     0.4829,
+     0.8857
+    ]
+   },
+   "ndcg@10": {
+    "mean": 0.7406,
+    "n": 15,
+    "ci95": [
+     0.5671,
+     0.9082
+    ]
+   }
+  },
+  "answers": {
+   "answerable": 15,
+   "correct": {
+    "mean": 0.6,
+    "n": 15,
+    "ci95": [
+     0.3333,
+     0.8
+    ]
+   },
+   "completeness": {
+    "mean": 0.65,
+    "n": 15,
+    "ci95": [
+     0.4167,
+     0.8667
+    ]
+   },
+   "false_refusals": 1,
+   "invalid_output": 0,
+   "errors": 0
+  },
+  "abstention": {
+   "should_refuse": 3,
+   "refused": 3,
+   "precision": 0.75,
+   "recall": 1.0,
+   "predicted_abstentions": 4
+  },
+  "citations": {
+   "precision": {
+    "mean": 0.4405,
+    "n": 14,
+    "ci95": [
+     0.2381,
+     0.6548
+    ]
+   },
+   "recall": {
+    "mean": 0.7143,
+    "n": 14,
+    "ci95": [
+     0.5,
+     0.9286
+    ]
+   },
+   "answers_with_invalid_labels": 0,
+   "answers_without_valid_label": 0
+  },
+  "claims_lexical_check": {
+   "statements": 31,
+   "found_share": 1.0,
+   "unsupported_share": 0.0,
+   "partial_share": 0.0
+  },
+  "quotes": {
+   "total": 32,
+   "verbatim_share": 1.0,
+   "page_correct_share": 1.0,
+   "pages_unknown": 0
+  },
+  "false_conflict_reports": 0,
+  "latency_ms": {
+   "total_median": 93.2,
+   "generation_median": 5.9,
+   "retrieval_median": 62.1,
+   "total_p90": 348.2
+  }
+ },
+ "by_category": {
+  "factual": {
+   "questions": 14,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.6429,
+     "n": 14,
+     "ci95": [
+      0.4286,
+      0.8571
+     ]
+    },
+    "precision@1": {
+     "mean": 0.6429,
+     "n": 14,
+     "ci95": [
+      0.4286,
+      0.8571
+     ]
+    },
+    "recall@3": {
+     "mean": 0.7857,
+     "n": 14,
+     "ci95": [
+      0.5714,
+      1.0
+     ]
+    },
+    "precision@3": {
+     "mean": 0.2619,
+     "n": 14,
+     "ci95": [
+      0.1905,
+      0.3333
+     ]
+    },
+    "recall@5": {
+     "mean": 0.7857,
+     "n": 14,
+     "ci95": [
+      0.5714,
+      1.0
+     ]
+    },
+    "precision@5": {
+     "mean": 0.1571,
+     "n": 14,
+     "ci95": [
+      0.1143,
+      0.2
+     ]
+    },
+    "recall@10": {
+     "mean": 1.0,
+     "n": 14,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.1,
+     "n": 14,
+     "ci95": [
+      0.1,
+      0.1
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.7316,
+     "n": 14,
+     "ci95": [
+      0.5347,
+      0.9048
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.7935,
+     "n": 14,
+     "ci95": [
+      0.6398,
+      0.9286
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 14,
+    "correct": {
+     "mean": 0.6429,
+     "n": 14,
+     "ci95": [
+      0.4286,
+      0.8571
+     ]
+    },
+    "completeness": {
+     "mean": 0.6607,
+     "n": 14,
+     "ci95": [
+      0.4286,
+      0.875
+     ]
+    },
+    "false_refusals": 1,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": 0.0,
+    "recall": null,
+    "predicted_abstentions": 1
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.4744,
+     "n": 13,
+     "ci95": [
+      0.2821,
+      0.6923
+     ]
+    },
+    "recall": {
+     "mean": 0.7692,
+     "n": 13,
+     "ci95": [
+      0.5385,
+      1.0
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 28,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 29,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 92.6,
+    "generation_median": 5.7,
+    "retrieval_median": 58.2,
+    "total_p90": 388.8
+   }
+  },
+  "multi_chunk": {
+   "questions": 1,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@1": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall@3": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@3": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall@5": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@5": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "mrr@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "ndcg@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    }
+   },
+   "answers": {
+    "answerable": 1,
+    "correct": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": 0.5,
+     "n": 1,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": null,
+    "recall": null,
+    "predicted_abstentions": 0
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 3,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 123.9,
+    "generation_median": 5.1,
+    "retrieval_median": 81.0,
+    "total_p90": 123.9
+   }
+  },
+  "unanswerable": {
+   "questions": 3,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 3,
+    "refused": 3,
+    "precision": 1.0,
+    "recall": 1.0,
+    "predicted_abstentions": 3
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 0,
+    "found_share": null,
+    "unsupported_share": null,
+    "partial_share": null
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim_share": null,
+    "page_correct_share": null,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 85.9,
+    "generation_median": 7.1,
+    "retrieval_median": 57.1,
+    "total_p90": 101.7
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "v01",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "This publication is available free of charge from: https://doi.org/10.6028/NIST.AI.600-1 [S1]. Acknowledgments: This report was accomplished with the many helpful comments and contributions from the community, including the NIST Generative AI Public Working Group, and NIST staff and guest researchers: Chloe Autio, Jesse Dunietz, Patrick Hall, Shomik Jain, Kamie Roberts, Reva Schwartz, Martin Stanley, and Elham Tabassi [S3]. Additional information about this publication and other NIST AI publications are available at https://airc.nist.gov/Home [S4].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 157.763,
+    "generation": 19.411,
+    "total": 208.309
+   },
+   "model_output": "This publication is available free of charge from: https://doi.org/10.6028/NIST.AI.600-1 [S1]. Acknowledgments: This report was accomplished with the many helpful comments and contributions from the community, including the NIST Generative AI Public Working Group, and NIST staff and guest researchers: Chloe Autio, Jesse Dunietz, Patrick Hall, Shomik Jain, Kamie Roberts, Reva Schwartz, Martin Stanley, and Elham Tabassi [S3]. Additional information about this publication and other NIST AI publications are available at https://airc.nist.gov/Home [S4].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S3",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v02",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 336.867,
+    "generation": 23.878,
+    "total": 419.16
+   },
+   "model_output": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v03",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S1]. • Not every subcategory of the AI RMF is included in this document.13 Suggested actions are listed for only some subcategories [S2]. AI RMF profiles assist organizations in deciding how to best manage AI risks in a manner that is well-aligned with their goals, considers legal/regulatory requirements and best practices, and reflects risk management priorities [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 74.344,
+    "generation": 4.326,
+    "total": 110.722
+   },
+   "model_output": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S1]. • Not every subcategory of the AI RMF is included in this document.13 Suggested actions are listed for only some subcategories [S2]. AI RMF profiles assist organizations in deciding how to best manage AI risks in a manner that is well-aligned with their goals, considers legal/regulatory requirements and best practices, and reflects risk management priorities [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v04",
+   "category": "factual",
+   "tags": [
+    "numeric",
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The foundation model subcategory of “dual-use foundation models” is defined by EO 14110 as “an AI model that is trained on broad data; generally uses self-supervision; contains at least tens of billions of parameters; is applicable across a wide range of contexts.” 2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 46.35,
+    "generation": 5.448,
+    "total": 81.433
+   },
+   "model_output": "The foundation model subcategory of “dual-use foundation models” is defined by EO 14110 as “an AI model that is trained on broad data; generally uses self-supervision; contains at least tens of billions of parameters; is applicable across a wide range of contexts.” 2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v05",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5
+   },
+   "status": "answered",
+   "answer": "Confabulation “Confabulation” refers to a phenomenon in which GAI systems generate and confidently present erroneous or false content in response to prompts [S1]. 9 Confabulations of falsehoods are most commonly a problem for text-based outputs; for audio, image, or video content, creative generation of non-factual content can be a desired behavior [S2]. Confabulation: The production of confidently stated but erroneous or false content (known colloquially as “hallucinations” or “fabrications”) by which users may be misled or deceived.6 3 [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 42.98,
+    "generation": 3.892,
+    "total": 76.383
+   },
+   "model_output": "Confabulation “Confabulation” refers to a phenomenon in which GAI systems generate and confidently present erroneous or false content in response to prompts [S1]. 9 Confabulations of falsehoods are most commonly a problem for text-based outputs; for audio, image, or video content, creative generation of non-factual content can be a desired behavior [S2]. Confabulation: The production of confidently stated but erroneous or false content (known colloquially as “hallucinations” or “fabrications”) by which users may be misled or deceived.6 3 [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v06",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 49.382,
+    "generation": 5.0,
+    "total": 67.078
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v07",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "This work was informed by public feedback and consultations with diverse stakeholder groups as part of NIST’s Generative AI Public Working Group (GAI PWG) [S1]. The focus of the GAI PWG was limited to four primary considerations relevant to GAI: Governance, Content Provenance, Pre-deployment Testing, and Incident Disclosure (further described in Appendix A) [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 46.75,
+    "generation": 5.899,
+    "total": 84.716
+   },
+   "model_output": "This work was informed by public feedback and consultations with diverse stakeholder groups as part of NIST’s Generative AI Public Working Group (GAI PWG) [S1]. The focus of the GAI PWG was limited to four primary considerations relevant to GAI: Governance, Content Provenance, Pre-deployment Testing, and Incident Disclosure (further described in Appendix A) [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v08",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Current estimates suggest that training a single transformer LLM can emit as much carbon as 300 roundtrip flights between San Francisco and New York [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 66.993,
+    "generation": 6.692,
+    "total": 100.483
+   },
+   "model_output": "Current estimates suggest that training a single transformer LLM can emit as much carbon as 300 roundtrip flights between San Francisco and New York [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v09",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 57.112,
+    "generation": 7.345,
+    "total": 85.892
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v10",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 82.11,
+    "generation": 6.7,
+    "total": 105.632
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v11",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "We introduce four principles for explainable artificial intelligence (AI) that comprise fundamental properties for explainable AI systems [S1]. The four principles support the foundation of explainable AI measurement, policy considerations, safety, acceptance by society, and other aspects of AI technology [S3]. 1 Introduction 1 2 Four Principles of Explainable AI 2 2.1 Explanation 3 2.2 Meaningful 3 2.3 Explanation Accuracy 4 2.4 Knowledge Limits 5 2.5 Summary 5 3 Purposes and styles of explanations 6 4 Risk Management of Explainable AI 8 5 Overview of Principles in the Literature 10 6 Overview of Explainable AI Algorithms 12 6.1 Self-Interpretable Models 12 6.2 Post-Hoc Explanations 13 6.2.1 Local Explanations 13 6.2.2 Global Explanations 14 6.3 Adversarial Attacks on Explainability 15 7 Evaluating Explainable AI Algorithms 15 7.1 Evaluating Meaningfulness 15 7.2 Evaluating Explanation Accuracy 17 8 Humans as a Comparison Group for Explainable AI 18 8.1 Explanation 19 8.2 Meaningful 19 8.3 Explanation Accuracy 20 8.4 Knowledge Limits 20 9 Discussion and Conclusions 21 [S4].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 493.824,
+    "generation": 30.137,
+    "total": 655.394
+   },
+   "model_output": "We introduce four principles for explainable artificial intelligence (AI) that comprise fundamental properties for explainable AI systems [S1]. The four principles support the foundation of explainable AI measurement, policy considerations, safety, acceptance by society, and other aspects of AI technology [S3]. 1 Introduction 1 2 Four Principles of Explainable AI 2 2.1 Explanation 3 2.2 Meaningful 3 2.3 Explanation Accuracy 4 2.4 Knowledge Limits 5 2.5 Summary 5 3 Purposes and styles of explanations 6 4 Risk Management of Explainable AI 8 5 Overview of Principles in the Literature 10 6 Overview of Explainable AI Algorithms 12 6.1 Self-Interpretable Models 12 6.2 Post-Hoc Explanations 13 6.2.1 Local Explanations 13 6.2.2 Global Explanations 14 6.3 Adversarial Attacks on Explainability 15 7 Evaluating Explainable AI Algorithms 15 7.1 Evaluating Meaningfulness 15 7.2 Evaluating Explanation Accuracy 17 8 Humans as a Comparison Group for Explainable AI 18 8.1 Explanation 19 8.2 Meaningful 19 8.3 Explanation Accuracy 20 8.4 Knowledge Limits 20 9 Discussion and Conclusions 21 [S4].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S3",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v12",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.1,
+    "ndcg@10": 0.2890648263178879
+   },
+   "status": "answered",
+   "answer": "NISTIR 8312 [S1]. URL https://csrc.nist.gov/publications/detail/nistir/8286/final [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 43.723,
+    "generation": 4.693,
+    "total": 79.61
+   },
+   "model_output": "NISTIR 8312 [S1]. URL https://csrc.nist.gov/publications/detail/nistir/8286/final [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v13",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.3333333333333333
+   },
+   "status": "answered",
+   "answer": "NISTIR 8312 [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 33.062,
+    "generation": 4.945,
+    "total": 66.301
+   },
+   "model_output": "NISTIR 8312 [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v14",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "However, for those AI systems that are intended or required to be explainable, we propose that those systems adhere to the following four principles: Explanation: A system delivers or contains accompanying evidence or reason(s) for outputs and/or processes [S2]. These two principles do not require that an explanation correctly reflects a system’s process for generating its output [S3]. The remaining three principles are the fundamental properties of those explanations [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 33.311,
+    "generation": 4.866,
+    "total": 75.594
+   },
+   "model_output": "However, for those AI systems that are intended or required to be explainable, we propose that those systems adhere to the following four principles: Explanation: A system delivers or contains accompanying evidence or reason(s) for outputs and/or processes [S2]. These two principles do not require that an explanation correctly reflects a system’s process for generating its output [S3]. The remaining three principles are the fundamental properties of those explanations [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S2",
+     "S3",
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v15",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 55.272,
+    "generation": 7.079,
+    "total": 85.8
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v16",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "These four principles are that the system produce an explanation, that the explanation be meaningful to humans, that the explanation reflects the system’s processes accurately, and that the system expresses its knowledge limits [S2]. 2.4 Knowledge Limits The previous principles implicitly assume that a system is operating within the scope of its design and knowledge boundaries [S1]. 8.4 Knowledge Limits This principle states that the system only operates 1) under the conditions it was designed and 2) when it reaches a sufficient confidence in its output or actions [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.5,
+   "timings_ms": {
+    "retrieval": 80.982,
+    "generation": 5.137,
+    "total": 123.896
+   },
+   "model_output": "These four principles are that the system produce an explanation, that the explanation be meaningful to humans, that the explanation reflects the system’s processes accurately, and that the system expresses its knowledge limits [S2]. 2.4 Knowledge Limits The previous principles implicitly assume that a system is operating within the scope of its design and knowledge boundaries [S1]. 8.4 Knowledge Limits This principle states that the system only operates 1) under the conditions it was designed and 2) when it reaches a sufficient confidence in its output or actions [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S2",
+     "S1",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v17",
+   "category": "factual",
+   "tags": [
+    "paraphrase:v11"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.3562071871080222
+   },
+   "status": "answered",
+   "answer": "This work on principles of explainable AI systems is part of the much larger NIST AI portfolio 1 around trustworthy AI data, standards, evaluation, validation, and verification—all necessary for AI measurements [S2]. However, for those AI systems that are intended or required to be explainable, we propose that those systems adhere to the following four principles: Explanation: A system delivers or contains accompanying evidence or reason(s) for outputs and/or processes [S3]. Explainable AI is one of several properties that characterize trust in AI systems [121, 127, 134] [S5].",
+   "abstained": false,
+   "key_fact_recall": 0.25,
+   "timings_ms": {
+    "retrieval": 69.762,
+    "generation": 5.98,
+    "total": 112.676
+   },
+   "model_output": "This work on principles of explainable AI systems is part of the much larger NIST AI portfolio 1 around trustworthy AI data, standards, evaluation, validation, and verification—all necessary for AI measurements [S2]. However, for those AI systems that are intended or required to be explainable, we propose that those systems adhere to the following four principles: Explanation: A system delivers or contains accompanying evidence or reason(s) for outputs and/or processes [S3]. Explainable AI is one of several properties that characterize trust in AI systems [121, 127, 134] [S5].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S2",
+     "S3",
+     "S5"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "v18",
+   "category": "factual",
+   "tags": [
+    "paraphrase:v02"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S1]. The White House (2023) Executive Order on the Safe, Secure, and Trustworthy Development and Use of Artificial Intelligence. https://www.whitehouse.gov/briefing-room/presidentialactions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-ofartificial-intelligence/ The White House (2022) Roadmap for Researchers on Priorities Related to Information Integrity Research and Development. https://www.whitehouse.gov/wp-content/uploads/2022/12/Roadmap- Information-Integrity-RD-2022.pdf [S2]? A profile is an implementation of the AI RMF functions, categories, and subcategories for a specific setting, application, or technology – in this case, Generative AI (GAI) – based on the requirements, risk [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 262.262,
+    "generation": 6.12,
+    "total": 317.857
+   },
+   "model_output": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S1]. The White House (2023) Executive Order on the Safe, Secure, and Trustworthy Development and Use of Artificial Intelligence. https://www.whitehouse.gov/briefing-room/presidentialactions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-ofartificial-intelligence/ The White House (2022) Roadmap for Researchers on Priorities Related to Information Integrity Research and Development. https://www.whitehouse.gov/wp-content/uploads/2022/12/Roadmap- Information-Integrity-RD-2022.pdf [S2]? A profile is an implementation of the AI RMF functions, categories, and subcategories for a specific setting, application, or technology – in this case, Generative AI (GAI) – based on the requirements, risk [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  }
+ ],
+ "label": "b02-ft-dense",
+ "generated_at": "2026-11-09T22:44:26+0100",
+ "generator": "extractive",
+ "provider": {
+  "name": "extractive-demo",
+  "model": "extractive-demo-v2-prefix",
+  "is_llm": false
+ },
+ "settings_overrides": {
+  "text_cleanup": "v2",
+  "extractive_matching": "prefix",
+  "retrieval_mode": "dense",
+  "embedding_provider": "sentence-transformers",
+  "embedding_model": "experiments/finetune/runs/bge-small-ft/best",
+  "embedding_query_prefix": "Represent this sentence for searching relevant passages: "
+ },
+ "settings": {
+  "chunk_size": "800",
+  "chunk_overlap": "120",
+  "embedding_provider": "sentence-transformers",
+  "embedding_model": "experiments/finetune/runs/bge-small-ft/best",
+  "retrieval_mode": "dense",
+  "fusion": "rrf",
+  "hybrid_alpha": "0.5",
+  "rrf_k": "60",
+  "top_k": "5",
+  "candidate_k": "20",
+  "reranker": "none",
+  "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+  "prompt_version": "answer-v2",
+  "claim_check": "claims-v1",
+  "conflict_check": "disagreement-v1",
+  "max_context_chars": "6000",
+  "generation_provider": "extractive-demo",
+  "ollama_model": "qwen2.5:1.5b",
+  "hf_generation_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "temperature": "0.0",
+  "max_new_tokens": "384"
+ },
+ "cost": {
+  "index_seconds": 104.8,
+  "model_load_seconds": 0.0,
+  "peak_rss_mb": 1061.0,
+  "chunks_indexed": 459
+ },
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "ac",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "langchain-huggingface": "1.2.3",
+   "sentence-transformers": "6.1.0",
+   "transformers": "5.19.0",
+   "torch": "2.10.0",
+   "numpy": "2.4.1",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "087158c0a179",
+   "uncommitted_changes": true
+  }
+ },
+ "code": {
+  "commit": "087158c0a179",
+  "uncommitted_changes": true
+ }
+}

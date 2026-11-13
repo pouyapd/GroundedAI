@@ -1,0 +1,35 @@
+{
+  "written": "2026-11-09, before any question was asked in the live demo",
+  "url": "https://pouyapd.github.io/GroundedAI/",
+  "documents": {
+    "63b": {"file": "NIST.SP.800-63b.pdf", "title": "Digital Identity Guidelines: Authentication and Lifecycle Management", "pages": 80, "note": "SP 800-63B, June 2017 (updates 2020), withdrawn 2025"},
+    "rmf": {"file": "NIST.AI.100-1.pdf", "title": "Artificial Intelligence Risk Management Framework (AI RMF 1.0)", "pages": 48},
+    "63b4": {"file": "NIST.SP.800-63B-4.pdf", "title": "Digital Identity Guidelines: Authentication and Authenticator Management", "pages": 129, "note": "SP 800-63B-4, July 2025, supersedes 800-63B"}
+  },
+  "questions": [
+    {"id": "L01", "docs": ["63b"], "category": "direct", "q": "What is the minimum length of a memorized secret chosen by the subscriber?", "expect": "answer", "facts": ["8 characters"], "pages": [24]},
+    {"id": "L02", "docs": ["63b"], "category": "numeric", "q": "How often must the subscriber be reauthenticated at AAL2 during an extended usage session?", "expect": "answer", "facts": ["12 hours"], "pages": [19, 22]},
+    {"id": "L03", "docs": ["63b"], "category": "numeric", "q": "After how many minutes of inactivity must an AAL3 session be reauthenticated?", "expect": "answer", "facts": ["15 minutes"], "pages": [21, 22]},
+    {"id": "L04", "docs": ["63b"], "category": "numeric", "q": "Within how many minutes must out-of-band authentication be completed?", "expect": "answer", "facts": ["10 minutes"], "pages": [29]},
+    {"id": "L05", "docs": ["63b"], "category": "terminology", "q": "Should verifiers require memorized secrets to be changed periodically?", "expect": "answer", "facts": ["SHOULD NOT", "evidence of compromise"], "pages": [25]},
+    {"id": "L06", "docs": ["63b"], "category": "paraphrase of L01", "q": "How many characters long must a password picked by the user be at minimum?", "expect": "answer", "facts": ["8 characters"], "pages": [24]},
+    {"id": "L07", "docs": ["63b"], "category": "date", "q": "When was SP 800-63B published?", "expect": "answer", "facts": ["June 2017"], "pages": [3, 4]},
+    {"id": "L08", "docs": ["63b"], "category": "missing", "q": "What is the maximum fine for an agency that does not follow these guidelines?", "expect": "refuse", "facts": [], "pages": []},
+    {"id": "L09", "docs": ["63b"], "category": "multi-passage", "q": "What are the reauthentication time limits at AAL2 and at AAL3?", "expect": "answer", "facts": ["12 hours", "30 minutes", "15 minutes"], "pages": [19, 21, 22]},
+    {"id": "L10", "docs": ["63b"], "category": "ambiguous", "q": "How long is the time limit?", "expect": "ambiguous: several limits exist (30 days, 12 hours, 10 minutes...); a good answer names which one or asks", "facts": [], "pages": []},
+    {"id": "L11", "docs": ["63b"], "category": "numeric", "q": "What is the maximum number of consecutive failed authentication attempts on a single account?", "expect": "answer", "facts": ["100"], "pages": [36]},
+    {"id": "L12", "docs": ["rmf"], "category": "entity", "q": "What are the four functions of the AI RMF Core?", "expect": "answer", "facts": ["GOVERN", "MAP", "MEASURE", "MANAGE"], "pages": [25]},
+    {"id": "L13", "docs": ["rmf"], "category": "entity/date", "q": "Which law directed NIST to develop the AI RMF?", "expect": "answer", "facts": ["National Artificial Intelligence Initiative Act of 2020"], "pages": [7]},
+    {"id": "L14", "docs": ["rmf"], "category": "terminology", "q": "Which trustworthiness characteristic is a necessary condition of trustworthiness?", "expect": "answer", "facts": ["Valid", "Reliable"], "pages": [17]},
+    {"id": "L15", "docs": ["rmf"], "category": "multi-passage", "q": "What is the difference between a Current Profile and a Target Profile?", "expect": "answer", "facts": ["currently being managed", "target"], "pages": [38]},
+    {"id": "L16", "docs": ["rmf"], "category": "missing", "q": "How much does NIST charge for AI RMF certification?", "expect": "refuse", "facts": [], "pages": []},
+    {"id": "L17", "docs": ["rmf"], "category": "paraphrase of L12", "q": "Name the main activities NIST uses to organise AI risk management.", "expect": "answer", "facts": ["govern", "map", "measure", "manage"], "pages": [25]},
+    {"id": "L18", "docs": ["rmf"], "category": "entity", "q": "Where can comments on the AI RMF Playbook be sent?", "expect": "answer", "facts": ["AIframework@nist.gov"], "pages": [3]},
+    {"id": "L19", "docs": ["63b", "63b4"], "category": "conflict (document versions)", "q": "What is the minimum password length for single-factor authentication?", "expect": "conflict: 2017 version 8 characters (memorized secret), 2025 version 15 characters", "facts": ["8", "15"], "pages": [24, 25]},
+    {"id": "L20", "docs": ["63b", "63b4"], "category": "conflict (document versions)", "q": "How often must AAL2 sessions be reauthenticated?", "expect": "conflict: 2017 version at least once per 12 hours; 2025 version overall timeout SHOULD be no more than 24 hours", "facts": ["12 hours", "24 hours"], "pages": [19, 18]},
+    {"id": "L21", "docs": ["63b4"], "category": "document switch", "q": "What is the inactivity timeout at AAL2?", "expect": "answer", "facts": ["1 hour"], "pages": [18]},
+    {"id": "L22", "docs": ["63b", "rmf", "63b4"], "category": "all documents", "q": "What are the four functions of the AI RMF Core?", "expect": "answer", "facts": ["GOVERN", "MAP", "MEASURE", "MANAGE"], "pages": [25]}
+  ],
+  "model_subset": ["L01", "L02", "L08", "L12", "L16", "L19"],
+  "ferry_s2": {"q": "How much does a single adult ticket to Mirrow cost?", "expect": "14 euros, page 2; earlier runs cited an S2 that was never provided"}
+}

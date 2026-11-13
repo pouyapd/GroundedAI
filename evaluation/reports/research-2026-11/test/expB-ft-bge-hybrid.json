@@ -1,0 +1,3851 @@
+{
+ "kind": "rag-eval",
+ "rag_eval_version": 1,
+ "dataset": {
+  "name": "groundedai-nist-v1",
+  "fingerprint": "2dc116de6369941f",
+  "questions": 53
+ },
+ "summary": {
+  "questions": 53,
+  "retrieval": {
+   "recall@1": {
+    "mean": 0.6477,
+    "n": 44,
+    "ci95": [
+     0.5227,
+     0.7727
+    ]
+   },
+   "precision@1": {
+    "mean": 0.7045,
+    "n": 44,
+    "ci95": [
+     0.5682,
+     0.8409
+    ]
+   },
+   "recall@3": {
+    "mean": 0.8295,
+    "n": 44,
+    "ci95": [
+     0.7159,
+     0.9318
+    ]
+   },
+   "precision@3": {
+    "mean": 0.3258,
+    "n": 44,
+    "ci95": [
+     0.2727,
+     0.3788
+    ]
+   },
+   "recall@5": {
+    "mean": 0.8864,
+    "n": 44,
+    "ci95": [
+     0.7955,
+     0.9659
+    ]
+   },
+   "precision@5": {
+    "mean": 0.2091,
+    "n": 44,
+    "ci95": [
+     0.1818,
+     0.2364
+    ]
+   },
+   "recall@10": {
+    "mean": 0.9205,
+    "n": 44,
+    "ci95": [
+     0.8409,
+     0.9886
+    ]
+   },
+   "precision@10": {
+    "mean": 0.1136,
+    "n": 44,
+    "ci95": [
+     0.1,
+     0.1318
+    ]
+   },
+   "mrr@10": {
+    "mean": 0.7877,
+    "n": 44,
+    "ci95": [
+     0.6871,
+     0.8852
+    ]
+   },
+   "ndcg@10": {
+    "mean": 0.7975,
+    "n": 44,
+    "ci95": [
+     0.7095,
+     0.8816
+    ]
+   }
+  },
+  "answers": {
+   "answerable": 40,
+   "correct": {
+    "mean": 0.725,
+    "n": 40,
+    "ci95": [
+     0.575,
+     0.85
+    ]
+   },
+   "completeness": {
+    "mean": 0.7438,
+    "n": 40,
+    "ci95": [
+     0.6,
+     0.8688
+    ]
+   },
+   "false_refusals": 3,
+   "invalid_output": 0,
+   "errors": 0
+  },
+  "abstention": {
+   "should_refuse": 6,
+   "refused": 2,
+   "precision": 0.4,
+   "recall": 0.3333,
+   "predicted_abstentions": 5
+  },
+  "ambiguous": {
+   "questions": 3,
+   "refused": 0,
+   "answered": 3
+  },
+  "citations": {
+   "precision": {
+    "mean": 0.4756,
+    "n": 41,
+    "ci95": [
+     0.378,
+     0.5772
+    ]
+   },
+   "recall": {
+    "mean": 0.8293,
+    "n": 41,
+    "ci95": [
+     0.7073,
+     0.9268
+    ]
+   },
+   "answers_with_invalid_labels": 0,
+   "answers_without_valid_label": 0
+  },
+  "claims_lexical_check": {
+   "statements": 111,
+   "found_share": 0.982,
+   "unsupported_share": 0.009,
+   "partial_share": 0.009
+  },
+  "quotes": {
+   "total": 111,
+   "verbatim_share": 1.0,
+   "page_correct_share": 1.0,
+   "pages_unknown": 0
+  },
+  "conflicts": {
+   "questions": 4,
+   "reported_by_application": 0,
+   "any_disagreement_note": 0,
+   "stated_in_answer": 0,
+   "both_values_in_answer": 1
+  },
+  "false_conflict_reports": 0,
+  "latency_ms": {
+   "total_median": 111.9,
+   "generation_median": 7.2,
+   "retrieval_median": 55.6,
+   "total_p90": 214.6
+  }
+ },
+ "by_category": {
+  "ambiguous": {
+   "questions": 3,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": null,
+    "recall": null,
+    "predicted_abstentions": 0
+   },
+   "ambiguous": {
+    "questions": 3,
+    "refused": 0,
+    "answered": 3
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 9,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 9,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 105.4,
+    "generation_median": 6.4,
+    "retrieval_median": 49.6,
+    "total_p90": 109.5
+   }
+  },
+  "conflicting": {
+   "questions": 4,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.375,
+     "n": 4,
+     "ci95": [
+      0.125,
+      0.5
+     ]
+    },
+    "precision@1": {
+     "mean": 0.75,
+     "n": 4,
+     "ci95": [
+      0.25,
+      1.0
+     ]
+    },
+    "recall@3": {
+     "mean": 0.875,
+     "n": 4,
+     "ci95": [
+      0.625,
+      1.0
+     ]
+    },
+    "precision@3": {
+     "mean": 0.5833,
+     "n": 4,
+     "ci95": [
+      0.4167,
+      0.6667
+     ]
+    },
+    "recall@5": {
+     "mean": 0.875,
+     "n": 4,
+     "ci95": [
+      0.625,
+      1.0
+     ]
+    },
+    "precision@5": {
+     "mean": 0.35,
+     "n": 4,
+     "ci95": [
+      0.25,
+      0.4
+     ]
+    },
+    "recall@10": {
+     "mean": 0.875,
+     "n": 4,
+     "ci95": [
+      0.625,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.225,
+     "n": 4,
+     "ci95": [
+      0.2,
+      0.275
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.875,
+     "n": 4,
+     "ci95": [
+      0.625,
+      1.0
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.8061,
+     "n": 4,
+     "ci95": [
+      0.5693,
+      0.9293
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": null,
+    "recall": null,
+    "predicted_abstentions": 0
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.4167,
+     "n": 4,
+     "ci95": [
+      0.1667,
+      0.6667
+     ]
+    },
+    "recall": {
+     "mean": 0.625,
+     "n": 4,
+     "ci95": [
+      0.25,
+      1.0
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 9,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 9,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "conflicts": {
+    "questions": 4,
+    "reported_by_application": 0,
+    "any_disagreement_note": 0,
+    "stated_in_answer": 0,
+    "both_values_in_answer": 1
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 127.3,
+    "generation_median": 8.3,
+    "retrieval_median": 70.2,
+    "total_p90": 148.0
+   }
+  },
+  "factual": {
+   "questions": 36,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.6944,
+     "n": 36,
+     "ci95": [
+      0.5278,
+      0.8333
+     ]
+    },
+    "precision@1": {
+     "mean": 0.6944,
+     "n": 36,
+     "ci95": [
+      0.5278,
+      0.8333
+     ]
+    },
+    "recall@3": {
+     "mean": 0.8333,
+     "n": 36,
+     "ci95": [
+      0.6944,
+      0.9444
+     ]
+    },
+    "precision@3": {
+     "mean": 0.287,
+     "n": 36,
+     "ci95": [
+      0.2407,
+      0.3333
+     ]
+    },
+    "recall@5": {
+     "mean": 0.8889,
+     "n": 36,
+     "ci95": [
+      0.7778,
+      0.9722
+     ]
+    },
+    "precision@5": {
+     "mean": 0.1833,
+     "n": 36,
+     "ci95": [
+      0.1556,
+      0.2056
+     ]
+    },
+    "recall@10": {
+     "mean": 0.9167,
+     "n": 36,
+     "ci95": [
+      0.8056,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.0944,
+     "n": 36,
+     "ci95": [
+      0.0833,
+      0.1028
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.7752,
+     "n": 36,
+     "ci95": [
+      0.6514,
+      0.8843
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.7884,
+     "n": 36,
+     "ci95": [
+      0.6773,
+      0.8834
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 36,
+    "correct": {
+     "mean": 0.8056,
+     "n": 36,
+     "ci95": [
+      0.6667,
+      0.9167
+     ]
+    },
+    "completeness": {
+     "mean": 0.8125,
+     "n": 36,
+     "ci95": [
+      0.6736,
+      0.9236
+     ]
+    },
+    "false_refusals": 1,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": 0.0,
+    "recall": null,
+    "predicted_abstentions": 1
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.481,
+     "n": 35,
+     "ci95": [
+      0.3714,
+      0.5952
+     ]
+    },
+    "recall": {
+     "mean": 0.8571,
+     "n": 35,
+     "ci95": [
+      0.7429,
+      0.9714
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 79,
+    "found_share": 0.9873,
+    "unsupported_share": 0.0127,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 79,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 113.6,
+    "generation_median": 7.4,
+    "retrieval_median": 56.5,
+    "total_p90": 236.7
+   }
+  },
+  "multi_chunk": {
+   "questions": 4,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.5,
+     "n": 4,
+     "ci95": [
+      0.125,
+      0.875
+     ]
+    },
+    "precision@1": {
+     "mean": 0.75,
+     "n": 4,
+     "ci95": [
+      0.25,
+      1.0
+     ]
+    },
+    "recall@3": {
+     "mean": 0.75,
+     "n": 4,
+     "ci95": [
+      0.25,
+      1.0
+     ]
+    },
+    "precision@3": {
+     "mean": 0.4167,
+     "n": 4,
+     "ci95": [
+      0.1667,
+      0.6667
+     ]
+    },
+    "recall@5": {
+     "mean": 0.875,
+     "n": 4,
+     "ci95": [
+      0.625,
+      1.0
+     ]
+    },
+    "precision@5": {
+     "mean": 0.3,
+     "n": 4,
+     "ci95": [
+      0.2,
+      0.4
+     ]
+    },
+    "recall@10": {
+     "mean": 1.0,
+     "n": 4,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.175,
+     "n": 4,
+     "ci95": [
+      0.125,
+      0.2
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.8125,
+     "n": 4,
+     "ci95": [
+      0.4375,
+      1.0
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.8706,
+     "n": 4,
+     "ci95": [
+      0.6119,
+      1.0
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 4,
+    "correct": {
+     "mean": 0.0,
+     "n": 4,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "completeness": {
+     "mean": 0.125,
+     "n": 4,
+     "ci95": [
+      0.0,
+      0.375
+     ]
+    },
+    "false_refusals": 2,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": 0.0,
+    "recall": null,
+    "predicted_abstentions": 2
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.5,
+     "n": 2,
+     "ci95": [
+      0.5,
+      0.5
+     ]
+    },
+    "recall": {
+     "mean": 0.75,
+     "n": 2,
+     "ci95": [
+      0.5,
+      1.0
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 5,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 5,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 102.8,
+    "generation_median": 7.5,
+    "retrieval_median": 52.9,
+    "total_p90": 133.4
+   }
+  },
+  "out_of_scope": {
+   "questions": 1,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 1,
+    "refused": 0,
+    "precision": null,
+    "recall": 0.0,
+    "predicted_abstentions": 0
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 2,
+    "found_share": 0.5,
+    "unsupported_share": 0.0,
+    "partial_share": 0.5
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 124.4,
+    "generation_median": 6.8,
+    "retrieval_median": 64.6,
+    "total_p90": 124.4
+   }
+  },
+  "unanswerable": {
+   "questions": 5,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 5,
+    "refused": 2,
+    "precision": 1.0,
+    "recall": 0.4,
+    "predicted_abstentions": 2
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 7,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 7,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 76.4,
+    "generation_median": 7.1,
+    "retrieval_median": 40.4,
+    "total_p90": 108.1
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "t01",
+   "category": "factual",
+   "tags": [
+    "direct"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "5.1.1.1 Memorized Secret Authenticators Memorized secrets SHALL be at least 8 characters in length if chosen by the subscriber [S1]. 5.1.1.2 Memorized Secret Verifiers Verifiers SHALL require subscriber-chosen memorized secrets to be at least 8 characters in length [S3]. Memorized secrets that are randomly chosen by the CSP (e.g., at enrollment) or by the verifier (e.g., when a user requests a new PIN) SHALL be at least 6 characters in length and SHALL be generated using an approved random bit generator [SP 800-90Ar1] [S4].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 37.638,
+    "generation": 22.423,
+    "total": 99.527
+   },
+   "model_output": "5.1.1.1 Memorized Secret Authenticators Memorized secrets SHALL be at least 8 characters in length if chosen by the subscriber [S1]. 5.1.1.2 Memorized Secret Verifiers Verifiers SHALL require subscriber-chosen memorized secrets to be at least 8 characters in length [S3]. Memorized secrets that are randomly chosen by the CSP (e.g., at enrollment) or by the verifier (e.g., when a user requests a new PIN) SHALL be at least 6 characters in length and SHALL be generated using an approved random bit generator [SP 800-90Ar1] [S4].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S3",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t02",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Memorized secrets chosen randomly by the CSP or verifier SHALL be at least 6 characters in length and MAY be entirely numeric [S1]. Memorized secrets that are randomly chosen by the CSP (e.g., at enrollment) or by the verifier (e.g., when a user requests a new PIN) SHALL be at least 6 characters in length and SHALL be generated using an approved random bit generator [SP 800-90Ar1] [S2]. Secrets that are randomly chosen (in most cases by the verifier or CSP) and are uniformly distributed will be more difficult to guess or brute-force attack than user-chosen secrets meeting the same length and complexity requirements [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 34.838,
+    "generation": 5.618,
+    "total": 76.515
+   },
+   "model_output": "Memorized secrets chosen randomly by the CSP or verifier SHALL be at least 6 characters in length and MAY be entirely numeric [S1]. Memorized secrets that are randomly chosen by the CSP (e.g., at enrollment) or by the verifier (e.g., when a user requests a new PIN) SHALL be at least 6 characters in length and SHALL be generated using an approved random bit generator [SP 800-90Ar1] [S2]. Secrets that are randomly chosen (in most cases by the verifier or CSP) and are uniformly distributed will be more difficult to guess or brute-force attack than user-chosen secrets meeting the same length and complexity requirements [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t03",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Verifiers SHOULD permit subscriber-chosen memorized secrets at least 64 characters in length [S1]. Memorized secrets that are randomly chosen by the CSP (e.g., at enrollment) or by the verifier (e.g., when a user requests a new PIN) SHALL be at least 6 characters in length and SHALL be generated using an approved random bit generator [SP 800-90Ar1] [S2]. 5.1.1.1 Memorized Secret Authenticators Memorized secrets SHALL be at least 8 characters in length if chosen by the subscriber [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 39.798,
+    "generation": 6.213,
+    "total": 88.012
+   },
+   "model_output": "Verifiers SHOULD permit subscriber-chosen memorized secrets at least 64 characters in length [S1]. Memorized secrets that are randomly chosen by the CSP (e.g., at enrollment) or by the verifier (e.g., when a user requests a new PIN) SHALL be at least 6 characters in length and SHALL be generated using an approved random bit generator [SP 800-90Ar1] [S2]. 5.1.1.1 Memorized Secret Authenticators Memorized secrets SHALL be at least 8 characters in length if chosen by the subscriber [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t04",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "At AAL1, reauthentication of the subscriber SHOULD be repeated at least once per 30 days during an extended usage session, regardless of user activity [S2]. At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity [S1]. At AAL3, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity, as described in Section 7.2 [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 69.113,
+    "generation": 6.861,
+    "total": 123.293
+   },
+   "model_output": "At AAL1, reauthentication of the subscriber SHOULD be repeated at least once per 30 days during an extended usage session, regardless of user activity [S2]. At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity [S1]. At AAL3, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity, as described in Section 7.2 [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S2",
+     "S1",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t05",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity [S1]. At AAL3, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity, as described in Section 7.2 [S2]. At AAL1, reauthentication of the subscriber SHOULD be repeated at least once per 30 days during an extended usage session, regardless of user activity [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 469.141,
+    "generation": 76.843,
+    "total": 655.651
+   },
+   "model_output": "At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity [S1]. At AAL3, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity, as described in Section 7.2 [S2]. At AAL1, reauthentication of the subscriber SHOULD be repeated at least once per 30 days during an extended usage session, regardless of user activity [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t06",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 30 minutes or longer [S1]. Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 15 minutes or longer [S2]. 4.1.3 Reauthentication Periodic reauthentication of subscriber sessions SHALL be performed as described in Section 7.2 [S4].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 36.813,
+    "generation": 5.228,
+    "total": 75.501
+   },
+   "model_output": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 30 minutes or longer [S1]. Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 15 minutes or longer [S2]. 4.1.3 Reauthentication Periodic reauthentication of subscriber sessions SHALL be performed as described in Section 7.2 [S4].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t07",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 15 minutes or longer [S1]. Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 30 minutes or longer [S2]. • To prevent users from needing to reauthenticate due to user inactivity, prompt users in order to trigger activity just before (e.g., 2 minutes) an inactivity timeout would otherwise occur [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 37.231,
+    "generation": 5.637,
+    "total": 75.151
+   },
+   "model_output": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 15 minutes or longer [S1]. Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 30 minutes or longer [S2]. • To prevent users from needing to reauthenticate due to user inactivity, prompt users in order to trigger activity just before (e.g., 2 minutes) an inactivity timeout would otherwise occur [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 1
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t08",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "In all cases, the authentication SHALL be considered invalid if not completed within 10 minutes [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 51.988,
+    "generation": 6.527,
+    "total": 90.504
+   },
+   "model_output": "In all cases, the authentication SHALL be considered invalid if not completed within 10 minutes [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t09",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5
+   },
+   "status": "answered",
+   "answer": "Unless otherwise specified in the description of a given authenticator, the verifier SHALL limit consecutive failed authentication attempts on a single account to no more than 100 [S3]. If the authentication secret has less than 64 bits of entropy, the verifier SHALL implement a rate-limiting mechanism that effectively limits the number of failed authentication attempts that can be made on the subscriber’s account as described in Section 5.2.2 [S2]. Verifiers SHALL implement a rate-limiting mechanism that effectively limits the number of failed authentication attempts that can be made on the subscriber’s account as described in Section 5.2.2 [S5].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 46.472,
+    "generation": 8.06,
+    "total": 102.477
+   },
+   "model_output": "Unless otherwise specified in the description of a given authenticator, the verifier SHALL limit consecutive failed authentication attempts on a single account to no more than 100 [S3]. If the authentication secret has less than 64 bits of entropy, the verifier SHALL implement a rate-limiting mechanism that effectively limits the number of failed authentication attempts that can be made on the subscriber’s account as described in Section 5.2.2 [S2]. Verifiers SHALL implement a rate-limiting mechanism that effectively limits the number of failed authentication attempts that can be made on the subscriber’s account as described in Section 5.2.2 [S5].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S3",
+     "S2",
+     "S5"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t10",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Verifiers SHOULD NOT require memorized secrets to be changed arbitrarily (e.g., periodically) [S1]. o Do not require that memorized secrets be changed arbitrarily (e.g., periodically) unless there is a user request or evidence of authenticator compromise [S5].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 48.668,
+    "generation": 7.609,
+    "total": 100.993
+   },
+   "model_output": "Verifiers SHOULD NOT require memorized secrets to be changed arbitrarily (e.g., periodically) [S1]. o Do not require that memorized secrets be changed arbitrarily (e.g., periodically) unless there is a user request or evidence of authenticator compromise [S5].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S5"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t11",
+   "category": "factual",
+   "tags": [
+    "numeric",
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "This salt value, if used, SHALL be generated by an approved random bit generator [SP 800-90Ar1] and provide at least the minimum security strength specified in the latest revision of SP 800-131A (112 bits as of the date of this publication) [S1]. The secret key and its algorithm SHALL provide at least the minimum security strength specified in the latest revision of SP 800-131A (112 bits as of the date of this publication) [S4]. Other verifier compromise resistant secrets SHALL use approved hash algorithms and the underlying secrets SHALL have at least the minimum security strength specified in the latest [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 48.883,
+    "generation": 6.959,
+    "total": 105.501
+   },
+   "model_output": "This salt value, if used, SHALL be generated by an approved random bit generator [SP 800-90Ar1] and provide at least the minimum security strength specified in the latest revision of SP 800-131A (112 bits as of the date of this publication) [S1]. The secret key and its algorithm SHALL provide at least the minimum security strength specified in the latest revision of SP 800-131A (112 bits as of the date of this publication) [S4]. Other verifier compromise resistant secrets SHALL use approved hash algorithms and the underlying secrets SHALL have at least the minimum security strength specified in the latest [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S4",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t12",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "The attached publication has been superseded by the following publication(s): Series/Number NIST SP 800-63B-4 [S1]. Title Digital Identity Guidelines: Authentication and Lifecycle Management Publication Date(s) June 2017 (includes updates as of 03-02-2020) Withdrawal Date August 1, 2025 Withdrawal Note NIST SP 800-63B is withdrawn and superseded in its entirety by NIST SP 800- 63B-4 [S4]. Table 2-1 Normative and Informative Sections of SP 800-63B ...................................... [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 46.644,
+    "generation": 8.522,
+    "total": 119.091
+   },
+   "model_output": "The attached publication has been superseded by the following publication(s): Series/Number NIST SP 800-63B-4 [S1]. Title Digital Identity Guidelines: Authentication and Lifecycle Management Publication Date(s) June 2017 (includes updates as of 03-02-2020) Withdrawal Date August 1, 2025 Withdrawal Note NIST SP 800-63B is withdrawn and superseded in its entirety by NIST SP 800- 63B-4 [S4]. Table 2-1 Normative and Informative Sections of SP 800-63B ...................................... [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S4",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t13",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Confirmation codes sent by means other than physical mail SHALL be valid for a maximum of 10 minutes [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 85.499,
+    "generation": 11.715,
+    "total": 156.5
+   },
+   "model_output": "Confirmation codes sent by means other than physical mail SHALL be valid for a maximum of 10 minutes [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t14",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "AI RMF Core functions should be carried out in a way that reflects diverse and multidisciplinary perspectives, potentially including the views of AI actors outside the organization [S3]. AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems [S1]. It describes four specific functions to help organizations address the risks of AI systems in practice [S2].",
+   "abstained": false,
+   "key_fact_recall": 0.25,
+   "timings_ms": {
+    "retrieval": 55.681,
+    "generation": 7.399,
+    "total": 111.92
+   },
+   "model_output": "AI RMF Core functions should be carried out in a way that reflects diverse and multidisciplinary perspectives, potentially including the views of AI actors outside the organization [S3]. AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems [S1]. It describes four specific functions to help organizations address the risks of AI systems in practice [S2].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S3",
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t15",
+   "category": "factual",
+   "tags": [
+    "entity",
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.38685280723454163
+   },
+   "status": "answered",
+   "answer": "Development of the AI RMF by NIST in collaboration with the private and public sectors is directed and consistent with its broader AI efforts called for by the National AI Initiative Act of 2020, the National Security Commission on Artificial Intelligence recommendations, and the Plan for Federal Engagement in Developing Technical Standards and Related Tools [S1]. RMF 1.0 as well as AI research and development and evaluation conducted by NIST and others [S2].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 69.621,
+    "generation": 6.169,
+    "total": 115.32
+   },
+   "model_output": "Development of the AI RMF by NIST in collaboration with the private and public sectors is directed and consistent with its broader AI efforts called for by the National AI Initiative Act of 2020, the National Security Commission on Artificial Intelligence recommendations, and the Plan for Federal Engagement in Developing Technical Standards and Related Tools [S1]. RMF 1.0 as well as AI research and development and evaluation conducted by NIST and others [S2].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t16",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.43067655807339306
+   },
+   "status": "answered",
+   "answer": "Valid & Reliable is a necessary condition of trustworthiness and is shown as the base for other trustworthiness characteristics [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 194.863,
+    "generation": 6.022,
+    "total": 255.382
+   },
+   "model_output": "Valid & Reliable is a necessary condition of trustworthiness and is shown as the base for other trustworthiness characteristics [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t17",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "NIST will review the content and usefulness of the Framework regularly to determine if an update is appropriate; a review with formal input from the AI community is expected to take place no later than 2028 [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 146.598,
+    "generation": 15.14,
+    "total": 221.566
+   },
+   "model_output": "NIST will review the content and usefulness of the Framework regularly to determine if an update is appropriate; a review with formal input from the AI community is expected to take place no later than 2028 [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t18",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Residual risk – defined as risk remaining after risk treatment (Source: ISO GUIDE 73) – directly impacts end users or affected individuals and communities [S1]. The AI RMF provides opportunities to clearly define and differentiate the various human roles and responsibilities when using, interacting with, or managing AI systems [S2]. AI RMF profiles assist organizations in deciding how they might best manage AI risk that is well-aligned with their goals, considers legal/regulatory requirements and best practices, and reflects risk management priorities [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 76.779,
+    "generation": 8.295,
+    "total": 139.546
+   },
+   "model_output": "Residual risk – defined as risk remaining after risk treatment (Source: ISO GUIDE 73) – directly impacts end users or affected individuals and communities [S1]. The AI RMF provides opportunities to clearly define and differentiate the various human roles and responsibilities when using, interacting with, or managing AI systems [S2]. AI RMF profiles assist organizations in deciding how they might best manage AI risk that is well-aligned with their goals, considers legal/regulatory requirements and best practices, and reflects risk management priorities [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t19",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "AI systems are inherently socio-technical in nature, meaning they are influenced by societal dynamics and human behavior [S1]. While all characteristics are socio-technical system attributes, accountability and transparency also relate to the processes and activities internal to an AI system and its external setting [S3]. Design decisions take socio-technical implications into account to address AI risks [S5].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 50.629,
+    "generation": 7.027,
+    "total": 107.091
+   },
+   "model_output": "AI systems are inherently socio-technical in nature, meaning they are influenced by societal dynamics and human behavior [S1]. While all characteristics are socio-technical system attributes, accountability and transparency also relate to the processes and activities internal to an AI system and its external setting [S3]. Design decisions take socio-technical implications into account to address AI risks [S5].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S3",
+     "S5"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t20",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "After instituting the outcomes in GOVERN , most users of the AI RMF would start with the MAP function and continue to MEASURE or MANAGE  [S2]. If a decision is made to proceed, organizations should utilize the MEASURE and MANAGE functions along with policies and procedures put into place in the GOVERN function to assist in AI risk management efforts [S5]. Assuming a governance structure is in place, functions may be performed in any order across the AI lifecycle as deemed to add value by a user of the framework [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 44.798,
+    "generation": 8.637,
+    "total": 106.923
+   },
+   "model_output": "After instituting the outcomes in GOVERN , most users of the AI RMF would start with the MAP function and continue to MEASURE or MANAGE  [S2]. If a decision is made to proceed, organizations should utilize the MEASURE and MANAGE functions along with policies and procedures put into place in the GOVERN function to assist in AI risk management efforts [S5]. Assuming a governance structure is in place, functions may be performed in any order across the AI lifecycle as deemed to add value by a user of the framework [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S2",
+     "S5"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t21",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis [S1]. An online companion resource to the AI RMF, the NIST AI RMF Playbook, is available to help organizations navigate the AI RMF and achieve its outcomes through suggested tactical actions they can apply within their own contexts [S2]. Along with the AI RMF, the Playbook is part of the NIST Trustworthy and Responsible AI Resource Center [S4].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 80.279,
+    "generation": 7.333,
+    "total": 140.921
+   },
+   "model_output": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis [S1]. An online companion resource to the AI RMF, the NIST AI RMF Playbook, is available to help organizations navigate the AI RMF and achieve its outcomes through suggested tactical actions they can apply within their own contexts [S2]. Along with the AI RMF, the Playbook is part of the NIST Trustworthy and Responsible AI Resource Center [S4].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t22",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "AI actors are defined by the Organisation for Economic Co-operation and Development (OECD) as “those who play an active role in the AI system lifecycle, including organizations and individuals that deploy or operate AI” [OECD (2019) Artificial Intelligence in Society—OECD iLibrary] (See Appendix A) [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 136.553,
+    "generation": 7.875,
+    "total": 186.819
+   },
+   "model_output": "AI actors are defined by the Organisation for Economic Co-operation and Development (OECD) as “those who play an active role in the AI system lifecycle, including organizations and individuals that deploy or operate AI” [OECD (2019) Artificial Intelligence in Society—OECD iLibrary] (See Appendix A) [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t23",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6131471927654584
+   },
+   "status": "answered",
+   "answer": "Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length [S1]. Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 87.706,
+    "generation": 7.995,
+    "total": 139.167
+   },
+   "model_output": "Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length [S1]. Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t24",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S1]. Passwords used locally as an activation factor for a multi-factor authenticator (e.g., an unlock PIN) are referred to as activation secrets and discussed in Sec [S4].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 108.114,
+    "generation": 8.214,
+    "total": 158.766
+   },
+   "model_output": "Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S1]. Passwords used locally as an activation factor for a multi-factor authenticator (e.g., an unlock PIN) are referred to as activation secrets and discussed in Sec [S4].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t25",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "An inactivity timeout MAY be applied but is not required at AAL1 [S1]. A definite reauthentication overall timeout SHALL be established, which SHOULD be no more than 24 hours at AAL2 [S2]. Session activity SHALL reset the inactivity timeout, and successful reauthentication during a session SHALL reset both timeouts [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 628.345,
+    "generation": 5.459,
+    "total": 669.342
+   },
+   "model_output": "An inactivity timeout MAY be applied but is not required at AAL1 [S1]. A definite reauthentication overall timeout SHALL be established, which SHOULD be no more than 24 hours at AAL2 [S2]. Session activity SHALL reset the inactivity timeout, and successful reauthentication during a session SHALL reset both timeouts [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t26",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "At AAL3, the overall timeout for reauthentication SHALL be no more than 12 hours [S1]. When the inactivity timeout has occurred but the overall timeout has not yet occurred, the verifier MAY allow the subscriber to reauthenticate using only a successful password or biometric comparison in conjunction with the session secret, as described in Sec [S4]. A definite reauthentication overall timeout SHALL be established, which SHOULD be no more than 24 hours at AAL2 [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 37.155,
+    "generation": 5.436,
+    "total": 73.451
+   },
+   "model_output": "At AAL3, the overall timeout for reauthentication SHALL be no more than 12 hours [S1]. When the inactivity timeout has occurred but the overall timeout has not yet occurred, the verifier MAY allow the subscriber to reauthenticate using only a successful password or biometric comparison in conjunction with the session secret, as described in Sec [S4]. A definite reauthentication overall timeout SHALL be established, which SHOULD be no more than 24 hours at AAL2 [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S4",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t27",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Once that limit has been reached, the biometric authenticator SHALL impose a delay of at least 30 seconds before each subsequent attempt with an overall limit of no more than 50 consecutive failed authentication attempts or 100 if PAD is implemented due to the mitigation of presentation attacks [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 49.907,
+    "generation": 6.289,
+    "total": 83.022
+   },
+   "model_output": "Once that limit has been reached, the biometric authenticator SHALL impose a delay of at least 30 seconds before each subsequent attempt with an overall limit of no more than 50 consecutive failed authentication attempts or 100 if PAD is implemented due to the mitigation of presentation attacks [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t28",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "• 21 days when sent to a postal address within the contiguous United States [S1]. • 30 days when sent to a postal address outside of the contiguous United States [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 36.848,
+    "generation": 6.946,
+    "total": 77.26
+   },
+   "model_output": "• 21 days when sent to a postal address within the contiguous United States [S1]. • 30 days when sent to a postal address outside of the contiguous United States [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t29",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Verifiers SHALL allow the use of password managers and autofill functionality [S1]. Verifiers MAY make limited allowances for mistyping (e.g., removing leading and trailing whitespace characters before verification, allowing the verification of passwords with differing cases for the leading character) if the password remains at least the required minimum length after such processing and the complexity of the resulting password is not significantly reduced [S3]. Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S4].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 46.414,
+    "generation": 6.278,
+    "total": 99.545
+   },
+   "model_output": "Verifiers SHALL allow the use of password managers and autofill functionality [S1]. Verifiers MAY make limited allowances for mistyping (e.g., removing leading and trailing whitespace characters before verification, allowing the verification of passwords with differing cases for the leading character) if the password remains at least the required minimum length after such processing and the complexity of the resulting password is not significantly reduced [S3]. Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S4].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S3",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t30",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.125,
+    "ndcg@10": 0.31546487678572877
+   },
+   "status": "answered",
+   "answer": "(National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) NIST SP 800-63B-4. https://doi.org/10.6028/NIST.SP.800-63B-4 Author ORCID iDs [S1]. Richer This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-63B-4 [S4]. MD), NIST Special Publication (SP) NIST SP 800-63A-4. https://doi.org/10.6028/NIST.SP [S2].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 49.953,
+    "generation": 7.021,
+    "total": 111.88
+   },
+   "model_output": "(National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) NIST SP 800-63B-4. https://doi.org/10.6028/NIST.SP.800-63B-4 Author ORCID iDs [S1]. Richer This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-63B-4 [S4]. MD), NIST Special Publication (SP) NIST SP 800-63A-4. https://doi.org/10.6028/NIST.SP [S2].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S4",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t31",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage",
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Reauthentication of a session that has not yet reached its time limit MAY require only a memorized secret or a biometric in conjunction with the still-valid session secret [S1]. Prior to session expiration, the reauthentication time limit SHALL be extended by prompting the subscriber for the authentication factor(s) specified in Table 7-1 [S5].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 55.584,
+    "generation": 8.2,
+    "total": 126.77
+   },
+   "model_output": "Reauthentication of a session that has not yet reached its time limit MAY require only a memorized secret or a biometric in conjunction with the still-valid session secret [S1]. Prior to session expiration, the reauthentication time limit SHALL be extended by prompting the subscriber for the authentication factor(s) specified in Table 7-1 [S5].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S5"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t32",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage",
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 92.052,
+    "generation": 10.721,
+    "total": 136.226
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t33",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "AI RMF temporal profiles are descriptions of either the current state or the desired, target state of specific AI risk management activities within a given sector, industry, organization, or application context [S1]. Comparing Current and Target Profiles likely reveals gaps to be addressed to meet AI risk management objectives [S2]. Comparing Current and Target Profiles likely reveals gaps to be addressed to meet AI risk [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.5,
+   "timings_ms": {
+    "retrieval": 43.911,
+    "generation": 6.717,
+    "total": 78.879
+   },
+   "model_output": "AI RMF temporal profiles are descriptions of either the current state or the desired, target state of specific AI risk management activities within a given sector, industry, organization, or application context [S1]. Comparing Current and Target Profiles likely reveals gaps to be addressed to meet AI risk management objectives [S2]. Comparing Current and Target Profiles likely reveals gaps to be addressed to meet AI risk [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t34",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage",
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.5,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.48247555939075504
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 50.298,
+    "generation": 6.774,
+    "total": 78.646
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t35",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 45.855,
+    "generation": 7.175,
+    "total": 71.936
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t36",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "status": "answered",
+   "answer": "Framework (AI RMF 1.0) This publication is available free of charge from: https://doi.org/10.6028/NIST.AI.100-1 January 2023 [S1]. This publication is available free of charge from: https://doi.org/10.6028/NIST.AI.100-1 [S2]. An online companion resource to the AI RMF, the NIST AI RMF Playbook, is available to help organizations navigate the AI RMF and achieve its outcomes through suggested tactical actions they can apply within their own contexts [S3].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 37.983,
+    "generation": 6.6,
+    "total": 81.043
+   },
+   "model_output": "Framework (AI RMF 1.0) This publication is available free of charge from: https://doi.org/10.6028/NIST.AI.100-1 January 2023 [S1]. This publication is available free of charge from: https://doi.org/10.6028/NIST.AI.100-1 [S2]. An online companion resource to the AI RMF, the NIST AI RMF Playbook, is available to help organizations navigate the AI RMF and achieve its outcomes through suggested tactical actions they can apply within their own contexts [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t37",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "status": "answered",
+   "answer": "(National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) NIST SP 800-131Ar2. https://doi.org/ 10.6028/NIST.SP.800-131Ar2 [SP800-132] Turan M, Barker E, Burr W, Chen L (2010) Recommendation for Password- Based Key Derivation [S1]. Agencies should carefully evaluate password managers before making recommendations or mandates to confirm that they meet expectations for secure implementation [S2]. a multi-factor authenticator. activation secret A password that is used locally as an activation factor for a multi-factor authenticator. applicant A subject undergoing the processes of identity proofing and enrollment. approved cryptography An encryption algorithm, hash function, random bit generator, or similar technique that is Federal Information Processing Standards (FIPS)-approved or NIST-recommended [S3].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 71.137,
+    "generation": 7.308,
+    "total": 126.111
+   },
+   "model_output": "(National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) NIST SP 800-131Ar2. https://doi.org/ 10.6028/NIST.SP.800-131Ar2 [SP800-132] Turan M, Barker E, Burr W, Chen L (2010) Recommendation for Password- Based Key Derivation [S1]. Agencies should carefully evaluate password managers before making recommendations or mandates to confirm that they meet expectations for secure implementation [S2]. a multi-factor authenticator. activation secret A password that is used locally as an activation factor for a multi-factor authenticator. applicant A subject undergoing the processes of identity proofing and enrollment. approved cryptography An encryption algorithm, hash function, random bit generator, or similar technique that is Federal Information Processing Standards (FIPS)-approved or NIST-recommended [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t38",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 40.419,
+    "generation": 7.098,
+    "total": 66.092
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t39",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "status": "answered",
+   "answer": "Many NIST cybersecurity publications, ot her than the ones noted above, are available at http://csrc.nist.gov/publications [S1]. [FIPS 201] Federal Information Processing Standard Publication 201-2, Personal Identity Verification (PIV) of Federal Employees and Contractors, August 2013, https://doi.org/10.6028/NIST.FIPS.201-2 [S2].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 36.476,
+    "generation": 5.817,
+    "total": 76.422
+   },
+   "model_output": "Many NIST cybersecurity publications, ot her than the ones noted above, are available at http://csrc.nist.gov/publications [S1]. [FIPS 201] Federal Information Processing Standard Publication 201-2, Personal Identity Verification (PIV) of Federal Employees and Contractors, August 2013, https://doi.org/10.6028/NIST.FIPS.201-2 [S2].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t40",
+   "category": "out_of_scope",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "sp800-63b-2017",
+    "ai-rmf-1.0",
+    "sp800-63b4-2025"
+   ],
+   "status": "answered",
+   "answer": "• Specific terms in CAPITALS represent normative requirements [S1]. * Fonts that clearly distinguish between characters that are easily confused (e.g., the capital letter “O” and the number zero “0”) [S4]. When these same terms are not in CAPITALS , the term does not represent a normative requirement. – The terms “ SHALL ” and “ SHALL NOT ” indicate requirements to be followed [S1].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 64.646,
+    "generation": 6.765,
+    "total": 124.415
+   },
+   "model_output": "• Specific terms in CAPITALS represent normative requirements [S1]. * Fonts that clearly distinguish between characters that are easily confused (e.g., the capital letter “O” and the number zero “0”) [S4]. When these same terms are not in CAPITALS , the term does not represent a normative requirement. – The terms “ SHALL ” and “ SHALL NOT ” indicate requirements to be followed [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 2,
+    "found": 1,
+    "partial": 1,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t41",
+   "category": "ambiguous",
+   "tags": [
+    "ambiguous"
+   ],
+   "expected_behavior": "answer_or_clarify",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "status": "answered",
+   "answer": "Extremely long passwords (perhaps megabytes in length) could conceivably require excessive processing time to hash, so it is reasonable to have some limit [S1]. Prior to session expiration, the reauthentication time limit SHALL be extended by prompting the subscriber for the authentication factor(s) specified in Table 7-1 [S2]. The session SHALL be terminated (i.e., logged out) when either of these time limits is reached [S3].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 49.556,
+    "generation": 7.171,
+    "total": 110.536
+   },
+   "model_output": "Extremely long passwords (perhaps megabytes in length) could conceivably require excessive processing time to hash, so it is reasonable to have some limit [S1]. Prior to session expiration, the reauthentication time limit SHALL be extended by prompting the subscriber for the authentication factor(s) specified in Table 7-1 [S2]. The session SHALL be terminated (i.e., logged out) when either of these time limits is reached [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t42",
+   "category": "ambiguous",
+   "tags": [
+    "ambiguous"
+   ],
+   "expected_behavior": "answer_or_clarify",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "status": "answered",
+   "answer": "Since a minimum length requirement will also govern the user’s choice of passwords, this dictionary only needs to include entries that meet that requirement [S1]. Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length [S2]. The minimum password length required depends on the threat model being addressed [S3].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 49.994,
+    "generation": 6.011,
+    "total": 105.362
+   },
+   "model_output": "Since a minimum length requirement will also govern the user’s choice of passwords, this dictionary only needs to include entries that meet that requirement [S1]. Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length [S2]. The minimum password length required depends on the threat model being addressed [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t43",
+   "category": "ambiguous",
+   "tags": [
+    "ambiguous"
+   ],
+   "expected_behavior": "answer_or_clarify",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "status": "answered",
+   "answer": "AI RMF Profiles AI RMF use-case profiles are implementations of the AI RMF functions, categories, and subcategories for a specific setting or application based on the requirements, risk tolerance, and resources of the Framework user: for example, an AI RMF hiring profile or an AI RMF fair housing profile [S1]. AI RMF profiles assist organizations in deciding how they might best manage AI risk that is well-aligned with their goals, considers legal/regulatory requirements and best practices, and reflects risk management priorities [S2]. AI RMF cross-sectoral profilescover risks of models or applications that can be used across use cases or sectors [S3].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 41.422,
+    "generation": 6.366,
+    "total": 99.882
+   },
+   "model_output": "AI RMF Profiles AI RMF use-case profiles are implementations of the AI RMF functions, categories, and subcategories for a specific setting or application based on the requirements, risk tolerance, and resources of the Framework user: for example, an AI RMF hiring profile or an AI RMF fair housing profile [S1]. AI RMF profiles assist organizations in deciding how they might best manage AI risk that is well-aligned with their goals, considers legal/regulatory requirements and best practices, and reflects risk management priorities [S2]. AI RMF cross-sectoral profilescover risks of models or applications that can be used across use cases or sectors [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t44",
+   "category": "conflicting",
+   "tags": [
+    "conflict"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "sp800-63b-2017",
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.5,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 0.5,
+    "precision@5": 0.2,
+    "recall@10": 0.5,
+    "precision@10": 0.2,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.4525081529734507
+   },
+   "status": "answered",
+   "answer": "The minimum password length that should be required depends to a large extent on the threat model being addressed [S1]. Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length [S2]. The minimum password length required depends on the threat model being addressed [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.5,
+   "timings_ms": {
+    "retrieval": 62.324,
+    "generation": 7.329,
+    "total": 118.429
+   },
+   "model_output": "The minimum password length that should be required depends to a large extent on the threat model being addressed [S1]. Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length [S2]. The minimum password length required depends on the threat model being addressed [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.3333333333333333,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t45",
+   "category": "conflicting",
+   "tags": [
+    "conflict",
+    "numeric"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "sp800-63b-2017",
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9197207891481876
+   },
+   "status": "answered",
+   "answer": "4.2.3 Reauthentication Periodic reauthentication of subscriber sessions SHALL be performed as described in Section 7.2 [S1]. Periodic reauthentication of subscriber sessions SHALL be performed, as described in Sec [S2]. Reauthentication Periodic reauthentication of subscriber sessions SHALL be performed, as described in Sec [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 80.855,
+    "generation": 8.592,
+    "total": 153.054
+   },
+   "model_output": "4.2.3 Reauthentication Periodic reauthentication of subscriber sessions SHALL be performed as described in Section 7.2 [S1]. Periodic reauthentication of subscriber sessions SHALL be performed, as described in Sec [S2]. Reauthentication Periodic reauthentication of subscriber sessions SHALL be performed, as described in Sec [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.6666666666666666,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t46",
+   "category": "conflicting",
+   "tags": [
+    "conflict",
+    "numeric"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "sp800-63b-2017",
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9197207891481876
+   },
+   "status": "answered",
+   "answer": "Session activity SHALL reset the inactivity timeout, and successful reauthentication during a session SHALL reset both timeouts [S4].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 60.744,
+    "generation": 7.953,
+    "total": 111.467
+   },
+   "model_output": "Session activity SHALL reset the inactivity timeout, and successful reauthentication during a session SHALL reset both timeouts [S4].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t47",
+   "category": "conflicting",
+   "tags": [
+    "conflict",
+    "terminology"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "sp800-63b-2017",
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.3,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.9325210919548239
+   },
+   "status": "answered",
+   "answer": "Verifiers and CSPs SHALL NOT require subscribers to change passwords periodically [S1]. Verifiers SHOULD NOT require memorized secrets to be changed arbitrarily (e.g., periodically) [S2]. – Do not require that passwords be changed arbitrarily (e.g., periodically) unless there is a user request or evidence of authenticator compromise (see Sec [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 78.081,
+    "generation": 8.91,
+    "total": 136.259
+   },
+   "model_output": "Verifiers and CSPs SHALL NOT require subscribers to change passwords periodically [S1]. Verifiers SHOULD NOT require memorized secrets to be changed arbitrarily (e.g., periodically) [S2]. – Do not require that passwords be changed arbitrarily (e.g., periodically) unless there is a user request or evidence of authenticator compromise (see Sec [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.6666666666666666,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t48",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t01"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "Passwords that are too short yield to brute force attacks as well as to dictionary attacks using words and commonly chosen passwords [S1]. Users’ password choices are very predictable, so attackers are likely to guess passwords that have been successful in the past [S2]. Users should be encouraged to make their passwords as lengthy as they want, within reason [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 74.412,
+    "generation": 6.319,
+    "total": 124.677
+   },
+   "model_output": "Passwords that are too short yield to brute force attacks as well as to dictionary attacks using words and commonly chosen passwords [S1]. Users’ password choices are very predictable, so attackers are likely to guess passwords that have been successful in the past [S2]. Users should be encouraged to make their passwords as lengthy as they want, within reason [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t49",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t05"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 141.909,
+    "generation": 19.761,
+    "total": 226.025
+   },
+   "model_output": "At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t50",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t14"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems [S1]. Functions organize AI risk management activities at their highest level to govern, map, measure, and manage AI risks [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 75.363,
+    "generation": 8.144,
+    "total": 127.097
+   },
+   "model_output": "AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems [S1]. Functions organize AI risk management activities at their highest level to govern, map, measure, and manage AI risks [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t51",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t09"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 57.297,
+    "generation": 11.756,
+    "total": 98.418
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t52",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t21"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 155.14,
+    "generation": 13.168,
+    "total": 247.307
+   },
+   "model_output": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "t53",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t23"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6131471927654584
+   },
+   "status": "answered",
+   "answer": "Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S1]. A reference to the password hashing scheme used, including the cost factor, SHOULD be stored for each password to allow migration to new algorithms and work factors [S4].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 69.991,
+    "generation": 9.391,
+    "total": 132.444
+   },
+   "model_output": "Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S1]. A reference to the password hashing scheme used, including the cost factor, SHOULD be stored for each password to allow migration to new algorithms and work factors [S4].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.5,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  }
+ ],
+ "label": "expB-ft-bge-hybrid",
+ "generated_at": "2026-11-09T22:57:37+0100",
+ "generator": "extractive",
+ "provider": {
+  "name": "extractive-demo",
+  "model": "extractive-demo-v2-prefix",
+  "is_llm": false
+ },
+ "settings_overrides": {
+  "text_cleanup": "v2",
+  "extractive_matching": "prefix",
+  "embedding_provider": "sentence-transformers",
+  "embedding_model": "experiments/finetune/runs/bge-small-ft/best",
+  "embedding_query_prefix": "Represent this sentence for searching relevant passages: "
+ },
+ "settings": {
+  "chunk_size": "800",
+  "chunk_overlap": "120",
+  "embedding_provider": "sentence-transformers",
+  "embedding_model": "experiments/finetune/runs/bge-small-ft/best",
+  "retrieval_mode": "hybrid",
+  "fusion": "rrf",
+  "hybrid_alpha": "0.5",
+  "rrf_k": "60",
+  "top_k": "5",
+  "candidate_k": "20",
+  "reranker": "none",
+  "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+  "prompt_version": "answer-v2",
+  "claim_check": "claims-v1",
+  "conflict_check": "disagreement-v1",
+  "max_context_chars": "6000",
+  "generation_provider": "extractive-demo",
+  "ollama_model": "qwen2.5:1.5b",
+  "hf_generation_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "temperature": "0.0",
+  "max_new_tokens": "384"
+ },
+ "cost": {
+  "index_seconds": 156.91,
+  "model_load_seconds": 0.0,
+  "peak_rss_mb": 1153.0,
+  "chunks_indexed": 927
+ },
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "ac",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "langchain-huggingface": "1.2.3",
+   "sentence-transformers": "6.1.0",
+   "transformers": "5.19.0",
+   "torch": "2.10.0",
+   "numpy": "2.4.1",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "087158c0a179",
+   "uncommitted_changes": true
+  }
+ },
+ "code": {
+  "commit": "087158c0a179",
+  "uncommitted_changes": true
+ }
+}

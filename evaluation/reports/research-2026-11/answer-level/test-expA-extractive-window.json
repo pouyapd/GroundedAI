@@ -1,0 +1,1678 @@
+{
+ "report": "expA-improved-retrieval",
+ "dataset": {
+  "name": "groundedai-nist-v1",
+  "fingerprint": "2dc116de6369941f",
+  "questions": 53
+ },
+ "settings_overrides": {
+  "text_cleanup": "v2",
+  "extractive_matching": "prefix"
+ },
+ "nli_model": "cross-encoder/nli-deberta-v3-xsmall",
+ "premise": "window",
+ "seconds": 410.2,
+ "skipped": {
+  "abstained_or_error": 4,
+  "not_scored": 7,
+  "passages_differ": 0
+ },
+ "lexical_all_found": {
+  "answers": 42,
+  "wrong_answers": 13,
+  "wrong_answers_flagged": 2,
+  "wrong_answers_passed": 11,
+  "correct_answers_flagged": 2,
+  "catch_rate": 0.1538,
+  "false_alarm_rate": 0.069
+ },
+ "nli_all_entailed": {
+  "answers": 42,
+  "wrong_answers": 13,
+  "wrong_answers_flagged": 2,
+  "wrong_answers_passed": 11,
+  "correct_answers_flagged": 3,
+  "catch_rate": 0.1538,
+  "false_alarm_rate": 0.1034
+ },
+ "rows": [
+  {
+   "question_id": "t01",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "5.1.1.1 Memorized Secret Authenticators Memorized secrets SHALL be at least 8 characters in length if chosen by the subscriber.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "entailment",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "5.1.1.2 Memorized Secret Verifiers Verifiers SHALL require subscriber-chosen memorized secrets to be at least 8 characters in length.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "entailment",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "Memorized secrets that are randomly chosen by the CSP (e.g., at enrollment) or by the verifier (e.g., when a user requests a new PIN) SHALL be at least 6 characters in length and SHALL be generated using an approved random bit generator [SP 800-90Ar1].",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "contradiction",
+      "S4": "entailment",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t02",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Memorized secrets chosen randomly by the CSP or verifier SHALL be at least 6 characters in length and MAY be entirely numeric.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Secrets that are randomly chosen (in most cases by the verifier or CSP) and are uniformly distributed will be more difficult to guess or brute-force attack than user-chosen secrets meeting the same length and complexity requirements.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "entailment",
+      "S3": "contradiction",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "5.1.1.2 Memorized Secret Verifiers Verifiers SHALL require subscriber-chosen memorized secrets to be at least 8 characters in length.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "entailment",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t03",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Verifiers SHOULD permit subscriber-chosen memorized secrets at least 64 characters in length.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "5.1.1.1 Memorized Secret Authenticators Memorized secrets SHALL be at least 8 characters in length if chosen by the subscriber.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "contradiction",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Memorized secrets that are randomly chosen by the CSP (e.g., at enrollment) or by the verifier (e.g., when a user requests a new PIN) SHALL be at least 6 characters in length and SHALL be generated using an approved random bit generator [SP 800-90Ar1].",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t04",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "At AAL1, reauthentication of the subscriber SHOULD be repeated at least once per 30 days during an extended usage session, regardless of user activity.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "neutral",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "entailment",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "At AAL3, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity.2.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "contradiction",
+      "S3": "entailment",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t05",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "neutral",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "At AAL3, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity.2.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "entailment",
+      "S3": "contradiction",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "At AAL1, reauthentication of the subscriber SHOULD be repeated at least once per 30 days during an extended usage session, regardless of user activity.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "contradiction",
+      "S3": "entailment",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t06",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 30 minutes or longer.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 15 minutes or longer.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "4.2.3 Reauthentication Periodic reauthentication of subscriber sessions SHALL be performed.2.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "contradiction",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t08",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "In all cases, the authentication SHALL be considered invalid if not completed within 10 minutes.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t09",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Unless otherwise specified in the description of a given authenticator, the verifier SHALL limit consecutive failed authentication attempts on a single account to no more than 100.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "If the authentication secret has less than 64 bits of entropy, the verifier SHALL implement a rate-limiting mechanism that effectively limits the number of failed authentication attempts that can be made on the subscriber\u2019s account.2.2.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "SHALL implement a rate-limiting mechanism that effectively limits the number of failed authentication attempts that can be made on the subscriber\u2019s account.2.2.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t10",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Verifiers SHOULD NOT require memorized secrets to be changed arbitrarily (e.g., periodically). o Do not require that memorized secrets be changed arbitrarily (e.g., periodically) unless there is a user request or evidence of authenticator compromise.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t11",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "This salt value, if used, SHALL be generated by an approved random bit generator [SP 800-90Ar1] and provide at least the minimum security strength specified in the latest revision of SP 800-131A (112 bits as of the date of this publication).",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "The secret key and its algorithm SHALL provide at least the minimum security strength specified in the latest revision of SP 800-131A (112 bits as of the date of this publication).",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "entailment",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t12",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Title Digital Identity Guidelines: Authentication and Lifecycle Management Publication Date(s) June 2017 (includes updates as of 03-02-2020) Withdrawal Date August 1, 2025 Withdrawal Note NIST SP 800-63B is withdrawn and superseded in its entirety by NIST SP 800- 63B-4.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "The attached publication has been superseded by the following publication(s): Series/Number NIST SP 800-63B-4.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Table 2-1 Normative and Informative Sections of SP 800-63B......................................",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t13",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Confirmation codes sent by means other than physical mail SHALL be valid for a maximum of 10 minutes.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t14",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "AI RMF Core functions should be carried out in a way that reflects diverse and multidisciplinary perspectives, potentially including the views of AI actors outside the organization.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "It describes four specific functions to help organizations address the risks of AI systems in practice.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t15",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Development of the AI RMF by NIST in collaboration with the private and public sectors is directed and consistent with its broader AI efforts called for by the National AI Initiative Act of 2020, the National Security Commission on Artificial Intelligence recommendations, and the Plan for Federal Engagement in Developing Technical Standards and Related Tools.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "NIST intends to work collaboratively with others to develop metrics, methodologies, and goals for evaluating the AI RMF\u2019s effectiveness, and to broadly share results and supporting information.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t16",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Valid & Reliable is a necessary condition of trustworthiness and is shown as the base for other trustworthiness characteristics.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t17",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "NIST will review the content and usefulness of the Framework regularly to determine if an update is appropriate; a review with formal input from the AI community is expected to take place no later than 2028.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t18",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "The AI RMF should offer taxonomy, terminology, definitions, metrics, and characterizations for AI risk.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Residual risk \u2013 defined as risk remaining after risk treatment (Source: ISO GUIDE 73) \u2013 directly impacts end users or affected individuals and communities.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "AI RMF Profiles AI RMF use-case profiles are implementations of the AI RMF functions, categories, and subcategories for a specific setting or application based on the requirements, risk tolerance, and resources of the Framework user: for example, an AI RMF hiring profile or an AI RMF fair housing profile.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t19",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "AI systems are inherently socio-technical in nature, meaning they are influenced by societal dynamics and human behavior.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "While all characteristics are socio-technical system attributes, accountability and transparency also relate to the processes and activities internal to an AI system and its external setting.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Design decisions take socio-technical implications into account to address AI risks.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t20",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "After instituting the outcomes in GOVERN, most users of the AI RMF would start with the MAP function and continue to MEASURE or MANAGE.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "It is incumbent on Framework users to continue to execute the GOVERN function as knowledge, cultures, and needs or expectations from AI actors evolve over time.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Assuming a governance structure is in place, functions may be performed in any order across the AI lifecycle as deemed to add value by a user of the framework.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t21",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "An online companion resource to the AI RMF, the NIST AI RMF Playbook, is available to help organizations navigate the AI RMF and achieve its outcomes through suggested tactical actions they can apply within their own contexts.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Along with the AI RMF, the Playbook is part of the NIST Trustworthy and Responsible AI Resource Center.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "entailment"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t22",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "AI actors are defined by the Organisation for Economic Co-operation and Development (OECD) as \u201cthose who play an active role in the AI system lifecycle, including organizations and individuals that deploy or operate AI\u201d [OECD (2019) Artificial Intelligence in Society\u2014OECD iLibrary] (See Appendix A).",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t23",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 0,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": false,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length. \u2022 Section 3.1.1.2: Increases the minimum length of passwords used as a single authentication factor.",
+     "lexical": "unsupported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "entailment"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t24",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Passwords used locally as an activation factor for a multi-factor authenticator (e.g., an unlock PIN) are referred to as activation secrets and discussed in Sec. a multi-factor authenticator. activation secret A password that is used locally as an activation factor for a multi-factor authenticator. applicant A subject undergoing the processes of identity proofing and enrollment. approved cryptography An encryption algorithm, hash function, random bit generator, or similar technique that is Federal Information Processing Standards (FIPS)-approved or NIST-recommended.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t25",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "A definite reauthentication overall timeout SHALL be established, which SHOULD be no more than 24 hours at AAL2.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "The inactivity timeout SHOULD be no more than 15 minutes.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "When the inactivity timeout has occurred but the overall timeout has not yet occurred, the verifier MAY allow the subscriber to reauthenticate using only a successful password or biometric comparison in conjunction with the session secret.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t26",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "At AAL3, the overall timeout for reauthentication SHALL be no more than 12 hours.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "contradiction",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "When the inactivity timeout has occurred but the overall timeout has not yet occurred, the verifier MAY allow the subscriber to reauthenticate using only a successful password or biometric comparison in conjunction with the session secret.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "An overall timeout limits the duration of an authenticated session to a specific period following authentication or a previous reauthentication.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "entailment",
+      "S5": "entailment"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t27",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Once that limit has been reached, the biometric authenticator SHALL impose a delay of at least 30 seconds before each subsequent attempt with an overall limit of no more than 50 consecutive failed authentication attempts or 100 if PAD is implemented due to the mitigation of presentation attacks.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t28",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 0,
+   "nli_contradicted": 1,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "\u2022 21 days when sent to a postal address within the contiguous United States. \u2022 30 days when sent to a postal address outside of the contiguous United States.",
+     "lexical": "supported",
+     "nli": "contradiction",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "neutral",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t29",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 1,
+   "lexical_pass": false,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "Verifiers SHALL allow the use of password managers and autofill functionality.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length. \u2022 Ease of entry \u2013 Support autofill functionality to allow for the safe retrieval of secrets from password managers. \u2013 Support copy and paste functionality in fields for entering passwords, including passphrases.",
+     "lexical": "partial",
+     "nli": "contradiction",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "contradiction",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t30",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 2,
+   "nli_contradicted": 1,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "(National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) NIST SP 800-63B-4. https://doi.org/10.6028/NIST.SP.800-63B-4 Author ORCID iDs.",
+     "lexical": "supported",
+     "nli": "contradiction",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "Richer This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-63B-4.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "entailment",
+      "S3": "contradiction",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-63B-4 July 2025.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "neutral",
+      "S3": "contradiction",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t31",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Reauthentication of a session that has not yet reached its time limit MAY require only a memorized secret or a biometric in conjunction with the still-valid session secret.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Prior to session expiration, the reauthentication time limit SHALL be extended by prompting the subscriber for the authentication factor(s) specified in Table 7-1.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t33",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "AI RMF temporal profiles are descriptions of either the current state or the desired, target state of specific AI risk management activities within a given sector, industry, organization, or application context.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "Comparing Current and Target Profiles likely reveals gaps to be addressed to meet AI risk management objectives.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Comparing Current and Target Profiles likely reveals gaps to be addressed to meet AI risk.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t34",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "After instituting the outcomes in GOVERN, most users of the AI RMF would start with the MAP function and continue to MEASURE or MANAGE.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "It is incumbent on Framework users to continue to execute the GOVERN function as knowledge, cultures, and needs or expectations from AI actors evolve over time.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Assuming a governance structure is in place, functions may be performed in any order across the AI lifecycle as deemed to add value by a user of the framework.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t36",
+   "expected_behavior": "abstain",
+   "correct": false,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "Framework (AI RMF 1.0) This publication is available free of charge from: https://doi.org/10.6028/NIST.AI.100-1 January 2023.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "An online companion resource to the AI RMF, the NIST AI RMF Playbook, is available to help organizations navigate the AI RMF and achieve its outcomes through suggested tactical actions they can apply within their own contexts. which is available via the NIST AI RMF website: https://www.nist.gov/itl/ai-risk-management-framework.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t37",
+   "expected_behavior": "abstain",
+   "correct": false,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Agencies should carefully evaluate password managers before making recommendations or mandates to confirm that they meet expectations for secure implementation.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t38",
+   "expected_behavior": "abstain",
+   "correct": false,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "AI RMF Profiles AI RMF use-case profiles are implementations of the AI RMF functions, categories, and subcategories for a specific setting or application based on the requirements, risk tolerance, and resources of the Framework user: for example, an AI RMF hiring profile or an AI RMF fair housing profile.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t39",
+   "expected_behavior": "abstain",
+   "correct": false,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "[FIPS 201] Federal Information Processing Standard Publication 201-2, Personal Identity Verification (PIV) of Federal Employees and Contractors, August 2013, https://doi.org/10.6028/NIST.FIPS.201-2.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "The authors gratefully acknowledge Kaitlin Boeckl for her artistic graphics contributions to all volumes in the SP 800-63 suite and the contributions of our many reviewers, including Joni Brennan from the Digital ID & Authentication Council of Canada (DIACC), Kat Megas, Ellen Nadeau, and Ben Piccarreta from NIST, and Ryan Galluzzo and Danna Gabel O\u2019Rourke from Deloitte & Touche LLP.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t40",
+   "expected_behavior": "abstain",
+   "correct": false,
+   "statements": 2,
+   "lexical_found": 1,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": false,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "\u2022 Specific terms in CAPITALS represent normative requirements. * Fonts that clearly distinguish between characters that are easily confused (e.g., the capital letter \u201cO\u201d and the number zero \u201c0\u201d).",
+     "lexical": "partial",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "entailment",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "When these same terms are not in CAPITALS, the term does not represent a normative requirement. \u2013 The terms \u201c SHALL \u201d and \u201c SHALL NOT \u201d indicate requirements to be followed.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t48",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 2,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 1,
+   "lexical_pass": false,
+   "nli_pass": false,
+   "detail": [
+    {
+     "statement": "Users\u2019 password choices are very predictable, so attackers are likely to guess passwords that have been successful in the past. deterministic distribution functions, estimating the entropy for user-chosen passwords is difficult and past efforts to do so have not been particularly accurate.",
+     "lexical": "partial",
+     "nli": "contradiction",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "contradiction",
+      "S3": "contradiction",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "The most notable form of these is composition rules, which require the user to choose passwords constructed using a mix of character types, such as at least one digit, uppercase letter, and symbol.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t49",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t50",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "AI RMF temporal profiles are descriptions of either the current state or the desired, target state of specific AI risk management activities within a given sector, industry, organization, or application context.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "entailment",
+      "S3": "neutral",
+      "S4": "contradiction",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "5 Functions organize AI risk management activities at their highest level to govern, map, measure, and manage AI risks.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "entailment",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t52",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "t53",
+   "expected_behavior": "answer",
+   "correct": false,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "detail": [
+    {
+     "statement": "Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "contradiction",
+      "S3": "entailment",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "A reference to the password hashing scheme used, including the cost factor, SHOULD be stored for each password to allow migration to new algorithms and work factors.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "contradiction"
+     }
+    },
+    {
+     "statement": "Local Verification While passwords that are used as a separate authentication factor are often centrally verified by the CSP\u2019s verifier, those that are used as an activation factor for a multifactor authenticator are either verified locally by the authenticator or used to derive the authenticator output, which will be incorrect if the wrong activation factor is used.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "entailment",
+      "S5": "neutral"
+     }
+    }
+   ]
+  }
+ ]
+}

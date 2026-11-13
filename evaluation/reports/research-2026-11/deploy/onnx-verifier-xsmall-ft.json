@@ -1,0 +1,220 @@
+{
+ "model": "experiments/finetune/runs/verifier-xsmall/epoch-2",
+ "mapping": "ft",
+ "claims": 108,
+ "threads": 4,
+ "machine": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+ "power_source": "ac",
+ "packages": {
+  "torch": "2.10.0+cpu",
+  "onnxruntime": "1.23.2"
+ },
+ "cpu_load_percent_before_timing": 8.8,
+ "logical_cpus": 12,
+ "versions": {
+  "pytorch-fp32": {
+   "file_mb": 270.2,
+   "load_seconds": 0.85,
+   "agreement_with_pytorch": 1.0,
+   "n": 108,
+   "accuracy": 0.7315,
+   "macro_f1": 0.7396,
+   "per_class": {
+    "supported": {
+     "precision": 0.95,
+     "recall": 0.6129,
+     "f1": 0.7451,
+     "support": 31
+    },
+    "partial": {
+     "precision": 0.8636,
+     "recall": 0.8636,
+     "f1": 0.8636,
+     "support": 22
+    },
+    "contradicted": {
+     "precision": 0.6857,
+     "recall": 0.7059,
+     "f1": 0.6957,
+     "support": 34
+    },
+    "nee": {
+     "precision": 0.5484,
+     "recall": 0.8095,
+     "f1": 0.6538,
+     "support": 21
+    }
+   },
+   "confusion": {
+    "supported": {
+     "supported": 19,
+     "partial": 1,
+     "contradicted": 9,
+     "nee": 2
+    },
+    "partial": {
+     "supported": 0,
+     "partial": 19,
+     "contradicted": 0,
+     "nee": 3
+    },
+    "contradicted": {
+     "supported": 1,
+     "partial": 0,
+     "contradicted": 24,
+     "nee": 9
+    },
+    "nee": {
+     "supported": 0,
+     "partial": 2,
+     "contradicted": 2,
+     "nee": 17
+    }
+   },
+   "supported_vs_rest": {
+    "false_positive_rate": 0.013,
+    "false_negative_rate": 0.3871,
+    "precision": 0.95,
+    "recall": 0.6129
+   },
+   "ms_per_claim_median": 60.0,
+   "ms_per_claim_p90": 137.2
+  },
+  "onnx-fp32": {
+   "file_mb": 271.1,
+   "load_seconds": 2.21,
+   "agreement_with_pytorch": 1.0,
+   "n": 108,
+   "accuracy": 0.7315,
+   "macro_f1": 0.7396,
+   "per_class": {
+    "supported": {
+     "precision": 0.95,
+     "recall": 0.6129,
+     "f1": 0.7451,
+     "support": 31
+    },
+    "partial": {
+     "precision": 0.8636,
+     "recall": 0.8636,
+     "f1": 0.8636,
+     "support": 22
+    },
+    "contradicted": {
+     "precision": 0.6857,
+     "recall": 0.7059,
+     "f1": 0.6957,
+     "support": 34
+    },
+    "nee": {
+     "precision": 0.5484,
+     "recall": 0.8095,
+     "f1": 0.6538,
+     "support": 21
+    }
+   },
+   "confusion": {
+    "supported": {
+     "supported": 19,
+     "partial": 1,
+     "contradicted": 9,
+     "nee": 2
+    },
+    "partial": {
+     "supported": 0,
+     "partial": 19,
+     "contradicted": 0,
+     "nee": 3
+    },
+    "contradicted": {
+     "supported": 1,
+     "partial": 0,
+     "contradicted": 24,
+     "nee": 9
+    },
+    "nee": {
+     "supported": 0,
+     "partial": 2,
+     "contradicted": 2,
+     "nee": 17
+    }
+   },
+   "supported_vs_rest": {
+    "false_positive_rate": 0.013,
+    "false_negative_rate": 0.3871,
+    "precision": 0.95,
+    "recall": 0.6129
+   },
+   "ms_per_claim_median": 29.9,
+   "ms_per_claim_p90": 45.7
+  },
+  "onnx-int8": {
+   "file_mb": 83.1,
+   "load_seconds": 1.81,
+   "agreement_with_pytorch": 0.9167,
+   "n": 108,
+   "accuracy": 0.7685,
+   "macro_f1": 0.775,
+   "per_class": {
+    "supported": {
+     "precision": 0.9524,
+     "recall": 0.6452,
+     "f1": 0.7692,
+     "support": 31
+    },
+    "partial": {
+     "precision": 0.9474,
+     "recall": 0.8182,
+     "f1": 0.878,
+     "support": 22
+    },
+    "contradicted": {
+     "precision": 0.7297,
+     "recall": 0.7941,
+     "f1": 0.7606,
+     "support": 34
+    },
+    "nee": {
+     "precision": 0.5806,
+     "recall": 0.8571,
+     "f1": 0.6923,
+     "support": 21
+    }
+   },
+   "confusion": {
+    "supported": {
+     "supported": 20,
+     "partial": 0,
+     "contradicted": 8,
+     "nee": 3
+    },
+    "partial": {
+     "supported": 0,
+     "partial": 18,
+     "contradicted": 0,
+     "nee": 4
+    },
+    "contradicted": {
+     "supported": 1,
+     "partial": 0,
+     "contradicted": 27,
+     "nee": 6
+    },
+    "nee": {
+     "supported": 0,
+     "partial": 1,
+     "contradicted": 2,
+     "nee": 18
+    }
+   },
+   "supported_vs_rest": {
+    "false_positive_rate": 0.013,
+    "false_negative_rate": 0.3548,
+    "precision": 0.9524,
+    "recall": 0.6452
+   },
+   "ms_per_claim_median": 16.7,
+   "ms_per_claim_p90": 25.0
+  }
+ }
+}
