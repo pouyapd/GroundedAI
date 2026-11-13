@@ -77,11 +77,12 @@ class Settings(BaseSettings):
     chunk_size: int = Field(default=800, ge=100, le=8000)
     chunk_overlap: int = Field(default=120, ge=0, le=2000)
     text_cleanup: Literal["v1", "v2"] = Field(
-        default="v1",
+        default="v2",
         description=(
-            "PDF text preparation: v1 keeps the extracted text; v2 expands ligatures, joins words "
-            "hyphenated at line breaks and removes running headers and footers. Re-ingest "
-            "documents after changing it."
+            "PDF text preparation: v2 (default) expands ligatures, joins words hyphenated at "
+            "line breaks and removes running headers, footers and page numbers; v1 keeps the "
+            "extracted text as it is (the behaviour before 2026-11). Documents keep the version "
+            "they were indexed with; re-ingest them after changing it."
         ),
     )
 
@@ -101,11 +102,11 @@ class Settings(BaseSettings):
     # --- generation ------------------------------------------------------
     generation_provider: GenerationProviderName = "extractive-demo"
     extractive_matching: Literal["exact", "prefix"] = Field(
-        default="exact",
+        default="prefix",
         description=(
-            "Extractive generator: 'exact' counts a question word only when a sentence has the "
-            "same word; 'prefix' also counts another form of it (reauthenticated / "
-            "reauthentication)."
+            "Extractive generator: 'prefix' (default) also counts another form of a question "
+            "word (reauthenticated / reauthentication); 'exact' counts a word only when a "
+            "sentence has the same word (the behaviour before 2026-11)."
         ),
     )
     ollama_base_url: str = "http://localhost:11434"

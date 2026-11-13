@@ -197,3 +197,14 @@ def test_the_inline_executor_runs_work_in_the_caller() -> None:
         assert list(executor.map(str, [1, 2])) == ["1", "2"]
         failed = executor.submit(lambda: 1 / 0)
     assert isinstance(failed.exception(), ZeroDivisionError)
+
+
+def test_the_demo_uses_the_application_defaults_for_text_and_matching(tmp_path: Path) -> None:
+    # The online demo builds its settings from the application defaults, so it gets the text
+    # clean-up and word-form matching of the application.
+    demo = BrowserDemo(data_dir=tmp_path / "data")
+    try:
+        assert demo.settings.text_cleanup == "v2"
+        assert demo.settings.extractive_matching == "prefix"
+    finally:
+        demo.services.close()
