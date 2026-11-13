@@ -111,7 +111,7 @@ describe("claim check in the answer view", () => {
     };
     const { unmount } = render(<AnswerView response={v2} />);
     const checks = screen.getByLabelText("Answer checks");
-    expect(within(checks).getByText("Some statements not found")).toBeInTheDocument();
+    expect(within(checks).getByText("Some statements did not match text")).toBeInTheDocument();
     expect(within(checks).getByText("Some citations wrong")).toBeInTheDocument();
     expect(within(checks).getByText("Gives what was asked")).toBeInTheDocument();
     unmount();
