@@ -44,6 +44,8 @@ Ask questions across PDFs and other text documents. GroundedAI shows which retri
 
 > **Important:** a checked citation is not a guarantee of a correct answer. The default claim checker compares words and figures, not full meaning. A statement can match a passage and still be irrelevant or misleading. Open the source before relying on an answer.
 
+This is a research and portfolio prototype evaluated on small, author-curated datasets and a limited set of real PDFs. The results describe those test sets and should not be generalized to other domains.
+
 **Built with:** Python 3.12, FastAPI, LangChain, SQLAlchemy + Alembic, SQLite FTS5 or
 PostgreSQL + pgvector, sentence-transformers, Ollama, React 19 + TypeScript (Vite), pytest,
 Playwright (browser check), Docker, GitHub Actions.
