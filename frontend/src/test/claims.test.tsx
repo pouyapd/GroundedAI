@@ -84,11 +84,11 @@ const CHECKED: AnswerResponse = {
 describe("claim check in the answer view", () => {
   it("shows the verdict, each statement's status and the exact supporting quote", () => {
     render(<AnswerView response={CHECKED} />);
-    expect(screen.getByText("Some statements not found in the sources")).toBeInTheDocument();
+    expect(screen.getByText("Some statements did not match retrieved text")).toBeInTheDocument();
     expect(screen.getByText(/model citations: no valid citations/)).toBeInTheDocument();
-    expect(screen.getByText(/1 of 2 statements found in the retrieved passages/)).toBeInTheDocument();
-    expect(screen.getByText("Found in a passage, not cited")).toBeInTheDocument();
-    expect(screen.getByText("Not found in the sources")).toBeInTheDocument();
+    expect(screen.getByText(/1 of 2 statements matched retrieved text/)).toBeInTheDocument();
+    expect(screen.getByText("Passage matched, not cited by model")).toBeInTheDocument();
+    expect(screen.getByText("No lexical match in retrieved passages")).toBeInTheDocument();
     expect(screen.getByText("“The hotel limit is €140 per night in capital cities.”")).toBeInTheDocument();
     // the quote's own page, not the passage's range (pp. 2–4)
     expect(screen.getByText(/Travel Policy · p\. 3/)).toBeInTheDocument();
