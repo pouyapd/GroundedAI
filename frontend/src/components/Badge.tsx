@@ -72,7 +72,7 @@ export function VerdictBadge({ verdict }: { verdict: Verdict }) {
     case "partially_verified":
       return <Badge tone="warning">Some statements did not match retrieved text</Badge>;
     case "unverified":
-      return <Badge tone="critical">No statements matched retrieved text</Badge>;
+      return <Badge tone="critical">No lexical match in retrieved passages</Badge>;
     default:
       return <Badge tone="neutral">No statements to check</Badge>;
   }
@@ -118,13 +118,13 @@ export function VerificationBadges({ verification }: { verification: Verificatio
 export function ClaimStatusBadge({ status }: { status: ClaimStatus }) {
   switch (status) {
     case "supported":
-      return <Badge tone="good">Supported by the cited passage</Badge>;
+      return <Badge tone="good">Lexical match in cited passage</Badge>;
     case "wrong_source":
-      return <Badge tone="warning">Cited the wrong passage</Badge>;
+      return <Badge tone="warning">Lexical match in another passage</Badge>;
     case "added_source":
-      return <Badge tone="info">Found in a passage, not cited</Badge>;
+      return <Badge tone="info">Passage matched, not cited by model</Badge>;
     case "partial":
-      return <Badge tone="warning">Partly found</Badge>;
+      return <Badge tone="warning">Partial lexical match</Badge>;
     default:
       return <Badge tone="critical">No statements matched retrieved text</Badge>;
   }
