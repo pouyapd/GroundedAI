@@ -99,11 +99,11 @@ Each statement gets one status. By default, the claim checker asks whether the s
 
 | Status shown | Meaning |
 |---|---|
-| Supported by the cited passage | the passage the model cited contains it |
-| Found in a passage, not cited | another retrieved passage contains it; GroundedAI adds that source |
-| Cited the wrong passage | the cited passage does not contain it, another one does (shown instead) |
-| Partly found | some of it is in a passage, not enough to count as found |
-| Not found in the sources | no retrieved passage contains it |
+| Lexical match in cited passage | the cited passage meets the rule-based word-and-figure overlap threshold |
+| Passage matched, not cited by model | another retrieved passage meets the threshold; GroundedAI attaches that evidence |
+| Lexical match in another passage | the model's cited passage did not match, but another retrieved passage did |
+| Partial lexical match | some statement content overlaps, but the passage does not meet the threshold |
+| No lexical match in retrieved passages | no retrieved passage meets the matching rule |
 
 The answer can also be *Not enough evidence* or *Invalid model output* (no usable answer text),
 and it can come with warnings: conflicting sources (with both quotes), invented citation labels,
