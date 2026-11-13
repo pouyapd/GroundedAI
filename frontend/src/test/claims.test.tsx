@@ -117,7 +117,7 @@ describe("claim check in the answer view", () => {
     unmount();
     render(<AnswerView response={CHECKED} />);
     expect(screen.queryByLabelText("Answer checks")).toBeNull();
-    expect(screen.getByText("Some statements not found in the sources")).toBeInTheDocument();
+    expect(screen.getByText("Some statements did not match retrieved text")).toBeInTheDocument();
   });
 
   it("shows both sides of a disagreement without choosing one", () => {
