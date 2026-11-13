@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { isInterruptedDownload, PageModel, type EngineFactory } from "../browser/pageModel";
+import { isInterruptedDownload, modelLoadErrorMessage, PageModel, type EngineFactory } from "../browser/pageModel";
 
 type Engine = Awaited<ReturnType<EngineFactory>>;
 
@@ -51,5 +51,24 @@ describe("PageModel", () => {
     expect(isInterruptedDownload(cacheError)).toBe(true);
     expect(isInterruptedDownload(new TypeError("Failed to fetch"))).toBe(true);
     expect(isInterruptedDownload(new Error("No WebGPU adapter is available."))).toBe(false);
+  });
+});
+
+describe("modelLoadErrorMessage", () => {
+  it("says the download can be continued and that the extractive generator still works", () => {
+    // Regression (2026-11-13, live demo with the model download blocked): the page showed
+    // "could not be loaded: TypeError: Failed to fetch The extractive generator still works."
+    // with no sentence break and no hint that choosing the model again retries.
+    const message = modelLoadErrorMessage(new TypeError("Failed to fetch"));
+    expect(message).toBe(
+      "The language model could not be loaded (Failed to fetch). The download did not finish; check the " +
+        "connection and choose the model again to continue it. The extractive generator still works.",
+    );
+  });
+
+  it("asks for a retry when the failure is not a broken download", () => {
+    const message = modelLoadErrorMessage(new Error("WebGPU adapter not found."));
+    expect(message).toContain("(WebGPU adapter not found). Choose the model again to retry.");
+    expect(message).toContain("could not be loaded");
   });
 });

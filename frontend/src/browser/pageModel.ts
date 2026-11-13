@@ -49,6 +49,15 @@ export function isInterruptedDownload(error: unknown): boolean {
   return /network|fetch|Cache\.add|aborted|timed? ?out/i.test(text);
 }
 
+/** What the page says when the model could not be loaded, including how to try again. */
+export function modelLoadErrorMessage(error: unknown): string {
+  const detail = (error instanceof Error ? error.message : String(error)).replace(/[.\s]+$/, "");
+  const next = isInterruptedDownload(error)
+    ? "The download did not finish; check the connection and choose the model again to continue it."
+    : "Choose the model again to retry.";
+  return `The language model could not be loaded (${detail}). ${next} The extractive generator still works.`;
+}
+
 export class PageModel {
   private engine: Promise<Engine> | null = null;
 
