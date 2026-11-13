@@ -7,6 +7,7 @@ import { AnswerStatusBadge, Badge, SupportBadge, VerificationBadges } from "./Ba
 import { Banner } from "./Banner";
 import { CitedText } from "./CitedText";
 import { ClaimCheck } from "./ClaimCheck";
+import { CheckSummary } from "./CheckSummary";
 import { Disagreements } from "./Disagreements";
 import { SourceCard } from "./SourceCard";
 
@@ -172,6 +173,8 @@ export function AnswerView({
         </div>
       ) : null}
 
+      <CheckSummary response={response} />
+
       {verification && claims.length > 0 ? (
         <ClaimCheck claims={claims} verification={verification} onCite={showCite} />
       ) : null}
@@ -232,7 +235,15 @@ export function AnswerView({
 
       {response.retrieval ? (
         <details style={{ marginTop: 16 }}>
-          <summary>Retrieval diagnostics</summary>
+          <summary>
+            Retrieval diagnostics{" "}
+            <span className="small muted">
+              · {response.retrieval.mode}
+              {response.retrieval.fusion ? ` (${response.retrieval.fusion})` : ""} · {response.retrieval.fused_candidates}{" "}
+              candidate passage{response.retrieval.fused_candidates === 1 ? "" : "s"} ·{" "}
+              {formatMs(response.retrieval.timings_ms.total_ms ?? null)}
+            </span>
+          </summary>
           <div className="table-wrap" style={{ marginTop: 8 }}>
             <table>
               <tbody>

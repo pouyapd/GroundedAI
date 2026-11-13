@@ -82,6 +82,11 @@ export function ClaimCheck({
                 Not stated in any retrieved passage: {claim.missing_figures.join(", ")}
               </p>
             ) : null}
+            {(claim.added_details ?? []).length > 0 ? (
+              <p className="small claim-note" style={{ color: "var(--critical-ink)" }}>
+                Words no retrieved passage states (an added detail): {(claim.added_details ?? []).join("; ")}
+              </p>
+            ) : null}
             {claim.flags.includes("instruction_text") ? (
               <p className="small claim-note" style={{ color: "var(--critical-ink)" }}>
                 Repeats instruction-like text from a source; not treated as a fact.

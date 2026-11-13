@@ -106,7 +106,8 @@ export function DemoPanel({ api }: { api: BrowserApi }) {
             <span className="option-meta">Instant · deterministic · not a language model</span>
             <span className="option-text">
               Selects sentences from retrieved passages using lexical word matching. It is instant and repeatable, but it
-              does not interpret meaning and may miss paraphrased questions.
+              does not interpret meaning and may miss paraphrased questions. When the passages do not mention what the
+              question asks about, it says so instead of answering.
             </span>
           </span>
         </label>
