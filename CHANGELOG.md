@@ -45,6 +45,8 @@ Full write-up: `docs/RESEARCH_EVALUATION.md`.
 - `scripts/e2e_demo.py` accepts refusals in the model step and takes card screenshots without
   the sticky header.
 - The in-browser model was checked end to end on the live site (`docs/ONLINE_DEMO.md`).
+- Launch visuals (`docs/images/linkedin-launch*.png`) built around crops of a real answer card
+  from the live demo: `scripts/capture_launch_fragments.py`, `scripts/make_linkedin_visual.py`.
 
 ## 0.1.0 — 2026-10-19
 

@@ -42,3 +42,21 @@ Qwen2.5-0.5B-Instruct (transformers) on the same journey (2026-10-18):
 A static, read-only version of the UI can be built with `npm run build:demo`: ten dataset
 questions recorded with every retrieval mode and passage count, replayed without a backend
 ([docs/DEPLOYMENT_STATUS.md](DEPLOYMENT_STATUS.md), [docs/UI_CONTROL_AUDIT.md](UI_CONTROL_AUDIT.md)).
+
+## Launch visuals
+
+`docs/images/linkedin-launch.png` and `linkedin-launch-minimal.png` (1200 × 675; `@2x` versions
+2400 × 1350) are layouts around crops of one real answer card, captured from the live demo on
+2026-10-20 in the dark theme: Qwen2.5-1.5B-Instruct in the browser answered the ferry-guide
+question, cited a source (S2) it was never given, and the check flagged it. The crops are not
+edited; the gaps between them are marked, and the numbered rings only point at parts of the
+interface. Regenerate with `scripts/capture_launch_fragments.py` (needs a Chrome profile with the
+cached model) and `scripts/make_linkedin_visual.py`.
+
+The launch post's other images are plain crops of the same screenshots, with nothing drawn on
+them: `linkedin-post-2-invalid-citation.png` (the answer, the model and the warning about S2),
+`linkedin-post-3-verified-evidence.png` (the claim check with both quotes and pages) and
+`linkedin-post-4-interface.png` (the whole Ask page at desktop width with the model's answer).
+
+![LinkedIn launch visual: the GroundedAI name and tagline on the left with three numbered points, and on the right three crops of a real answer card with numbered rings on the invalid citation S2, the status Supported by the cited passage, and the quote from page 2](images/linkedin-launch.png)
+
