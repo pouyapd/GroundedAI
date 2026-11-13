@@ -1,0 +1,2601 @@
+[
+ {
+  "file": "evaluation/datasets/groundedai-nist-v1/corpus/NIST.AI.100-1.pdf",
+  "pages": 48,
+  "chars_v1": 106441,
+  "chars_v2": 104559,
+  "chunks_v1": 172,
+  "chunks_v2": 173,
+  "pages_changed": 45,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 235,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "NIST AI 100-1 AI RMF 1.0",
+    "pages": 43
+   },
+   {
+    "line": "i",
+    "pages": 1
+   },
+   {
+    "line": "Page ii",
+    "pages": 1
+   },
+   {
+    "line": "Page 1",
+    "pages": 1
+   },
+   {
+    "line": "Page 2",
+    "pages": 1
+   },
+   {
+    "line": "Page 3",
+    "pages": 1
+   },
+   {
+    "line": "Page 4",
+    "pages": 1
+   },
+   {
+    "line": "Page 5",
+    "pages": 1
+   },
+   {
+    "line": "Page 6",
+    "pages": 1
+   },
+   {
+    "line": "Page 7",
+    "pages": 1
+   },
+   {
+    "line": "Page 8",
+    "pages": 1
+   },
+   {
+    "line": "Page 9",
+    "pages": 1
+   },
+   {
+    "line": "Page 10",
+    "pages": 1
+   },
+   {
+    "line": "Page 11",
+    "pages": 1
+   },
+   {
+    "line": "Page 12",
+    "pages": 1
+   },
+   {
+    "line": "Page 13",
+    "pages": 1
+   },
+   {
+    "line": "Page 14",
+    "pages": 1
+   },
+   {
+    "line": "Page 15",
+    "pages": 1
+   },
+   {
+    "line": "Page 16",
+    "pages": 1
+   },
+   {
+    "line": "Page 17",
+    "pages": 1
+   },
+   {
+    "line": "Page 18",
+    "pages": 1
+   },
+   {
+    "line": "Page 19",
+    "pages": 1
+   },
+   {
+    "line": "Page 20",
+    "pages": 1
+   },
+   {
+    "line": "Page 21",
+    "pages": 1
+   },
+   {
+    "line": "Page 22",
+    "pages": 1
+   },
+   {
+    "line": "Page 23",
+    "pages": 1
+   },
+   {
+    "line": "Page 24",
+    "pages": 1
+   },
+   {
+    "line": "Page 25",
+    "pages": 1
+   },
+   {
+    "line": "Page 26",
+    "pages": 1
+   },
+   {
+    "line": "Page 27",
+    "pages": 1
+   },
+   {
+    "line": "Page 28",
+    "pages": 1
+   },
+   {
+    "line": "Page 29",
+    "pages": 1
+   },
+   {
+    "line": "Page 30",
+    "pages": 1
+   },
+   {
+    "line": "Page 31",
+    "pages": 1
+   },
+   {
+    "line": "Page 32",
+    "pages": 1
+   },
+   {
+    "line": "Page 33",
+    "pages": 1
+   },
+   {
+    "line": "Page 34",
+    "pages": 1
+   },
+   {
+    "line": "Page 35",
+    "pages": 1
+   },
+   {
+    "line": "Page 36",
+    "pages": 1
+   },
+   {
+    "line": "Page 37",
+    "pages": 1
+   },
+   {
+    "line": "Page 38",
+    "pages": 1
+   },
+   {
+    "line": "Page 39",
+    "pages": 1
+   },
+   {
+    "line": "Page 40",
+    "pages": 1
+   },
+   {
+    "line": "Page 41",
+    "pages": 1
+   },
+   {
+    "line": "Page 42",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "evaluation/datasets/groundedai-nist-v1/corpus/NIST.SP.800-63B-4.pdf",
+  "pages": 129,
+  "chars_v1": 286500,
+  "chars_v2": 273372,
+  "chunks_v1": 468,
+  "chunks_v2": 448,
+  "pages_changed": 127,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 3,
+  "hyphens_joined": 33,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "NIST SP 800-63B-4",
+    "pages": 127
+   },
+   {
+    "line": "Digital Identity Guidelines",
+    "pages": 127
+   },
+   {
+    "line": "Authentication and Authenticator Management",
+    "pages": 127
+   },
+   {
+    "line": "July 2025",
+    "pages": 125
+   },
+   {
+    "line": "i",
+    "pages": 1
+   },
+   {
+    "line": "ii",
+    "pages": 1
+   },
+   {
+    "line": "iii",
+    "pages": 1
+   },
+   {
+    "line": "iv",
+    "pages": 1
+   },
+   {
+    "line": "v",
+    "pages": 1
+   },
+   {
+    "line": "vi",
+    "pages": 1
+   },
+   {
+    "line": "vii",
+    "pages": 1
+   },
+   {
+    "line": "1",
+    "pages": 1
+   },
+   {
+    "line": "2",
+    "pages": 1
+   },
+   {
+    "line": "3",
+    "pages": 1
+   },
+   {
+    "line": "4",
+    "pages": 1
+   },
+   {
+    "line": "5",
+    "pages": 1
+   },
+   {
+    "line": "6",
+    "pages": 1
+   },
+   {
+    "line": "7",
+    "pages": 1
+   },
+   {
+    "line": "8",
+    "pages": 1
+   },
+   {
+    "line": "9",
+    "pages": 1
+   },
+   {
+    "line": "10",
+    "pages": 1
+   },
+   {
+    "line": "11",
+    "pages": 1
+   },
+   {
+    "line": "12",
+    "pages": 1
+   },
+   {
+    "line": "13",
+    "pages": 1
+   },
+   {
+    "line": "14",
+    "pages": 1
+   },
+   {
+    "line": "15",
+    "pages": 1
+   },
+   {
+    "line": "16",
+    "pages": 1
+   },
+   {
+    "line": "17",
+    "pages": 1
+   },
+   {
+    "line": "18",
+    "pages": 1
+   },
+   {
+    "line": "19",
+    "pages": 1
+   },
+   {
+    "line": "20",
+    "pages": 1
+   },
+   {
+    "line": "21",
+    "pages": 1
+   },
+   {
+    "line": "22",
+    "pages": 1
+   },
+   {
+    "line": "23",
+    "pages": 1
+   },
+   {
+    "line": "24",
+    "pages": 1
+   },
+   {
+    "line": "25",
+    "pages": 1
+   },
+   {
+    "line": "26",
+    "pages": 1
+   },
+   {
+    "line": "27",
+    "pages": 1
+   },
+   {
+    "line": "28",
+    "pages": 1
+   },
+   {
+    "line": "29",
+    "pages": 1
+   },
+   {
+    "line": "30",
+    "pages": 1
+   },
+   {
+    "line": "31",
+    "pages": 1
+   },
+   {
+    "line": "32",
+    "pages": 1
+   },
+   {
+    "line": "33",
+    "pages": 1
+   },
+   {
+    "line": "34",
+    "pages": 1
+   },
+   {
+    "line": "35",
+    "pages": 1
+   },
+   {
+    "line": "36",
+    "pages": 1
+   },
+   {
+    "line": "37",
+    "pages": 1
+   },
+   {
+    "line": "38",
+    "pages": 1
+   },
+   {
+    "line": "39",
+    "pages": 1
+   },
+   {
+    "line": "40",
+    "pages": 1
+   },
+   {
+    "line": "41",
+    "pages": 1
+   },
+   {
+    "line": "42",
+    "pages": 1
+   },
+   {
+    "line": "43",
+    "pages": 1
+   },
+   {
+    "line": "44",
+    "pages": 1
+   },
+   {
+    "line": "45",
+    "pages": 1
+   },
+   {
+    "line": "46",
+    "pages": 1
+   },
+   {
+    "line": "47",
+    "pages": 1
+   },
+   {
+    "line": "48",
+    "pages": 1
+   },
+   {
+    "line": "49",
+    "pages": 1
+   },
+   {
+    "line": "50",
+    "pages": 1
+   },
+   {
+    "line": "51",
+    "pages": 1
+   },
+   {
+    "line": "52",
+    "pages": 1
+   },
+   {
+    "line": "53",
+    "pages": 1
+   },
+   {
+    "line": "54",
+    "pages": 1
+   },
+   {
+    "line": "55",
+    "pages": 1
+   },
+   {
+    "line": "56",
+    "pages": 1
+   },
+   {
+    "line": "57",
+    "pages": 1
+   },
+   {
+    "line": "58",
+    "pages": 1
+   },
+   {
+    "line": "59",
+    "pages": 1
+   },
+   {
+    "line": "60",
+    "pages": 1
+   },
+   {
+    "line": "61",
+    "pages": 1
+   },
+   {
+    "line": "62",
+    "pages": 1
+   },
+   {
+    "line": "63",
+    "pages": 1
+   },
+   {
+    "line": "64",
+    "pages": 1
+   },
+   {
+    "line": "65",
+    "pages": 1
+   },
+   {
+    "line": "66",
+    "pages": 1
+   },
+   {
+    "line": "67",
+    "pages": 1
+   },
+   {
+    "line": "68",
+    "pages": 1
+   },
+   {
+    "line": "69",
+    "pages": 1
+   },
+   {
+    "line": "70",
+    "pages": 1
+   },
+   {
+    "line": "71",
+    "pages": 1
+   },
+   {
+    "line": "72",
+    "pages": 1
+   },
+   {
+    "line": "73",
+    "pages": 1
+   },
+   {
+    "line": "74",
+    "pages": 1
+   },
+   {
+    "line": "75",
+    "pages": 1
+   },
+   {
+    "line": "76",
+    "pages": 1
+   },
+   {
+    "line": "77",
+    "pages": 1
+   },
+   {
+    "line": "78",
+    "pages": 1
+   },
+   {
+    "line": "79",
+    "pages": 1
+   },
+   {
+    "line": "80",
+    "pages": 1
+   },
+   {
+    "line": "81",
+    "pages": 1
+   },
+   {
+    "line": "82",
+    "pages": 1
+   },
+   {
+    "line": "83",
+    "pages": 1
+   },
+   {
+    "line": "84",
+    "pages": 1
+   },
+   {
+    "line": "85",
+    "pages": 1
+   },
+   {
+    "line": "86",
+    "pages": 1
+   },
+   {
+    "line": "87",
+    "pages": 1
+   },
+   {
+    "line": "88",
+    "pages": 1
+   },
+   {
+    "line": "89",
+    "pages": 1
+   },
+   {
+    "line": "90",
+    "pages": 1
+   },
+   {
+    "line": "91",
+    "pages": 1
+   },
+   {
+    "line": "92",
+    "pages": 1
+   },
+   {
+    "line": "93",
+    "pages": 1
+   },
+   {
+    "line": "94",
+    "pages": 1
+   },
+   {
+    "line": "95",
+    "pages": 1
+   },
+   {
+    "line": "96",
+    "pages": 1
+   },
+   {
+    "line": "97",
+    "pages": 1
+   },
+   {
+    "line": "98",
+    "pages": 1
+   },
+   {
+    "line": "99",
+    "pages": 1
+   },
+   {
+    "line": "100",
+    "pages": 1
+   },
+   {
+    "line": "101",
+    "pages": 1
+   },
+   {
+    "line": "102",
+    "pages": 1
+   },
+   {
+    "line": "103",
+    "pages": 1
+   },
+   {
+    "line": "104",
+    "pages": 1
+   },
+   {
+    "line": "105",
+    "pages": 1
+   },
+   {
+    "line": "106",
+    "pages": 1
+   },
+   {
+    "line": "107",
+    "pages": 1
+   },
+   {
+    "line": "108",
+    "pages": 1
+   },
+   {
+    "line": "109",
+    "pages": 1
+   },
+   {
+    "line": "110",
+    "pages": 1
+   },
+   {
+    "line": "111",
+    "pages": 1
+   },
+   {
+    "line": "112",
+    "pages": 1
+   },
+   {
+    "line": "113",
+    "pages": 1
+   },
+   {
+    "line": "114",
+    "pages": 1
+   },
+   {
+    "line": "115",
+    "pages": 1
+   },
+   {
+    "line": "116",
+    "pages": 1
+   },
+   {
+    "line": "117",
+    "pages": 1
+   },
+   {
+    "line": "118",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "evaluation/datasets/groundedai-nist-v1/corpus/NIST.SP.800-63b.pdf",
+  "pages": 80,
+  "chars_v1": 198102,
+  "chars_v2": 184530,
+  "chunks_v1": 367,
+  "chunks_v2": 306,
+  "pages_changed": 76,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 25,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "NIST SP 800-63B DIGITAL IDENTITY GUIDELINES:",
+    "pages": 76
+   },
+   {
+    "line": "AUTHENTICATION & LIFECYCLE MANAGEMENT",
+    "pages": 76
+   },
+   {
+    "line": "This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-63b",
+    "pages": 76
+   },
+   {
+    "line": "ii",
+    "pages": 1
+   },
+   {
+    "line": "iii",
+    "pages": 1
+   },
+   {
+    "line": "iv",
+    "pages": 1
+   },
+   {
+    "line": "v",
+    "pages": 1
+   },
+   {
+    "line": "vi",
+    "pages": 1
+   },
+   {
+    "line": "vii",
+    "pages": 1
+   },
+   {
+    "line": "viii",
+    "pages": 1
+   },
+   {
+    "line": "1",
+    "pages": 1
+   },
+   {
+    "line": "2",
+    "pages": 1
+   },
+   {
+    "line": "3",
+    "pages": 1
+   },
+   {
+    "line": "4",
+    "pages": 1
+   },
+   {
+    "line": "5",
+    "pages": 1
+   },
+   {
+    "line": "6",
+    "pages": 1
+   },
+   {
+    "line": "7",
+    "pages": 1
+   },
+   {
+    "line": "8",
+    "pages": 1
+   },
+   {
+    "line": "9",
+    "pages": 1
+   },
+   {
+    "line": "10",
+    "pages": 1
+   },
+   {
+    "line": "11",
+    "pages": 1
+   },
+   {
+    "line": "12",
+    "pages": 1
+   },
+   {
+    "line": "13",
+    "pages": 1
+   },
+   {
+    "line": "14",
+    "pages": 1
+   },
+   {
+    "line": "15",
+    "pages": 1
+   },
+   {
+    "line": "16",
+    "pages": 1
+   },
+   {
+    "line": "17",
+    "pages": 1
+   },
+   {
+    "line": "18",
+    "pages": 1
+   },
+   {
+    "line": "19",
+    "pages": 1
+   },
+   {
+    "line": "20",
+    "pages": 1
+   },
+   {
+    "line": "21",
+    "pages": 1
+   },
+   {
+    "line": "22",
+    "pages": 1
+   },
+   {
+    "line": "23",
+    "pages": 1
+   },
+   {
+    "line": "24",
+    "pages": 1
+   },
+   {
+    "line": "25",
+    "pages": 1
+   },
+   {
+    "line": "26",
+    "pages": 1
+   },
+   {
+    "line": "27",
+    "pages": 1
+   },
+   {
+    "line": "28",
+    "pages": 1
+   },
+   {
+    "line": "29",
+    "pages": 1
+   },
+   {
+    "line": "30",
+    "pages": 1
+   },
+   {
+    "line": "31",
+    "pages": 1
+   },
+   {
+    "line": "32",
+    "pages": 1
+   },
+   {
+    "line": "33",
+    "pages": 1
+   },
+   {
+    "line": "34",
+    "pages": 1
+   },
+   {
+    "line": "35",
+    "pages": 1
+   },
+   {
+    "line": "36",
+    "pages": 1
+   },
+   {
+    "line": "37",
+    "pages": 1
+   },
+   {
+    "line": "38",
+    "pages": 1
+   },
+   {
+    "line": "39",
+    "pages": 1
+   },
+   {
+    "line": "40",
+    "pages": 1
+   },
+   {
+    "line": "41",
+    "pages": 1
+   },
+   {
+    "line": "42",
+    "pages": 1
+   },
+   {
+    "line": "43",
+    "pages": 1
+   },
+   {
+    "line": "44",
+    "pages": 1
+   },
+   {
+    "line": "45",
+    "pages": 1
+   },
+   {
+    "line": "46",
+    "pages": 1
+   },
+   {
+    "line": "47",
+    "pages": 1
+   },
+   {
+    "line": "48",
+    "pages": 1
+   },
+   {
+    "line": "49",
+    "pages": 1
+   },
+   {
+    "line": "50",
+    "pages": 1
+   },
+   {
+    "line": "51",
+    "pages": 1
+   },
+   {
+    "line": "52",
+    "pages": 1
+   },
+   {
+    "line": "53",
+    "pages": 1
+   },
+   {
+    "line": "54",
+    "pages": 1
+   },
+   {
+    "line": "55",
+    "pages": 1
+   },
+   {
+    "line": "56",
+    "pages": 1
+   },
+   {
+    "line": "57",
+    "pages": 1
+   },
+   {
+    "line": "58",
+    "pages": 1
+   },
+   {
+    "line": "59",
+    "pages": 1
+   },
+   {
+    "line": "60",
+    "pages": 1
+   },
+   {
+    "line": "61",
+    "pages": 1
+   },
+   {
+    "line": "62",
+    "pages": 1
+   },
+   {
+    "line": "63",
+    "pages": 1
+   },
+   {
+    "line": "64",
+    "pages": 1
+   },
+   {
+    "line": "65",
+    "pages": 1
+   },
+   {
+    "line": "66",
+    "pages": 1
+   },
+   {
+    "line": "67",
+    "pages": 1
+   },
+   {
+    "line": "68",
+    "pages": 1
+   },
+   {
+    "line": "69",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "evaluation/datasets/groundedai-nist-val-v1/corpus/NIST.AI.600-1.pdf",
+  "pages": 64,
+  "chars_v1": 157793,
+  "chars_v2": 157988,
+  "chunks_v1": 271,
+  "chunks_v2": 271,
+  "pages_changed": 61,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 402,
+  "hyphens_joined": 29,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "1",
+    "pages": 1
+   },
+   {
+    "line": "2",
+    "pages": 1
+   },
+   {
+    "line": "3",
+    "pages": 1
+   },
+   {
+    "line": "4",
+    "pages": 1
+   },
+   {
+    "line": "5",
+    "pages": 1
+   },
+   {
+    "line": "6",
+    "pages": 1
+   },
+   {
+    "line": "7",
+    "pages": 1
+   },
+   {
+    "line": "8",
+    "pages": 1
+   },
+   {
+    "line": "9",
+    "pages": 1
+   },
+   {
+    "line": "10",
+    "pages": 1
+   },
+   {
+    "line": "11",
+    "pages": 1
+   },
+   {
+    "line": "12",
+    "pages": 1
+   },
+   {
+    "line": "13",
+    "pages": 1
+   },
+   {
+    "line": "14",
+    "pages": 1
+   },
+   {
+    "line": "15",
+    "pages": 1
+   },
+   {
+    "line": "16",
+    "pages": 1
+   },
+   {
+    "line": "17",
+    "pages": 1
+   },
+   {
+    "line": "18",
+    "pages": 1
+   },
+   {
+    "line": "19",
+    "pages": 1
+   },
+   {
+    "line": "20",
+    "pages": 1
+   },
+   {
+    "line": "21",
+    "pages": 1
+   },
+   {
+    "line": "22",
+    "pages": 1
+   },
+   {
+    "line": "23",
+    "pages": 1
+   },
+   {
+    "line": "24",
+    "pages": 1
+   },
+   {
+    "line": "25",
+    "pages": 1
+   },
+   {
+    "line": "26",
+    "pages": 1
+   },
+   {
+    "line": "27",
+    "pages": 1
+   },
+   {
+    "line": "28",
+    "pages": 1
+   },
+   {
+    "line": "29",
+    "pages": 1
+   },
+   {
+    "line": "30",
+    "pages": 1
+   },
+   {
+    "line": "31",
+    "pages": 1
+   },
+   {
+    "line": "32",
+    "pages": 1
+   },
+   {
+    "line": "33",
+    "pages": 1
+   },
+   {
+    "line": "34",
+    "pages": 1
+   },
+   {
+    "line": "35",
+    "pages": 1
+   },
+   {
+    "line": "36",
+    "pages": 1
+   },
+   {
+    "line": "37",
+    "pages": 1
+   },
+   {
+    "line": "38",
+    "pages": 1
+   },
+   {
+    "line": "39",
+    "pages": 1
+   },
+   {
+    "line": "40",
+    "pages": 1
+   },
+   {
+    "line": "41",
+    "pages": 1
+   },
+   {
+    "line": "42",
+    "pages": 1
+   },
+   {
+    "line": "43",
+    "pages": 1
+   },
+   {
+    "line": "44",
+    "pages": 1
+   },
+   {
+    "line": "45",
+    "pages": 1
+   },
+   {
+    "line": "46",
+    "pages": 1
+   },
+   {
+    "line": "47",
+    "pages": 1
+   },
+   {
+    "line": "48",
+    "pages": 1
+   },
+   {
+    "line": "49",
+    "pages": 1
+   },
+   {
+    "line": "50",
+    "pages": 1
+   },
+   {
+    "line": "51",
+    "pages": 1
+   },
+   {
+    "line": "52",
+    "pages": 1
+   },
+   {
+    "line": "53",
+    "pages": 1
+   },
+   {
+    "line": "54",
+    "pages": 1
+   },
+   {
+    "line": "55",
+    "pages": 1
+   },
+   {
+    "line": "56",
+    "pages": 1
+   },
+   {
+    "line": "57",
+    "pages": 1
+   },
+   {
+    "line": "58",
+    "pages": 1
+   },
+   {
+    "line": "59",
+    "pages": 1
+   },
+   {
+    "line": "60",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "evaluation/datasets/groundedai-nist-val-v1/corpus/NIST.IR.8312.pdf",
+  "pages": 43,
+  "chars_v1": 123775,
+  "chars_v2": 115789,
+  "chunks_v1": 195,
+  "chunks_v2": 188,
+  "pages_changed": 43,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 217,
+  "hyphens_joined": 226,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "______________________________________________________________________________________________________",
+    "pages": 40
+   },
+   {
+    "line": "This publication is available free of charge from: https://doi.org/10.6028/NIST.IR.8312",
+    "pages": 40
+   },
+   {
+    "line": "i",
+    "pages": 1
+   },
+   {
+    "line": "ii",
+    "pages": 1
+   },
+   {
+    "line": "iii",
+    "pages": 1
+   },
+   {
+    "line": "iv",
+    "pages": 1
+   },
+   {
+    "line": "1",
+    "pages": 1
+   },
+   {
+    "line": "2",
+    "pages": 1
+   },
+   {
+    "line": "3",
+    "pages": 1
+   },
+   {
+    "line": "4",
+    "pages": 1
+   },
+   {
+    "line": "5",
+    "pages": 1
+   },
+   {
+    "line": "6",
+    "pages": 1
+   },
+   {
+    "line": "7",
+    "pages": 1
+   },
+   {
+    "line": "8",
+    "pages": 1
+   },
+   {
+    "line": "9",
+    "pages": 1
+   },
+   {
+    "line": "10",
+    "pages": 1
+   },
+   {
+    "line": "11",
+    "pages": 1
+   },
+   {
+    "line": "12",
+    "pages": 1
+   },
+   {
+    "line": "13",
+    "pages": 1
+   },
+   {
+    "line": "14",
+    "pages": 1
+   },
+   {
+    "line": "15",
+    "pages": 1
+   },
+   {
+    "line": "16",
+    "pages": 1
+   },
+   {
+    "line": "17",
+    "pages": 1
+   },
+   {
+    "line": "18",
+    "pages": 1
+   },
+   {
+    "line": "19",
+    "pages": 1
+   },
+   {
+    "line": "20",
+    "pages": 1
+   },
+   {
+    "line": "21",
+    "pages": 1
+   },
+   {
+    "line": "22",
+    "pages": 1
+   },
+   {
+    "line": "23",
+    "pages": 1
+   },
+   {
+    "line": "24",
+    "pages": 1
+   },
+   {
+    "line": "25",
+    "pages": 1
+   },
+   {
+    "line": "26",
+    "pages": 1
+   },
+   {
+    "line": "27",
+    "pages": 1
+   },
+   {
+    "line": "28",
+    "pages": 1
+   },
+   {
+    "line": "29",
+    "pages": 1
+   },
+   {
+    "line": "30",
+    "pages": 1
+   },
+   {
+    "line": "31",
+    "pages": 1
+   },
+   {
+    "line": "32",
+    "pages": 1
+   },
+   {
+    "line": "33",
+    "pages": 1
+   },
+   {
+    "line": "34",
+    "pages": 1
+   },
+   {
+    "line": "35",
+    "pages": 1
+   },
+   {
+    "line": "36",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "evaluation/datasets/groundedai-synthetic-v1/corpus/solvane-sx5-manual.pdf",
+  "pages": 4,
+  "chars_v1": 2632,
+  "chars_v2": 2632,
+  "chunks_v1": 4,
+  "chunks_v2": 4,
+  "pages_changed": 0,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 0,
+  "pages_with_new_words": [],
+  "removed_lines": []
+ },
+ {
+  "file": "examples/harbourline-ferry-guide.pdf",
+  "pages": 3,
+  "chars_v1": 526,
+  "chars_v2": 526,
+  "chunks_v1": 1,
+  "chunks_v2": 1,
+  "pages_changed": 0,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 0,
+  "pages_with_new_words": [],
+  "removed_lines": []
+ },
+ {
+  "file": "examples/orchard-library-rules.pdf",
+  "pages": 1,
+  "chars_v1": 154,
+  "chars_v2": 154,
+  "chunks_v1": 1,
+  "chunks_v2": 1,
+  "pages_changed": 0,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 0,
+  "pages_with_new_words": [],
+  "removed_lines": []
+ },
+ {
+  "file": "experiments/finetune/corpus/NIST.CSWP.29.pdf",
+  "pages": 32,
+  "chars_v1": 68350,
+  "chars_v2": 65985,
+  "chunks_v1": 127,
+  "chunks_v2": 117,
+  "pages_changed": 32,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 5,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "February 26, 2024",
+    "pages": 32
+   },
+   {
+    "line": "NIST CSWP 29 The NIST Cybersecurity Framework (CSF) 2.0",
+    "pages": 30
+   },
+   {
+    "line": "i",
+    "pages": 1
+   },
+   {
+    "line": "ii",
+    "pages": 1
+   },
+   {
+    "line": "iii",
+    "pages": 1
+   },
+   {
+    "line": "iv",
+    "pages": 1
+   },
+   {
+    "line": "1",
+    "pages": 1
+   },
+   {
+    "line": "2",
+    "pages": 1
+   },
+   {
+    "line": "3",
+    "pages": 1
+   },
+   {
+    "line": "4",
+    "pages": 1
+   },
+   {
+    "line": "5",
+    "pages": 1
+   },
+   {
+    "line": "6",
+    "pages": 1
+   },
+   {
+    "line": "7",
+    "pages": 1
+   },
+   {
+    "line": "8",
+    "pages": 1
+   },
+   {
+    "line": "9",
+    "pages": 1
+   },
+   {
+    "line": "10",
+    "pages": 1
+   },
+   {
+    "line": "11",
+    "pages": 1
+   },
+   {
+    "line": "12",
+    "pages": 1
+   },
+   {
+    "line": "13",
+    "pages": 1
+   },
+   {
+    "line": "14",
+    "pages": 1
+   },
+   {
+    "line": "15",
+    "pages": 1
+   },
+   {
+    "line": "16",
+    "pages": 1
+   },
+   {
+    "line": "17",
+    "pages": 1
+   },
+   {
+    "line": "18",
+    "pages": 1
+   },
+   {
+    "line": "19",
+    "pages": 1
+   },
+   {
+    "line": "20",
+    "pages": 1
+   },
+   {
+    "line": "21",
+    "pages": 1
+   },
+   {
+    "line": "22",
+    "pages": 1
+   },
+   {
+    "line": "23",
+    "pages": 1
+   },
+   {
+    "line": "24",
+    "pages": 1
+   },
+   {
+    "line": "25",
+    "pages": 1
+   },
+   {
+    "line": "26",
+    "pages": 1
+   },
+   {
+    "line": "27",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "experiments/finetune/corpus/NIST.SP.800-207.pdf",
+  "pages": 59,
+  "chars_v1": 154186,
+  "chars_v2": 146580,
+  "chunks_v1": 299,
+  "chunks_v2": 242,
+  "pages_changed": 56,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 24,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "NIST SP 800-207 ZERO TRUST ARCHITECTURE",
+    "pages": 56
+   },
+   {
+    "line": "This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207",
+    "pages": 56
+   },
+   {
+    "line": "ii",
+    "pages": 1
+   },
+   {
+    "line": "iii",
+    "pages": 1
+   },
+   {
+    "line": "iv",
+    "pages": 1
+   },
+   {
+    "line": "v",
+    "pages": 1
+   },
+   {
+    "line": "vi",
+    "pages": 1
+   },
+   {
+    "line": "vii",
+    "pages": 1
+   },
+   {
+    "line": "1",
+    "pages": 1
+   },
+   {
+    "line": "2",
+    "pages": 1
+   },
+   {
+    "line": "3",
+    "pages": 1
+   },
+   {
+    "line": "4",
+    "pages": 1
+   },
+   {
+    "line": "5",
+    "pages": 1
+   },
+   {
+    "line": "6",
+    "pages": 1
+   },
+   {
+    "line": "7",
+    "pages": 1
+   },
+   {
+    "line": "8",
+    "pages": 1
+   },
+   {
+    "line": "9",
+    "pages": 1
+   },
+   {
+    "line": "10",
+    "pages": 1
+   },
+   {
+    "line": "11",
+    "pages": 1
+   },
+   {
+    "line": "12",
+    "pages": 1
+   },
+   {
+    "line": "13",
+    "pages": 1
+   },
+   {
+    "line": "14",
+    "pages": 1
+   },
+   {
+    "line": "15",
+    "pages": 1
+   },
+   {
+    "line": "16",
+    "pages": 1
+   },
+   {
+    "line": "17",
+    "pages": 1
+   },
+   {
+    "line": "18",
+    "pages": 1
+   },
+   {
+    "line": "19",
+    "pages": 1
+   },
+   {
+    "line": "20",
+    "pages": 1
+   },
+   {
+    "line": "21",
+    "pages": 1
+   },
+   {
+    "line": "22",
+    "pages": 1
+   },
+   {
+    "line": "23",
+    "pages": 1
+   },
+   {
+    "line": "24",
+    "pages": 1
+   },
+   {
+    "line": "25",
+    "pages": 1
+   },
+   {
+    "line": "26",
+    "pages": 1
+   },
+   {
+    "line": "27",
+    "pages": 1
+   },
+   {
+    "line": "28",
+    "pages": 1
+   },
+   {
+    "line": "29",
+    "pages": 1
+   },
+   {
+    "line": "30",
+    "pages": 1
+   },
+   {
+    "line": "31",
+    "pages": 1
+   },
+   {
+    "line": "32",
+    "pages": 1
+   },
+   {
+    "line": "33",
+    "pages": 1
+   },
+   {
+    "line": "34",
+    "pages": 1
+   },
+   {
+    "line": "35",
+    "pages": 1
+   },
+   {
+    "line": "36",
+    "pages": 1
+   },
+   {
+    "line": "37",
+    "pages": 1
+   },
+   {
+    "line": "38",
+    "pages": 1
+   },
+   {
+    "line": "39",
+    "pages": 1
+   },
+   {
+    "line": "40",
+    "pages": 1
+   },
+   {
+    "line": "41",
+    "pages": 1
+   },
+   {
+    "line": "42",
+    "pages": 1
+   },
+   {
+    "line": "43",
+    "pages": 1
+   },
+   {
+    "line": "44",
+    "pages": 1
+   },
+   {
+    "line": "45",
+    "pages": 1
+   },
+   {
+    "line": "46",
+    "pages": 1
+   },
+   {
+    "line": "47",
+    "pages": 1
+   },
+   {
+    "line": "48",
+    "pages": 1
+   },
+   {
+    "line": "49",
+    "pages": 1
+   },
+   {
+    "line": "50",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "experiments/finetune/corpus/NIST.SP.800-218.pdf",
+  "pages": 36,
+  "chars_v1": 105267,
+  "chars_v2": 102364,
+  "chunks_v1": 190,
+  "chunks_v2": 172,
+  "pages_changed": 33,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 17,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "NIST SP 800-218 SSDF VERSION 1.1",
+    "pages": 33
+   },
+   {
+    "line": "This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218",
+    "pages": 18
+   },
+   {
+    "line": "ii",
+    "pages": 1
+   },
+   {
+    "line": "iii",
+    "pages": 1
+   },
+   {
+    "line": "iv",
+    "pages": 1
+   },
+   {
+    "line": "v",
+    "pages": 1
+   },
+   {
+    "line": "vi",
+    "pages": 1
+   },
+   {
+    "line": "vii",
+    "pages": 1
+   },
+   {
+    "line": "1",
+    "pages": 1
+   },
+   {
+    "line": "2",
+    "pages": 1
+   },
+   {
+    "line": "3",
+    "pages": 1
+   },
+   {
+    "line": "4",
+    "pages": 1
+   },
+   {
+    "line": "5",
+    "pages": 1
+   },
+   {
+    "line": "6",
+    "pages": 1
+   },
+   {
+    "line": "7",
+    "pages": 1
+   },
+   {
+    "line": "8",
+    "pages": 1
+   },
+   {
+    "line": "9",
+    "pages": 1
+   },
+   {
+    "line": "10",
+    "pages": 1
+   },
+   {
+    "line": "11",
+    "pages": 1
+   },
+   {
+    "line": "12",
+    "pages": 1
+   },
+   {
+    "line": "13",
+    "pages": 1
+   },
+   {
+    "line": "14",
+    "pages": 1
+   },
+   {
+    "line": "15",
+    "pages": 1
+   },
+   {
+    "line": "16",
+    "pages": 1
+   },
+   {
+    "line": "17",
+    "pages": 1
+   },
+   {
+    "line": "18",
+    "pages": 1
+   },
+   {
+    "line": "19",
+    "pages": 1
+   },
+   {
+    "line": "20",
+    "pages": 1
+   },
+   {
+    "line": "21",
+    "pages": 1
+   },
+   {
+    "line": "22",
+    "pages": 1
+   },
+   {
+    "line": "23",
+    "pages": 1
+   },
+   {
+    "line": "24",
+    "pages": 1
+   },
+   {
+    "line": "25",
+    "pages": 1
+   },
+   {
+    "line": "26",
+    "pages": 1
+   },
+   {
+    "line": "27",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "experiments/finetune/corpus/NIST.SP.800-61r3.pdf",
+  "pages": 48,
+  "chars_v1": 104753,
+  "chars_v2": 97626,
+  "chunks_v1": 205,
+  "chunks_v2": 163,
+  "pages_changed": 46,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 10,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "NIST SP 800-61r3 Incident Response Recommendations and",
+    "pages": 46
+   },
+   {
+    "line": "April 2025 Considerations for Cyber Risk Management",
+    "pages": 46
+   },
+   {
+    "line": "CSF Element CSF Element Description Priority Recommendations, Considerations, Notes",
+    "pages": 23
+   },
+   {
+    "line": "i",
+    "pages": 1
+   },
+   {
+    "line": "ii",
+    "pages": 1
+   },
+   {
+    "line": "iii",
+    "pages": 1
+   },
+   {
+    "line": "iv",
+    "pages": 1
+   },
+   {
+    "line": "1",
+    "pages": 1
+   },
+   {
+    "line": "2",
+    "pages": 1
+   },
+   {
+    "line": "3",
+    "pages": 1
+   },
+   {
+    "line": "4",
+    "pages": 1
+   },
+   {
+    "line": "5",
+    "pages": 1
+   },
+   {
+    "line": "6",
+    "pages": 1
+   },
+   {
+    "line": "7",
+    "pages": 1
+   },
+   {
+    "line": "8",
+    "pages": 1
+   },
+   {
+    "line": "9",
+    "pages": 1
+   },
+   {
+    "line": "10",
+    "pages": 1
+   },
+   {
+    "line": "11",
+    "pages": 1
+   },
+   {
+    "line": "12",
+    "pages": 1
+   },
+   {
+    "line": "13",
+    "pages": 1
+   },
+   {
+    "line": "14",
+    "pages": 1
+   },
+   {
+    "line": "15",
+    "pages": 1
+   },
+   {
+    "line": "16",
+    "pages": 1
+   },
+   {
+    "line": "17",
+    "pages": 1
+   },
+   {
+    "line": "18",
+    "pages": 1
+   },
+   {
+    "line": "19",
+    "pages": 1
+   },
+   {
+    "line": "20",
+    "pages": 1
+   },
+   {
+    "line": "21",
+    "pages": 1
+   },
+   {
+    "line": "22",
+    "pages": 1
+   },
+   {
+    "line": "23",
+    "pages": 1
+   },
+   {
+    "line": "24",
+    "pages": 1
+   },
+   {
+    "line": "25",
+    "pages": 1
+   },
+   {
+    "line": "26",
+    "pages": 1
+   },
+   {
+    "line": "27",
+    "pages": 1
+   },
+   {
+    "line": "28",
+    "pages": 1
+   },
+   {
+    "line": "29",
+    "pages": 1
+   },
+   {
+    "line": "30",
+    "pages": 1
+   },
+   {
+    "line": "31",
+    "pages": 1
+   },
+   {
+    "line": "32",
+    "pages": 1
+   },
+   {
+    "line": "33",
+    "pages": 1
+   },
+   {
+    "line": "34",
+    "pages": 1
+   },
+   {
+    "line": "35",
+    "pages": 1
+   },
+   {
+    "line": "36",
+    "pages": 1
+   },
+   {
+    "line": "37",
+    "pages": 1
+   },
+   {
+    "line": "38",
+    "pages": 1
+   },
+   {
+    "line": "39",
+    "pages": 1
+   },
+   {
+    "line": "40",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "experiments/finetune/corpus/NIST.SP.800-88r1.pdf",
+  "pages": 65,
+  "chars_v1": 161228,
+  "chars_v2": 157646,
+  "chunks_v1": 280,
+  "chunks_v2": 264,
+  "pages_changed": 62,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 11,
+  "pages_with_new_words": [],
+  "removed_lines": [
+   {
+    "line": "NIST SP 800-88 Rev. 1 Guidelines for Media Sanitization",
+    "pages": 60
+   },
+   {
+    "line": "ii",
+    "pages": 1
+   },
+   {
+    "line": "iii",
+    "pages": 1
+   },
+   {
+    "line": "iv",
+    "pages": 1
+   },
+   {
+    "line": "v",
+    "pages": 1
+   },
+   {
+    "line": "vi",
+    "pages": 1
+   },
+   {
+    "line": "vii",
+    "pages": 1
+   },
+   {
+    "line": "1",
+    "pages": 1
+   },
+   {
+    "line": "2",
+    "pages": 1
+   },
+   {
+    "line": "3",
+    "pages": 1
+   },
+   {
+    "line": "4",
+    "pages": 1
+   },
+   {
+    "line": "5",
+    "pages": 1
+   },
+   {
+    "line": "6",
+    "pages": 1
+   },
+   {
+    "line": "7",
+    "pages": 1
+   },
+   {
+    "line": "8",
+    "pages": 1
+   },
+   {
+    "line": "9",
+    "pages": 1
+   },
+   {
+    "line": "10",
+    "pages": 1
+   },
+   {
+    "line": "11",
+    "pages": 1
+   },
+   {
+    "line": "12",
+    "pages": 1
+   },
+   {
+    "line": "13",
+    "pages": 1
+   },
+   {
+    "line": "14",
+    "pages": 1
+   },
+   {
+    "line": "15",
+    "pages": 1
+   },
+   {
+    "line": "16",
+    "pages": 1
+   },
+   {
+    "line": "17",
+    "pages": 1
+   },
+   {
+    "line": "18",
+    "pages": 1
+   },
+   {
+    "line": "19",
+    "pages": 1
+   },
+   {
+    "line": "20",
+    "pages": 1
+   },
+   {
+    "line": "21",
+    "pages": 1
+   },
+   {
+    "line": "22",
+    "pages": 1
+   },
+   {
+    "line": "23",
+    "pages": 1
+   },
+   {
+    "line": "24",
+    "pages": 1
+   },
+   {
+    "line": "25",
+    "pages": 1
+   },
+   {
+    "line": "26",
+    "pages": 1
+   },
+   {
+    "line": "27",
+    "pages": 1
+   },
+   {
+    "line": "28",
+    "pages": 1
+   },
+   {
+    "line": "29",
+    "pages": 1
+   },
+   {
+    "line": "30",
+    "pages": 1
+   },
+   {
+    "line": "31",
+    "pages": 1
+   },
+   {
+    "line": "32",
+    "pages": 1
+   },
+   {
+    "line": "33",
+    "pages": 1
+   },
+   {
+    "line": "34",
+    "pages": 1
+   },
+   {
+    "line": "35",
+    "pages": 1
+   },
+   {
+    "line": "36",
+    "pages": 1
+   },
+   {
+    "line": "37",
+    "pages": 1
+   },
+   {
+    "line": "38",
+    "pages": 1
+   },
+   {
+    "line": "39",
+    "pages": 1
+   },
+   {
+    "line": "40",
+    "pages": 1
+   },
+   {
+    "line": "41",
+    "pages": 1
+   },
+   {
+    "line": "42",
+    "pages": 1
+   },
+   {
+    "line": "43",
+    "pages": 1
+   },
+   {
+    "line": "44",
+    "pages": 1
+   },
+   {
+    "line": "45",
+    "pages": 1
+   },
+   {
+    "line": "46",
+    "pages": 1
+   },
+   {
+    "line": "47",
+    "pages": 1
+   },
+   {
+    "line": "48",
+    "pages": 1
+   },
+   {
+    "line": "49",
+    "pages": 1
+   },
+   {
+    "line": "50",
+    "pages": 1
+   },
+   {
+    "line": "51",
+    "pages": 1
+   },
+   {
+    "line": "52",
+    "pages": 1
+   },
+   {
+    "line": "53",
+    "pages": 1
+   },
+   {
+    "line": "54",
+    "pages": 1
+   },
+   {
+    "line": "55",
+    "pages": 1
+   },
+   {
+    "line": "56",
+    "pages": 1
+   }
+  ]
+ },
+ {
+  "file": "frontend/public/runtime/samples/harbourline-ferry-guide.pdf",
+  "pages": 3,
+  "chars_v1": 526,
+  "chars_v2": 526,
+  "chunks_v1": 1,
+  "chunks_v2": 1,
+  "pages_changed": 0,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 0,
+  "pages_with_new_words": [],
+  "removed_lines": []
+ },
+ {
+  "file": "frontend/public/runtime/samples/orchard-library-rules.pdf",
+  "pages": 1,
+  "chars_v1": 154,
+  "chars_v2": 154,
+  "chunks_v1": 1,
+  "chunks_v2": 1,
+  "pages_changed": 0,
+  "pages_empty_v1": 0,
+  "pages_empty_v2": 0,
+  "ligatures_expanded": 0,
+  "hyphens_joined": 0,
+  "pages_with_new_words": [],
+  "removed_lines": []
+ }
+]

@@ -11,6 +11,7 @@ commit, package versions, hardware and power source, and one row per question.
 | `verifier/` | claim verifiers on the 108 hand-written test claims and on the rule-made sets, with the prediction for every claim; the verifier training log | `experiments/verifier/run_verifiers.py`, `train_verifier.py` |
 | `answer-level/` | lexical check and NLI check on finished answers: validation (whole-passage and sentence-window premises) and test (sentence windows) | `experiments/verifier/answer_level.py` |
 | `deploy/` | ONNX export and int8 quantization of the verifier: size, speed, agreement with PyTorch | `experiments/deploy/export_verifier_onnx.py` |
+| `regression/` | checks before Experiment A became the default: what text clean-up v2 removes from each local PDF; the synthetic and development sets and the offline retrieval benchmark with the old and new settings; qwen2.5:1.5b on the validation set with and without v2 | `scripts/compare_text_cleanup.py`, `groundedai eval generation`, `groundedai eval retrieval`, `scripts/rag_eval.py` |
 | `live/` | the live demo test of 2026-11-09: the questions and expected answers written before the test, and the log of what the page showed | a Playwright script (not in the repository) |
 
 Notes:

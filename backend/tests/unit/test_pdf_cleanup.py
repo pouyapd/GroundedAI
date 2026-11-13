@@ -88,3 +88,11 @@ def test_v1_chunking_record_is_unchanged() -> None:
     # Reports written before the v2 clean-up existed must keep the same chunking record.
     assert "text_cleanup" not in ChunkingConfig(800, 120).as_dict()
     assert ChunkingConfig(800, 120, "v2").as_dict()["text_cleanup"] == "v2"
+
+
+def test_the_application_defaults_are_text_cleanup_v2_and_prefix_matching() -> None:
+    from groundedai.core.config import Settings
+
+    settings = Settings(_env_file=None)
+    assert settings.text_cleanup == "v2"
+    assert settings.extractive_matching == "prefix"

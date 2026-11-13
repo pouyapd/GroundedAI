@@ -226,8 +226,8 @@ with 40 answerable questions, one question is 2.5 points.
 | | Extractive generator | qwen2.5:1.5b (Ollama) |
 |---|---|---|
 | Recall@5 / MRR@10 of the evidence pages, defaults | .807 / .753 | same retrieval |
-| Correct answers, defaults | .600 | .750 |
-| Correct answers, with `TEXT_CLEANUP=v2` and `EXTRACTIVE_MATCHING=prefix` | .725 (+.125, CI +.025 to +.250) | .775 (+.025, CI -.100 to +.150) |
+| Correct answers, old defaults (`TEXT_CLEANUP=v1`, `EXTRACTIVE_MATCHING=exact`) | .600 | .750 |
+| Correct answers, with `TEXT_CLEANUP=v2` and `EXTRACTIVE_MATCHING=prefix` (the new defaults) | .725 (+.125, CI +.025 to +.250) | .775 (+.025, CI -.100 to +.150) |
 | Recall@5 / MRR@10 with those settings | .864 / .792 (+.057, CI .000 to +.136 / +.038, CI -.003 to +.094) | same retrieval |
 | Should refuse (6): refused, defaults | 2 | 6 |
 | Answers without a valid source label, defaults | 0 of 46 | 28 of 45 |
@@ -240,7 +240,7 @@ with 40 answerable questions, one question is 2.5 points.
 
 | Experiment | Result on the test set |
 |---|---|
-| A. PDF text clean-up and word-form matching (opt-in settings) | More correct extractive answers (.600 to .725; the interval excludes zero). Retrieval gain small, interval touches zero. No clear change for the language model. |
+| A. PDF text clean-up and word-form matching (now the default) | More correct extractive answers (.600 to .725; the interval excludes zero). Retrieval gain small, interval touches zero. No clear change for the language model. |
 | B. Fine-tuned embeddings (bge-small, 242 model-written training questions) | No measurable gain: hybrid Recall@5 -.011 (CI -.080 to +.057) against the base model; dense +.057 (CI -.045 to +.170). |
 | C. LoRA fine-tuning of a small answer model | **Not completed** (CPU time). Data, code and commands are in the repository; there are no results. |
 | D. Claim verifier on 108 hand-written claims (macro-F1, four labels) | Lexical check .409; pretrained NLI model (zero-shot) .723; the same model fine-tuned on rule-made pairs .740 (difference +.016, CI -.081 to +.120: not reliable). |
@@ -253,7 +253,10 @@ with 40 answerable questions, one question is 2.5 points.
 - The live demo was tested with three of these PDFs
   ([results](docs/RESEARCH_EVALUATION.md#live-demo-test)); two bugs found in this round are
   fixed.
-- The new settings are opt-in; the defaults and the public demo are unchanged.
+- Experiment A's two settings are the defaults after checks on every other question set
+  ([details](docs/RESEARCH_EVALUATION.md#making-experiment-a-the-default-2026-11-13)); set
+  `GROUNDEDAI_TEXT_CLEANUP=v1` and `GROUNDEDAI_EXTRACTIVE_MATCHING=exact` for the old
+  behaviour. Documents indexed earlier keep their text until they are re-ingested.
 
 ## Limitations
 
