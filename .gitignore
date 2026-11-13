@@ -72,3 +72,4 @@ evaluation/datasets/groundedai-nist-val-v1/corpus/
 experiments/finetune/corpus/
 experiments/finetune/data/
 experiments/finetune/runs/
+experiments/deploy/runs/

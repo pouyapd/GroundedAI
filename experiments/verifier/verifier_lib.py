@@ -106,8 +106,53 @@ class CrossEncoderClassifier:
         return out
 
 
-def nli_verifier(model_dir: str) -> Verifier:
-    classifier = CrossEncoderClassifier(model_dir)
+class OnnxClassifier:
+    """CrossEncoderClassifier's interface, run with onnxruntime (see experiments/deploy)."""
+
+    def __init__(self, onnx_path: str, tokenizer_dir: str, max_length: int = 256, threads: int = 0):
+        import json as _json
+
+        import onnxruntime as ort
+        from transformers import AutoTokenizer
+
+        options = ort.SessionOptions()
+        options.intra_op_num_threads = threads
+        self.session = ort.InferenceSession(onnx_path, options, providers=["CPUExecutionProvider"])
+        self.inputs = {i.name for i in self.session.get_inputs()}
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_dir)
+        self.max_length = max_length
+        config = _json.loads((Path(tokenizer_dir) / "config.json").read_text(encoding="utf-8"))
+        self.id2label = {int(k): v.lower() for k, v in config["id2label"].items()}
+
+    def probabilities(
+        self, pairs: Sequence[tuple[str, str]], batch: int = 16
+    ) -> list[dict[str, float]]:
+        import numpy as np
+
+        out = []
+        for start in range(0, len(pairs), batch):
+            chunk = pairs[start : start + batch]
+            encoded = self.tokenizer(
+                [e for _, e in chunk],
+                [c for c, _ in chunk],
+                truncation=True,
+                max_length=self.max_length,
+                padding=True,
+                return_tensors="np",
+            )
+            feed = {k: v.astype("int64") for k, v in encoded.items() if k in self.inputs}
+            logits = self.session.run(None, feed)[0]
+            exp = np.exp(logits - logits.max(-1, keepdims=True))
+            probs = (exp / exp.sum(-1, keepdims=True)).tolist()
+            out.extend({self.id2label[i]: p for i, p in enumerate(row)} for row in probs)
+        return out
+
+
+Classifier = CrossEncoderClassifier | OnnxClassifier
+
+
+def nli_verifier(model_dir: str, classifier: Classifier | None = None) -> Verifier:
+    classifier = classifier or CrossEncoderClassifier(model_dir)
 
     def top(probs: dict[str, float]) -> str:
         return max(probs, key=probs.__getitem__)
@@ -137,8 +182,8 @@ def nli_verifier(model_dir: str) -> Verifier:
     return run
 
 
-def finetuned_verifier(model_dir: str) -> Verifier:
-    classifier = CrossEncoderClassifier(model_dir)
+def finetuned_verifier(model_dir: str, classifier: Classifier | None = None) -> Verifier:
+    classifier = classifier or CrossEncoderClassifier(model_dir)
 
     def run(pairs: Sequence[tuple[str, str]]) -> list[str]:
         return [max(p, key=p.__getitem__) for p in classifier.probabilities(pairs)]

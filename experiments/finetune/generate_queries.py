@@ -120,7 +120,12 @@ def main() -> int:
                 if (key, chunk.index) in done:
                     continue
                 passage = chunk.text
-                result = ask(args.model, args.ollama, PROMPT.format(title=title, passage=passage))
+                try:
+                    prompt = PROMPT.format(title=title, passage=passage)
+                    result = ask(args.model, args.ollama, prompt)
+                except TimeoutError:  # a stalled local model: skip this passage, keep going
+                    rejected += 1
+                    continue
                 ok = (
                     bool(result)
                     and result["question"].endswith("?")
