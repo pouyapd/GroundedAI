@@ -461,6 +461,7 @@ Pages run 43761256978 built, checked, deployed and verified the demo. On the liv
 | a question about borrowing, asked about the ferry guide | refused, naming the words the passages do not mention |
 | "Checks that ran on this answer" | every row present; meaning shown as not checked while the check is off |
 | meaning check switched on, ferry question | "entailed by S1" per statement and in the summary row ([screenshot](images/demo-checks-meaning.png)) |
+| after the added-detail rule was made optional (PR #17, Pages run 43768884347) | `e2e_demo.py` 16 of 16; the checks table shows "Added details: not checked (optional rule, off by default)" and the meaning check still runs ("1 of 1 statements entailed by a passage") |
 | meaning check: bytes received on first use | 93.2 MB: 87.3 MB model, 2.0 MB tokenizer and 3.9 MB runtime file, both compressed in transit by their servers |
 | meaning check: agreement with Python onnxruntime, 160 validation pairs | same top label on 159 (as locally) |
 | meaning check: memory of the page's renderer | 401-418 MB before; 897-1,013 MB loaded; about 850 MB after classifying; 450-458 MB after switching off |
