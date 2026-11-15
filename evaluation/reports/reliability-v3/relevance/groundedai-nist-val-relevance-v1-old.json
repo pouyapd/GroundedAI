@@ -1,0 +1,1187 @@
+{
+ "kind": "rag-eval",
+ "rag_eval_version": 1,
+ "dataset": {
+  "name": "groundedai-nist-val-relevance-v1",
+  "fingerprint": "379ba68e6bd714d9",
+  "questions": 14
+ },
+ "summary": {
+  "questions": 14,
+  "retrieval": {
+   "recall@1": {
+    "mean": 0.2857,
+    "n": 7,
+    "ci95": [
+     0.0,
+     0.5714
+    ]
+   },
+   "precision@1": {
+    "mean": 0.2857,
+    "n": 7,
+    "ci95": [
+     0.0,
+     0.5714
+    ]
+   },
+   "recall@3": {
+    "mean": 0.2857,
+    "n": 7,
+    "ci95": [
+     0.0,
+     0.5714
+    ]
+   },
+   "precision@3": {
+    "mean": 0.0952,
+    "n": 7,
+    "ci95": [
+     0.0,
+     0.1905
+    ]
+   },
+   "recall@5": {
+    "mean": 0.4286,
+    "n": 7,
+    "ci95": [
+     0.1429,
+     0.7143
+    ]
+   },
+   "precision@5": {
+    "mean": 0.0857,
+    "n": 7,
+    "ci95": [
+     0.0286,
+     0.1429
+    ]
+   },
+   "recall@10": {
+    "mean": 0.7143,
+    "n": 7,
+    "ci95": [
+     0.4286,
+     1.0
+    ]
+   },
+   "precision@10": {
+    "mean": 0.0714,
+    "n": 7,
+    "ci95": [
+     0.0429,
+     0.1
+    ]
+   },
+   "mrr@10": {
+    "mean": 0.3585,
+    "n": 7,
+    "ci95": [
+     0.081,
+     0.6443
+    ]
+   },
+   "ndcg@10": {
+    "mean": 0.4395,
+    "n": 7,
+    "ci95": [
+     0.1614,
+     0.7252
+    ]
+   }
+  },
+  "answers": {
+   "answerable": 7,
+   "correct": {
+    "mean": 0.2857,
+    "n": 7,
+    "ci95": [
+     0.0,
+     0.5714
+    ]
+   },
+   "completeness": {
+    "mean": 0.2857,
+    "n": 7,
+    "ci95": [
+     0.0,
+     0.5714
+    ]
+   },
+   "false_refusals": 0,
+   "invalid_output": 0,
+   "errors": 0
+  },
+  "abstention": {
+   "should_refuse": 7,
+   "refused": 0,
+   "precision": null,
+   "recall": 0.0,
+   "predicted_abstentions": 0
+  },
+  "citations": {
+   "precision": {
+    "mean": 0.2857,
+    "n": 7,
+    "ci95": [
+     0.0,
+     0.5714
+    ]
+   },
+   "recall": {
+    "mean": 0.2857,
+    "n": 7,
+    "ci95": [
+     0.0,
+     0.5714
+    ]
+   },
+   "answers_with_invalid_labels": 0,
+   "answers_without_valid_label": 0
+  },
+  "claims_lexical_check": {
+   "statements": 29,
+   "found_share": 1.0,
+   "unsupported_share": 0.0,
+   "partial_share": 0.0
+  },
+  "quotes": {
+   "total": 29,
+   "verbatim_share": 1.0,
+   "page_correct_share": 1.0,
+   "pages_unknown": 0
+  },
+  "false_conflict_reports": 0,
+  "latency_ms": {
+   "total_median": 45.7,
+   "generation_median": 4.9,
+   "retrieval_median": 4.7,
+   "total_p90": 79.3
+  }
+ },
+ "by_category": {
+  "factual": {
+   "questions": 7,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.2857,
+     "n": 7,
+     "ci95": [
+      0.0,
+      0.5714
+     ]
+    },
+    "precision@1": {
+     "mean": 0.2857,
+     "n": 7,
+     "ci95": [
+      0.0,
+      0.5714
+     ]
+    },
+    "recall@3": {
+     "mean": 0.2857,
+     "n": 7,
+     "ci95": [
+      0.0,
+      0.5714
+     ]
+    },
+    "precision@3": {
+     "mean": 0.0952,
+     "n": 7,
+     "ci95": [
+      0.0,
+      0.1905
+     ]
+    },
+    "recall@5": {
+     "mean": 0.4286,
+     "n": 7,
+     "ci95": [
+      0.1429,
+      0.7143
+     ]
+    },
+    "precision@5": {
+     "mean": 0.0857,
+     "n": 7,
+     "ci95": [
+      0.0286,
+      0.1429
+     ]
+    },
+    "recall@10": {
+     "mean": 0.7143,
+     "n": 7,
+     "ci95": [
+      0.4286,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.0714,
+     "n": 7,
+     "ci95": [
+      0.0429,
+      0.1
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.3585,
+     "n": 7,
+     "ci95": [
+      0.081,
+      0.6443
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.4395,
+     "n": 7,
+     "ci95": [
+      0.1614,
+      0.7252
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 7,
+    "correct": {
+     "mean": 0.2857,
+     "n": 7,
+     "ci95": [
+      0.0,
+      0.5714
+     ]
+    },
+    "completeness": {
+     "mean": 0.2857,
+     "n": 7,
+     "ci95": [
+      0.0,
+      0.5714
+     ]
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": null,
+    "recall": null,
+    "predicted_abstentions": 0
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.2857,
+     "n": 7,
+     "ci95": [
+      0.0,
+      0.5714
+     ]
+    },
+    "recall": {
+     "mean": 0.2857,
+     "n": 7,
+     "ci95": [
+      0.0,
+      0.5714
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 16,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 16,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 45.8,
+    "generation_median": 4.7,
+    "retrieval_median": 4.7,
+    "total_p90": 65.8
+   }
+  },
+  "unanswerable": {
+   "questions": 7,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 7,
+    "refused": 0,
+    "precision": null,
+    "recall": 0.0,
+    "predicted_abstentions": 0
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 13,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 13,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 45.6,
+    "generation_median": 5.0,
+    "retrieval_median": 4.8,
+    "total_p90": 78.4
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "nv01",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "status": "answered",
+   "answer": "A profile is an implementation of the AI RMF functions, categories, and subcategories for a specific setting, application, or technology – in this case, Generative AI (GAI) – based on the requirements, risk [S3].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 4.887,
+    "generation": 55.591,
+    "total": 106.76
+   },
+   "model_output": "A profile is an implementation of the AI RMF functions, categories, and subcategories for a specific setting, application, or technology – in this case, Generative AI (GAI) – based on the requirements, risk [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S3"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv02",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "status": "answered",
+   "answer": "2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting through the Director of the National Institute of Standards and Technology (NIST), to develop a companion resource to the AI RMF, NIST AI 100–1, for generative AI [S1]. Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S5].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 6.466,
+    "generation": 6.455,
+    "total": 59.426
+   },
+   "model_output": "2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting through the Director of the National Institute of Standards and Technology (NIST), to develop a companion resource to the AI RMF, NIST AI 100–1, for generative AI [S1]. Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S5].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S5"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv03",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "multi-part"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.3562071871080222
+   },
+   "status": "answered",
+   "answer": "A profile is an implementation of the AI RMF functions, categories, and subcategories for a specific setting, application, or technology – in this case, Generative AI (GAI) – based on the requirements, risk [S4]. This work was informed by public feedback and consultations with diverse stakeholder groups as part of NIST’s Generative AI Public Working Group (GAI PWG) [S1]. Quantify harms using: field testing with sub-group populations to determine likelihood of exposure to generated content exhibiting harmful bias, AI red-teaming with counterfactual and low-context (e.g., “leader,” “bad guys”) prompts [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 11.015,
+    "generation": 4.936,
+    "total": 87.756
+   },
+   "model_output": "A profile is an implementation of the AI RMF functions, categories, and subcategories for a specific setting, application, or technology – in this case, Generative AI (GAI) – based on the requirements, risk [S4]. This work was informed by public feedback and consultations with diverse stakeholder groups as part of NIST’s Generative AI Public Working Group (GAI PWG) [S1]. Quantify harms using: field testing with sub-group populations to determine likelihood of exposure to generated content exhibiting harmful bias, AI red-teaming with counterfactual and low-context (e.g., “leader,” “bad guys”) prompts [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S4",
+     "S1",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv04",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "paraphrase"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "One possible way to further categorize these risks, derived in part from the UK’s International Scientific Report on the Safety of Advanced AI, could be: 1 ) Technical / Model risks (or risk from malfunction): Confabulation; Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Information or Capabilities; Data Privacy; Human-AI Configuration; Obscene, Degrading, and/or Abusive Content; Information Integrity; Information Security; 3) Ecosystem / societal risks (or systemic risks): Data Privacy; Environmental; Intellectual [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.91,
+    "generation": 4.431,
+    "total": 46.681
+   },
+   "model_output": "One possible way to further categorize these risks, derived in part from the UK’s International Scientific Report on the Safety of Advanced AI, could be: 1 ) Technical / Model risks (or risk from malfunction): Confabulation; Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Information or Capabilities; Data Privacy; Human-AI Configuration; Obscene, Degrading, and/or Abusive Content; Information Integrity; Information Security; 3) Ecosystem / societal risks (or systemic risks): Data Privacy; Environmental; Intellectual [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv05",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting through the Director of the National Institute of Standards and Technology (NIST), to develop a companion resource to the AI RMF, NIST AI 100–1, for generative AI [S1]. Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S2]. The foundation model subcategory of “dual-use foundation models” is defined by EO 14110 as “an AI model that is trained on broad data; generally uses self-supervision; contains at least tens of billions of parameters; is applicable across a wide range of contexts.” 2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting [S4].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.501,
+    "generation": 5.066,
+    "total": 51.142
+   },
+   "model_output": "2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting through the Director of the National Institute of Standards and Technology (NIST), to develop a companion resource to the AI RMF, NIST AI 100–1, for generative AI [S1]. Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S2]. The foundation model subcategory of “dual-use foundation models” is defined by EO 14110 as “an AI model that is trained on broad data; generally uses self-supervision; contains at least tens of billions of parameters; is applicable across a wide range of contexts.” 2 This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting [S4].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S4"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv06",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "status": "answered",
+   "answer": "[72] evaluated the interpretability of different complexity decision sets by asking humans to view explanations and make decisions, measuring their accuracy and response time [S5].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 4.478,
+    "generation": 4.935,
+    "total": 38.165
+   },
+   "model_output": "[72] evaluated the interpretability of different complexity decision sets by asking humans to view explanations and make decisions, measuring their accuracy and response time [S5].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S5"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv07",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "status": "answered",
+   "answer": "This work on principles of explainable AI systems is part of the much larger NIST AI portfolio 1 around trustworthy AI data, standards, evaluation, validation, and verification—all necessary for AI measurements [S2]. The Explanation principle (Principle 1) is covered under the section, Overview of Explainable AI Algorithms (Section 6), which reviews current explanation methods [S5]. NIST is a metrology institute and as such, defining initial principles of explainable AI systems acts as a roadmap for future measurement and evaluation activities [S2].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 4.103,
+    "generation": 4.791,
+    "total": 45.643
+   },
+   "model_output": "This work on principles of explainable AI systems is part of the much larger NIST AI portfolio 1 around trustworthy AI data, standards, evaluation, validation, and verification—all necessary for AI measurements [S2]. The Explanation principle (Principle 1) is covered under the section, Overview of Explainable AI Algorithms (Section 6), which reviews current explanation methods [S5]. NIST is a metrology institute and as such, defining initial principles of explainable AI systems acts as a roadmap for future measurement and evaluation activities [S2].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S2",
+     "S5"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv08",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "NISTIR 8312 [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.711,
+    "generation": 3.989,
+    "total": 30.166
+   },
+   "model_output": "NISTIR 8312 [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv09",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "paraphrase"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.14285714285714285,
+    "ndcg@10": 0.3333333333333333
+   },
+   "status": "answered",
+   "answer": "The Explanation Accuracy principle imposes veracity on a system’s explanations [S1]. 2.3 Explanation Accuracy Together, the Explanation and Meaningful principles only call for a system to produce explanations that are intelligible to the intended audience [S2]. 6.3 Adversarial Attacks on Explainability Explanation accuracy (Principle 3) is an important component of explanations [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 5.096,
+    "generation": 4.114,
+    "total": 45.758
+   },
+   "model_output": "The Explanation Accuracy principle imposes veracity on a system’s explanations [S1]. 2.3 Explanation Accuracy Together, the Explanation and Meaningful principles only call for a system to produce explanations that are intelligible to the intended audience [S2]. 6.3 Adversarial Attacks on Explainability Explanation accuracy (Principle 3) is an important component of explanations [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv10",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "paraphrase"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.2,
+    "ndcg@10": 0.38685280723454163
+   },
+   "status": "answered",
+   "answer": "8.4 Knowledge Limits This principle states that the system only operates 1) under the conditions it was designed and 2) when it reaches a sufficient confidence in its output or actions [S1]. 2.4 Knowledge Limits The previous principles implicitly assume that a system is operating within the scope of its design and knowledge boundaries [S2]. Knowledge Limits: A system only operates under conditions for which it was designed and when it reaches sufficient confidence in its output [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.667,
+    "generation": 4.666,
+    "total": 41.273
+   },
+   "model_output": "8.4 Knowledge Limits This principle states that the system only operates 1) under the conditions it was designed and 2) when it reaches a sufficient confidence in its output or actions [S1]. 2.4 Knowledge Limits The previous principles implicitly assume that a system is operating within the scope of its design and knowledge boundaries [S2]. Knowledge Limits: A system only operates under conditions for which it was designed and when it reaches sufficient confidence in its output [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv11",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "multi-part"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "NIST is a metrology institute and as such, defining initial principles of explainable AI systems acts as a roadmap for future measurement and evaluation activities [S2]. The principles defined here provide guidance and a philosophy for driving explainable AI toward a safer world by giving users a deeper under- [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 3.911,
+    "generation": 4.676,
+    "total": 33.13
+   },
+   "model_output": "NIST is a metrology institute and as such, defining initial principles of explainable AI systems acts as a roadmap for future measurement and evaluation activities [S2]. The principles defined here provide guidance and a philosophy for driving explainable AI toward a safer world by giving users a deeper under- [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv12",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "status": "answered",
+   "answer": "We recognize that not all AI systems may require explanations [S1]. However, for those AI systems that are intended or required to be explainable, we propose that those systems adhere to the following four principles: Explanation: A system delivers or contains accompanying evidence or reason(s) for outputs and/or processes [S1].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 4.317,
+    "generation": 5.036,
+    "total": 41.783
+   },
+   "model_output": "We recognize that not all AI systems may require explanations [S1]. However, for those AI systems that are intended or required to be explainable, we propose that those systems adhere to the following four principles: Explanation: A system delivers or contains accompanying evidence or reason(s) for outputs and/or processes [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv13",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "status": "answered",
+   "answer": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S1].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 9.898,
+    "generation": 6.816,
+    "total": 53.799
+   },
+   "model_output": "Introduction This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden’s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "nv14",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "status": "answered",
+   "answer": "Our principles apply to systems that produce explanations, and they support the full range of AI techniques, not only machine learning ones [S1]. Discussion and Conclusions We introduced four principles to encapsulate the fundamental elements for explainable AI systems [S2]. Our four principles of explainable AI systems are intended to capture a broad set of motivations, reasons, and perspectives [S3].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 4.786,
+    "generation": 4.814,
+    "total": 40.564
+   },
+   "model_output": "Our principles apply to systems that produce explanations, and they support the full range of AI techniques, not only machine learning ones [S1]. Discussion and Conclusions We introduced four principles to encapsulate the fundamental elements for explainable AI systems [S2]. Our four principles of explainable AI systems are intended to capture a broad set of motivations, reasons, and perspectives [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  }
+ ],
+ "label": "groundedai-nist-val-relevance-v1-old",
+ "generated_at": "2026-11-13T20:03:49+0100",
+ "generator": "extractive",
+ "provider": {
+  "name": "extractive-demo",
+  "model": "extractive-demo-v2-prefix",
+  "is_llm": false
+ },
+ "settings_overrides": {
+  "extractive_relevance": "v1",
+  "claim_detail_check": "off",
+  "conflict_check": "disagreement-v1"
+ },
+ "settings": {
+  "chunk_size": "800",
+  "chunk_overlap": "120",
+  "embedding_provider": "hashing",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "retrieval_mode": "hybrid",
+  "fusion": "rrf",
+  "hybrid_alpha": "0.5",
+  "rrf_k": "60",
+  "top_k": "5",
+  "candidate_k": "20",
+  "reranker": "none",
+  "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+  "prompt_version": "answer-v2",
+  "claim_check": "claims-v1",
+  "conflict_check": "disagreement-v1",
+  "max_context_chars": "6000",
+  "generation_provider": "extractive-demo",
+  "ollama_model": "qwen2.5:1.5b",
+  "hf_generation_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "temperature": "0.0",
+  "max_new_tokens": "384"
+ },
+ "cost": {
+  "index_seconds": 17.32,
+  "model_load_seconds": 0.0,
+  "peak_rss_mb": 138.4,
+  "chunks_indexed": 459
+ },
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "ac",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "numpy": "2.5.4",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "7080889f4128",
+   "uncommitted_changes": true
+  }
+ },
+ "code": {
+  "commit": "7080889f4128",
+  "uncommitted_changes": true
+ }
+}

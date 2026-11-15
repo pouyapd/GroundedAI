@@ -1,0 +1,4261 @@
+{
+ "kind": "disagreement-eval",
+ "dataset": {
+  "name": "train-fp-check",
+  "fingerprint": "65643017499c9c89"
+ },
+ "split": "all",
+ "settings_overrides": {
+  "conflict_check": "disagreement-v2"
+ },
+ "conflict_check": "disagreement-v2",
+ "generated_at": "2026-11-13T19:55:02+0100",
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "battery",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "numpy": "2.5.4",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "7080889f4128",
+   "uncommitted_changes": true
+  }
+ },
+ "code": {
+  "commit": "7080889f4128",
+  "uncommitted_changes": true
+ },
+ "summary": {
+  "questions": 242,
+  "positives": 0,
+  "negatives": 242,
+  "true_positives": 0,
+  "false_negatives": 0,
+  "wrong_reports_on_positives": 0,
+  "false_positives": 23,
+  "precision": 0.0,
+  "recall": null,
+  "false_positive_rate": 0.095
+ },
+ "rows": [
+  {
+   "id": "q000",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does GV.OC.03 cover?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q001",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the passage state about the identification of commercial equipment, instruments, software, or materials?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-88r1"
+     ],
+     "pages": [
+      3,
+      4
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–88",
+       "1",
+       "64 pages",
+       "10.6028"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-88 Revision 1, 64 pages (December 2014) CODEN: NSPUE2 This publication is available free of charge from: http://dx.doi.org/10.6028/NIST.SP.800-88r1 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-88r1"
+     ],
+     "pages": [
+      3,
+      4
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–88",
+       "1",
+       "64 pages",
+       "10.6028"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-88 Revision 1, 64 pages (December 2014) CODEN: NSPUE2 This publication is available free of charge from: http://dx.doi.org/10.6028/NIST.SP.800-88r1 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q002",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first step in establishing risk management objectives?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q003",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What Function of the NIST Cybersecurity Framework (CSF) 2.0 focuses on safeguarding assets and reducing the likelihood and impact of cybersecurity events?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q004",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What are Informative References in the context of the CSF 2.0?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q005",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first step in the incident response plan?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q006",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the relationship between cybersecurity risks and organizational objectives?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q007",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does RC.RP-01 refer to?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q008",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does PR.AA-01 entail?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q009",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What can the NIST Privacy Framework and Cybersecurity Framework be used together to address?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q010",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "How can reducing cybersecurity risk benefit an organization?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "csf-2.0",
+      "sp800-61r3"
+     ],
+     "pages": [
+      13,
+      18
+     ],
+     "values": [
+      [
+       "1"
+      ],
+      [
+       "2.0 Community"
+      ]
+     ],
+     "quotes": [
+      "For example, an organization can use the Tiers to communicate internally as a benchmark for an organization-wide1 1 For the purposes of this document, the terms “organization-wide” and “enterprise” have the same meaning. approach to managing cybersecurity risks.",
+      "CSF 2.0 Community Profile for Cyber Incident Risk Management A CSF Community Profile is a baseline of CSF outcomes that is created and published to address shared interests and goals for reducing cybersecurity risk among a number of organizations."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q011",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the passage state about personnel?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "q012",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the role of organizational leadership in the Cybersecurity Roles, Responsibilities, and Authorities (GV.RR) framework?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q013",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "How many Organizational Profiles can an organization have?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q014",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does ID.RA-08 refer to?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q015",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the second tier of risk management practices?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q016",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the DETECT Function enable?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q017",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the GOVERN Function support?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q018",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the CSF aim to address alongside other risks?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q019",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first step in preparing to create and use Organizational Profiles?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q020",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the CSF aim to do?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q021",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the process for identifying, validating, and recording vulnerabilities in assets?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q022",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the passage discuss regarding the integration of the CSF with other risk management programs?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q023",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first step in the cybersecurity strategy?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q024",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What are the two main practices integrated into cybersecurity and enterprise risk management programs?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q025",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should the Functions be addressed concurrently?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q026",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What are the three types of online resources mentioned in the passage?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q027",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the current state of cybersecurity risk management within the organization?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q028",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does GV.OC-01 describe?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q029",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the primary purpose of the NIST Cybersecurity Framework (CSF) 2.0?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q030",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does ID.AM-01 refer to?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q031",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is a baseline of cybersecurity outcomes that is created and published to address shared interests and goals among a number of organizations?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q032",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does GV.SC-05 require to address cybersecurity risks in supply chains?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q033",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What are the steps for assessing critical suppliers prior to acquisition?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q034",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the CSF Core Functions organize at their highest level?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q035",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the passage state about the outcomes provided by the CSF?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-61r3",
+      "csf-2.0"
+     ],
+     "pages": [
+      18,
+      8
+     ],
+     "values": [
+      [
+       "2.0 Community"
+      ],
+      [
+       "five Functions"
+      ]
+     ],
+     "quotes": [
+      "CSF 2.0 Community Profile for Cyber Incident Risk Management A CSF Community Profile is a baseline of CSF outcomes that is created and published to address shared interests and goals for reducing cybersecurity risk among a number of organizations.",
+      "The GOVERN Function provides outcomes to inform what an organization may do to achieve and prioritize the outcomes of the other five Functions in the context of its mission and stakeholder expectations."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q036",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first step in establishing a cybersecurity supply chain risk management program?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q037",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the main focus of the Cybersecurity Framework?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q038",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the AI RMF Core use to describe AI outcomes and manage risks related to AI?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q039",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the RECOVER function support?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q040",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "How can an organization benefit from using the CSF?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-61r3",
+      "csf-2.0"
+     ],
+     "pages": [
+      14,
+      13
+     ],
+     "values": [
+      [
+       "2.0",
+       "2.0"
+      ],
+      [
+       "1"
+      ]
+     ],
+     "quotes": [
+      "The model in this document is based on CSF 2.0 to take advantage of the wealth of resources available for CSF 2.0 and aid organizations that are already using the CSF.",
+      "For example, an organization can use the Tiers to communicate internally as a benchmark for an organization-wide1 1 For the purposes of this document, the terms “organization-wide” and “enterprise” have the same meaning. approach to managing cybersecurity risks."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "csf-2.0",
+      "sp800-61r3"
+     ],
+     "pages": [
+      13,
+      9
+     ],
+     "values": [
+      [
+       "1"
+      ],
+      [
+       "2.0",
+       "2.0"
+      ]
+     ],
+     "quotes": [
+      "For example, an organization can use the Tiers to communicate internally as a benchmark for an organization-wide1 1 For the purposes of this document, the terms “organization-wide” and “enterprise” have the same meaning. approach to managing cybersecurity risks.",
+      "The model in this document is based on CSF 2.0 to take advantage of the wealth of resources available for CSF 2.0 and aid organizations that are already using the CSF."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q041",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the Tiers in the NIST Cybersecurity Framework (CSF) 2.0 represent?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q042",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the purpose of reviewing the cybersecurity risk management strategy?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q043",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the primary focus of the Incident Analysis Category?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q044",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the purpose of this publication?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q045",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the DOI of the National Institute of Standards and Technology (NIST) Special Publication (SP) 800-30r1?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q046",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority of CSF elements in the Incident Response section of the CSF 2.0 Community Profile compared to those in the first part?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q047",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is cyber threat intelligence (CTI)?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q048",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for understanding known cybersecurity vulnerabilities?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q049",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the Detect Function encompass?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q050",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the lowest priority recommendation for understanding the circumstances surrounding cybersecurity risk management decisions?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q051",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for monitoring networks and network services?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q052",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for coordinating response activities with stakeholders?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q053",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first step in incident response activities?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q054",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the purpose of this publication?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q055",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for adjusting the cybersecurity risk management strategy?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q056",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended approach for preventing unauthorized software installation?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "csf-2.0",
+      "sp800-218"
+     ],
+     "pages": [
+      25,
+      13
+     ],
+     "values": [
+      [
+       "01"
+      ],
+      [
+       "2",
+       "1.1"
+      ]
+     ],
+     "quotes": [
+      "• P latform Security (PR.PS): The hardware, software (e.g., firmware, operating systems, applications), and services of physical and virtual platforms are managed consistent with the organization’s risk strategy to protect their confidentiality, integrity, and availability o PR .PS -01: Configuration management practices are established and applied o PR.PS-02: Software is maintained, replaced, and removed commensurate with risk o PR.PS-03: Hardware is maintained, replaced, and removed commensurate with risk o PR.PS-04: Log records are generated and made available for continuous monitoring o PR.PS-05: Installation and execution of unauthorized software are prevented o PR.PS-06: Secure software development practices are integrated, and their performance",
+      "2 The Secure Software Development Framework This document defines version 1.1 of the Secure Software Development Framework (SSDF) with fundamental, sound, and secure recommended practices based on established secure software development practice documents."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q057",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority of the recommendations and considerations for risk evaluation?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q058",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the established cybersecurity roles and responsibilities for suppliers, customers, and partners?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q059",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the level of urgency needed to respond to incidents?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q060",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does Section 3 present?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q061",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority of organization assets based on?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q062",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should processes and procedures be based on?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q063",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for estimating the impact and scope of adverse events?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q064",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the latest version of NIST SP 800-160?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q065",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be the next step after identifying the vulnerabilities, threats, and threat actors involved in the incident?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q066",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be considered when managing hardware, software, services, and systems throughout their life cycles?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-88r1"
+     ],
+     "pages": [
+      10,
+      14
+     ],
+     "values": [
+      [
+       "1 Note"
+      ],
+      [
+       "2 Background"
+      ]
+     ],
+     "quotes": [
+      "1 Note that SDLC is also widely used for “system development life cycle.” All usage of “SDLC” in this document is referencing software, not systems.",
+      "2 Background Information disposition and sanitization decisions occur throughout the information system life cycle."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q067",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for recording actions during an investigation?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q068",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for adverse event analysis?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q069",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the CSF Element 'R1: Identify all affected hosts and services' aim to achieve?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q070",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the bottom level of the incident response life cycle model represent?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q071",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What can sharing defensive tactics between organizations do?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q072",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the GV.SC-08 Subcategory about?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q073",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be evaluated periodically to identify problems and deficiencies in the incident response program?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q074",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for ensuring the organization's technology assets are protected from environmental threats?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q075",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be monitored to find potentially adverse events?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q076",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the acronym for the Cybersecurity and Infrastructure Security Agency?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q077",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What can a standardized method for calculating cybersecurity risks help with?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q078",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the definition of a vulnerability disclosure?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q079",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended approach for aligning business continuity plans with incident response plans?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-61r3",
+      "csf-2.0"
+     ],
+     "pages": [
+      28,
+      27
+     ],
+     "values": [
+      [
+       "3"
+      ],
+      [
+       "once"
+      ]
+     ],
+     "quotes": [
+      "responses; and 3) business continuity plans.",
+      "• Incident Recovery Plan Execution (RC.RP): Restoration activities are performed to ensure operational availability of systems and services affected by cybersecurity incidents o RC.RP-01: The recovery portion of the incident response plan is executed once initiated from the incident response process"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q080",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the medium risk level recommendation for cybersecurity risk management?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q081",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended practice for securely sharing information with stakeholders?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q082",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is ITL's request regarding patent claims?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q083",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first recommendation for validating restoration assets?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "q084",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What was the typical incident response process before?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q085",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Who has the authority to make mandatory and binding standards and guidelines for federal agencies?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q086",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the importance of backups for recovery purposes?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q087",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for establishing cybersecurity roles, responsibilities, and authorities?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q088",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the primary goal of containment in incident response?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q089",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does this publication use to organize its recommendations, considerations, and other information regarding incident response?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q090",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the primary reason for the changes in incident response activities?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q091",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for notifying third parties of data breaches and other cybersecurity incidents?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q092",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can the publication be accessed for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-207"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–207",
+       "59 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-207, 59 pages (August 2020) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q093",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Who should be informed about incidents when needed?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q094",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What level of cybersecurity risk management is being discussed?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q095",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is recommended for documenting procedures to ensure their accuracy and usefulness for training new personnel?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q096",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the primary goal of incident recovery?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q097",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is an indicator of compromise (IoC)?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q098",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the URL of the document that provides a guide for handling computer security incidents?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q099",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for selecting incident response strategies for active incidents?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q100",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does this publication supersede?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q101",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for assessing the authenticity and integrity of hardware and software prior to acquisition?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q102",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What factors influence response efforts?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q103",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can the publication 'Incident Response Recommendations and Considerations for Cybersecurity Risk Management' be accessed for free?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q104",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does 'escalation' mean in the context of incident response?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q105",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should cybersecurity risk management programs consider using for incident response purposes?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-61r3",
+      "csf-2.0"
+     ],
+     "pages": [
+      22,
+      17
+     ],
+     "values": [
+      [
+       "01 A"
+      ],
+      [
+       "800–221 A"
+      ]
+     ],
+     "quotes": [
+      "GV.SC-01 A cybersecurity supply chain risk management program, strategy, objectives, policies, and processes are established and agreed to by organizational stakeholders Low",
+      "• SP 800-221A, Information and Communications Technology (ICT) Risk Outcomes: Integrating ICT Risk Management Programs with the Enterprise Risk Portfolio An organization may also find the CSF beneficial for integrating cybersecurity risk management with individual ICT risk management programs, such as:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q106",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for incident recovery communication?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q107",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does N1 state?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q108",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the highest priority recommendation for data protection?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "q109",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What functions are essential for incident response?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q110",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for executing the incident recovery plan?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "csf-2.0",
+      "sp800-61r3"
+     ],
+     "pages": [
+      27,
+      5
+     ],
+     "values": [
+      [
+       "once"
+      ],
+      [
+       "2.0"
+      ]
+     ],
+     "quotes": [
+      "• Incident Recovery Plan Execution (RC.RP): Restoration activities are performed to ensure operational availability of systems and services affected by cybersecurity incidents o RC.RP-01: The recovery portion of the incident response plan is executed once initiated from the incident response process",
+      "This publication seeks to assist organizations with incorporating cybersecurity incident response recommendations and considerations throughout their cybersecurity risk management activities as described by the NIST Cybersecurity Framework (CSF) 2.0."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q111",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the priority recommendation for addressing cybersecurity risks in supply chains?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q112",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the primary goal of containment in incident response?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q113",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is a CSF Community Profile?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q114",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the benefit of using a framework or model emphasizing continuous improvement in incident response?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q115",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What are the roles and responsibilities of incident handlers?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q116",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does Fig. 1 represent?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "q117",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should organizations use for the incident response life cycle framework or model?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q118",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the medium risk level recommendation for considering past cybersecurity incidents in the organization's cybersecurity risk management strategy?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q119",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the primary goal of incident response processes?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q120",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the publication's URL for additional information?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q121",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be shared using approved methods and messaging for public updates on incident recovery?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q122",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the passage state about the CSF's scope?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q123",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What do practitioners focus on when implementing the CSF?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q124",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the function category that includes the 'Cybersecurity Supply Chain Risk Management'?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q125",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can additional information on incident response activities be found?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q126",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should organizations do if they encounter terms not defined in this publication?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q127",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does Fig. 2 represent in the context of cybersecurity risk management?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q128",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the unique identifier for a recommendation in the Community Profile?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q129",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the minimum level of risk response options that should be established and communicated?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q130",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What supplementary resources are provided to help an organization put the CSF into practice?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q131",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the minimum number of write passes required to Purge the media?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q132",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the list not endorse?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q133",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be done when degaussing is not sufficient for certain storage devices?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q134",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should an organization do after making an effective, risk-based decision on the appropriate level of sanitization?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q135",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the primary reason for understanding the decision early on regarding media sanitization?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "q136",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Can the sanitization results be verified?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q137",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended procedure for media sanitization?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q138",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended approach for sanitizing media?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q139",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be treated as a Clear operation when performing sanitization via a remote wipe?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q140",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be considered when making sanitization decisions?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q141",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended method for peripherally attached storage sanitization?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q142",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended method for verifying the effectiveness of degaussing?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q143",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended procedure for handling supplies that are not used again?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q144",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the alternative approach mentioned for addressing the issue?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q145",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended method for verifying the effectiveness of Cryptographic Erase?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q146",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be considered when determining the security strength and level of assurance of wrapping techniques?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q147",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be done for most cases where Purging is desired?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q148",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended method for destroying paper and microforms?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q149",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What document provides guidance for assessing security controls, including sanitization, for federal systems based on their overall system security categorization?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q150",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What methods can be used to destroy media?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q151",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is a potential risk when using Cryptographic Erase as a purge mechanism?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q152",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is a significant benefit of SEDs mentioned in the passage?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q153",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is a potential risk when disposing of media that contains confidential information?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q154",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can one find information on the NVM Express specification?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q155",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommendation for sharing information about trusted products?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q156",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What command should be used if the overwrite command is not supported?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q157",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Who contributed to the original version of the publication?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q158",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What factors determine whether a certificate of media disposition is completed and how much data is recorded?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q159",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended procedure for media sanitization?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q160",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be addressed in a separate device sanitization policy?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q161",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the URL of the web page that provides information about degaussers and the erasure of magnetic media?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "q162",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does media sanitization refer to?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q163",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Who is responsible for coordinating security efforts of a particular system(s)?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q164",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What alternative method can be used for cryptographic erase?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q165",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the common benefit of using cryptographic erase?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q166",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the ZT principle of no implicit trust based on network location mean?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q167",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What can client identity include?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q168",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be implemented to monitor the state of devices and applications?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q169",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What feature of the Zero Trust Architecture (ZTA) prevents compromised credentials from moving laterally through the network?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q170",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What has been the trend in security strategies for federal agencies over the past decade?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      11,
+      11
+     ],
+     "values": [
+      [
+       "zero trust"
+      ],
+      [
+       "3"
+      ]
+     ],
+     "quotes": [
+      "Federal agencies have been urged to move to security based on zero trust principles for more than a decade, building capabilities and policies such as the Federal Information Security",
+      "• Software acquirers, including federal agencies and other organizations, that want to define required or desired characteristics for software in their acquisition processes in order to have higher-quality software (particularly with fewer significant security vulnerabilities)3"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q171",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What framework was developed by NIST to manage risk?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "csf-2.0",
+      "sp800-218"
+     ],
+     "pages": [
+      17,
+      1
+     ],
+     "values": [
+      [
+       "800–37",
+       "800–30"
+      ],
+      [
+       "1.1"
+      ]
+     ],
+     "quotes": [
+      "• Cybersecurity risk management and assessment: The CSF can be integrated with established cybersecurity risk management and assessment programs, such as SP 800- 37, Risk Management Framework for Information Systems and Organizations, and SP 800-30, Guide for Conducting Risk Assessments fr om the NIST Risk Management Framework (RMF).",
+      "Framework (SSDF) Version 1.1: Recommendations for Mitigating the Risk of Software Vulnerabilities"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "csf-2.0",
+      "sp800-207"
+     ],
+     "pages": [
+      17,
+      41
+     ],
+     "values": [
+      [
+       "800–37",
+       "800–30"
+      ],
+      [
+       "zero trust"
+      ]
+     ],
+     "quotes": [
+      "• Cybersecurity risk management and assessment: The CSF can be integrated with established cybersecurity risk management and assessment programs, such as SP 800- 37, Risk Management Framework for Information Systems and Organizations, and SP 800-30, Guide for Conducting Risk Assessments fr om the NIST Risk Management Framework (RMF).",
+      "The NIST Privacy Framework [NISTPRIV] could help in developing a formal process to identify and mitigate any privacy-related risks to an enterprise developing a zero trust architecture."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      8,
+      1
+     ],
+     "values": [
+      [
+       "32",
+       "6.1 ZTA"
+      ],
+      [
+       "1.1"
+      ]
+     ],
+     "quotes": [
+      "32 6.1 ZTA and NIST Risk Management Framework ..............................................",
+      "Framework (SSDF) Version 1.1: Recommendations for Mitigating the Risk of Software Vulnerabilities"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q172",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can one obtain this publication free of charge?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q173",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What deployment model is recommended for enterprises using cloud-based micro-services?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q174",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be accessed for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": true
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-207"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–207",
+       "59 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-207, 59 pages (August 2020) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q175",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can the publication be accessed?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q176",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does Zero Trust Architecture assume about trust?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q177",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be accessed for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": true
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-207"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–207",
+       "59 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-207, 59 pages (August 2020) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q178",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Does the passage state that trust should not be automatically granted based on the device being on enterprise network infrastructure?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q179",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the phenomenon of end users being confronted with so many security policies and challenges that it begins to impact their productivity in a negative way?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q180",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the main challenge in achieving a zero trust architecture?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q181",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be accessed?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q182",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be accessed for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": true
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-207"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–207",
+       "59 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-207, 59 pages (August 2020) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q183",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the date of the OMB Memorandum M-19-26?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q184",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be accessed for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": true
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-207"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–207",
+       "59 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-207, 59 pages (August 2020) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q185",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What act did NIST develop this publication in accordance with?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q186",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be accessed for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": true
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-207"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–207",
+       "59 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-207, 59 pages (August 2020) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q187",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is a common feature in many enterprises that may or may not include user registration?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q188",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should organizations do to identify privacy-related risks when intercepting, scanning, and logging network traffic?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q189",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be accessed for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": true
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-207"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–207",
+       "59 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-207, 59 pages (August 2020) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q190",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can enterprise assets reach the PEP component?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q191",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can PE(s) and PA(s) be hosted in this use case?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q192",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be accessed for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": true
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-207"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–207",
+       "59 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-207, 59 pages (August 2020) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q193",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be accessed for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": true
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-207"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "218"
+      ],
+      [
+       "800–207",
+       "59 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-218 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-207, 59 pages (August 2020) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q194",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be done if a change occurs to the workflow?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q195",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What areas of the ZTA ecosystem are identified as having gaps?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q196",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the version number of the document?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q197",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the URL for the publication that provides information on Zero Trust Architecture?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q198",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the requirement for remote enterprise assets to access enterprise resources without traversing the enterprise network first?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q199",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What can negatively impact the ability to perform a workflow?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q200",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the URL for obtaining this publication?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q201",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the key component of policy creation in the enhanced identity governance approach?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q202",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What prevents attackers from identifying targets via scanning and launching DoS attacks against resources located behind PEPs?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q203",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the purpose of the Secure Software Development Framework (SSDF)?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q204",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first step in configuring software to have secure settings by default?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q205",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can the Secure Software Development Framework (SSDF) Version 1.1 be accessed?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q206",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the process for ensuring that security criteria are effectively managed?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q207",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first task of the Prepare the Organization (PO) practice?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q208",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the ITL's request regarding patent claims?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q209",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the policy that addresses vulnerability disclosure and remediation?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q210",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended frequency for reviewing security requirements?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-218",
+      "sp800-88r1"
+     ],
+     "pages": [
+      21,
+      12
+     ],
+     "values": [
+      [
+       "1",
+       "2"
+      ],
+      [
+       "800–53",
+       "4 provides"
+      ]
+     ],
+     "quotes": [
+      "PW.2.1: Have 1) a qualified person (or people) who were not involved with the design and/or 2) automated processes instantiated in the toolchain review the software design to confirm and enforce that it meets all of the security requirements and satisfactorily addresses the identified risk information.",
+      "NIST SP 800-53 Revision 4 provides minimum recommended security controls, including sanitization, for Federal systems based on their overall system security categorization."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-88r1",
+      "sp800-218"
+     ],
+     "pages": [
+      12,
+      14
+     ],
+     "values": [
+      [
+       "800–53",
+       "4 provides"
+      ],
+      [
+       "6",
+       "annually"
+      ]
+     ],
+     "quotes": [
+      "NIST SP 800-53 Revision 4 provides minimum recommended security controls, including sanitization, for Federal systems based on their overall system security categorization.",
+      "Example 6: Review all security requirements at least annually, or sooner if there are new requirements from internal or external sources, a major vulnerability is discovered in released software, or a major security incident targeting organization-developed software has occurred."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q211",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the new location for Verify Third-Party Software Complies with Security Requirements?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q212",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the purpose of Implement Supporting Toolchains (PO.3)?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q213",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the purpose of PS.2?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q214",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Who has the authority to mandate and bind federal agencies?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q215",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the SSDF practices help support?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q216",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first step in implementing risk responses for vulnerabilities?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-61r3",
+      "sp800-218"
+     ],
+     "pages": [
+      28,
+      26
+     ],
+     "values": [
+      [
+       "1",
+       "2",
+       "3"
+      ],
+      [
+       "9.2",
+       "9.3 SCFPSSD",
+       "10",
+       "3.8 SP",
+       "10"
+      ]
+     ],
+     "quotes": [
+      "ID.IM-04 Incident response plans and other cybersecurity plans that affect operations are established, communicated, maintained, and improved High N1: Several types of cybersecurity plans are relevant to incident response, including 1) incident response plans, which provide the roadmap for implementing the incident response capability; 2) vulnerability management plans, which help identify and assess all types of vulnerabilities and prioritize, test, and implement risk responses; and 3) business continuity plans.",
+      "PCISSLC: 9.2, 9.3 SCFPSSD: Vulnerability Response and Disclosure SP80053: SA-15(10) SP800160: 3.3.8 SP800161: SA-15(10) SP800181: K0041, K0042, K0151, K0292, K0317; S0054; A0025 SP800216: All Assess, Prioritize, and Remediate Vulnerabilities (RV.2): Help ensure that vulnerabilities are remediated in accordance with risk to reduce the window of opportunity for attackers."
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q217",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the ISO/IEC standard for information technology security techniques?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q218",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the primary focus of this document?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q219",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should organizations do to ensure secure software development?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q220",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the purpose of the Secure Software Development Framework (SSDF)?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q221",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the purpose of defining criteria for security features and services?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q222",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the version number of the National Institute of Standards and Technology's Framework for Improving Critical Infrastructure Cybersecurity?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q223",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the first practice in the Secure Software Development Framework (SSDF) version 1.1?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q224",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can the Secure Software Development Framework (SSDF) Version 1.1 be obtained for free?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q225",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended practice for maintaining older versions of software components?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q226",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be considered when deciding which practices to use and how much time and resources to devote to each practice?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q227",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended approach for ensuring compliance with secure coding practices?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q228",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can the Secure Software Development Framework (SSDF) Version 1.1 be accessed for free?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q229",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended approach for providing role-based training for personnel with responsibilities that contribute to secure development?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q230",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What are the software delivery integrity controls mentioned in the passage?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q231",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Where can this publication be obtained for free?",
+   "expected": "none",
+   "outcome": "FP",
+   "reports": [
+    {
+     "kind": "conflict",
+     "documents": [
+      "csf-2.0",
+      "sp800-218"
+     ],
+     "pages": [
+      1,
+      3
+     ],
+     "values": [
+      [
+       "10.6028"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "This publication is available free of charge from: https://doi.org/10.6028/NIST.CSWP.29 The NIST Cybersecurity",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-207",
+      "sp800-218"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "10.6028",
+       "207"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "CODEN: NSPUE2 This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-207 Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately.",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    },
+    {
+     "kind": "conflict",
+     "documents": [
+      "sp800-61r3",
+      "sp800-218"
+     ],
+     "pages": [
+      1,
+      3
+     ],
+     "values": [
+      [
+       "10.6028"
+      ],
+      [
+       "800–218",
+       "36 pages"
+      ]
+     ],
+     "quotes": [
+      "This publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-61r3",
+      "800-218, 36 pages (February 2022) CODEN: NSPUE2 This publication is available free of charge from:"
+     ],
+     "two_documents_in_scope": false,
+     "expected_values_found": false
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q232",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What practice involves verifying that acquired commercial, open-source, and third-party software components comply with the organization's requirements throughout their life cycles?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q233",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does the SSDF define?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q234",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended approach for storing default configurations?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "q235",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the date of the document?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q236",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended approach for educating affected individuals on changes to roles and responsibilities?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q237",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the purpose of the Secure Software Development Framework (SSDF)?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q238",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What should be documented in the development workflow or issue tracking system?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q239",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What is the recommended practice for managing security risks in third-party components?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q240",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "Who provided input for the SSDF update?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "q241",
+   "split": "train",
+   "tags": [
+    "split:train",
+    "expect-conflict:none"
+   ],
+   "question": "What does this document provide?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  }
+ ]
+}

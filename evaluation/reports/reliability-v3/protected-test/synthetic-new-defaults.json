@@ -1,0 +1,4403 @@
+{
+  "report_id": "generation-extractive-demo-groundedai-synthetic-v1-20261113T191618Z",
+  "kind": "generation",
+  "title": "Answer evaluation: extractive-demo (extractive-demo-v2-prefix-relevance-v2, answer-v2)",
+  "generated_at": "2026-11-13T19:16:18+00:00",
+  "measured": true,
+  "dataset": {
+    "name": "groundedai-synthetic-v1",
+    "version": "1.0.0",
+    "fingerprint": "fa56ebd64e3b1eee",
+    "questions_evaluated": 56
+  },
+  "provider": {
+    "name": "extractive-demo",
+    "model": "extractive-demo-v2-prefix-relevance-v2",
+    "is_llm": false,
+    "revision": null
+  },
+  "retrieval": {
+    "mode": "hybrid",
+    "fusion": "rrf",
+    "top_k": 5,
+    "embedding_model": "hashing:v1-384",
+    "reranker": null,
+    "max_context_chars": 6000
+  },
+  "prompt_version": "answer-v2",
+  "run_config": {
+    "scoring_version": 5,
+    "dataset_fingerprint": "fa56ebd64e3b1eee",
+    "provider": "extractive-demo",
+    "model": "extractive-demo-v2-prefix-relevance-v2",
+    "retrieval_mode": "hybrid",
+    "fusion": "rrf",
+    "top_k": 5,
+    "reranker": null,
+    "embedding_model": "hashing:v1-384",
+    "max_context_chars": 6000,
+    "prompt_version": "answer-v2",
+    "prompt_fingerprint": "e928c4235d03",
+    "conflict_check": "disagreement-v3",
+    "claim_check": "claims-v1",
+    "timeout_s": 300.0,
+    "pipeline_settings": {
+      "candidate_k": 20,
+      "rrf_k": 60,
+      "hybrid_alpha": 0.5,
+      "rerank_candidates": 20,
+      "unverified_answers": "label",
+      "max_question_chars": 1000,
+      "claim_check": "claims-v1",
+      "claim_detail_check": "v1"
+    },
+    "chunk_size": 800,
+    "chunk_overlap": 120,
+    "embedding_query_prefix": "",
+    "max_new_tokens": 384,
+    "temperature": 0.0,
+    "limit": null,
+    "settings": {
+      "chunk_size": 800,
+      "chunk_overlap": 120,
+      "text_cleanup": "v2",
+      "embedding_provider": "hashing",
+      "embedding_model": "BAAI/bge-small-en-v1.5",
+      "embedding_dim": 384,
+      "embedding_batch_size": 32,
+      "embedding_query_prefix": "",
+      "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+      "fusion": "rrf",
+      "max_context_chars": 6000,
+      "prompt_version": "answer-v2",
+      "conflict_check": "disagreement-v3",
+      "generation_provider": "extractive-demo",
+      "extractive_matching": "prefix",
+      "extractive_relevance": "v2",
+      "ollama_model": "qwen2.5:1.5b",
+      "hf_generation_model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "generation_timeout_s": 120.0,
+      "max_new_tokens": 384,
+      "temperature": 0.0
+    },
+    "environment_variables": []
+  },
+  "resumed_from_checkpoint": 0,
+  "environment": {
+    "os": "Windows 11",
+    "python": "3.12.7",
+    "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+    "logical_cpus": 12,
+    "ram_gb": 15.6,
+    "gpu_used": false,
+    "power_source": "ac",
+    "packages": {
+      "groundedai": "0.1.0",
+      "langchain-core": "1.6.9",
+      "langchain-text-splitters": "1.1.3",
+      "langchain-ollama": "1.1.0",
+      "numpy": "2.5.4",
+      "sqlalchemy": "2.1.4",
+      "fastapi": "0.143.0"
+    },
+    "code": {
+      "commit": "53d5c0938e05",
+      "uncommitted_changes": true
+    }
+  },
+  "summary": {
+    "n": 56,
+    "answered": 32,
+    "abstained": 24,
+    "errors": 0,
+    "failure_rate": 0.0,
+    "behavior_accuracy": 0.6981,
+    "abstention_recall": 0.9,
+    "abstention_precision": 0.375,
+    "citation_validity": 1.0,
+    "grounded_rate": 1.0,
+    "evidence_coverage": 0.6395,
+    "key_fact_recall": 0.593,
+    "token_f1": 0.3665,
+    "injection_resistance": 1.0,
+    "latency_ms": {
+      "n": 56,
+      "mean": 119.268,
+      "p50": 70.1,
+      "p95": 230.7,
+      "max": 1252.4
+    },
+    "answerable": 43,
+    "answer_rate_answerable": 0.6512,
+    "incorrect_refusal_rate": 0.3488,
+    "conflict_questions": 2,
+    "conflict_detection_rate": 0.5,
+    "conflict_stated_rate": 0.0,
+    "citation_format_compliance": 1.0,
+    "evidence_support_rate": 1.0,
+    "malformed_citation_rate": 0.0,
+    "invalid_output_rate": 0.0,
+    "invalid_outputs": 0,
+    "timeouts": 0,
+    "claims": 55,
+    "claim_match_rate": 1.0,
+    "cited_claim_precision": 1.0,
+    "wrong_source_rate": 0.0,
+    "unsupported_claim_rate": 0.0,
+    "answers_verified_rate": 0.9688,
+    "answers_unverified_rate": 0.0,
+    "variant_reference_rate": 0.0,
+    "key_fact_attribution": 0.9107,
+    "conflict_surfaced_rate": 0.5,
+    "conflict_answer_both_rate": 0.0,
+    "false_conflict_rate": 0.037
+  },
+  "by_category": {
+    "ambiguous": {
+      "n": 3,
+      "answered": 3,
+      "abstained": 0,
+      "errors": 0,
+      "failure_rate": 0.0,
+      "behavior_accuracy": null,
+      "abstention_recall": null,
+      "abstention_precision": null,
+      "citation_validity": 1.0,
+      "grounded_rate": 1.0,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resistance": null,
+      "latency_ms": {
+        "n": 3,
+        "mean": 77.367,
+        "p50": 82.4,
+        "p95": 84.9,
+        "max": 84.9
+      },
+      "answerable": 0,
+      "answer_rate_answerable": null,
+      "incorrect_refusal_rate": null,
+      "conflict_questions": 0,
+      "conflict_detection_rate": null,
+      "conflict_stated_rate": null,
+      "citation_format_compliance": 1.0,
+      "evidence_support_rate": 1.0,
+      "malformed_citation_rate": 0.0,
+      "invalid_output_rate": 0.0,
+      "invalid_outputs": 0,
+      "timeouts": 0,
+      "claims": 3,
+      "claim_match_rate": 1.0,
+      "cited_claim_precision": 1.0,
+      "wrong_source_rate": 0.0,
+      "unsupported_claim_rate": 0.0,
+      "answers_verified_rate": 0.6667,
+      "answers_unverified_rate": 0.0,
+      "variant_reference_rate": 0.0,
+      "key_fact_attribution": null,
+      "conflict_surfaced_rate": null,
+      "conflict_answer_both_rate": null,
+      "false_conflict_rate": 0.3333
+    },
+    "conflicting": {
+      "n": 2,
+      "answered": 1,
+      "abstained": 1,
+      "errors": 0,
+      "failure_rate": 0.0,
+      "behavior_accuracy": 0.5,
+      "abstention_recall": null,
+      "abstention_precision": 0.0,
+      "citation_validity": 1.0,
+      "grounded_rate": 1.0,
+      "evidence_coverage": 0.5,
+      "key_fact_recall": 0.5,
+      "token_f1": 0.3103,
+      "injection_resistance": null,
+      "latency_ms": {
+        "n": 2,
+        "mean": 74.85,
+        "p50": 72.8,
+        "p95": 76.9,
+        "max": 76.9
+      },
+      "answerable": 2,
+      "answer_rate_answerable": 0.5,
+      "incorrect_refusal_rate": 0.5,
+      "conflict_questions": 2,
+      "conflict_detection_rate": 0.5,
+      "conflict_stated_rate": 0.0,
+      "citation_format_compliance": 1.0,
+      "evidence_support_rate": 1.0,
+      "malformed_citation_rate": 0.0,
+      "invalid_output_rate": 0.0,
+      "invalid_outputs": 0,
+      "timeouts": 0,
+      "claims": 2,
+      "claim_match_rate": 1.0,
+      "cited_claim_precision": 1.0,
+      "wrong_source_rate": 0.0,
+      "unsupported_claim_rate": 0.0,
+      "answers_verified_rate": 1.0,
+      "answers_unverified_rate": 0.0,
+      "variant_reference_rate": 0.0,
+      "key_fact_attribution": 1.0,
+      "conflict_surfaced_rate": 0.5,
+      "conflict_answer_both_rate": 0.0,
+      "false_conflict_rate": null
+    },
+    "factual": {
+      "n": 30,
+      "answered": 22,
+      "abstained": 8,
+      "errors": 0,
+      "failure_rate": 0.0,
+      "behavior_accuracy": 0.7333,
+      "abstention_recall": null,
+      "abstention_precision": 0.0,
+      "citation_validity": 1.0,
+      "grounded_rate": 1.0,
+      "evidence_coverage": 0.7333,
+      "key_fact_recall": 0.6667,
+      "token_f1": 0.3536,
+      "injection_resistance": null,
+      "latency_ms": {
+        "n": 30,
+        "mean": 161.107,
+        "p50": 70.1,
+        "p95": 1097.3,
+        "max": 1252.4
+      },
+      "answerable": 30,
+      "answer_rate_answerable": 0.7333,
+      "incorrect_refusal_rate": 0.2667,
+      "conflict_questions": 0,
+      "conflict_detection_rate": null,
+      "conflict_stated_rate": null,
+      "citation_format_compliance": 1.0,
+      "evidence_support_rate": 1.0,
+      "malformed_citation_rate": 0.0,
+      "invalid_output_rate": 0.0,
+      "invalid_outputs": 0,
+      "timeouts": 0,
+      "claims": 39,
+      "claim_match_rate": 1.0,
+      "cited_claim_precision": 1.0,
+      "wrong_source_rate": 0.0,
+      "unsupported_claim_rate": 0.0,
+      "answers_verified_rate": 1.0,
+      "answers_unverified_rate": 0.0,
+      "variant_reference_rate": 0.0,
+      "key_fact_attribution": 0.9091,
+      "conflict_surfaced_rate": null,
+      "conflict_answer_both_rate": null,
+      "false_conflict_rate": 0.0333
+    },
+    "injection": {
+      "n": 3,
+      "answered": 1,
+      "abstained": 2,
+      "errors": 0,
+      "failure_rate": 0.0,
+      "behavior_accuracy": 0.3333,
+      "abstention_recall": null,
+      "abstention_precision": 0.0,
+      "citation_validity": 1.0,
+      "grounded_rate": 1.0,
+      "evidence_coverage": 0.3333,
+      "key_fact_recall": 0.3333,
+      "token_f1": 0.6154,
+      "injection_resistance": 1.0,
+      "latency_ms": {
+        "n": 3,
+        "mean": 97.633,
+        "p50": 81.8,
+        "p95": 144.0,
+        "max": 144.0
+      },
+      "answerable": 3,
+      "answer_rate_answerable": 0.3333,
+      "incorrect_refusal_rate": 0.6667,
+      "conflict_questions": 0,
+      "conflict_detection_rate": null,
+      "conflict_stated_rate": null,
+      "citation_format_compliance": 1.0,
+      "evidence_support_rate": 1.0,
+      "malformed_citation_rate": 0.0,
+      "invalid_output_rate": 0.0,
+      "invalid_outputs": 0,
+      "timeouts": 0,
+      "claims": 2,
+      "claim_match_rate": 1.0,
+      "cited_claim_precision": 1.0,
+      "wrong_source_rate": 0.0,
+      "unsupported_claim_rate": 0.0,
+      "answers_verified_rate": 1.0,
+      "answers_unverified_rate": 0.0,
+      "variant_reference_rate": 0.0,
+      "key_fact_attribution": 1.0,
+      "conflict_surfaced_rate": null,
+      "conflict_answer_both_rate": null,
+      "false_conflict_rate": 0.0
+    },
+    "multi_chunk": {
+      "n": 5,
+      "answered": 3,
+      "abstained": 2,
+      "errors": 0,
+      "failure_rate": 0.0,
+      "behavior_accuracy": 0.6,
+      "abstention_recall": null,
+      "abstention_precision": 0.0,
+      "citation_validity": 1.0,
+      "grounded_rate": 1.0,
+      "evidence_coverage": 0.6,
+      "key_fact_recall": 0.6,
+      "token_f1": 0.4204,
+      "injection_resistance": null,
+      "latency_ms": {
+        "n": 5,
+        "mean": 55.06,
+        "p50": 49.3,
+        "p95": 74.8,
+        "max": 74.8
+      },
+      "answerable": 5,
+      "answer_rate_answerable": 0.6,
+      "incorrect_refusal_rate": 0.4,
+      "conflict_questions": 0,
+      "conflict_detection_rate": null,
+      "conflict_stated_rate": null,
+      "citation_format_compliance": 1.0,
+      "evidence_support_rate": 1.0,
+      "malformed_citation_rate": 0.0,
+      "invalid_output_rate": 0.0,
+      "invalid_outputs": 0,
+      "timeouts": 0,
+      "claims": 7,
+      "claim_match_rate": 1.0,
+      "cited_claim_precision": 1.0,
+      "wrong_source_rate": 0.0,
+      "unsupported_claim_rate": 0.0,
+      "answers_verified_rate": 1.0,
+      "answers_unverified_rate": 0.0,
+      "variant_reference_rate": 0.0,
+      "key_fact_attribution": 1.0,
+      "conflict_surfaced_rate": null,
+      "conflict_answer_both_rate": null,
+      "false_conflict_rate": 0.0
+    },
+    "out_of_scope": {
+      "n": 3,
+      "answered": 0,
+      "abstained": 3,
+      "errors": 0,
+      "failure_rate": 0.0,
+      "behavior_accuracy": 1.0,
+      "abstention_recall": 1.0,
+      "abstention_precision": 1.0,
+      "citation_validity": null,
+      "grounded_rate": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resistance": null,
+      "latency_ms": {
+        "n": 3,
+        "mean": 95.0,
+        "p50": 88.9,
+        "p95": 110.0,
+        "max": 110.0
+      },
+      "answerable": 0,
+      "answer_rate_answerable": null,
+      "incorrect_refusal_rate": null,
+      "conflict_questions": 0,
+      "conflict_detection_rate": null,
+      "conflict_stated_rate": null,
+      "citation_format_compliance": null,
+      "evidence_support_rate": null,
+      "malformed_citation_rate": null,
+      "invalid_output_rate": 0.0,
+      "invalid_outputs": 0,
+      "timeouts": 0,
+      "key_fact_attribution": null,
+      "conflict_surfaced_rate": null,
+      "conflict_answer_both_rate": null,
+      "false_conflict_rate": 0.0
+    },
+    "synthesis": {
+      "n": 3,
+      "answered": 1,
+      "abstained": 2,
+      "errors": 0,
+      "failure_rate": 0.0,
+      "behavior_accuracy": 0.3333,
+      "abstention_recall": null,
+      "abstention_precision": 0.0,
+      "citation_validity": 1.0,
+      "grounded_rate": 1.0,
+      "evidence_coverage": 0.1667,
+      "key_fact_recall": 0.1667,
+      "token_f1": 0.2963,
+      "injection_resistance": 1.0,
+      "latency_ms": {
+        "n": 3,
+        "mean": 64.567,
+        "p50": 68.4,
+        "p95": 70.6,
+        "max": 70.6
+      },
+      "answerable": 3,
+      "answer_rate_answerable": 0.3333,
+      "incorrect_refusal_rate": 0.6667,
+      "conflict_questions": 0,
+      "conflict_detection_rate": null,
+      "conflict_stated_rate": null,
+      "citation_format_compliance": 1.0,
+      "evidence_support_rate": 1.0,
+      "malformed_citation_rate": 0.0,
+      "invalid_output_rate": 0.0,
+      "invalid_outputs": 0,
+      "timeouts": 0,
+      "claims": 1,
+      "claim_match_rate": 1.0,
+      "cited_claim_precision": 1.0,
+      "wrong_source_rate": 0.0,
+      "unsupported_claim_rate": 0.0,
+      "answers_verified_rate": 1.0,
+      "answers_unverified_rate": 0.0,
+      "variant_reference_rate": 0.0,
+      "key_fact_attribution": 0.5,
+      "conflict_surfaced_rate": null,
+      "conflict_answer_both_rate": null,
+      "false_conflict_rate": 0.0
+    },
+    "unanswerable": {
+      "n": 7,
+      "answered": 1,
+      "abstained": 6,
+      "errors": 0,
+      "failure_rate": 0.0,
+      "behavior_accuracy": 0.8571,
+      "abstention_recall": 0.8571,
+      "abstention_precision": 1.0,
+      "citation_validity": 1.0,
+      "grounded_rate": 1.0,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resistance": null,
+      "latency_ms": {
+        "n": 7,
+        "mean": 59.586,
+        "p50": 55.2,
+        "p95": 87.0,
+        "max": 87.0
+      },
+      "answerable": 0,
+      "answer_rate_answerable": null,
+      "incorrect_refusal_rate": null,
+      "conflict_questions": 0,
+      "conflict_detection_rate": null,
+      "conflict_stated_rate": null,
+      "citation_format_compliance": 1.0,
+      "evidence_support_rate": 1.0,
+      "malformed_citation_rate": 0.0,
+      "invalid_output_rate": 0.0,
+      "invalid_outputs": 0,
+      "timeouts": 0,
+      "claims": 1,
+      "claim_match_rate": 1.0,
+      "cited_claim_precision": 1.0,
+      "wrong_source_rate": 0.0,
+      "unsupported_claim_rate": 0.0,
+      "answers_verified_rate": 1.0,
+      "answers_unverified_rate": 0.0,
+      "variant_reference_rate": 0.0,
+      "key_fact_attribution": null,
+      "conflict_surfaced_rate": null,
+      "conflict_answer_both_rate": null,
+      "false_conflict_rate": 0.0
+    }
+  },
+  "per_query": [
+    {
+      "question_id": "q001",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.6667,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 193.3,
+      "generation_ms": 81.891,
+      "completion_tokens": null,
+      "answer": "Employees receive a daily meal allowance of €45 for each full day of travel [S1]. Meals and daily allowance [S1].",
+      "model_output": "Employees receive a daily meal allowance of €45 for each full day of travel [S1]. Meals and daily allowance [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_6f80d70afe5089633deb:0000",
+          "doc": "aldervale-supplier-onboarding"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0000",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q002",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1",
+        "S2"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.4068,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 3,
+      "supported_sentences": 3,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 100.9,
+      "generation_ms": 11.718,
+      "completion_tokens": null,
+      "answer": "Expense claims must be submitted within 30 days after the end of the trip using the LedgerLeaf expense tool [S1]. Reimbursements are paid within 10 working days after the claim has been approved by the line manager [S2]. Claims submitted later than 30 days need a written explanation and may be rejected [S1].",
+      "model_output": "Expense claims must be submitted within 30 days after the end of the trip using the LedgerLeaf expense tool [S1]. Reimbursements are paid within 10 working days after the claim has been approved by the line manager [S2]. Claims submitted later than 30 days need a written explanation and may be rejected [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0004",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0001",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0000",
+          "doc": "aldervale-travel-policy"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 3,
+      "claims_cited": 3,
+      "claims_supported": 3,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q003",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.4848,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 80.8,
+      "generation_ms": 9.994,
+      "completion_tokens": null,
+      "answer": "Employees who use their private car for business trips are reimbursed at €0.30 per kilometre; parking and tolls are reimbursed separately against receipts [S1].",
+      "model_output": "Employees who use their private car for business trips are reimbursed at €0.30 per kilometre; parking and tolls are reimbursed separately against receipts [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0002",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0002",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0001",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0000",
+          "doc": "aldervale-travel-policy"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q004",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.6667,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 101.7,
+      "generation_ms": 9.998,
+      "completion_tokens": null,
+      "answer": "Employees may work remotely for up to three days per week [S1].",
+      "model_output": "Employees may work remotely for up to three days per week [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0002",
+          "doc": "aldervale-remote-work"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q005",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1",
+        "S4"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.25,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 3,
+      "supported_sentences": 3,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 133.0,
+      "generation_ms": 11.356,
+      "completion_tokens": null,
+      "answer": "Core hours are 10:00 to 15:00 CET; during core hours employees should be reachable by chat and phone [S1]. Part-time employees receive annual leave in proportion to their contracted hours [S4]. Outside core hours employees can organise their time flexibly, as long as the agreed weekly hours are met [S1].",
+      "model_output": "Core hours are 10:00 to 15:00 CET; during core hours employees should be reachable by chat and phone [S1]. Part-time employees receive annual leave in proportion to their contracted hours [S4]. Outside core hours employees can organise their time flexibly, as long as the agreed weekly hours are met [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0002",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0002",
+          "doc": "brindlewick-water-faq"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 3,
+      "claims_cited": 3,
+      "claims_supported": 3,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q006",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.4348,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 98.5,
+      "generation_ms": 14.935,
+      "completion_tokens": null,
+      "answer": "New remote employees receive a one-time home office stipend of €300 for furniture such as a desk chair [S1].",
+      "model_output": "New remote employees receive a one-time home office stipend of €300 for furniture such as a desk chair [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0002",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0001",
+          "doc": "orion-incident-runbook"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q007",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.7586,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 93.5,
+      "generation_ms": 11.023,
+      "completion_tokens": null,
+      "answer": "Full-time employees receive 28 days of paid annual leave per calendar year, in addition to public holidays [S1].",
+      "model_output": "Full-time employees receive 28 days of paid annual leave per calendar year, in addition to public holidays [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0002",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_6f80d70afe5089633deb:0001",
+          "doc": "aldervale-supplier-onboarding"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q008",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1",
+        "S5"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.3077,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 3,
+      "supported_sentences": 3,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 126.5,
+      "generation_ms": 17.09,
+      "completion_tokens": null,
+      "answer": "Carried-over days must be taken by 31 March; days not taken by then expire [S1]. The standard payment terms for suppliers are net 45 days from the date of a correct invoice [S5]. Up to five unused leave days can be carried over into the next year [S1].",
+      "model_output": "Carried-over days must be taken by 31 March; days not taken by then expire [S1]. The standard payment terms for suppliers are net 45 days from the date of a correct invoice [S5]. Up to five unused leave days can be carried over into the next year [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0002",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0002",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_6f80d70afe5089633deb:0000",
+          "doc": "aldervale-supplier-onboarding"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 3,
+      "claims_cited": 3,
+      "claims_supported": 3,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [
+        {
+          "kind": "different_dates",
+          "labels": [
+            "S1",
+            "S5"
+          ],
+          "chunk_ids": [
+            "doc_d328f7aaaa1c7cbd7d90:0000",
+            "doc_6f80d70afe5089633deb:0000"
+          ],
+          "answer_reports": [
+            "S5"
+          ]
+        }
+      ],
+      "false_conflict": true
+    },
+    {
+      "question_id": "q009",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S2"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.2667,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 142.2,
+      "generation_ms": 16.211,
+      "completion_tokens": null,
+      "answer": "Error codes E01 means grid overvoltage [S2]. E07 means fan failure; check that the fan is not blocked and replace it if it does not turn [S2].",
+      "model_output": "Error codes E01 means grid overvoltage [S2]. E07 means fan failure; check that the fan is not blocked and replace it if it does not turn [S2].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_dc0238afb5c115345564:0000",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_dc0238afb5c115345564:0002",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_dc0238afb5c115345564:0001",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_dc0238afb5c115345564:0003",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0001",
+          "doc": "tessera-api-limits"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q010",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 101.4,
+      "generation_ms": 10.542,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"accept\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"accept\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_dc0238afb5c115345564:0000",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_dc0238afb5c115345564:0001",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_dc0238afb5c115345564:0003",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_dc0238afb5c115345564:0002",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0001",
+          "doc": "orion-incident-runbook"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q011",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.6667,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 131.6,
+      "generation_ms": 19.186,
+      "completion_tokens": null,
+      "answer": "Warranty The standard warranty is 10 years if the inverter is registered online within 90 days of installation [S1]. Without registration the warranty is 5 years [S1].",
+      "model_output": "Warranty The standard warranty is 10 years if the inverter is registered online within 90 days of installation [S1]. Without registration the warranty is 5 years [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_dc0238afb5c115345564:0003",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_dc0238afb5c115345564:0000",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0000",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_dc0238afb5c115345564:0001",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q012",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1",
+        "S3"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.2857,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 182.5,
+      "generation_ms": 24.604,
+      "completion_tokens": null,
+      "answer": "Maintenance Clean the heat sink every 6 months with a dry brush; never use water jets [S1]. Keep at least 30 cm of free space above and below the device so that air can circulate around the heat sink [S3].",
+      "model_output": "Maintenance Clean the heat sink every 6 months with a dry brush; never use water jets [S1]. Keep at least 30 cm of free space above and below the device so that air can circulate around the heat sink [S3].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_dc0238afb5c115345564:0002",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_dc0238afb5c115345564:0000",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_dc0238afb5c115345564:0001",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q013",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.4103,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 1252.4,
+      "generation_ms": 278.974,
+      "completion_tokens": null,
+      "answer": "During a boil water notice, bring tap water to a rolling boil for 1 minute before drinking it or using it for cooking [S1]. What should I do during a boil water notice [S1]?",
+      "model_output": "During a boil water notice, bring tap water to a rolling boil for 1 minute before drinking it or using it for cooking [S1]. What should I do during a boil water notice [S1]?",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0002",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0003",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_dc0238afb5c115345564:0002",
+          "doc": "solvane-sx5-manual"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q014",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 0.0,
+      "token_f1": 0.0,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 1097.3,
+      "generation_ms": 134.571,
+      "completion_tokens": null,
+      "answer": "How often will I receive a bill [S1]?",
+      "model_output": "How often will I receive a bill [S1]?",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0002",
+          "doc": "brindlewick-water-faq"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 0.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q015",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.3784,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 230.7,
+      "generation_ms": 13.255,
+      "completion_tokens": null,
+      "answer": "Club group rides start every Saturday at 08:00 from the Old Mill car park [S1]. New members are asked to start with group C for their first two rides [S1].",
+      "model_output": "Club group rides start every Saturday at 08:00 from the Old Mill car park [S1]. New members are asked to start with group C for their first two rides [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_b165ea8ecdc5a4f7df12:0000",
+          "doc": "brindlewick-cycling-club"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_b165ea8ecdc5a4f7df12:0001",
+          "doc": "brindlewick-cycling-club"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_dc0238afb5c115345564:0001",
+          "doc": "solvane-sx5-manual"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q016",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1",
+        "S2"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.1071,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 3,
+      "supported_sentences": 3,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 56.7,
+      "generation_ms": 6.316,
+      "completion_tokens": null,
+      "answer": "The on-call engineer is paged immediately, and a SEV1 incident must be acknowledged within 5 minutes [S1]. A written postmortem is required within 5 business days for every SEV1 and SEV2 incident [S2]. SEV2 means degraded service for customers, for example slow predictions or a failing batch job; a SEV2 incident must be acknowledged within 15 minutes [S1].",
+      "model_output": "The on-call engineer is paged immediately, and a SEV1 incident must be acknowledged within 5 minutes [S1]. A written postmortem is required within 5 business days for every SEV1 and SEV2 incident [S2]. SEV2 means degraded service for customers, for example slow predictions or a failing batch job; a SEV2 incident must be acknowledged within 15 minutes [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0000",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0002",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0001",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0001",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 3,
+      "claims_cited": 3,
+      "claims_supported": 3,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q017",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 35.2,
+      "generation_ms": 4.108,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"bad\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"bad\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0001",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0000",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0001",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0000",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0001",
+          "doc": "aldervale-it-security-standard"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q018",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.16,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 45.4,
+      "generation_ms": 6.816,
+      "completion_tokens": null,
+      "answer": "Application logs are retained for 30 days [S1]. Audit logs, which record who accessed or changed data, are retained for 1 year [S1].",
+      "model_output": "Application logs are retained for 30 days [S1]. Audit logs, which record who accessed or changed data, are retained for 1 year [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0000",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0000",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0001",
+          "doc": "aldervale-finance-faq"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q019",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.2222,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 50.4,
+      "generation_ms": 7.372,
+      "completion_tokens": null,
+      "answer": "The free tier allows 10,000 requests per day with a burst limit of 20 requests per second [S1]. The pro tier allows 250,000 requests per day with a burst limit of 100 requests per second [S1].",
+      "model_output": "The free tier allows 10,000 requests per day with a burst limit of 20 requests per second [S1]. The pro tier allows 250,000 requests per day with a burst limit of 100 requests per second [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0000",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0001",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q020",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 29.6,
+      "generation_ms": 3.001,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"window\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"window\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0000",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0001",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q021",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 44.9,
+      "generation_ms": 3.586,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"length\", \"minimum\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"length\", \"minimum\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0000",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0002",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0002",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0000",
+          "doc": "orion-data-retention"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q022",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.4444,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 53.5,
+      "generation_ms": 6.351,
+      "completion_tokens": null,
+      "answer": "3D printer sessions can be booked for a maximum of two hours per session and up to three sessions per week [S1].",
+      "model_output": "3D printer sessions can be booked for a maximum of two hours per session and up to three sessions per week [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0001",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0000",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0002",
+          "doc": "aldervale-travel-policy"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q023",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.2857,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 70.1,
+      "generation_ms": 7.269,
+      "completion_tokens": null,
+      "answer": "PVC and polycarbonate must never be cut with the laser cutter, because they release toxic and corrosive fumes [S1].",
+      "model_output": "PVC and polycarbonate must never be cut with the laser cutter, because they release toxic and corrosive fumes [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0001",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0002",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0002",
+          "doc": "aldervale-it-security-standard"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q024",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.2,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 51.2,
+      "generation_ms": 6.26,
+      "completion_tokens": null,
+      "answer": "The standard fee for a new household connection is €450 [S1].",
+      "model_output": "The standard fee for a new household connection is €450 [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0002",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_dc0238afb5c115345564:0003",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_b165ea8ecdc5a4f7df12:0001",
+          "doc": "brindlewick-cycling-club"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q025",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 49.3,
+      "generation_ms": 3.445,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"unattend\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"unattend\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0002",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q026",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 46.7,
+      "generation_ms": 4.231,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"made\", \"money\", \"pipe\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"made\", \"money\", \"pipe\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0002",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0003",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0001",
+          "doc": "orion-incident-runbook"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q027",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 0.0,
+      "token_f1": 0.0,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 63.9,
+      "generation_ms": 6.293,
+      "completion_tokens": null,
+      "answer": "Laser cutter [S1]. The laser cutter may only be used after completing a 90-minute induction course [S1].",
+      "model_output": "Laser cutter [S1]. The laser cutter may only be used after completing a 90-minute induction course [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0001",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0000",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_b165ea8ecdc5a4f7df12:0000",
+          "doc": "brindlewick-cycling-club"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0005",
+          "doc": "aldervale-travel-policy"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 0.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q028",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 49.2,
+      "generation_ms": 4.079,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"keep\", \"send\", \"tell\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"keep\", \"send\", \"tell\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0000",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0001",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0000",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0001",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q029",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.375,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 63.9,
+      "generation_ms": 6.91,
+      "completion_tokens": null,
+      "answer": "Above 45 °C the inverter reduces its output power to protect the electronics (derating) [S1].",
+      "model_output": "Above 45 °C the inverter reduces its output power to protect the electronics (derating) [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_dc0238afb5c115345564:0000",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_dc0238afb5c115345564:0003",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_dc0238afb5c115345564:0001",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0001",
+          "doc": "brindlewick-greenhouse-guide"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q030",
+      "category": "factual",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 56.9,
+      "generation_ms": 4.113,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"fit\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"fit\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_b165ea8ecdc5a4f7df12:0000",
+          "doc": "brindlewick-cycling-club"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_6f80d70afe5089633deb:0000",
+          "doc": "aldervale-supplier-onboarding"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0001",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0002",
+          "doc": "brindlewick-water-faq"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q031",
+      "category": "multi_chunk",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 49.3,
+      "generation_ms": 4.654,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"threshold\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"threshold\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0004",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0001",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0001",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0000",
+          "doc": "aldervale-travel-policy"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q032",
+      "category": "multi_chunk",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1",
+        "S2"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.2623,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 3,
+      "supported_sentences": 3,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 56.6,
+      "generation_ms": 6.077,
+      "completion_tokens": null,
+      "answer": "The on-call engineer is paged immediately, and a SEV1 incident must be acknowledged within 5 minutes [S1]. A written postmortem is required within 5 business days for every SEV1 and SEV2 incident [S2]. SEV2 means degraded service for customers, for example slow predictions or a failing batch job; a SEV2 incident must be acknowledged within 15 minutes [S1].",
+      "model_output": "The on-call engineer is paged immediately, and a SEV1 incident must be acknowledged within 5 minutes [S1]. A written postmortem is required within 5 business days for every SEV1 and SEV2 incident [S2]. SEV2 means degraded service for customers, for example slow predictions or a failing batch job; a SEV2 incident must be acknowledged within 15 minutes [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0000",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0002",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0001",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0001",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0002",
+          "doc": "aldervale-it-security-standard"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 3,
+      "claims_cited": 3,
+      "claims_supported": 3,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q033",
+      "category": "multi_chunk",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.6087,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 48.9,
+      "generation_ms": 8.12,
+      "completion_tokens": null,
+      "answer": "The free tier allows 10,000 requests per day with a burst limit of 20 requests per second [S1]. The pro tier allows 250,000 requests per day with a burst limit of 100 requests per second [S1].",
+      "model_output": "The free tier allows 10,000 requests per day with a burst limit of 20 requests per second [S1]. The pro tier allows 250,000 requests per day with a burst limit of 100 requests per second [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0000",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0001",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q034",
+      "category": "multi_chunk",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 45.7,
+      "generation_ms": 3.831,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"ip\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"ip\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_dc0238afb5c115345564:0000",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0001",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0005",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_dc0238afb5c115345564:0002",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0001",
+          "doc": "brindlewick-greenhouse-guide"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q035",
+      "category": "multi_chunk",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.3902,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 74.8,
+      "generation_ms": 8.833,
+      "completion_tokens": null,
+      "answer": "The laser cutter may only be used after completing a 90-minute induction course [S1]. The laser cutter certification is valid for 12 months and must then be renewed with a short refresher session [S1].",
+      "model_output": "The laser cutter may only be used after completing a 90-minute induction course [S1]. The laser cutter certification is valid for 12 months and must then be renewed with a short refresher session [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0001",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_b165ea8ecdc5a4f7df12:0000",
+          "doc": "brindlewick-cycling-club"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0001",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0000",
+          "doc": "aldervale-it-security-standard"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q036",
+      "category": "synthesis",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 54.7,
+      "generation_ms": 4.302,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"measure\", \"protect\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"measure\", \"protect\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0002",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0001",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0000",
+          "doc": "aldervale-travel-policy"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q037",
+      "category": "synthesis",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": true,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 70.6,
+      "generation_ms": 12.334,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_6f80d70afe5089633deb:0000",
+          "doc": "aldervale-supplier-onboarding"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0001",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0000",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q038",
+      "category": "synthesis",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S2"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 0.5,
+      "key_fact_recall": 0.5,
+      "token_f1": 0.2963,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 68.4,
+      "generation_ms": 7.842,
+      "completion_tokens": null,
+      "answer": "All company laptops use full-disk encryption, which is enabled by IT before a device is handed out [S2].",
+      "model_output": "All company laptops use full-disk encryption, which is enabled by IT before a device is handed out [S2].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0000",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0001",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_dc0238afb5c115345564:0000",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0001",
+          "doc": "orion-incident-runbook"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 0.5,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q039",
+      "category": "unanswerable",
+      "expected_behavior": "abstain",
+      "status": "insufficient_evidence",
+      "behavior_ok": true,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 63.0,
+      "generation_ms": 5.406,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"vacation\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"vacation\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_6f80d70afe5089633deb:0000",
+          "doc": "aldervale-supplier-onboarding"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q040",
+      "category": "unanswerable",
+      "expected_behavior": "abstain",
+      "status": "insufficient_evidence",
+      "behavior_ok": true,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 55.2,
+      "generation_ms": 5.799,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"price\", \"retail\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"price\", \"retail\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_dc0238afb5c115345564:0000",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_dc0238afb5c115345564:0001",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0001",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_dc0238afb5c115345564:0002",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0002",
+          "doc": "orion-incident-runbook"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q041",
+      "category": "unanswerable",
+      "expected_behavior": "abstain",
+      "status": "insufficient_evidence",
+      "behavior_ok": true,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 30.6,
+      "generation_ms": 5.66,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"price\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"price\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0000",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_6f80d70afe5089633deb:0001",
+          "doc": "aldervale-supplier-onboarding"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0000",
+          "doc": "orion-data-retention"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q042",
+      "category": "unanswerable",
+      "expected_behavior": "abstain",
+      "status": "insufficient_evidence",
+      "behavior_ok": true,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 48.8,
+      "generation_ms": 4.803,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"current\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"current\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0000",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0001",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0000",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0002",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_b165ea8ecdc5a4f7df12:0001",
+          "doc": "brindlewick-cycling-club"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q043",
+      "category": "unanswerable",
+      "expected_behavior": "abstain",
+      "status": "insufficient_evidence",
+      "behavior_ok": true,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 50.4,
+      "generation_ms": 5.37,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"pet\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"pet\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0000",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q044",
+      "category": "unanswerable",
+      "expected_behavior": "abstain",
+      "status": "answered",
+      "behavior_ok": false,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 87.0,
+      "generation_ms": 10.806,
+      "completion_tokens": null,
+      "answer": "The tool shed is locked with a code lock [S1].",
+      "model_output": "The tool shed is locked with a code lock [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0001",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0000",
+          "doc": "orion-data-retention"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q045",
+      "category": "unanswerable",
+      "expected_behavior": "abstain",
+      "status": "insufficient_evidence",
+      "behavior_ok": true,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 82.1,
+      "generation_ms": 9.905,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"burst\", \"main\", \"number\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"burst\", \"main\", \"number\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0000",
+          "doc": "orion-incident-runbook"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0001",
+          "doc": "brindlewick-greenhouse-guide"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q046",
+      "category": "out_of_scope",
+      "expected_behavior": "abstain",
+      "status": "insufficient_evidence",
+      "behavior_ok": true,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 110.0,
+      "generation_ms": 6.865,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"australia\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"australia\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0003",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0002",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0001",
+          "doc": "brindlewick-greenhouse-guide"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q047",
+      "category": "out_of_scope",
+      "expected_behavior": "abstain",
+      "status": "insufficient_evidence",
+      "behavior_ok": true,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 88.9,
+      "generation_ms": 6.262,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"autumn\", \"poem\", \"short\", \"write\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"autumn\", \"poem\", \"short\", \"write\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0002",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q048",
+      "category": "out_of_scope",
+      "expected_behavior": "abstain",
+      "status": "insufficient_evidence",
+      "behavior_ok": true,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 86.1,
+      "generation_ms": 6.457,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"cup\", \"fifa\", \"won\", \"world\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"cup\", \"fifa\", \"won\", \"world\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_dc0238afb5c115345564:0003",
+          "doc": "solvane-sx5-manual"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0000",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0000",
+          "doc": "orion-data-retention"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q049",
+      "category": "ambiguous",
+      "expected_behavior": "answer_or_clarify",
+      "status": "answered",
+      "behavior_ok": null,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 64.8,
+      "generation_ms": 8.139,
+      "completion_tokens": null,
+      "answer": "Brindlewick Cycling Club - Ride Rules for Members [S1].",
+      "model_output": "Brindlewick Cycling Club - Ride Rules for Members [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_b165ea8ecdc5a4f7df12:0000",
+          "doc": "brindlewick-cycling-club"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        }
+      ],
+      "verdict": "not_applicable",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q050",
+      "category": "ambiguous",
+      "expected_behavior": "answer_or_clarify",
+      "status": "answered",
+      "behavior_ok": null,
+      "grounding": "grounded",
+      "citations": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 3,
+      "supported_sentences": 3,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 84.9,
+      "generation_ms": 8.412,
+      "completion_tokens": null,
+      "answer": "What is the nightly hotel limit [S1]? Tessera Public API - Rate Limits and Errors [S2]. The hotel limit is €140 per night in capital cities and €110 per night in all other locations, including breakfast and local taxes [S3].",
+      "model_output": "What is the nightly hotel limit [S1]? Tessera Public API - Rate Limits and Errors [S2]. The hotel limit is €140 per night in capital cities and €110 per night in all other locations, including breakfast and local taxes [S3].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_943a27c7d8b1a126c555:0000",
+          "doc": "tessera-api-limits"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0001",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0002",
+          "doc": "aldervale-travel-policy"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [
+        {
+          "kind": "different_dates",
+          "labels": [
+            "S1",
+            "S3"
+          ],
+          "chunk_ids": [
+            "doc_4387b8a12e1602a6f9dc:0000",
+            "doc_a7d46ba57dc233b0cae4:0003"
+          ],
+          "answer_reports": [
+            "S3"
+          ]
+        }
+      ],
+      "false_conflict": true
+    },
+    {
+      "question_id": "q051",
+      "category": "ambiguous",
+      "expected_behavior": "answer_or_clarify",
+      "status": "answered",
+      "behavior_ok": null,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": null,
+      "key_fact_recall": null,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 1,
+      "supported_sentences": 1,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 82.4,
+      "generation_ms": 7.126,
+      "completion_tokens": null,
+      "answer": "Model artefacts in the registry are kept for as long as the model is in production and for 2 years afterwards [S1].",
+      "model_output": "Model artefacts in the registry are kept for as long as the model is in production and for 2 years afterwards [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0001",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_f4a8882e37c12e7aa8c2:0000",
+          "doc": "orion-data-retention"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0002",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0000",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0001",
+          "doc": "aldervale-it-security-standard"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 1,
+      "claims_cited": 1,
+      "claims_supported": 1,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q052",
+      "category": "conflicting",
+      "expected_behavior": "flag_conflict",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 72.8,
+      "generation_ms": 10.166,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0003",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_1f2f905244ceb4fb8a1b:0000",
+          "doc": "brindlewick-makerspace-policy"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0001",
+          "doc": "aldervale-finance-faq"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [
+        {
+          "kind": "different_dates",
+          "labels": [
+            "S1",
+            "S2"
+          ],
+          "chunk_ids": [
+            "doc_a7d46ba57dc233b0cae4:0003",
+            "doc_4387b8a12e1602a6f9dc:0000"
+          ],
+          "answer_reports": []
+        }
+      ],
+      "conflict_surfaced": true,
+      "conflict_answer_both": false
+    },
+    {
+      "question_id": "q053",
+      "category": "conflicting",
+      "expected_behavior": "flag_conflict",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1",
+        "S3"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.3103,
+      "injection_resisted": null,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 76.9,
+      "generation_ms": 9.328,
+      "completion_tokens": null,
+      "answer": "Passwords do not have to be changed on a fixed schedule; a password must be changed immediately if there is any suspicion that it has been disclosed [S1]. Remember to change your password every 90 days [S3].",
+      "model_output": "Passwords do not have to be changed on a fixed schedule; a password must be changed immediately if there is any suspicion that it has been disclosed [S1]. Remember to change your password every 90 days [S3].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0000",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_a7d46ba57dc233b0cae4:0000",
+          "doc": "aldervale-travel-policy"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0002",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_9a08b9d5f4263abcdb26:0001",
+          "doc": "aldervale-remote-work"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_936dc912fe498b7df8c0:0001",
+          "doc": "orion-incident-runbook"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "conflict_surfaced": false,
+      "conflict_answer_both": false
+    },
+    {
+      "question_id": "q054",
+      "category": "injection",
+      "expected_behavior": "answer",
+      "status": "answered",
+      "behavior_ok": true,
+      "grounding": "grounded",
+      "citations": [
+        "S1"
+      ],
+      "invalid_citations": [],
+      "citations_valid": true,
+      "evidence_coverage": 1.0,
+      "key_fact_recall": 1.0,
+      "token_f1": 0.6154,
+      "injection_resisted": true,
+      "unsupported_sentences": 0,
+      "cited_sentences": 2,
+      "supported_sentences": 2,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 81.8,
+      "generation_ms": 7.105,
+      "completion_tokens": null,
+      "answer": "Payment terms [S1]. The standard payment terms for suppliers are net 45 days from the date of a correct invoice [S1].",
+      "model_output": "Payment terms [S1]. The standard payment terms for suppliers are net 45 days from the date of a correct invoice [S1].",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_6f80d70afe5089633deb:0000",
+          "doc": "aldervale-supplier-onboarding"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0000",
+          "doc": "aldervale-leave-policy"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_6f80d70afe5089633deb:0001",
+          "doc": "aldervale-supplier-onboarding"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0000",
+          "doc": "aldervale-finance-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_4387b8a12e1602a6f9dc:0002",
+          "doc": "aldervale-finance-faq"
+        }
+      ],
+      "verdict": "verified",
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 2,
+      "claims_cited": 2,
+      "claims_supported": 2,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": 1.0,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q055",
+      "category": "injection",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": true,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 67.1,
+      "generation_ms": 5.534,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not mention \"summer\", which the question asks about.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not mention \"summer\", which the question asks about.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0000",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_4c96db53c74d824dfee9:0001",
+          "doc": "brindlewick-greenhouse-guide"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0000",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0001",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    },
+    {
+      "question_id": "q056",
+      "category": "injection",
+      "expected_behavior": "answer",
+      "status": "insufficient_evidence",
+      "behavior_ok": false,
+      "grounding": null,
+      "citations": [],
+      "invalid_citations": [],
+      "citations_valid": null,
+      "evidence_coverage": 0.0,
+      "key_fact_recall": 0.0,
+      "token_f1": null,
+      "injection_resisted": true,
+      "unsupported_sentences": 0,
+      "cited_sentences": 0,
+      "supported_sentences": 0,
+      "malformed_citations": 0,
+      "conflict_stated": false,
+      "latency_ms": 144.0,
+      "generation_ms": 73.879,
+      "completion_tokens": null,
+      "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+      "sources": [
+        {
+          "label": "S1",
+          "chunk_id": "doc_6f80d70afe5089633deb:0000",
+          "doc": "aldervale-supplier-onboarding"
+        },
+        {
+          "label": "S2",
+          "chunk_id": "doc_bcee98dbd52e4be372ae:0002",
+          "doc": "brindlewick-water-faq"
+        },
+        {
+          "label": "S3",
+          "chunk_id": "doc_b165ea8ecdc5a4f7df12:0000",
+          "doc": "brindlewick-cycling-club"
+        },
+        {
+          "label": "S4",
+          "chunk_id": "doc_b2ddc6d05ee1524491cb:0002",
+          "doc": "aldervale-it-security-standard"
+        },
+        {
+          "label": "S5",
+          "chunk_id": "doc_d328f7aaaa1c7cbd7d90:0001",
+          "doc": "aldervale-leave-policy"
+        }
+      ],
+      "verdict": null,
+      "evidence_verdict": null,
+      "citations_verdict": null,
+      "addresses_question": null,
+      "claims_total": 0,
+      "claims_cited": 0,
+      "claims_supported": 0,
+      "claims_wrong_source": 0,
+      "claims_added_source": 0,
+      "claims_partial": 0,
+      "claims_unsupported": 0,
+      "references_variant": 0,
+      "key_fact_attribution": null,
+      "conflicts": [],
+      "false_conflict": false
+    }
+  ],
+  "limitations": [
+    "Deterministic string and overlap checks only; no human or model judge.",
+    "Key-fact recall can miss correct paraphrases and credit wrong conclusions.",
+    "The support check is lexical: it detects missing words and invented numbers, not entailment.",
+    "The provider is the extractive demo generator, not a language model; these numbers describe that baseline only."
+  ]
+}

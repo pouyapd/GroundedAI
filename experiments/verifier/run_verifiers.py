@@ -48,7 +48,31 @@ def build(method: str):
 
         onnx_file = Path(name) / "onnx" / "model_quantized.onnx"
         return nli_verifier(name, OnnxClassifier(str(onnx_file), name, threads=4))
+    if kind == "both":  # both:<rule method>|<NLI method>, e.g. both:rule:claims-v1|onnx:<dir>
+        rule_method, _, nli_method = name.partition("|")
+        return combined_verifier(build(rule_method), build(nli_method))
     raise SystemExit(f"unknown method {method}")
+
+
+def combined_verifier(rule, nli):  # type: ignore[no-untyped-def]
+    """Lexical and NLI together (rule fixed before any protected-set run, 2026-11-15):
+    "supported" only when both say supported; "contradicted" when either says so; otherwise
+    the lexical label (partial or nee), or "partial" when only one says supported."""
+
+    def run(pairs):  # type: ignore[no-untyped-def]
+        out = []
+        for lexical, meaning in zip(rule(pairs), nli(pairs), strict=True):
+            if lexical == meaning == "supported":
+                out.append("supported")
+            elif "contradicted" in (lexical, meaning):
+                out.append("contradicted")
+            elif "supported" in (lexical, meaning):
+                out.append("partial")
+            else:
+                out.append(lexical)
+        return out
+
+    return run
 
 
 def model_size_mb(method: str) -> float | None:

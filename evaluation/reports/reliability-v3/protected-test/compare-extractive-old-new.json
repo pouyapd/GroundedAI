@@ -1,0 +1,86 @@
+{
+  "old": {
+    "file": "rag-extractive-old.json",
+    "label": "test-extractive-old-defaults"
+  },
+  "new": {
+    "file": "rag-extractive-new.json",
+    "label": "test-extractive-new-defaults"
+  },
+  "bootstrap": {
+    "samples": 5000,
+    "seed": 13,
+    "interval": "95% percentile, paired"
+  },
+  "questions_compared": 53,
+  "left_out": [],
+  "measures": {
+    "correct (should answer)": {
+      "n": 40,
+      "old_mean": 0.725,
+      "new_mean": 0.625,
+      "gained": 1,
+      "lost": 5,
+      "mean_diff": -0.1,
+      "ci95_low": -0.225,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    },
+    "false refusal (should answer)": {
+      "n": 40,
+      "old_mean": 0.075,
+      "new_mean": 0.25,
+      "gained": 7,
+      "lost": 0,
+      "mean_diff": 0.175,
+      "ci95_low": 0.075,
+      "ci95_high": 0.3,
+      "distinguishable": true
+    },
+    "refused (should refuse)": {
+      "n": 6,
+      "old_mean": 0.1667,
+      "new_mean": 0.6667,
+      "gained": 3,
+      "lost": 0,
+      "mean_diff": 0.5,
+      "ci95_low": 0.1667,
+      "ci95_high": 0.8333,
+      "distinguishable": true
+    },
+    "recall@5": {
+      "n": 44,
+      "old_mean": 0.8636,
+      "new_mean": 0.8636,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    },
+    "mrr@10": {
+      "n": 44,
+      "old_mean": 0.7917,
+      "new_mean": 0.7917,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    }
+  },
+  "changed_answers": {
+    "gained": [
+      "t14"
+    ],
+    "lost": [
+      "t03",
+      "t12",
+      "t26",
+      "t49",
+      "t50"
+    ]
+  }
+}

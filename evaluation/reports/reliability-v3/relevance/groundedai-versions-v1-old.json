@@ -1,0 +1,3469 @@
+{
+ "kind": "rag-eval",
+ "rag_eval_version": 1,
+ "dataset": {
+  "name": "groundedai-versions-v1",
+  "fingerprint": "8622531c5545d390",
+  "questions": 52
+ },
+ "summary": {
+  "questions": 52,
+  "retrieval": {
+   "recall@1": {
+    "mean": 0.6032,
+    "n": 42,
+    "ci95": [
+     0.5357,
+     0.6786
+    ]
+   },
+   "precision@1": {
+    "mean": 0.9762,
+    "n": 42,
+    "ci95": [
+     0.9286,
+     1.0
+    ]
+   },
+   "recall@3": {
+    "mean": 1.0,
+    "n": 42,
+    "ci95": [
+     1.0,
+     1.0
+    ]
+   },
+   "precision@3": {
+    "mean": 0.627,
+    "n": 42,
+    "ci95": [
+     0.5635,
+     0.6825
+    ]
+   },
+   "recall@5": {
+    "mean": 1.0,
+    "n": 42,
+    "ci95": [
+     1.0,
+     1.0
+    ]
+   },
+   "precision@5": {
+    "mean": 0.3762,
+    "n": 42,
+    "ci95": [
+     0.3381,
+     0.4095
+    ]
+   },
+   "recall@10": {
+    "mean": 1.0,
+    "n": 42,
+    "ci95": [
+     1.0,
+     1.0
+    ]
+   },
+   "precision@10": {
+    "mean": 0.1881,
+    "n": 42,
+    "ci95": [
+     0.169,
+     0.2048
+    ]
+   },
+   "mrr@10": {
+    "mean": 0.9881,
+    "n": 42,
+    "ci95": [
+     0.9643,
+     1.0
+    ]
+   },
+   "ndcg@10": {
+    "mean": 0.9912,
+    "n": 42,
+    "ci95": [
+     0.9736,
+     1.0
+    ]
+   }
+  },
+  "answers": {
+   "answerable": 24,
+   "correct": {
+    "mean": 0.8333,
+    "n": 24,
+    "ci95": [
+     0.6667,
+     0.9583
+    ]
+   },
+   "completeness": {
+    "mean": 0.875,
+    "n": 24,
+    "ci95": [
+     0.75,
+     0.9792
+    ]
+   },
+   "false_refusals": 0,
+   "invalid_output": 0,
+   "errors": 0
+  },
+  "abstention": {
+   "should_refuse": 10,
+   "refused": 6,
+   "precision": 0.8571,
+   "recall": 0.6,
+   "predicted_abstentions": 7
+  },
+  "citations": {
+   "precision": {
+    "mean": 0.9512,
+    "n": 41,
+    "ci95": [
+     0.878,
+     1.0
+    ]
+   },
+   "recall": {
+    "mean": 0.8659,
+    "n": 41,
+    "ci95": [
+     0.7805,
+     0.939
+    ]
+   },
+   "answers_with_invalid_labels": 0,
+   "answers_without_valid_label": 0
+  },
+  "claims_lexical_check": {
+   "statements": 81,
+   "found_share": 1.0,
+   "unsupported_share": 0.0,
+   "partial_share": 0.0
+  },
+  "quotes": {
+   "total": 81,
+   "verbatim_share": 1.0,
+   "page_correct_share": 1.0,
+   "pages_unknown": 0
+  },
+  "conflicts": {
+   "questions": 18,
+   "reported_by_application": 1,
+   "any_disagreement_note": 6,
+   "stated_in_answer": 0,
+   "both_values_in_answer": 16
+  },
+  "false_conflict_reports": 1,
+  "latency_ms": {
+   "total_median": 26.6,
+   "generation_median": 3.6,
+   "retrieval_median": 1.9,
+   "total_p90": 98.1
+  }
+ },
+ "by_category": {
+  "factual": {
+   "questions": 42,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.6032,
+     "n": 42,
+     "ci95": [
+      0.5357,
+      0.6786
+     ]
+    },
+    "precision@1": {
+     "mean": 0.9762,
+     "n": 42,
+     "ci95": [
+      0.9286,
+      1.0
+     ]
+    },
+    "recall@3": {
+     "mean": 1.0,
+     "n": 42,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "precision@3": {
+     "mean": 0.627,
+     "n": 42,
+     "ci95": [
+      0.5635,
+      0.6825
+     ]
+    },
+    "recall@5": {
+     "mean": 1.0,
+     "n": 42,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "precision@5": {
+     "mean": 0.3762,
+     "n": 42,
+     "ci95": [
+      0.3381,
+      0.4095
+     ]
+    },
+    "recall@10": {
+     "mean": 1.0,
+     "n": 42,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.1881,
+     "n": 42,
+     "ci95": [
+      0.169,
+      0.2048
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.9881,
+     "n": 42,
+     "ci95": [
+      0.9643,
+      1.0
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.9912,
+     "n": 42,
+     "ci95": [
+      0.9736,
+      1.0
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 24,
+    "correct": {
+     "mean": 0.8333,
+     "n": 24,
+     "ci95": [
+      0.6667,
+      0.9583
+     ]
+    },
+    "completeness": {
+     "mean": 0.875,
+     "n": 24,
+     "ci95": [
+      0.75,
+      0.9792
+     ]
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": 0.0,
+    "recall": null,
+    "predicted_abstentions": 1
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.9512,
+     "n": 41,
+     "ci95": [
+      0.878,
+      1.0
+     ]
+    },
+    "recall": {
+     "mean": 0.8659,
+     "n": 41,
+     "ci95": [
+      0.7805,
+      0.939
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 75,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 75,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "conflicts": {
+    "questions": 18,
+    "reported_by_application": 1,
+    "any_disagreement_note": 6,
+    "stated_in_answer": 0,
+    "both_values_in_answer": 16
+   },
+   "false_conflict_reports": 1,
+   "latency_ms": {
+    "total_median": 23.0,
+    "generation_median": 3.5,
+    "retrieval_median": 1.7,
+    "total_p90": 62.0
+   }
+  },
+  "unanswerable": {
+   "questions": 10,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 10,
+    "refused": 6,
+    "precision": 1.0,
+    "recall": 0.6,
+    "predicted_abstentions": 6
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 6,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 6,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 74.7,
+    "generation_median": 16.6,
+    "retrieval_median": 3.9,
+    "total_p90": 117.4
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "k01",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "2 Leaks and supply problems We SHALL attend reported leaks within 2 hours of the first report, day or night [S1]. 2 Leaks and supply problems We SHALL attend reported leaks within 4 hours of the first report, day or night [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.514,
+    "generation": 24.545,
+    "total": 47.739
+   },
+   "model_output": "2 Leaks and supply problems We SHALL attend reported leaks within 2 hours of the first report, day or night [S1]. 2 Leaks and supply problems We SHALL attend reported leaks within 4 hours of the first report, day or night [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": true,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "k02",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value",
+    "number-word"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "3 Meters and bills Meters are read every 6 months [S1]. 3 Meters and bills Meters are read every three months [S2]. Bills are issued twice a year, after each meter reading [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.17,
+    "generation": 2.929,
+    "total": 22.874
+   },
+   "model_output": "3 Meters and bills Meters are read every 6 months [S1]. 3 Meters and bills Meters are read every three months [S2]. Bills are issued twice a year, after each meter reading [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": true,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "k03",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value",
+    "terminology"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The reconnection fee is GBP 45 when a supply has been disconnected at the customer's request [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.5,
+   "timings_ms": {
+    "retrieval": 1.224,
+    "generation": 3.748,
+    "total": 19.746
+   },
+   "model_output": "The reconnection fee is GBP 45 when a supply has been disconnected at the customer's request [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "k04",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "modal"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "4 Visits to your property Field staff SHOULD show photo identification before entering a property [S1]. 4 Visits to your property Field staff SHALL show photo identification before entering a property [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.256,
+    "generation": 3.7,
+    "total": 22.355
+   },
+   "model_output": "4 Visits to your property Field staff SHOULD show photo identification before entering a property [S1]. 4 Visits to your property Field staff SHALL show photo identification before entering a property [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "k05",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement",
+    "number-word"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "5 Complaints Written complaints receive a reply within ten working days [S1]. 5 Complaints We reply to written complaints within 10 working days [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.58,
+    "generation": 2.956,
+    "total": 22.217
+   },
+   "model_output": "5 Complaints Written complaints receive a reply within ten working days [S1]. 5 Complaints We reply to written complaints within 10 working days [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "k06",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement",
+    "unit"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The emergency helpline answers calls within 2 minutes on average [S1]. The emergency helpline answers calls within 120 seconds on average [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.318,
+    "generation": 3.621,
+    "total": 22.955
+   },
+   "model_output": "The emergency helpline answers calls within 2 minutes on average [S1]. The emergency helpline answers calls within 120 seconds on average [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "k07",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value",
+    "terminology"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Customers are given at least 72 hours notice of a planned outage [S2]. Customers are given at least 48 hours notice of a service interruption for planned work on the mains [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.467,
+    "generation": 3.11,
+    "total": 23.902
+   },
+   "model_output": "Customers are given at least 72 hours notice of a planned outage [S2]. Customers are given at least 48 hours notice of a service interruption for planned work on the mains [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S2",
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": true,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "k08",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Residential customers receive a water quality report every 12 months; business customers receive one every 6 months [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.262,
+    "generation": 3.612,
+    "total": 22.447
+   },
+   "model_output": "Residential customers receive a water quality report every 12 months; business customers receive one every 6 months [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "k09",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "If an unplanned interruption lasts longer than 12 hours, we deliver bottled water to customers who ask for it [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 2.762,
+    "generation": 2.992,
+    "total": 22.18
+   },
+   "model_output": "If an unplanned interruption lasts longer than 12 hours, we deliver bottled water to customers who ask for it [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "k10",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "kestrel-2019",
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "If we miss an appointment without 24 hours notice, the customer receives a payment of GBP 20 [S1]. If we miss an appointment without 24 hours notice, the customer receives a payment of GBP 30 [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.506,
+    "generation": 4.079,
+    "total": 19.459
+   },
+   "model_output": "If we miss an appointment without 24 hours notice, the customer receives a payment of GBP 20 [S1]. If we miss an appointment without 24 hours notice, the customer receives a payment of GBP 30 [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": true,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n01",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "2 Borrowing Members can borrow up to 15 items at a time [S1]. 2 Borrowing Members can borrow up to 10 items at a time [S2]. Members need a library card or the library app to borrow items [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.118,
+    "generation": 2.615,
+    "total": 18.976
+   },
+   "model_output": "2 Borrowing Members can borrow up to 15 items at a time [S1]. 2 Borrowing Members can borrow up to 10 items at a time [S2]. Members need a library card or the library app to borrow items [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n02",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement",
+    "unit"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The loan period for books is 3 weeks [S1]. The loan period for books is 21 days [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.943,
+    "generation": 2.666,
+    "total": 19.857
+   },
+   "model_output": "The loan period for books is 3 weeks [S1]. The loan period for books is 21 days [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n03",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value",
+    "number-word"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Members MAY renew a loan three times, unless another member has reserved the item [S1]. Members MAY renew a loan twice, unless another member has reserved the item [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.14,
+    "generation": 2.703,
+    "total": 17.626
+   },
+   "model_output": "Members MAY renew a loan three times, unless another member has reserved the item [S1]. Members MAY renew a loan twice, unless another member has reserved the item [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": true,
+   "conflict_any": true,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n04",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "3 Late returns A late fee of 20p per day is charged for each overdue adult book [S1]. 3 Late returns A late fee of 25p per day is charged for each overdue adult book [S2]. Children's books have no late fees [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.608,
+    "generation": 3.273,
+    "total": 20.795
+   },
+   "model_output": "3 Late returns A late fee of 20p per day is charged for each overdue adult book [S1]. 3 Late returns A late fee of 25p per day is charged for each overdue adult book [S2]. Children's books have no late fees [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n05",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement",
+    "unit"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Reserved items are held for one week at the collection desk [S1]. Reserved items are held for 7 days at the collection desk [S2]. Members MAY renew a loan three times, unless another member has reserved the item [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.525,
+    "generation": 2.673,
+    "total": 24.849
+   },
+   "model_output": "Reserved items are held for one week at the collection desk [S1]. Reserved items are held for 7 days at the collection desk [S2]. Members MAY renew a loan three times, unless another member has reserved the item [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n06",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "modal"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "4 Damaged and lost items Borrowers MUST return damaged items to the desk and not to the drop box [S1]. 4 Damaged and lost items Borrowers SHOULD return damaged items to the desk and not to the drop box [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.495,
+    "generation": 2.607,
+    "total": 18.782
+   },
+   "model_output": "4 Damaged and lost items Borrowers MUST return damaged items to the desk and not to the drop box [S1]. 4 Damaged and lost items Borrowers SHOULD return damaged items to the desk and not to the drop box [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n07",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Study rooms can be booked for up to 3 hours a day [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.47,
+    "generation": 2.849,
+    "total": 15.029
+   },
+   "model_output": "Study rooms can be booked for up to 3 hours a day [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n08",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "range"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "5 Opening hours The library opens from 09:00 to 19:00 on weekdays and from 10:00 to 16:00 on Saturdays [S1]. 5 Opening hours The library opens from 09:00 to 20:00 on weekdays and from 10:00 to 16:00 on Saturdays [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.601,
+    "generation": 2.638,
+    "total": 15.404
+   },
+   "model_output": "5 Opening hours The library opens from 09:00 to 19:00 on weekdays and from 10:00 to 16:00 on Saturdays [S1]. 5 Opening hours The library opens from 09:00 to 20:00 on weekdays and from 10:00 to 16:00 on Saturdays [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n09",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Children's books have no late fees [S1]. 3 Late returns A late fee of 25p per day is charged for each overdue adult book [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.333,
+    "generation": 2.885,
+    "total": 19.847
+   },
+   "model_output": "Children's books have no late fees [S1]. 3 Late returns A late fee of 25p per day is charged for each overdue adult book [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "n10",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "other-organisation"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "orchard",
+    "northgate-v2",
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Members need a library card or the library app to borrow items [S2]. Members need a library card to borrow items [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 2.452,
+    "generation": 6.662,
+    "total": 50.074
+   },
+   "model_output": "Members need a library card or the library app to borrow items [S2]. Members need a library card to borrow items [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": true,
+   "conflict_any": true,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "a01",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "ashby-2021",
+    "ashby-2023"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "2 Prices A residents' permit costs GBP 110 per year [S1]. 2 Prices A residents' permit costs GBP 85 per year [S2]. 1 Who can apply Residents of a controlled parking zone can apply for a residents' permit for one vehicle registered at their address [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 3.995,
+    "generation": 6.767,
+    "total": 54.066
+   },
+   "model_output": "2 Prices A residents' permit costs GBP 110 per year [S1]. 2 Prices A residents' permit costs GBP 85 per year [S2]. 1 Who can apply Residents of a controlled parking zone can apply for a residents' permit for one vehicle registered at their address [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": true,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "a02",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement",
+    "unit"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ashby-2021",
+    "ashby-2023"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 1.0,
+    "recall@5": 1.0,
+    "precision@5": 0.6,
+    "recall@10": 1.0,
+    "precision@10": 0.3,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "3 Validity A residents' permit is valid for one year from the date of issue [S1]. 3 Validity A residents' permit is valid for 12 months from the date of issue [S2]. A visitor permit is valid for one day [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 3.332,
+    "generation": 6.839,
+    "total": 51.056
+   },
+   "model_output": "3 Validity A residents' permit is valid for one year from the date of issue [S1]. 3 Validity A residents' permit is valid for 12 months from the date of issue [S2]. A visitor permit is valid for one day [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "a03",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "ashby-2021",
+    "ashby-2023"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 1.0,
+    "recall@5": 1.0,
+    "precision@5": 0.6,
+    "recall@10": 1.0,
+    "precision@10": 0.3,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "4 Visitors Each household can buy up to 30 visitor permits per year [S1]. 4 Visitors Each household can buy up to 50 visitor permits per year [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 5.201,
+    "generation": 3.659,
+    "total": 34.138
+   },
+   "model_output": "4 Visitors Each household can buy up to 30 visitor permits per year [S1]. 4 Visitors Each household can buy up to 50 visitor permits per year [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "a04",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement",
+    "modal"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ashby-2021",
+    "ashby-2023"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Applicants MUST provide proof of address and the vehicle's registration document [S1]. Applicants MUST provide proof of address [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.66,
+    "generation": 2.635,
+    "total": 18.943
+   },
+   "model_output": "Applicants MUST provide proof of address and the vehicle's registration document [S1]. Applicants MUST provide proof of address [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "a05",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ashby-2021",
+    "ashby-2023"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "5 Enforcement Vehicles parked without a valid permit can receive a penalty charge notice of GBP 70 [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.255,
+    "generation": 2.518,
+    "total": 15.092
+   },
+   "model_output": "5 Enforcement Vehicles parked without a valid permit can receive a penalty charge notice of GBP 70 [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "a06",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ashby-2021",
+    "ashby-2023"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Fully electric vehicles receive a 50% discount on the permit price [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.564,
+    "generation": 3.343,
+    "total": 19.845
+   },
+   "model_output": "Fully electric vehicles receive a 50% discount on the permit price [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "a07",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ashby-2021",
+    "ashby-2023"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "A second permit for the same household costs GBP 120 per year [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.909,
+    "generation": 5.256,
+    "total": 31.938
+   },
+   "model_output": "A second permit for the same household costs GBP 120 per year [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "a08",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ashby-2021",
+    "ashby-2023"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 1.0,
+    "recall@5": 1.0,
+    "precision@5": 0.6,
+    "recall@10": 1.0,
+    "precision@10": 0.3,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "A visitor permit is valid for one day [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 2.551,
+    "generation": 3.345,
+    "total": 23.014
+   },
+   "model_output": "A visitor permit is valid for one day [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "c01",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "corvane-a",
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 0.3333333333333333,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 1.463,
+    "generation": 2.44,
+    "total": 11.417
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "c02",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value",
+    "acronym",
+    "word-form",
+    "unit"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "corvane-a",
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "At AL2, users SHALL be reauthenticated after 30 minutes of inactivity [S1]. At AL2, reauthentication SHALL occur after 1 hour of inactivity [S2]. 3 Sessions At AL1, users SHALL be reauthenticated after 2 hours of inactivity [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.721,
+    "generation": 6.013,
+    "total": 53.835
+   },
+   "model_output": "At AL2, users SHALL be reauthenticated after 30 minutes of inactivity [S1]. At AL2, reauthentication SHALL occur after 1 hour of inactivity [S2]. 3 Sessions At AL1, users SHALL be reauthenticated after 2 hours of inactivity [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "c03",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value",
+    "acronym",
+    "word-form"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "corvane-a",
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "At AL2, sessions SHALL be reauthenticated at least once every 8 hours, regardless of activity [S1]. At AL2, the overall session timeout SHALL be no more than 12 hours, after which reauthentication is required [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 2.023,
+    "generation": 3.58,
+    "total": 30.586
+   },
+   "model_output": "At AL2, sessions SHALL be reauthenticated at least once every 8 hours, regardless of activity [S1]. At AL2, the overall session timeout SHALL be no more than 12 hours, after which reauthentication is required [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "c04",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "modal"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "corvane-a",
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 1.0,
+    "recall@5": 1.0,
+    "precision@5": 0.6,
+    "recall@10": 1.0,
+    "precision@10": 0.3,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "4 Administrators Administrators SHALL NOT share accounts [S1]. 4 Administrators Administrators SHOULD NOT share accounts [S3].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.937,
+    "generation": 3.227,
+    "total": 27.208
+   },
+   "model_output": "4 Administrators Administrators SHALL NOT share accounts [S1]. 4 Administrators Administrators SHOULD NOT share accounts [S3].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "c05",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "corvane-a",
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Accounts SHALL be locked after 5 failed sign-in attempts [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.858,
+    "generation": 3.502,
+    "total": 26.02
+   },
+   "model_output": "Accounts SHALL be locked after 5 failed sign-in attempts [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "c06",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "corvane-a",
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 1.0,
+    "recall@5": 1.0,
+    "precision@5": 0.6,
+    "recall@10": 1.0,
+    "precision@10": 0.3,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Administrator access SHALL be reviewed every 6 months [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.894,
+    "generation": 3.595,
+    "total": 24.007
+   },
+   "model_output": "Administrator access SHALL be reviewed every 6 months [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "c07",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value",
+    "acronym",
+    "context"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "corvane-a",
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "3 Sessions At AL1, the inactivity timeout SHALL be no more than 4 hours [S1]. 3 Sessions At AL1, users SHALL be reauthenticated after 2 hours of inactivity [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 1.827,
+    "generation": 4.856,
+    "total": 62.887
+   },
+   "model_output": "3 Sessions At AL1, the inactivity timeout SHALL be no more than 4 hours [S1]. 3 Sessions At AL1, users SHALL be reauthenticated after 2 hours of inactivity [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "c08",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "corvane-a",
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "5 Exceptions Exceptions to this standard need written approval from the security officer and expire after 12 months [S1]. 5 Exceptions Exceptions to this standard need written approval from the security officer [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 13.448,
+    "generation": 8.268,
+    "total": 162.42
+   },
+   "model_output": "5 Exceptions Exceptions to this standard need written approval from the security officer and expire after 12 months [S1]. 5 Exceptions Exceptions to this standard need written approval from the security officer [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r01",
+   "category": "unanswerable",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "northgate-v3"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 3.252,
+    "generation": 45.44,
+    "total": 65.506
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r02",
+   "category": "unanswerable",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "kestrel-2024"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 4.396,
+    "generation": 81.642,
+    "total": 116.613
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r03",
+   "category": "unanswerable",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "kestrel-2024"
+   ],
+   "status": "answered",
+   "answer": "1 About these standards This document sets out the service that Kestrel Valley Water gives to its customers in the Kestrel Valley supply area [S1]. Contact: Kestrel Valley Water, Customer Relations, Mill Road, Kestrelford [S2]. Kestrel Valley Water now supplies drinking water to about 226,000 households and 9,400 businesses [S1].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 3.881,
+    "generation": 13.97,
+    "total": 104.978
+   },
+   "model_output": "1 About these standards This document sets out the service that Kestrel Valley Water gives to its customers in the Kestrel Valley supply area [S1]. Contact: Kestrel Valley Water, Customer Relations, Mill Road, Kestrelford [S2]. Kestrel Valley Water now supplies drinking water to about 226,000 households and 9,400 businesses [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 3,
+    "found": 3,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 3,
+    "verbatim": 3,
+    "pages_known": 3,
+    "pages_correct": 3
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r04",
+   "category": "unanswerable",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "northgate-v3"
+   ],
+   "status": "answered",
+   "answer": "Members need a library card or the library app to borrow items [S1].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 3.238,
+    "generation": 5.928,
+    "total": 111.039
+   },
+   "model_output": "Members need a library card or the library app to borrow items [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r05",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "paraphrase"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "5 Opening hours The library opens from 09:00 to 20:00 on weekdays and from 10:00 to 16:00 on Saturdays [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 3.949,
+    "generation": 5.49,
+    "total": 52.585
+   },
+   "model_output": "5 Opening hours The library opens from 09:00 to 20:00 on weekdays and from 10:00 to 16:00 on Saturdays [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r06",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "paraphrase"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "kestrel-2024"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "1 About these standards This document sets out the service that Kestrel Valley Water gives to its customers in the Kestrel Valley supply area [S1]. Contact: Kestrel Valley Water, Customer Relations, Mill Road, Kestrelford [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.102,
+    "generation": 24.554,
+    "total": 89.608
+   },
+   "model_output": "1 About these standards This document sets out the service that Kestrel Valley Water gives to its customers in the Kestrel Valley supply area [S1]. Contact: Kestrel Valley Water, Customer Relations, Mill Road, Kestrelford [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r07",
+   "category": "factual",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "multi-part"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "northgate-v3"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Members need a library card or the library app to borrow items [S1]. 2 Borrowing Members can borrow up to 15 items at a time [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.5,
+   "timings_ms": {
+    "retrieval": 4.48,
+    "generation": 8.8,
+    "total": 66.489
+   },
+   "model_output": "Members need a library card or the library app to borrow items [S1]. 2 Borrowing Members can borrow up to 15 items at a time [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r08",
+   "category": "unanswerable",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "out-of-scope"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "northgate-v3"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 2.797,
+    "generation": 3.011,
+    "total": 29.484
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r09",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ashby-2023"
+   ],
+   "status": "answered",
+   "answer": "2 Prices A residents' permit costs GBP 110 per year [S1].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 1.75,
+    "generation": 27.268,
+    "total": 50.702
+   },
+   "model_output": "2 Prices A residents' permit costs GBP 110 per year [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r10",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ashby-2023"
+   ],
+   "status": "answered",
+   "answer": "4 Visitors Each household can buy up to 30 visitor permits per year [S1].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 5.423,
+    "generation": 23.223,
+    "total": 83.89
+   },
+   "model_output": "4 Visitors Each household can buy up to 30 visitor permits per year [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r11",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "corvane-b"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 8.358,
+    "generation": 18.903,
+    "total": 124.062
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r12",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "corvane-b"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 3.957,
+    "generation": 14.381,
+    "total": 37.321
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r13",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "paraphrase"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "5 Exceptions Exceptions to this standard need written approval from the security officer and expire after 12 months [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 2.61,
+    "generation": 2.558,
+    "total": 22.354
+   },
+   "model_output": "5 Exceptions Exceptions to this standard need written approval from the security officer and expire after 12 months [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r14",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "paraphrase"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "corvane-b"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Accounts SHALL be locked after 5 failed sign-in attempts [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.207,
+    "generation": 4.954,
+    "total": 36.6
+   },
+   "model_output": "Accounts SHALL be locked after 5 failed sign-in attempts [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r15",
+   "category": "factual",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "multi-part"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ashby-2023"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "3 Validity A residents' permit is valid for one year from the date of issue [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.5,
+   "timings_ms": {
+    "retrieval": 3.334,
+    "generation": 60.381,
+    "total": 99.087
+   },
+   "model_output": "3 Validity A residents' permit is valid for one year from the date of issue [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  },
+  {
+   "question_id": "r16",
+   "category": "unanswerable",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "out-of-scope"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "corvane-b"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 11.776,
+    "generation": 12.954,
+    "total": 44.493
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not appear to answer this question.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false
+  }
+ ],
+ "label": "groundedai-versions-v1-old",
+ "generated_at": "2026-11-13T20:01:43+0100",
+ "generator": "extractive",
+ "provider": {
+  "name": "extractive-demo",
+  "model": "extractive-demo-v2-prefix",
+  "is_llm": false
+ },
+ "settings_overrides": {
+  "extractive_relevance": "v1",
+  "claim_detail_check": "off",
+  "conflict_check": "disagreement-v1"
+ },
+ "settings": {
+  "chunk_size": "800",
+  "chunk_overlap": "120",
+  "embedding_provider": "hashing",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "retrieval_mode": "hybrid",
+  "fusion": "rrf",
+  "hybrid_alpha": "0.5",
+  "rrf_k": "60",
+  "top_k": "5",
+  "candidate_k": "20",
+  "reranker": "none",
+  "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+  "prompt_version": "answer-v2",
+  "claim_check": "claims-v1",
+  "conflict_check": "disagreement-v1",
+  "max_context_chars": "6000",
+  "generation_provider": "extractive-demo",
+  "ollama_model": "qwen2.5:1.5b",
+  "hf_generation_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "temperature": "0.0",
+  "max_new_tokens": "384"
+ },
+ "cost": {
+  "index_seconds": 0.29,
+  "model_load_seconds": 0.0,
+  "peak_rss_mb": 125.7,
+  "chunks_indexed": 18
+ },
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "ac",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "numpy": "2.5.4",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "7080889f4128",
+   "uncommitted_changes": true
+  }
+ },
+ "code": {
+  "commit": "7080889f4128",
+  "uncommitted_changes": true
+ }
+}

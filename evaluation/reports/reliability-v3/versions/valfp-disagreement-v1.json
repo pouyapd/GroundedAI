@@ -1,0 +1,270 @@
+{
+ "kind": "disagreement-eval",
+ "dataset": {
+  "name": "groundedai-nist-val-v1",
+  "fingerprint": "377d90156fdcc888"
+ },
+ "split": "all",
+ "settings_overrides": {
+  "conflict_check": "disagreement-v1"
+ },
+ "conflict_check": "disagreement-v1",
+ "generated_at": "2026-11-13T19:53:07+0100",
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "battery",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "numpy": "2.5.4",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "7080889f4128",
+   "uncommitted_changes": true
+  }
+ },
+ "code": {
+  "commit": "7080889f4128",
+  "uncommitted_changes": true
+ },
+ "summary": {
+  "questions": 18,
+  "positives": 0,
+  "negatives": 18,
+  "true_positives": 0,
+  "false_negatives": 0,
+  "wrong_reports_on_positives": 0,
+  "false_positives": 0,
+  "precision": null,
+  "recall": null,
+  "false_positive_rate": 0.0
+ },
+ "rows": [
+  {
+   "id": "v01",
+   "split": "test",
+   "tags": [
+    "date"
+   ],
+   "question": "When was NIST AI 600-1 published?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v02",
+   "split": "test",
+   "tags": [
+    "entity"
+   ],
+   "question": "Pursuant to which executive order was the Generative AI Profile developed?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v03",
+   "split": "test",
+   "tags": [
+    "date"
+   ],
+   "question": "When was the AI RMF released?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v04",
+   "split": "test",
+   "tags": [
+    "numeric",
+    "terminology"
+   ],
+   "question": "How many parameters does a dual-use foundation model contain according to EO 14110?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v05",
+   "split": "test",
+   "tags": [
+    "terminology"
+   ],
+   "question": "What is confabulation?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v06",
+   "split": "test",
+   "tags": [
+    "entity"
+   ],
+   "question": "Which institute did NIST establish to continue the efforts of the executive order?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "v07",
+   "split": "test",
+   "tags": [
+    "entity"
+   ],
+   "question": "What were the four primary considerations of the GAI Public Working Group?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v08",
+   "split": "test",
+   "tags": [
+    "numeric"
+   ],
+   "question": "How much carbon can training a single transformer LLM emit, according to current estimates?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v09",
+   "split": "test",
+   "tags": [
+    "missing"
+   ],
+   "question": "What is the annual budget of the U.S. AI Safety Institute?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "v10",
+   "split": "test",
+   "tags": [
+    "missing"
+   ],
+   "question": "Which generative AI model scored best in NIST's tests?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v11",
+   "split": "test",
+   "tags": [
+    "entity"
+   ],
+   "question": "What are the four principles of explainable AI?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v12",
+   "split": "test",
+   "tags": [
+    "date"
+   ],
+   "question": "When was NISTIR 8312 published?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v13",
+   "split": "test",
+   "tags": [
+    "numeric"
+   ],
+   "question": "How many pages does NISTIR 8312 have?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v14",
+   "split": "test",
+   "tags": [
+    "terminology"
+   ],
+   "question": "What does the Explanation principle require?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v15",
+   "split": "test",
+   "tags": [
+    "missing"
+   ],
+   "question": "Which explainability library does NIST recommend for deep networks?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "v16",
+   "split": "test",
+   "tags": [
+    "multi-passage"
+   ],
+   "question": "What do the Meaningful and Knowledge Limits principles say?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v17",
+   "split": "test",
+   "tags": [
+    "paraphrase:v11"
+   ],
+   "question": "Name the properties NIST proposes for AI systems that must be explainable.",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "v18",
+   "split": "test",
+   "tags": [
+    "paraphrase:v02"
+   ],
+   "question": "Which presidential order is this profile based on?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  }
+ ]
+}

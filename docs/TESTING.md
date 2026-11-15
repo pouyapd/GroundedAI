@@ -39,6 +39,30 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## After merging reliability round 3 (2026-11-15; `main` at `0eb3eb5`)
+
+| Check | Where | Result |
+|---|---|---|
+| CI on `main` (run 43761266292), 8 jobs | GitHub Actions | all pass: backend on Python 3.12 and 3.13 (555 passed, 8 skipped each: the PostgreSQL tests, run in their own job), PostgreSQL + pgvector (8 passed), front end (lint, type check, 102 tests, both builds), online demo in a browser (16 of 16), offline benchmark, dependency audit (no known vulnerabilities), Docker image and Compose file |
+| Pages run 43761256978 | GitHub Actions | built, checked, deployed, verified |
+| `pytest -m postgres` with `scripts/dev_postgres.py` | local | 8 passed |
+| `scripts/e2e_demo.py` on the local build | local | 16 of 16 |
+| `scripts/e2e_demo.py --url https://pouyapd.github.io/GroundedAI/` | live site | 16 of 16; with the in-page model (`--llm`, Chrome, WebGPU): 19 of 19 |
+| round-3 cases on the live site (two editions, a refusal naming the missing words, the checks table) | live site | 9 of 9 |
+| `scripts/bench_meaning_check.py` | local build (mains) and live site (battery) | [RELIABILITY_V3.md](RELIABILITY_V3.md#c-meaning-check-nli-in-the-browser) |
+| `groundedai reindex` on the three NIST test PDFs indexed with clean-up v1 | local | identical to a fresh v2 ingestion (927 chunks) |
+
+New tests in this round:
+- `test_reliability_v3.py` (19);
+- `test_versions_pipeline.py` (3);
+- `test_reindex.py` (16);
+- a PostgreSQL re-index test and a CLI re-index test;
+- `checks.test.tsx` (4), `meaning.test.tsx` (10) and `reindex.test.tsx` (4).
+
+Two existing expectations were extended, not relaxed: the recorded pipeline settings now include
+`claim_detail_check`, and the browser checks expect the renamed lexical-match labels. No test was
+removed or skipped.
+
 ## After merging the research round (2026-11-13; `main` at `b3583ab`; mains power)
 
 | Check | Where | Result |

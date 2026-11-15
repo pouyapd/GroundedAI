@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-11-14T23:50:01",
+  "target": "local build (frontend/dist)",
+  "url": null,
+  "machine": {
+    "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+    "system": "Windows-11"
+  },
+  "backend": "onnxruntime-web WebAssembly, 1 thread (no WebGPU)",
+  "pairs": {
+    "rule-validation": 120,
+    "versions-dev": 24,
+    "versions-validation": 16
+  },
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36",
+  "memory_before_mb": {
+    "processes": 4,
+    "all_rss_mb": 556.6,
+    "all_private_mb": 438.5,
+    "renderer_rss_mb": 408.4,
+    "renderer_private_mb": 383.2
+  },
+  "first_load": {
+    "wall_ms": 4912,
+    "worker_load_ms": 4750,
+    "worker_bytes": 95904560
+  },
+  "memory_loaded_mb": {
+    "processes": 4,
+    "all_rss_mb": 1152.9,
+    "all_private_mb": 1075.3,
+    "renderer_rss_mb": 1002.9,
+    "renderer_private_mb": 1019.3
+  },
+  "received": {
+    "http://127.0.0.1:49672/GroundedAI/assets/nliWorker-IeCg36lh.js": 0,
+    "https://huggingface.co/Xenova/nli-deberta-v3-xsmall/resolve/2a4f614a701367a02d51389039afc998faeda637/config.json": 296,
+    "https://huggingface.co/Xenova/nli-deberta-v3-xsmall/resolve/2a4f614a701367a02d51389039afc998faeda637/tokenizer.json": 302,
+    "https://huggingface.co/Xenova/nli-deberta-v3-xsmall/resolve/2a4f614a701367a02d51389039afc998faeda637/onnx/model_quantized.onnx": 1054,
+    "https://huggingface.co/Xenova/nli-deberta-v3-xsmall/resolve/2a4f614a701367a02d51389039afc998faeda637/tokenizer_config.json": 316,
+    "https://huggingface.co/api/resolve-cache/models/Xenova/nli-deberta-v3-xsmall/2a4f614a701367a02d51389039afc998faeda637/tokenizer_config.json": 1253,
+    "https://huggingface.co/api/resolve-cache/models/Xenova/nli-deberta-v3-xsmall/2a4f614a701367a02d51389039afc998faeda637/config.json": 1331,
+    "https://huggingface.co/api/resolve-cache/models/Xenova/nli-deberta-v3-xsmall/2a4f614a701367a02d51389039afc998faeda637/tokenizer.json": 2062449,
+    "https://us.aws.cdn.hf.co/xet-bridge-us/64d22712c2bd23542200fff4/e97e4f1ecc8a626739ffea7b0e72f62fb81027c093bd579580cb341bc6c1d236": 87295303,
+    "http://127.0.0.1:49672/GroundedAI/assets/ort-wasm-simd-threaded-qh98TCA_.wasm": 14848852
+  },
+  "received_total_mb": 99.4,
+  "memory_after_classify_mb": {
+    "processes": 4,
+    "all_rss_mb": 974.2,
+    "all_private_mb": 892.0,
+    "renderer_rss_mb": 828.8,
+    "renderer_private_mb": 836.3
+  },
+  "per_pair_ms": {
+    "median": 186.3,
+    "mean": 187.3,
+    "max_batch_mean": 305.3,
+    "batches": 14,
+    "batch_size": 12
+  },
+  "end_to_end": {
+    "wall_ms": 1020,
+    "summary_row": "Meaning (entailment) 1 of 1 statements entailed by a passage DeBERTa-v3-xsmall NLI (int8 ONNX), WASM in this tab, 6 comparisons in 673 ms. An NLI model's judgement, not proof.",
+    "statement_lines": [
+      "Meaning check (NLI): entailed by S1 \u2014 \u201cA single adult ticket from Kessport to Mirrow costs 14 euros.\u201d"
+    ]
+  },
+  "cached_load": {
+    "wall_ms": 1698,
+    "worker_load_ms": 1600,
+    "worker_bytes": 95904560
+  },
+  "cached_received": {
+    "http://127.0.0.1:49672/GroundedAI/assets/nliWorker-IeCg36lh.js": 0,
+    "http://127.0.0.1:49672/GroundedAI/assets/ort-wasm-simd-threaded-qh98TCA_.wasm": 0
+  },
+  "python_onnxruntime": {
+    "per_pair_ms": 78.0,
+    "threads": 1
+  },
+  "agreement_with_python": {
+    "pairs": 160,
+    "same_top_label": 159,
+    "max_probability_difference": 0.206785
+  },
+  "agreement_by_set": {
+    "rule-validation": {
+      "pairs": 120,
+      "same_top_label": 120,
+      "max_probability_difference": 0.206785
+    },
+    "versions-dev": {
+      "pairs": 24,
+      "same_top_label": 23,
+      "max_probability_difference": 0.100593
+    },
+    "versions-validation": {
+      "pairs": 16,
+      "same_top_label": 16,
+      "max_probability_difference": 0.021368
+    }
+  }
+}

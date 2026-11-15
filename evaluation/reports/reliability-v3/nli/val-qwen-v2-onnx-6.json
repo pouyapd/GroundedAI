@@ -1,0 +1,609 @@
+{
+ "report": "val-qwen15-v2",
+ "dataset": {
+  "name": "groundedai-nist-val-v1",
+  "fingerprint": "377d90156fdcc888",
+  "questions": 18
+ },
+ "settings_overrides": {
+  "text_cleanup": "v2"
+ },
+ "nli_model": "cross-encoder/nli-deberta-v3-xsmall",
+ "premise": "window",
+ "max_windows": 6,
+ "onnx": "experiments\\deploy\\runs\\xenova-nli-xsmall",
+ "seconds": 11.8,
+ "skipped": {
+  "abstained_or_error": 2,
+  "not_scored": 0,
+  "passages_differ": 0
+ },
+ "lexical_all_found": {
+  "answers": 16,
+  "wrong_answers": 1,
+  "wrong_answers_flagged": 1,
+  "wrong_answers_passed": 0,
+  "correct_answers_flagged": 6,
+  "catch_rate": 1.0,
+  "false_alarm_rate": 0.4
+ },
+ "nli_all_entailed": {
+  "answers": 16,
+  "wrong_answers": 1,
+  "wrong_answers_flagged": 1,
+  "wrong_answers_passed": 0,
+  "correct_answers_flagged": 5,
+  "catch_rate": 1.0,
+  "false_alarm_rate": 0.3333
+ },
+ "lexical_and_nli": {
+  "answers": 16,
+  "wrong_answers": 1,
+  "wrong_answers_flagged": 1,
+  "wrong_answers_passed": 0,
+  "correct_answers_flagged": 8,
+  "catch_rate": 1.0,
+  "false_alarm_rate": 0.5333
+ },
+ "pairs_per_answer": 12.8,
+ "rows": [
+  {
+   "question_id": "v01",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": false,
+   "nli_pass": false,
+   "combined_pass": false,
+   "pairs": 18,
+   "detail": [
+    {
+     "statement": "NIST AI 600-1 is available free of charge from the following link: https://doi.org/10.6028/NIST.AI.600-1.",
+     "lexical": "supported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "NIST AI 600-1 is also available at the same link, indicating that it was published there.",
+     "lexical": "unsupported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "neutral"
+     }
+    },
+    {
+     "statement": "Therefore, NIST AI 600-1 was published in July 2024.",
+     "lexical": "unsupported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "contradiction",
+      "S3": "neutral",
+      "S4": "neutral",
+      "S5": "contradiction"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v02",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "combined_pass": true,
+   "pairs": 12,
+   "detail": [
+    {
+     "statement": "This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting through the Director of the National Institute of Standards and Technology (NIST), to develop a companion resource to the AI RMF, NIST AI 100\u20131, for generative AI.",
+     "lexical": "wrong_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral"
+     }
+    },
+    {
+     "statement": "This profile was developed per Section 4.1(a)(i)(A) of EO 14110, which directs the Secretary of Commerce, acting through the Director of the National Institute of Standards and Technology (NIST), to develop a companion resource to the AI RMF, NIST AI 100\u20131, for generative AI.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S3": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v03",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "combined_pass": true,
+   "pairs": 6,
+   "detail": [
+    {
+     "statement": "This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden\u2019s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.2 The AI RMF was released in January 2023, and is intended for voluntary use and to improve the ability of organizations to incorporate trustworthiness considerations into the design, development, use, and evaluation of AI products, services, and systems.",
+     "lexical": "supported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral",
+      "S3": "neutral",
+      "S4": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v04",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "combined_pass": true,
+   "pairs": 6,
+   "detail": [
+    {
+     "statement": "A dual-use foundation model contains at least tens of billions of parameters.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v05",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "combined_pass": true,
+   "pairs": 18,
+   "detail": [
+    {
+     "statement": "Confabulation refers to a phenomenon in which GAI systems generate and confidently present erroneous or false content in response to prompts.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment"
+     }
+    },
+    {
+     "statement": "Confabulations also include generated outputs that diverge from the prompts or other input or that contradict previously generated statements in the same context.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment"
+     }
+    },
+    {
+     "statement": "These phenomena are colloquially also referred to as \"hallucinations\" or \"fabrications.\" Confabulations can occur across GAI outputs and contexts.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v06",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "combined_pass": true,
+   "pairs": 12,
+   "detail": [
+    {
+     "statement": "NIST established the U.S.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment"
+     }
+    },
+    {
+     "statement": "AI Safety Institute and the companion AI Safety Institute Consortium to continue the efforts set in motion by the E.O. to build the science necessary for safe, secure, and trustworthy development and use of AI.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S3": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v07",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 2,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "combined_pass": false,
+   "pairs": 12,
+   "detail": [
+    {
+     "statement": "The four primary considerations of the GAI Public Working Group (GAI PWG) were Governance, Content Provenance, Pre-deployment Testing, and Incident Disclosure.",
+     "lexical": "added_source",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral"
+     }
+    },
+    {
+     "statement": "These considerations were derived as overarching themes from the GAI PWG consultation process and are relevant for voluntary use by any organization designing, developing, and using GAI, as well as informing the Actions to Manage GAI risks.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v08",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "combined_pass": true,
+   "pairs": 6,
+   "detail": [
+    {
+     "statement": "Training a single transformer LLM can emit as much carbon as 300 roundtrip flights between San Francisco and New York.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v11",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 5,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": false,
+   "nli_pass": false,
+   "combined_pass": false,
+   "pairs": 30,
+   "detail": [
+    {
+     "statement": "The four principles of explainable AI, as introduced in the sources, are:",
+     "lexical": "added_source",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral"
+     }
+    },
+    {
+     "statement": "1. **Explanation**: The system produces an explanation.",
+     "lexical": "unsupported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment"
+     }
+    },
+    {
+     "statement": "2. **Meaningful**: The explanation is meaningful to humans.",
+     "lexical": "unsupported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral"
+     }
+    },
+    {
+     "statement": "3. **Explanation Accuracy**: The explanation reflects the system's processes accurately.",
+     "lexical": "unsupported",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral"
+     }
+    },
+    {
+     "statement": "4. **Knowledge Limits**: The system expresses its knowledge limits.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S2": "entailment"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v12",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 0,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": false,
+   "nli_pass": true,
+   "combined_pass": false,
+   "pairs": 6,
+   "detail": [
+    {
+     "statement": "NISTIR 8312 was published on September 2021.",
+     "lexical": "unsupported",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment",
+      "S4": "entailment"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v13",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 0,
+   "nli_entailed": 1,
+   "nli_contradicted": 0,
+   "lexical_pass": false,
+   "nli_pass": true,
+   "combined_pass": false,
+   "pairs": 6,
+   "detail": [
+    {
+     "statement": "NISTIR 8312 has 43 pages.",
+     "lexical": "partial",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "entailment"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v14",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 3,
+   "lexical_found": 3,
+   "nli_entailed": 3,
+   "nli_contradicted": 0,
+   "lexical_pass": true,
+   "nli_pass": true,
+   "combined_pass": true,
+   "pairs": 18,
+   "detail": [
+    {
+     "statement": "The Explanation principle requires that a system provides evidence, support, or reasoning related to an outcome or a process of an AI system.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S3": "entailment",
+      "S4": "entailment"
+     }
+    },
+    {
+     "statement": "This principle is independent of whether the explanation is correct, informative, or intelligible.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S2": "contradiction",
+      "S3": "entailment"
+     }
+    },
+    {
+     "statement": "It does not impose any metric of quality on those explanations.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S2": "contradiction",
+      "S3": "entailment"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v15",
+   "expected_behavior": "abstain",
+   "correct": false,
+   "statements": 1,
+   "lexical_found": 0,
+   "nli_entailed": 0,
+   "nli_contradicted": 0,
+   "lexical_pass": false,
+   "nli_pass": false,
+   "combined_pass": false,
+   "pairs": 6,
+   "detail": [
+    {
+     "statement": "NIST recommends Grad-CAM for deep networks.",
+     "lexical": "partial",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v16",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 2,
+   "lexical_found": 1,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": false,
+   "nli_pass": true,
+   "combined_pass": false,
+   "pairs": 12,
+   "detail": [
+    {
+     "statement": "The Meaningful principle states that the explanation should be meaningful to humans, ensuring that the system's output is understandable and relevant to the human audience.",
+     "lexical": "partial",
+     "nli": "entailment",
+     "per_source": {
+      "S1": "entailment",
+      "S3": "neutral"
+     }
+    },
+    {
+     "statement": "The Knowledge Limits principle asserts that systems identify cases where they were not designed or approved to operate, or where their answers are not reliable, safeguarding against providing inappropriate judgments.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S3": "entailment"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v17",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 5,
+   "lexical_found": 2,
+   "nli_entailed": 2,
+   "nli_contradicted": 0,
+   "lexical_pass": false,
+   "nli_pass": false,
+   "combined_pass": false,
+   "pairs": 30,
+   "detail": [
+    {
+     "statement": "NIST proposes four principles for AI systems that must be explainable:",
+     "lexical": "added_source",
+     "nli": "neutral",
+     "per_source": {
+      "S1": "neutral",
+      "S2": "neutral",
+      "S3": "neutral"
+     }
+    },
+    {
+     "statement": "1. **Explanation**: A system delivers or contains accompanying evidence or reason(s) for outputs and/or processes.",
+     "lexical": "unsupported",
+     "nli": "entailment",
+     "per_source": {
+      "S2": "entailment",
+      "S3": "contradiction"
+     }
+    },
+    {
+     "statement": "2. **Meaningful**: A system provides explanations that are understandable to the intended consumer(s).",
+     "lexical": "unsupported",
+     "nli": "neutral",
+     "per_source": {
+      "S2": "neutral",
+      "S3": "neutral"
+     }
+    },
+    {
+     "statement": "3. **Explanation Accuracy**: An explanation correctly reflects the reason for generating the output and/or accurately reflects the system\u2019s process.",
+     "lexical": "unsupported",
+     "nli": "neutral",
+     "per_source": {
+      "S2": "neutral",
+      "S3": "neutral"
+     }
+    },
+    {
+     "statement": "4. **Knowledge Limits**: A system only operates under conditions for which it was designed and when it reaches sufficient confidence in its output.",
+     "lexical": "added_source",
+     "nli": "entailment",
+     "per_source": {
+      "S2": "entailment",
+      "S3": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "question_id": "v18",
+   "expected_behavior": "answer",
+   "correct": true,
+   "statements": 1,
+   "lexical_found": 1,
+   "nli_entailed": 0,
+   "nli_contradicted": 1,
+   "lexical_pass": true,
+   "nli_pass": false,
+   "combined_pass": false,
+   "pairs": 6,
+   "detail": [
+    {
+     "statement": "The profile is based on President Biden's Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence.",
+     "lexical": "supported",
+     "nli": "contradiction",
+     "per_source": {
+      "S1": "contradiction",
+      "S2": "contradiction",
+      "S4": "contradiction"
+     }
+    }
+   ]
+  }
+ ]
+}

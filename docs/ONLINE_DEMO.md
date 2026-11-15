@@ -14,6 +14,8 @@ flowchart LR
   W --> APP["GroundedAI FastAPI app, unchanged: upload checks · pypdf · chunking · SQLite FTS5 + vectors · hybrid retrieval · prompt · claim, citation and disagreement checks"]
   UI -- "optional: prompt messages" --> L["WebLLM worker: Qwen2.5-1.5B-Instruct on WebGPU"]
   L -- "reply" --> UI
+  UI -- "optional: statement and passage sentences" --> N["NLI worker: DeBERTa-v3-xsmall int8, ONNX Runtime Web (WebAssembly)"]
+  N -- "entailment probabilities" --> UI
 ```
 
 - **Backend in the browser.** The UI's normal API client (`LiveApi`) sends its requests to a Web
@@ -30,6 +32,15 @@ flowchart LR
     WebGPU. The application builds the prompt and records the exact messages; the page model
     answers; the application then checks that reply with the same claim check as any other
     model's. If the documents change between the two steps, the answer is refused.
+- **Optional meaning check.** An entailment (NLI) model, cross-encoder/nli-deberta-v3-xsmall
+  as int8 ONNX, runs in its own worker on WebAssembly (one thread; WebGPU is not used for it).
+  When switched on, it compares each statement of an answer, from either generator, with the six
+  closest sentence windows of the retrieved passages, and shows *entailed*, *contradicted* or
+  *not entailed* next to the lexical check, never merged with it. It is off by default: the
+  first use downloads about 111 MB (model files from Hugging Face, kept in the browser's Cache
+  Storage, and the ONNX Runtime file from this site), and while it is on the tab uses about
+  0.6 GB more memory; switching it off frees it. It is a model's judgement, not proof.
+  Measurements: [RELIABILITY_V3.md](RELIABILITY_V3.md#c-meaning-check-nli-in-the-browser).
 - **Data.** Two synthetic sample PDFs from [`examples/`](../examples) are indexed at start-up.
   Visitors can upload their own files; everything stays in the tab and is gone after a reload
   or *Reset demo*.
@@ -50,6 +61,7 @@ flowchart LR
 | Evaluation runs | not available; the Evaluation tab shows the recorded reports | `groundedai eval …` and the API |
 | First load | about 15–40 s (Python runtime, ~30 MB, cached afterwards) | instant |
 | Model download | about 880 MB once, then cached by the browser | `ollama pull` |
+| Meaning check (NLI) | optional, in the browser, about 111 MB once | `experiments/verifier` (not part of the API) |
 
 **Checked on the live site again (2026-11-13, after the research round):** 16 of 16 checks, and
 19 of 19 with the in-page model; 22 questions on three real NIST PDFs, every quote shown found

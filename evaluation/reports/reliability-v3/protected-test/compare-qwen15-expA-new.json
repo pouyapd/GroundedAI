@@ -1,0 +1,78 @@
+{
+  "old": {
+    "file": "expA-ollama-qwen15.json",
+    "label": "expA-qwen15"
+  },
+  "new": {
+    "file": "rag-qwen15-new.json",
+    "label": "test-qwen15-new-defaults"
+  },
+  "bootstrap": {
+    "samples": 5000,
+    "seed": 13,
+    "interval": "95% percentile, paired"
+  },
+  "questions_compared": 53,
+  "left_out": [],
+  "measures": {
+    "correct (should answer)": {
+      "n": 40,
+      "old_mean": 0.775,
+      "new_mean": 0.775,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    },
+    "false refusal (should answer)": {
+      "n": 40,
+      "old_mean": 0.025,
+      "new_mean": 0.0,
+      "gained": 0,
+      "lost": 1,
+      "mean_diff": -0.025,
+      "ci95_low": -0.075,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    },
+    "refused (should refuse)": {
+      "n": 6,
+      "old_mean": 0.8333,
+      "new_mean": 0.8333,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    },
+    "recall@5": {
+      "n": 44,
+      "old_mean": 0.8636,
+      "new_mean": 0.8636,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    },
+    "mrr@10": {
+      "n": 44,
+      "old_mean": 0.7917,
+      "new_mean": 0.7917,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    }
+  },
+  "changed_answers": {
+    "gained": [],
+    "lost": []
+  }
+}

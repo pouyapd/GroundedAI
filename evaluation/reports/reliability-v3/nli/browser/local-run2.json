@@ -1,0 +1,207 @@
+{
+  "generated_at": "2026-11-15T12:05:39",
+  "target": "local build (frontend/dist)",
+  "label": "final run 2",
+  "url": null,
+  "machine": {
+    "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+    "system": "Windows-11"
+  },
+  "backend": "onnxruntime-web WebAssembly, 1 thread (no WebGPU)",
+  "pairs": {
+    "rule-validation": 120,
+    "versions-dev": 24,
+    "versions-validation": 16
+  },
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36",
+  "memory_before_mb": {
+    "processes": 4,
+    "all_rss_mb": 552.8,
+    "all_private_mb": 435.4,
+    "renderer_rss_mb": 405.9,
+    "renderer_private_mb": 380.0
+  },
+  "first_load": {
+    "wall_ms": 4183,
+    "worker_load_ms": 4002,
+    "worker_bytes_read": 110753412
+  },
+  "memory_loaded_mb": {
+    "processes": 4,
+    "all_rss_mb": 1174.6,
+    "all_private_mb": 1102.3,
+    "renderer_rss_mb": 1024.9,
+    "renderer_private_mb": 1045.9
+  },
+  "received": {
+    "http://127.0.0.1:50808/GroundedAI/assets/nliWorker-DuH-ecEt.js": 0,
+    "http://127.0.0.1:50808/GroundedAI/assets/ort-wasm-simd-threaded-qh98TCA_.wasm": 14848852,
+    "https://huggingface.co/Xenova/nli-deberta-v3-xsmall/resolve/2a4f614a701367a02d51389039afc998faeda637/tokenizer_config.json": 316,
+    "https://huggingface.co/Xenova/nli-deberta-v3-xsmall/resolve/2a4f614a701367a02d51389039afc998faeda637/config.json": 296,
+    "https://huggingface.co/Xenova/nli-deberta-v3-xsmall/resolve/2a4f614a701367a02d51389039afc998faeda637/tokenizer.json": 302,
+    "https://huggingface.co/Xenova/nli-deberta-v3-xsmall/resolve/2a4f614a701367a02d51389039afc998faeda637/onnx/model_quantized.onnx": 1052,
+    "https://huggingface.co/api/resolve-cache/models/Xenova/nli-deberta-v3-xsmall/2a4f614a701367a02d51389039afc998faeda637/config.json": 1332,
+    "https://huggingface.co/api/resolve-cache/models/Xenova/nli-deberta-v3-xsmall/2a4f614a701367a02d51389039afc998faeda637/tokenizer_config.json": 1253,
+    "https://huggingface.co/api/resolve-cache/models/Xenova/nli-deberta-v3-xsmall/2a4f614a701367a02d51389039afc998faeda637/tokenizer.json": 2029493,
+    "https://us.aws.cdn.hf.co/xet-bridge-us/64d22712c2bd23542200fff4/e97e4f1ecc8a626739ffea7b0e72f62fb81027c093bd579580cb341bc6c1d236": 87295276
+  },
+  "received_total_mb": 99.4,
+  "memory_after_classify_mb": {
+    "processes": 4,
+    "all_rss_mb": 1052.6,
+    "all_private_mb": 979.5,
+    "renderer_rss_mb": 908.2,
+    "renderer_private_mb": 923.4
+  },
+  "per_pair_ms": {
+    "median": 96.5,
+    "mean": 97.3,
+    "max_batch_mean": 161.9,
+    "batches": 14,
+    "batch_size": 12
+  },
+  "end_to_end": {
+    "wall_ms": 856,
+    "summary_row": "Meaning (entailment) 1 of 1 statements entailed by a passage DeBERTa-v3-xsmall NLI (int8 ONNX), WASM in this tab, 6 comparisons in 281 ms. An NLI model's judgement, not proof.",
+    "statement_lines": [
+      "Meaning check (NLI): entailed by S1 \u2014 \u201cA single adult ticket from Kessport to Mirrow costs 14 euros.\u201d"
+    ]
+  },
+  "memory_after_switch_off_mb": {
+    "processes": 4,
+    "all_rss_mb": 668.8,
+    "all_private_mb": 544.6,
+    "renderer_rss_mb": 517.2,
+    "renderer_private_mb": 488.6
+  },
+  "cached_load": {
+    "wall_ms": 1197,
+    "worker_load_ms": 1073,
+    "worker_bytes_read": 110753412
+  },
+  "cached_received": {
+    "http://127.0.0.1:50808/GroundedAI/assets/nliWorker-DuH-ecEt.js": 0,
+    "http://127.0.0.1:50808/GroundedAI/assets/ort-wasm-simd-threaded-qh98TCA_.wasm": 0
+  },
+  "python_onnxruntime": {
+    "per_pair_ms": 32.7,
+    "threads": 1
+  },
+  "agreement_with_python": {
+    "pairs": 160,
+    "same_top_label": 159,
+    "max_probability_difference": 0.206785,
+    "median_probability_difference": 0.000405,
+    "pairs_differing_by_more_than_0.05": 8
+  },
+  "agreement_by_set": {
+    "rule-validation": {
+      "pairs": 120,
+      "same_top_label": 120,
+      "max_probability_difference": 0.206785,
+      "median_probability_difference": 0.000743,
+      "pairs_differing_by_more_than_0.05": 7
+    },
+    "versions-dev": {
+      "pairs": 24,
+      "same_top_label": 23,
+      "max_probability_difference": 0.100593,
+      "median_probability_difference": 0.000141,
+      "pairs_differing_by_more_than_0.05": 1
+    },
+    "versions-validation": {
+      "pairs": 16,
+      "same_top_label": 16,
+      "max_probability_difference": 0.021368,
+      "median_probability_difference": 4.9e-05,
+      "pairs_differing_by_more_than_0.05": 0
+    }
+  },
+  "largest_differences": [
+    {
+      "set": "rule-validation",
+      "claim": "Confabulation \u201cConfabulation\u201d refers to a phenomenon in which GAI systems generate and confidently present erroneous or false content in response to prompts.",
+      "premise": "2.2. Confabulation \u201cConfabulation\u201d refers to a phenomenon in which GAI systems generate and confidently present erroneous or false content in response to prompts. Confabulations also include generated outputs that diverge from the prompts or other input or that contradict previously generated statements in the same context.",
+      "browser": {
+        "entailment": 0.5609,
+        "neutral": 0.4309,
+        "contradiction": 0.0082
+      },
+      "python": {
+        "entailment": 0.7677,
+        "neutral": 0.2251,
+        "contradiction": 0.0072
+      },
+      "same_top_label": true,
+      "difference": 0.2068
+    },
+    {
+      "set": "versions-dev",
+      "claim": "Meters are read twice a year.",
+      "premise": "Meters are read every 6 months.",
+      "browser": {
+        "entailment": 0.4077,
+        "neutral": 0.2313,
+        "contradiction": 0.361
+      },
+      "python": {
+        "entailment": 0.3394,
+        "neutral": 0.199,
+        "contradiction": 0.4616
+      },
+      "same_top_label": false,
+      "difference": 0.1006
+    },
+    {
+      "set": "rule-validation",
+      "claim": "The common framework and definitions under the four principles facilitate the evolution of explainable AI methods necessary for complex, real-world systems.",
+      "premise": "without any inner knowledge of how the algorithm works, provided that it can be queried for outputs on chosen inputs.",
+      "browser": {
+        "entailment": 0.0033,
+        "neutral": 0.8859,
+        "contradiction": 0.1107
+      },
+      "python": {
+        "entailment": 0.0026,
+        "neutral": 0.9752,
+        "contradiction": 0.0222
+      },
+      "same_top_label": true,
+      "difference": 0.0893
+    },
+    {
+      "set": "rule-validation",
+      "claim": "As a result, we do not discuss evaluating knowledge limits in this section.",
+      "premise": "As a result, we do not discuss evaluating knowledge limits in this section. 7.1 Evaluating Meaningfulness One way to measure the meaningfulness of an explanation involves measuringhuman simulatability.",
+      "browser": {
+        "entailment": 0.86,
+        "neutral": 0.1391,
+        "contradiction": 0.0009
+      },
+      "python": {
+        "entailment": 0.7869,
+        "neutral": 0.2121,
+        "contradiction": 0.001
+      },
+      "same_top_label": true,
+      "difference": 0.0731
+    },
+    {
+      "set": "rule-validation",
+      "claim": "and red-teaming of LLM systems; GAI content moderation; GAI system development and engineering; Increased accessibility of GAI tools, interfaces, and systems, Incident response and containment.",
+      "premise": "and red-teaming of GAI systems; GAI content moderation; GAI system development and engineering; Increased accessibility of GAI tools, interfaces, and systems, Incident response and containment.",
+      "browser": {
+        "entailment": 0.8261,
+        "neutral": 0.054,
+        "contradiction": 0.1199
+      },
+      "python": {
+        "entailment": 0.7543,
+        "neutral": 0.0633,
+        "contradiction": 0.1824
+      },
+      "same_top_label": true,
+      "difference": 0.0718
+    }
+  ]
+}
