@@ -5,6 +5,7 @@ import type { ChunkOut, DocumentOut, Page } from "../api/types";
 import { DocumentStatusBadge } from "../components/Badge";
 import { Banner, EmptyState, Loading } from "../components/Banner";
 import { ErrorBanner } from "../components/ErrorBanner";
+import { differenceText, ReindexPanel } from "../components/ReindexPanel";
 import { useApp } from "../context";
 import { formatBytes, formatDate, pageRange } from "../lib/format";
 
@@ -204,6 +205,7 @@ export function DocumentsPage() {
       )}
 
       {loadError ? <ErrorBanner error={loadError} onRetry={load} /> : null}
+      <ReindexPanel api={api} reloadToken={reloadToken} readOnly={readOnly} onFinished={load} />
 
       <section className="card" aria-labelledby="docs-heading">
         <div className="card-header">
@@ -306,6 +308,11 @@ function DocumentRow({
         <td>
           <div style={{ fontWeight: 600 }}>{doc.title}</div>
           <div className="small muted">{doc.filename}</div>
+          {doc.index_differences && doc.index_differences.length > 0 ? (
+            <div className="small" style={{ color: "var(--warning-ink)" }}>
+              Indexed with older settings: {doc.index_differences.map(differenceText).join("; ")}
+            </div>
+          ) : null}
           {doc.status === "failed" && doc.error_message ? (
             <div className="small" style={{ color: "var(--critical-ink)" }}>
               {doc.error_message}

@@ -6,6 +6,7 @@ import type {
   OperationalMetrics,
   Page,
   QueryRequest,
+  ReindexStatus,
   Report,
   ReportListItem,
   SystemStatus,
@@ -45,6 +46,9 @@ export interface Api {
   uploadDocument(file: File, title?: string): Promise<DocumentOut>;
   deleteDocument(documentId: string): Promise<void>;
   reingestDocument(documentId: string): Promise<DocumentOut>;
+  /** Documents indexed with older settings, and the bulk re-indexing job. */
+  reindexStatus(): Promise<ReindexStatus>;
+  startReindex(): Promise<ReindexStatus>;
   query(request: QueryRequest): Promise<AnswerResponse>;
   metrics(): Promise<OperationalMetrics>;
   listReports(): Promise<ReportListItem[]>;
@@ -139,6 +143,12 @@ export class LiveApi implements Api {
   }
   reingestDocument(documentId: string) {
     return this.request<DocumentOut>(`/documents/${documentId}/reingest`, { method: "POST" });
+  }
+  reindexStatus() {
+    return this.request<ReindexStatus>("/documents/reindex");
+  }
+  startReindex() {
+    return this.request<ReindexStatus>("/documents/reindex", { method: "POST" });
   }
   query(request: QueryRequest) {
     return this.request<AnswerResponse>("/query", { method: "POST", body: JSON.stringify(request) });

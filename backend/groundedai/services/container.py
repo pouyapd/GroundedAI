@@ -22,13 +22,18 @@ from groundedai.persistence.db import create_db_engine, create_session_factory
 from groundedai.persistence.migrate import upgrade_database
 from groundedai.persistence.search import SearchBackend, backend_for_dialect
 from groundedai.persistence.storage import FileStore
-from groundedai.retrieval.embeddings import EmbeddingProvider, build_embedding_provider
+from groundedai.retrieval.embeddings import (
+    EmbeddingProvider,
+    build_embedding_provider,
+    embedding_model_id,
+)
 from groundedai.retrieval.engine import RetrievalEngine
 from groundedai.retrieval.rerank import CrossEncoderReranker, Reranker
 from groundedai.security.rate_limit import TokenBucketLimiter
 from groundedai.services.evaluation_service import EvaluationService
 from groundedai.services.ingestion_service import IngestionLimits, IngestionService
 from groundedai.services.qa_service import QAService
+from groundedai.services.reindex_service import ReindexService
 from groundedai.services.status_service import StatusService
 
 
@@ -67,6 +72,7 @@ class Services:
     generation: Lazy[GenerationProvider]
     retrieval: RetrievalEngine
     ingestion: IngestionService
+    reindex: ReindexService
     qa: QAService
     evaluation: EvaluationService
     status: StatusService
@@ -126,6 +132,9 @@ def build_services(
             max_document_chars=settings.max_document_chars,
         ),
         metrics=metrics,
+        expected_embedding_model=(
+            embedding_provider.model_id if embedding_provider else embedding_model_id(settings)
+        ),
     )
     qa = QAService(settings, session_factory, retrieval, generation.get, metrics)
     evaluation = EvaluationService(settings, session_factory, embedding.get, reranker_lazy.get)
@@ -143,6 +152,7 @@ def build_services(
         generation=generation,
         retrieval=retrieval,
         ingestion=ingestion,
+        reindex=ReindexService(session_factory, ingestion),
         qa=qa,
         evaluation=evaluation,
         status=status,

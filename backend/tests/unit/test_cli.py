@@ -27,6 +27,7 @@ def test_parser_knows_all_commands() -> None:
         ["migrate"],
         ["status"],
         ["ingest", "x.txt"],
+        ["reindex", "--dry-run"],
         ["ask", "question?"],
         ["retrieve", "query"],
         ["eval", "retrieval"],
@@ -55,5 +56,33 @@ def test_ingest_and_ask_through_the_cli(
         output = capsys.readouterr().out
         assert "[answered]" in output
         assert "DEMO (extractive, not an LLM)" in output
+    finally:
+        get_settings.cache_clear()
+
+
+def test_reindex_through_the_cli(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    from groundedai.core.config import get_settings
+
+    monkeypatch.setenv("GROUNDEDAI_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setenv("GROUNDEDAI_LOG_LEVEL", "WARNING")
+    (tmp_path / "policy.txt").write_text("Policy\n\nThe hotel limit is 140 euros.", "utf-8")
+    try:
+        monkeypatch.setenv("GROUNDEDAI_TEXT_CLEANUP", "v1")
+        get_settings.cache_clear()
+        assert main(["ingest", str(tmp_path / "policy.txt")]) == 0
+        monkeypatch.setenv("GROUNDEDAI_TEXT_CLEANUP", "v2")
+        get_settings.cache_clear()
+        capsys.readouterr()
+        assert main(["reindex", "--dry-run"]) == 0
+        output = capsys.readouterr().out
+        assert "1 of 1 ready document(s) were indexed with older settings." in output
+        assert "text clean-up: v1 -> v2 (1)" in output
+        assert main(["reindex"]) == 0
+        output = capsys.readouterr().out
+        assert "[1/1] Policy: re-indexed (1 -> 1 chunks)" in output
+        assert main(["reindex"]) == 0
+        assert "0 of 1 ready document(s)" in capsys.readouterr().out
     finally:
         get_settings.cache_clear()

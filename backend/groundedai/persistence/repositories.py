@@ -25,6 +25,18 @@ class DocumentRepository:
     def get(self, document_id: str) -> DocumentRow | None:
         return self.session.get(DocumentRow, document_id)
 
+    def get_for_update(self, document_id: str) -> DocumentRow | None:
+        """The row, locked until the transaction ends (SELECT ... FOR UPDATE; SQLite
+        serialises writers instead and ignores the lock)."""
+        return self.session.get(DocumentRow, document_id, with_for_update=True)
+
+    def ready(self) -> Sequence[DocumentRow]:
+        return self.session.scalars(
+            select(DocumentRow)
+            .where(DocumentRow.status == DocumentStatus.READY)
+            .order_by(DocumentRow.created_at, DocumentRow.id)
+        ).all()
+
     def get_by_sha256(self, sha256: str) -> DocumentRow | None:
         return self.session.scalar(select(DocumentRow).where(DocumentRow.sha256 == sha256))
 

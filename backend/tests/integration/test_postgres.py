@@ -87,3 +87,40 @@ def test_pdf_evidence_names_its_page(pg_services: Services) -> None:
     )
     assert response.status == "answered"
     assert response.claims[0].evidence[0].page == 2  # page breaks round-trip through JSON
+
+
+def test_reindex_after_a_settings_change(pg_services: Services, make_settings) -> None:  # type: ignore[no-untyped-def]
+    """Documents indexed with clean-up v1 are re-indexed with v2: same ids, no duplicate
+    chunks, the old text is gone from the full-text index, and a second run does nothing."""
+    from tests.integration.test_reindex import manual
+
+    old = build_services(make_settings(database_url=POSTGRES_URL, text_cleanup="v1"))
+    try:
+        row = old.ingestion.ingest_bytes("manual.pdf", None, manual())
+        old.ingestion.ingest_bytes("travel.txt", None, TRAVEL_TEXT.encode())
+    finally:
+        old.close()
+    summary = pg_services.reindex.summary()
+    assert (summary.ready, summary.outdated) == (2, 2)
+    job, started = pg_services.reindex.start()
+    assert started
+    assert job is not None
+    pg_services.reindex.run(job)
+    assert (job.reindexed, job.failed) == (2, [])
+    with session_scope(pg_services.session_factory) as session:
+        chunks, distinct = session.execute(
+            text("SELECT count(*), count(DISTINCT id) FROM chunks")
+        ).one()
+        header = session.execute(
+            text("SELECT count(*) FROM chunks WHERE text LIKE '%ACME PUMP%'")
+        ).scalar()
+    assert chunks == distinct
+    assert header == 0
+    assert pg_services.ingestion.get(row.id).chunking["text_cleanup"] == "v2"  # type: ignore[index]
+    with session_scope(pg_services.session_factory) as session:
+        result = pg_services.retrieval.retrieve(
+            session, RetrievalRequest(query="spare impellers part number", mode="lexical", top_k=1)
+        )
+    assert result.chunks[0].document_id == row.id
+    assert pg_services.reindex.summary().outdated == 0
+    assert pg_services.reindex.start()[1] is False

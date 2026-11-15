@@ -151,6 +151,8 @@ export function fakeApi(overrides: Partial<Api> = {}): Api {
     uploadDocument: vi.fn(),
     deleteDocument: vi.fn(),
     reingestDocument: vi.fn(),
+    reindexStatus: vi.fn().mockResolvedValue({ ready: 0, current: 0, outdated: 0, outdated_without_source: 0, differences: [], job: null }),
+    startReindex: vi.fn(),
     query: vi.fn().mockResolvedValue(ANSWER),
     metrics: vi.fn(),
     listReports: vi.fn().mockResolvedValue([]),

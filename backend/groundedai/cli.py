@@ -91,6 +91,49 @@ def cmd_ingest(args: argparse.Namespace) -> int:
     return 1 if failures else 0
 
 
+def cmd_reindex(args: argparse.Namespace) -> int:
+    """Re-index the ready documents that were indexed with older settings."""
+    from groundedai.services.ingestion_service import ReindexOutcome
+
+    services = _services(get_settings())
+    try:
+        summary = services.reindex.summary()
+        print(
+            f"{summary.outdated} of {summary.ready} ready document(s) were indexed with older "
+            "settings."
+        )
+        for item in summary.differences:
+            print(f"  {item.setting}: {item.indexed} -> {item.current} ({item.documents})")
+        if summary.outdated_without_source:
+            print(
+                f"{summary.outdated_without_source} of them cannot be re-indexed: the original "
+                "file is not stored (upload it again)."
+            )
+        if args.dry_run or not summary.reindexable:
+            return 0
+        job, _ = services.reindex.start()
+        if job is None:
+            return 0
+        print(f"Re-indexing {job.total} document(s); each keeps its index if this fails.")
+
+        def report(position: int, outcome: ReindexOutcome) -> None:
+            if outcome.result == "reindexed":
+                line = f"re-indexed ({outcome.chunks_before} -> {outcome.chunks_after} chunks)"
+            elif outcome.result == "current":
+                line = "already current"
+            elif outcome.result == "skipped":
+                line = f"skipped: {outcome.detail}"
+            else:
+                line = f"failed ({outcome.code}): {outcome.detail}"
+            print(f"  [{position}/{job.total}] {outcome.title}: {line}", flush=True)
+
+        services.reindex.run(job, report)
+        print(f"{job.reindexed} re-indexed, {len(job.failed)} failed, {len(job.skipped)} skipped.")
+        return 1 if job.failed else 0
+    finally:
+        services.close()
+
+
 def cmd_ask(args: argparse.Namespace) -> int:
     from groundedai.schemas.query import QueryRequest
 
@@ -351,6 +394,12 @@ def build_parser() -> argparse.ArgumentParser:
     ingest = sub.add_parser("ingest", help="ingest files or directories synchronously")
     ingest.add_argument("paths", nargs="+")
     ingest.set_defaults(func=cmd_ingest)
+
+    reindex = sub.add_parser(
+        "reindex", help="re-index documents indexed with older settings (text clean-up, ...)"
+    )
+    reindex.add_argument("--dry-run", action="store_true", help="only list what differs")
+    reindex.set_defaults(func=cmd_reindex)
 
     ask = sub.add_parser("ask", help="answer a question")
     ask.add_argument("question")

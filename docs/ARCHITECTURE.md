@@ -164,6 +164,18 @@ transaction, so a document is never searchable with a partial set of chunks. A f
 keeps no chunks and can be re-ingested. Documents left `pending`/`processing` by a crash are
 marked `failed` (`interrupted`) at startup.
 
+**Re-indexing after a settings change.** Each ready document records how it was indexed
+(chunking record with the text clean-up version, and the embedding model). A document whose
+record differs from the current settings is *outdated*; `GET /api/v1/documents` lists the
+differences per document and the Documents page shows them. Re-indexing
+(`POST /api/v1/documents/reindex`, or `groundedai reindex`) rebuilds outdated documents one at a
+time without leaving `ready`: the new chunks are built outside any transaction and swapped in
+with one transaction under a row lock, and only if nothing else wrote the document meanwhile
+(otherwise the result is discarded). Document and chunk ids are kept; a failure at any step
+keeps the previous index and the stored file. No job state needs to survive a restart: what is
+outdated is read from the database, so running it again continues with what is left. Only
+recorded settings are compared; a parser change that keeps them the same is not detected.
+
 **Observability without a vendor.** Logs are JSON lines with a request id. Counters and latency
 samples are kept in memory and exposed as JSON (`/api/v1/metrics`, used by the dashboard) and in
 the Prometheus text format (`/api/v1/metrics/prometheus`). Question outcomes and timings (not the

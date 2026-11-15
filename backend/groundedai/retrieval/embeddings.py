@@ -113,6 +113,14 @@ def configure_hf_offline(offline: bool) -> None:
     os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
 
 
+def embedding_model_id(settings: Settings) -> str:
+    """The ``model_id`` that :func:`build_embedding_provider` gives these settings, without
+    loading a model (used to find documents indexed with another embedding model)."""
+    if settings.embedding_provider == "hashing":
+        return f"hashing:v{HASHING_VERSION}-{settings.embedding_dim}"
+    return f"{settings.embedding_provider}:{settings.embedding_model}"
+
+
 def build_embedding_provider(settings: Settings) -> EmbeddingProvider:
     name = settings.embedding_provider
     if name == "hashing":

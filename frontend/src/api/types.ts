@@ -21,6 +21,47 @@ export interface DocumentOut {
   updated_at: string;
   /** False when a file that could not be read was discarded (added 2026-10-18). */
   source_stored?: boolean | null;
+  /** For a ready document: recorded index settings that differ from the current ones (added 2026-11-15). */
+  index_differences?: IndexDifference[] | null;
+}
+
+export interface IndexDifference {
+  setting: string;
+  indexed: string;
+  current: string;
+}
+
+export interface ReindexOutcome {
+  document_id: string;
+  title: string;
+  result: "reindexed" | "current" | "skipped" | "failed";
+  detail: string;
+  code?: string | null;
+}
+
+export interface ReindexJob {
+  id: string;
+  state: "running" | "finished";
+  started_at: string;
+  finished_at: string | null;
+  total: number;
+  done: number;
+  reindexed: number;
+  already_current: number;
+  skipped: ReindexOutcome[];
+  /** Each failed document keeps its previous index. */
+  failed: ReindexOutcome[];
+  processing_id: string | null;
+  processing_title: string | null;
+}
+
+export interface ReindexStatus {
+  ready: number;
+  current: number;
+  outdated: number;
+  outdated_without_source: number;
+  differences: (IndexDifference & { documents: number })[];
+  job: ReindexJob | null;
 }
 
 export interface Page<T> {
