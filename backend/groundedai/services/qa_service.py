@@ -735,7 +735,7 @@ class QAService:
                 evidence_sources(context),
                 question,
                 self.settings.claim_check,
-                detail_check=self.settings.claim_detail_check == "v1",
+                detail_check=self.settings.claim_detail_check_enabled,
             )
         )
         claims = claims_out(report, context) if report else []
@@ -781,7 +781,7 @@ class QAService:
         checks_run = ["citation_labels", "relevance"]
         if report is not None:
             checks_run.append("lexical_claims")
-            if self.settings.claim_detail_check == "v1":
+            if self.settings.claim_detail_check_enabled:
                 checks_run.append("added_details")
         checks_run.append("disagreement")
         if nothing_found and self.settings.unverified_answers == "withhold":

@@ -7,7 +7,7 @@ from a saved report in [`evaluation/reports/reliability-v3/`](../evaluation/repo
 | Issue | Status |
 |---|---|
 | A. Disagreement between two versions of a document (NIST SP 800-63B 2017 / 2025) | Partially resolved |
-| B. Statements that add details the sources do not state | Partially resolved |
+| B. Statements that add details the sources do not state | Partially resolved (the lexical rule is now optional and off by default) |
 | C. Meaning check (NLI) in the browser | Resolved and tested (deployed; deployed timings measured on battery) |
 | D. Whether the extractive answer addresses the question | Partially resolved |
 | E. Test question t38 answered instead of refused | Resolved and tested |
@@ -120,17 +120,23 @@ board" was shown as a lexical match when the passage only says the ticket costs 
 all its figures are found. Words that appear in no passage do not change the result as long as
 the share of found words stays above the threshold.
 
-**Implementation (lexical).** `claim_detail_check=v1` (new default): a matching statement that
-contains two or more consecutive content words found in no retrieved passage becomes `partial`,
-with the flag `added_detail` and the words listed ("hot meal"). The UI shows them under the
-statement and in "Checks that ran on this answer".
+**Implementation (lexical).** The added-detail rule (`claim_detail_check`): a matching statement
+that contains two or more consecutive content words found in no retrieved passage becomes
+`partial`, with the flag `added_detail` and the words listed ("hot meal"). The UI shows them under
+the statement and in "Checks that ran on this answer". It was the default from 2026-11-13; since
+2026-11-15 it is **off by default** and turned on with `GROUNDEDAI_CLAIM_DETAIL_CHECK=on` (`v1`,
+the name recorded in the reports below, is accepted too). See "Change after the test result"
+below.
 
 **Implementation (meaning).** A second, separate check with an entailment (NLI) model; see C.
 It is reported per statement as *entailed*, *contradicted* or *not entailed*, next to the lexical
 result and never merged into it. NLI is a model's judgement, not proof that a statement is true.
 
 **Tests.** `test_reliability_v3.py` (added details make a matching claim partial; one unmatched
-word is not an added detail; the check can be switched off), `meaning.test.tsx` (the meaning
+word is not an added detail; the check can be switched off), `test_added_detail_option.py` (off in
+a fresh installation; `on`, `v1` and `off` from the environment; other values refused; off: a
+statement with an added detail keeps its lexical result; on: it is partial as before),
+`checks.test.tsx` (the "not checked" row), `meaning.test.tsx` (the meaning
 check per statement and in the summary, never changing the lexical result).
 
 **Results, lexical rule** (claim-level macro-F1 over supported / partial / contradicted / not
@@ -147,9 +153,16 @@ supported; "false not-supported" = share of supported claims marked otherwise):
 
 On the hand-written test claims the rule **did not help**: it caught no additional unsupported
 claim and marked 3 more of the 31 supported claims as partial (their paraphrases use words the
-passage does not). This is reported as a negative result. The default was fixed before the test
-run and is kept, because its error is to flag too much rather than too little; it can be switched
-off with `GROUNDEDAI_CLAIM_DETAIL_CHECK=off`.
+passage does not). This is reported as a negative result.
+
+**Change after the test result (2026-11-15).** The rule was made optional and switched off by
+default. Nothing else changed: the implementation, the reports and the protected data are as they
+were, and no new score is claimed for the change. With the rule off, the lexical check behaves as
+`claims-v1` did before the rule existed; its score on these claims is the first column above
+(.409), measured in the same protected run. Whether the rule helps in some other setting would
+need new validation data that is independent of these claims. In the UI, "Added details" now
+reads "not checked (optional rule, off by default)" when the rule did not run. The NLI meaning
+check (C) is independent of this setting and unchanged.
 
 NLI results on the same claims: see C (macro-F1 .716, false supported .039).
 
@@ -499,7 +512,8 @@ same files the browser downloads.
 * **The relevance gate is lexical and refuses too often** on the test set (D: 10 false refusals
   of 40 with the extractive generator). The cause is known but was found on the test set, so it
   was not fixed.
-* **The added-detail rule did not transfer** to the hand-written test claims (B).
+* **The added-detail rule did not transfer** to the hand-written test claims (B); it is now
+  optional and off by default.
 * **The meaning check is a second opinion, not a verdict.** It helps most with a language model's
   answers; it cannot tell that a faithful quotation does not answer the question.
 * **Single machine, CPU only.** Times are from one laptop; the browser numbers depend on the

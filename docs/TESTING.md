@@ -39,6 +39,20 @@ npm run lint && npm run typecheck && npm test && npm run build
 cd .. && python scripts/e2e_browser.py --screenshots /tmp/shots
 ```
 
+## Added-detail rule made optional (2026-11-15)
+
+| Check | Where | Result |
+|---|---|---|
+| `pytest` (default suite), ruff, strict mypy (also `--platform linux`) | local | 562 passed, 8 skipped (PostgreSQL); clean |
+| `npm run lint`, `npm run typecheck`, `npm test` | local | clean; 103 passed |
+| fresh installation: new virtual environment, `pip install ./backend`, no `.env`, no `GROUNDEDAI_CLAIM_DETAIL_CHECK` | local | `claim_detail_check = off`; an answer's `checks_run` has no `added_details` |
+| `scripts/e2e_demo.py` on the local build | local | 16 of 16 |
+
+New: `test_added_detail_option.py` (7 tests) and a `checks.test.tsx` case for the "not checked"
+row. Two expectations changed with the default: the recorded pipeline settings now show
+`claim_detail_check: off`, and `test_versions_pipeline.py` checks that `added_details` is not
+listed by default. The rule's own tests still run with it switched on.
+
 ## After merging reliability round 3 (2026-11-15; `main` at `0eb3eb5`)
 
 | Check | Where | Result |

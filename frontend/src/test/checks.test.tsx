@@ -54,6 +54,28 @@ describe("checks that ran on an answer", () => {
     expect(rows["Answer correctness"]).toBe("not assessed");
   });
 
+  it("says that the optional added-detail rule did not run (the default) and keeps the meaning check apart", () => {
+    const plain: AnswerResponse = {
+      ...CHECKED,
+      checks_run: ["citation_labels", "relevance", "lexical_claims", "disagreement", "meaning_nli"],
+      claims: (CHECKED.claims ?? []).map((claim) => ({ ...claim, flags: [], added_details: [] })),
+      meaning: {
+        model: "DeBERTa test",
+        backend: "wasm",
+        pairs: 12,
+        model_ms: 10,
+        total_ms: 12,
+        claims: [
+          { index: 0, meaning: "entailed", source: "S1", premise: "x", probability: 0.9 },
+          { index: 1, meaning: "not_entailed", source: null, premise: null, probability: 0.2 },
+        ],
+      },
+    };
+    const rows = Object.fromEntries(checkRows(plain).map((row) => [row.property, row.result]));
+    expect(rows["Added details"]).toBe("not checked (optional rule, off by default)");
+    expect(rows["Meaning (entailment)"]).toBe("1 of 2 statements entailed by a passage");
+  });
+
   it("shows the checks and the added detail in the answer view", async () => {
     render(<AnswerView response={CHECKED} />);
     await userEvent.click(screen.getByText("Checks that ran on this answer"));

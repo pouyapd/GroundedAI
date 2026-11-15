@@ -148,14 +148,21 @@ class Settings(BaseSettings):
             "answers-the-question results (opt-in). The verdict field means the same in both."
         ),
     )
-    claim_detail_check: Literal["off", "v1"] = Field(
-        default="v1",
+    claim_detail_check: Literal["off", "on", "v1"] = Field(
+        default="off",
         description=(
-            "'v1': a statement that matches a passage but contains two or more consecutive "
-            "words that no retrieved passage states (an added detail) counts as partly "
-            "found. 'off' reproduces the results before 2026-11-13."
+            "Optional added-detail rule. 'on' (or 'v1', the name recorded in reports of "
+            "2026-11-13/14): a statement that matches a passage but contains two or more "
+            "consecutive words that no retrieved passage states counts as partly found. Off by "
+            "default since 2026-11-15: on the protected test claims it flagged more correct "
+            "statements and caught no more unsupported ones."
         ),
     )
+
+    @property
+    def claim_detail_check_enabled(self) -> bool:
+        return self.claim_detail_check != "off"
+
     unverified_answers: Literal["label", "withhold"] = Field(
         default="label",
         description=(

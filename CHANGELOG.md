@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Added-detail rule made optional (2026-11-15)
+
+- **Changed default:** `GROUNDEDAI_CLAIM_DETAIL_CHECK` is now `off` by default; `on` (or `v1`)
+  turns the added-detail rule on. On the 108 protected test claims the rule lowered macro-F1
+  (.409 → .388), flagged 3 more correct claims and did not lower false "supported" (.078). The
+  implementation is unchanged; no new score is claimed. The UI says "Added details: not checked
+  (optional rule, off by default)" when it did not run. The NLI meaning check is unaffected.
+
 ### Reliability round 3 (November 2026)
 
 Full write-up: `docs/RELIABILITY_V3.md`; reports in `evaluation/reports/reliability-v3/`.
@@ -9,7 +17,7 @@ Full write-up: `docs/RELIABILITY_V3.md`; reports in `evaluation/reports/reliabil
 - **Changed defaults:**
   - `GROUNDEDAI_CONFLICT_CHECK=disagreement-v3`: two editions of one document are compared, and differences are reported as `different_versions` with both quotes, editions and pages; GroundedAI does not decide which edition applies.
   - `GROUNDEDAI_EXTRACTIVE_RELEVANCE=v2`: the extractive generator refuses when an asked word appears in no retrieved passage, and names the word.
-  - `GROUNDEDAI_CLAIM_DETAIL_CHECK=v1`: statements that add two or more consecutive words found in no passage are partial.
+  - `GROUNDEDAI_CLAIM_DETAIL_CHECK=v1`: statements that add two or more consecutive words found in no passage are partial (made optional and off by default on 2026-11-15, see above).
   - The old behaviour stays available with `disagreement-v1`, `v1` and `off`.
 - **Added:** every answer reports `relevance` and `checks_run`. The UI lists the checks that ran as separate rows: retrieval, citation labels, lexical match, added details, relevance, meaning, correctness.
 - **Added (online demo):** an optional meaning check with an NLI model (DeBERTa-v3-xsmall, int8 ONNX, ONNX Runtime Web on WebAssembly), shown next to the lexical check and never merged with it. `scripts/bench_meaning_check.py` measures it in a real browser.

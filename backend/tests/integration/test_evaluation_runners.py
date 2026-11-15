@@ -145,7 +145,7 @@ def test_environment_settings_are_recorded_and_reproduce_the_run(
             "unverified_answers": "withhold",
             "max_question_chars": 500,
             "claim_check": "claims-v1",
-            "claim_detail_check": "v1",
+            "claim_detail_check": "off",
         }
         assert config["environment_variables"] == sorted(PIPELINE_ENV)
         assert config["timeout_s"] == 300.0

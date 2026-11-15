@@ -152,7 +152,7 @@ class ClaimOut(BaseModel):
     added_details: list[str] = Field(
         default_factory=list,
         description="Runs of the claim's words that no retrieved passage states "
-        "(claim_detail_check)",
+        "(only when the optional claim_detail_check is on; off by default)",
     )
     citation_status: (
         Literal["correct", "wrong", "partly_wrong", "invalid", "unconfirmed", "none"] | None

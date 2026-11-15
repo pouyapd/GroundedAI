@@ -83,9 +83,8 @@ def test_the_checks_that_ran_are_listed_and_relevance_is_reported(
     try:
         answered = services.qa.answer(QueryRequest(question="May administrators share accounts?"))
         assert answered.status == "answered"
-        assert {"citation_labels", "lexical_claims", "added_details", "relevance"} <= set(
-            answered.checks_run
-        )
+        assert {"citation_labels", "lexical_claims", "relevance"} <= set(answered.checks_run)
+        assert "added_details" not in answered.checks_run  # optional, off by default
         assert answered.relevance is not None
         assert answered.relevance.unmatched == []
         refused = services.qa.answer(QueryRequest(question="How long are audit logs kept?"))
