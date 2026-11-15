@@ -122,6 +122,7 @@ def main() -> int:
             for name in (
                 "chunk_size",
                 "chunk_overlap",
+                "text_cleanup",
                 "embedding_provider",
                 "embedding_model",
                 "retrieval_mode",
@@ -134,7 +135,10 @@ def main() -> int:
                 "reranker_model",
                 "prompt_version",
                 "claim_check",
+                "claim_detail_check",
                 "conflict_check",
+                "extractive_matching",
+                "extractive_relevance",
                 "max_context_chars",
                 "generation_provider",
                 "ollama_model",

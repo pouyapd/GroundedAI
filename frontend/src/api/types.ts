@@ -222,6 +222,24 @@ export interface AnswerResponse {
   relevance?: { method: "lexical"; asked: string[]; unmatched: string[]; answer_coverage: number | null } | null;
   /** The checks that actually ran on this answer (2026-11-13). */
   checks_run?: string[];
+  /** The optional meaning check (NLI model in the browser); absent when it did not run. */
+  meaning?: MeaningCheck | null;
+}
+
+/** Outcome of the optional meaning check: an NLI model's judgement, not proof. */
+export interface MeaningCheck {
+  model: string;
+  backend: "wasm";
+  pairs: number;
+  model_ms: number;
+  total_ms: number;
+  claims: {
+    index: number;
+    meaning: "entailed" | "contradicted" | "not_entailed";
+    source: string | null;
+    premise: string | null;
+    probability: number;
+  }[];
 }
 
 export interface ComponentStatus {

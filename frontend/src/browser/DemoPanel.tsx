@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useApp } from "../context";
 import type { BrowserApi, Generator, RuntimeState } from "./BrowserApi";
 import { checkWebGpu, PAGE_MODEL, type GpuSupport } from "./gpu";
+import { meaningLoadErrorMessage } from "./nliModel";
+import { NLI_MODEL } from "./nliProtocol";
 import { modelLoadErrorMessage } from "./pageModel";
 
 /** The live demo's controls: runtime start-up, generator choice and reset. */
@@ -14,6 +16,9 @@ export function DemoPanel({ api }: { api: BrowserApi }) {
   const [modelProgress, setModelProgress] = useState<{ fraction: number; text: string } | null>(null);
   const [modelError, setModelError] = useState<string | null>(null);
   const [resetting, setResetting] = useState(false);
+  const [meaning, setMeaning] = useState(api.meaningCheck);
+  const [nliProgress, setNliProgress] = useState<{ fraction: number; text: string } | null>(null);
+  const [nliError, setNliError] = useState<string | null>(null);
 
   useEffect(() => api.subscribe(setRuntime), [api]);
   useEffect(() => {
@@ -42,6 +47,25 @@ export function DemoPanel({ api }: { api: BrowserApi }) {
     await api.selectGenerator(next);
     setGenerator(next);
     refreshStatus();
+  }
+
+  async function toggleMeaning(on: boolean) {
+    setNliError(null);
+    setMeaning(on); // the box shows the choice while the model loads
+    if (on && !api.nli.loaded) {
+      setNliProgress({ fraction: 0, text: "Preparing the download" });
+      try {
+        await api.nli.load((fraction, text) => setNliProgress({ fraction, text }));
+      } catch (error) {
+        setNliProgress(null);
+        setMeaning(false);
+        setNliError(meaningLoadErrorMessage(error));
+        return;
+      }
+      setNliProgress(null);
+    }
+    api.setMeaningCheck(on);
+    if (!on) api.nli.unload(); // frees the model's memory; switching on again reads the cache
   }
 
   async function reset() {
@@ -134,6 +158,39 @@ export function DemoPanel({ api }: { api: BrowserApi }) {
           </span>
         </label>
       </fieldset>
+
+      <fieldset className="generator-choice" disabled={starting || nliProgress !== null}>
+        <legend>Second check (optional)</legend>
+        <label className={`option-card${meaning ? " is-selected" : ""}`}>
+          <input type="checkbox" checked={meaning} onChange={(event) => void toggleMeaning(event.target.checked)} />
+          <span>
+            <strong>Meaning check with an NLI model</strong>
+            <span className="option-meta">
+              CPU (WebAssembly) · one-time download of about {NLI_MODEL.downloadMB} MB, then cached
+            </span>
+            <span className="option-text">
+              An entailment model (DeBERTa-v3-xsmall) compares each statement with the closest sentences of the retrieved
+              passages, for either generator. It is a second opinion next to the word-matching check, not proof: it can
+              miss paraphrases and accept wrong statements.
+            </span>
+          </span>
+        </label>
+      </fieldset>
+      {nliProgress ? (
+        <div className="model-progress nli-progress" role="status" aria-live="polite">
+          <div className="progress">
+            <div className="progress-bar" style={{ width: `${Math.round(nliProgress.fraction * 100)}%` }} />
+          </div>
+          <span className="small secondary">
+            Meaning check: {Math.round(nliProgress.fraction * 100)}% · {nliProgress.text}
+          </span>
+        </div>
+      ) : null}
+      {nliError ? (
+        <div className="demo-status demo-status-error" role="alert">
+          {nliError}
+        </div>
+      ) : null}
 
       {modelProgress ? (
         <div className="model-progress" role="status" aria-live="polite">

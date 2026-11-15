@@ -1,4 +1,4 @@
-import type { ClaimOut, EvidenceOut, VerificationOut } from "../api/types";
+import type { ClaimOut, EvidenceOut, MeaningCheck, VerificationOut } from "../api/types";
 import { pageRange } from "../lib/format";
 import { ClaimStatusBadge } from "./Badge";
 
@@ -39,14 +39,22 @@ function evidenceLabels(evidence: EvidenceOut[]): string {
   return [...new Set(evidence.map((item) => item.label))].join(", ");
 }
 
+const MEANING_TEXT = {
+  entailed: "entailed by",
+  contradicted: "appears contradicted by",
+  not_entailed: "not entailed by any of the closest passage sentences",
+} as const;
+
 export function ClaimCheck({
   claims,
   verification,
   onCite,
+  meaning,
 }: {
   claims: ClaimOut[];
   verification: VerificationOut;
   onCite: (label: string) => void;
+  meaning?: MeaningCheck | null;
 }) {
   const found = verification.supported + verification.wrong_source + verification.added_source;
   return (
@@ -85,6 +93,13 @@ export function ClaimCheck({
             {(claim.added_details ?? []).length > 0 ? (
               <p className="small claim-note" style={{ color: "var(--critical-ink)" }}>
                 Words no retrieved passage states (an added detail): {(claim.added_details ?? []).join("; ")}
+              </p>
+            ) : null}
+            {meaning?.claims[index] ? (
+              <p className="small secondary claim-note meaning-note">
+                Meaning check (NLI): {MEANING_TEXT[meaning.claims[index].meaning]}
+                {meaning.claims[index].source ? ` ${meaning.claims[index].source}` : ""}
+                {meaning.claims[index].premise ? ` — “${meaning.claims[index].premise}”` : ""}
               </p>
             ) : null}
             {claim.flags.includes("instruction_text") ? (
