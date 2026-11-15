@@ -24,9 +24,9 @@ stays in the tab.
 
 <p align="center">
   <img src="docs/images/demo-checks-meaning.png" width="860"
-       alt="The live demo answering the ferry ticket question: the answer with its source label, the statement's quote and page, the meaning check (NLI) saying the statement is entailed by passage S1, and the table of checks that ran: retrieval, citation labels, lexical match, added details, question relevance, meaning, and answer correctness not assessed">
+       alt="The live demo answering the ferry ticket question: the answer with its source label, the statement's quote and page, the meaning check (NLI) saying the statement is entailed by passage S1, and the table of checks that ran: retrieval, citation labels, lexical match, added details (not checked: optional rule, off by default), question relevance, meaning, and answer correctness not assessed">
 </p>
-<p align="center"><sub>A screenshot of the deployed demo with the optional meaning check switched on.</sub></p>
+<p align="center"><sub>A screenshot of the deployed demo (2026-11-15) with the optional meaning check switched on.</sub></p>
 
 **What it does**
 
