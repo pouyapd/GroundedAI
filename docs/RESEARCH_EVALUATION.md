@@ -291,9 +291,11 @@ example; seed 13. The adapter is merged into a copy of the base model, which Gro
 like any local model.
 
 **Requirements.** Python with torch 2.10 (CPU), transformers 5.19, peft 0.21.2, accelerate
-1.10.1; about 1 GB of disk for the base model and 2 GB for the merged copy; the stopped run used
-about 4.3 GB of RAM. The time for one epoch on this CPU was not measured; each of the 259 steps
-is a forward and backward pass over a full prompt of five passages, so plan for hours. The script
+1.10.1; about 1 GB of disk for the base model and 2 GB for the merged copy. A bounded smoke test
+on 2026-11-15 (8 examples, `--max-steps 8 --smoke`; [docs/RELIABILITY_V3.md](RELIABILITY_V3.md),
+section F) measured 52 s per example on average (42-64 s) and a peak of 9.4 GB of RAM, so one
+epoch of 257 examples would take about 3.7 hours on this laptop; a repeat gave the same losses.
+That run trained nothing that is reported. The script
 runs on the CPU as written; a GPU run needs the model and tensors moved to the device, which was
 not done or tested. QLoRA (4-bit base weights through bitsandbytes) was not an option here
 because it needs a CUDA GPU.
@@ -698,8 +700,9 @@ model is not part of the application, so nothing on the live site is checked for
   No GPU, cloud service or paid API was used.
 * **Documents indexed before the default changed keep their v1 text** until they are re-ingested
   (tested: they keep answering; re-ingesting applies v2).
-* **Experiment C has no results.** The LoRA fine-tuning of the answer model was prepared but not
-  trained to the end (see above); nothing in this document says whether it helps.
+* **Experiment C has no results.** The LoRA fine-tuning of the answer model was prepared and
+  smoke-tested on the CPU, but not trained (about four hours per epoch on the only machine, no
+  GPU); nothing in this document says whether it helps.
 * **Not tried.** A bge-base embedder (the local copy was incomplete), larger answer models than
   1.5B on the CPU, QLoRA (4-bit training needs a CUDA GPU), and a second fine-tuning round for the
   verifier with paraphrased `supported` claims and a hand-written validation set.
