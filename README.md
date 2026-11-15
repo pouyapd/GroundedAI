@@ -31,8 +31,8 @@ stays in the tab.
 **What it does**
 
 - **Evidence for each statement:** the supporting sentence, quoted exactly, with its page and source label.
-- **Separate checks, never one score:** retrieval, citation labels, lexical match, added details,
-  question relevance and, optionally, meaning (an NLI model) are shown as separate rows. Answer
+- **Separate checks, never one score:** retrieval, citation labels, lexical match, question relevance and, optionally, added details (a
+  lexical rule, off by default) and meaning (an NLI model) are shown as separate rows. Answer
   correctness is never claimed.
 - **Refusals that say why:** when the passages do not mention what the question asks about, the
   extractive generator says which words are missing instead of answering.
@@ -69,7 +69,7 @@ WebLLM, ONNX Runtime Web, pytest, Playwright, Docker, GitHub Actions.
 
 | | |
 |---|---|
-| **Implemented and tested** | upload checks and PDF extraction with pages; hybrid retrieval (BM25 + vectors, RRF); three generators; citation-label check; lexical claim check with exact quotes; added-detail flag; question-relevance check and refusal (extractive); disagreement check across documents and editions; safe bulk re-indexing; browser demo with an optional in-page language model and an optional NLI meaning check |
+| **Implemented and tested** | upload checks and PDF extraction with pages; hybrid retrieval (BM25 + vectors, RRF); three generators; citation-label check; lexical claim check with exact quotes; optional added-detail flag (off by default); question-relevance check and refusal (extractive); disagreement check across documents and editions; safe bulk re-indexing; browser demo with an optional in-page language model and an optional NLI meaning check |
 | **Evaluated** | synthetic sets (development, 56-question evaluation, 30 held-out conflict cases); real NIST PDFs (53 test questions, 108 hand-written test claims, validation and fictional-edition sets), each change compared with the previous defaults ([round 3](docs/RELIABILITY_V3.md), [round 2](docs/RESEARCH_EVALUATION.md)) |
 | **Incomplete** | LoRA fine-tuning of the answer model: prepared and smoke-tested, not trained (no GPU); the meaning check is not part of the server API |
 | **Known weaknesses** | real version changes between two NIST editions are still missed (0 of 4); the extractive relevance check refuses too many answerable test questions (10 of 40); small, single-author datasets ([all limitations](#limitations)) |
@@ -150,7 +150,7 @@ optional model runs on the visitor's GPU with WebLLM.
 | **Indexing and retrieval** | BM25 (SQLite FTS5, Porter stemming) and vector search (hashing embedder by default, or sentence-transformers), fused with Reciprocal Rank Fusion (k = 60); top 5 passages, optional cross-encoder reranking; PostgreSQL + pgvector as an alternative store. | Recall@5 of the evidence page .864 on the real-PDF test set. A reranker reached 1.0 on validation but was 25 to 140 times slower. |
 | **Before generation** | Passages that state different values for the same thing are paired (disagreement check). Two editions of one document (found from their titles) are compared statement by statement, by value and by SHALL/SHOULD wording; if only one edition was retrieved, the other's best passages are added. Instruction-like text in a passage is flagged and passed as data. | Synthetic held-out set: 12 of 16 disagreements found, 0 false alarms. Fictional editions: 10 of 11 (dev), 4 of 7 (validation, first run). Real version changes: 0 of 4 found. |
 | **Generation** | A versioned LangChain prompt with numbered passages `[S1]`...; the model must cite or reply `INSUFFICIENT_EVIDENCE`. Generators: extractive (default, no model; copies the best-matching sentences, and refuses when an asked word appears in no passage), a local model through Ollama, transformers, or Qwen2.5-1.5B in the browser (WebLLM). | Correct answers on the real-PDF test set: extractive .625 (with the relevance check; .725 without), qwen2.5:1.5b .775. |
-| **After generation** | Citation labels are checked against the passages actually given; every statement is matched to the passages (lexical claim check) and gets a status, the exact quote and its page; words a statement adds that no passage contains are flagged; partial answers before a refusal marker are checked too. In the browser demo, an NLI model can check meaning as a second, separate opinion. | Invented labels (such as `S2` when only `S1` was given) are flagged. On 108 hand-written test claims: lexical check macro-F1 .388, NLI (int8, as in the browser) .716. |
+| **After generation** | Citation labels are checked against the passages actually given; every statement is matched to the passages (lexical claim check) and gets a status, the exact quote and its page; optionally (off by default), words a statement adds that no passage contains are flagged; partial answers before a refusal marker are checked too. In the browser demo, an NLI model can check meaning as a second, separate opinion. | Invented labels (such as `S2` when only `S1` was given) are flagged. On 108 hand-written test claims: lexical check macro-F1 .388, NLI (int8, as in the browser) .716. |
 
 The server's claim check compares words and figures, not meaning: it cannot tell a
 contradiction from a missing fact. The NLI meaning check does much better on hand-written claims
@@ -248,7 +248,7 @@ commit, test sets run once after the defaults were fixed; details in
 |---|---|---|
 | Version-aware disagreement (`disagreement-v3`) | fictional editions: 10 of 11 found (dev, v1: 5), 4 of 7 (validation, first run; v1: 1); no false alarm | real version changes: still 0 of 4; no false alarm in 49 questions |
 | Relevance check and refusal, extractive (`extractive_relevance=v2`) | refused 20 of 20 questions to refuse (was 8); false refusals 7 of 46 (was 1); correct answers unchanged (32 of 46) | refused 4 of 6 (was 1; t38 fixed); correct .625 (was .725; paired −.100, CI −.225 to 0); false refusals 10 of 40 (was 3) |
-| Added-detail flag (`claim_detail_check=v1`) | fewer false "supported" on fictional and rule-made claims (.294 → .118; .242 → .158) | no gain on the 108 test claims; 3 more correct claims flagged |
+| Added-detail flag (`claim_detail_check`; optional, off by default since 2026-11-15) | fewer false "supported" on fictional and rule-made claims (.294 → .118; .242 → .158) | no gain on the 108 test claims; 3 more correct claims flagged; therefore made optional |
 | NLI meaning check in the browser (int8 ONNX) | validation answers: 1 of 1 wrong answer caught, 5 of 15 correct ones flagged (lexical: 6) | test claims macro-F1 .716 (lexical .388); wrong qwen2.5:1.5b answers caught 5 of 9 (lexical 1), correct ones flagged 6 of 30 (lexical 4); wrong extractive answers caught 0 of 7 |
 | Browser cost of the meaning check (laptop CPU) | local build on mains power: about 96 ms per statement-sentence pair, 1.1–1.3 s start from the cache, about 0.6 GB of memory while on | deployed site: works the same (159 of 160 labels as in Python, 93 MB on first use); its timings were taken on battery and are slower |
 
@@ -301,7 +301,7 @@ commit, test sets run once after the defaults were fixed; details in
   eliminate hallucinations or guarantee that an answer is correct.
 - **The defaults have known costs.** Text clean-up drops a table column header that repeats at
   the top of pages, and on pages whose lines all sit at the page edges it can remove everything
-  (re-indexing then keeps the old index). The added-detail flag marks some correct paraphrases.
+  (re-indexing then keeps the old index). The optional added-detail flag (off by default) marks some correct paraphrases.
 - **Research results with limits.** The LoRA fine-tuning of the answer model was not completed
   (no GPU; smoke test only). The meaning check's browser numbers come from one laptop.
 - **No OCR, tables or images;** text processing is English-focused. A quote's page is the

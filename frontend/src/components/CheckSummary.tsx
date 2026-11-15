@@ -54,6 +54,13 @@ export function checkRows(response: AnswerResponse): Row[] {
           : "none found",
       detail: "Two or more consecutive words of a statement that appear in no retrieved passage.",
     });
+  } else if (answered) {
+    rows.push({
+      property: "Added details",
+      result: "not checked (optional rule, off by default)",
+      detail:
+        "The added-detail rule runs only when the server sets GROUNDEDAI_CLAIM_DETAIL_CHECK=on; it did not help on the hand-written test claims.",
+    });
   }
   if (ran.has("relevance") && response.relevance) {
     const missing = response.relevance.unmatched;
