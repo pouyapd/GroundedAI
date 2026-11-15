@@ -10,6 +10,7 @@ output with ``is_llm: false`` and the UI labels it as demo output.
 
 from __future__ import annotations
 
+import html
 import re
 from typing import Any, Literal
 
@@ -20,33 +21,23 @@ from langchain_core.outputs import ChatGeneration, ChatResult
 
 from groundedai.core.text import content_tokens, split_sentences
 from groundedai.generation.prompts import ABSTAIN_MARKER
+from groundedai.generation.relevance import question_relevance, shared_prefix, words_match
 from groundedai.generation.safety import looks_like_instruction
 
 _QUESTION_RE = re.compile(r"<question>\s*(.*?)\s*</question>", re.DOTALL)
 _SOURCE_RE = re.compile(r'<source id="(S\d+)"[^>]*>\n(.*?)\n</source>', re.DOTALL)
+_SOURCE_TITLE_RE = re.compile(r'<source id="S\d+" title="([^"]*)"')
 
 EXTRACTIVE_MODEL_NAME = "extractive-demo-v1"
 EXTRACTIVE_PREFIX_MODEL_NAME = "extractive-demo-v2-prefix"
-MIN_SHARED_PREFIX = 5
+NOT_ANSWERED = "The sources do not appear to answer this question."
+
+__all__ = ["ExtractiveDemoChatModel", "extractive_model_name", "shared_prefix", "words_match"]
 
 
-def shared_prefix(a: str, b: str) -> int:
-    length = 0
-    for left, right in zip(a, b, strict=False):
-        if left != right:
-            break
-        length += 1
-    return length
-
-
-def words_match(a: str, b: str) -> bool:
-    """Same word, or two forms of one word: a shared prefix of at least five letters that
-    leaves at most three letters of the shorter word ("reauthenticated" / "reauthentication",
-    "minutes" / "minute"). A heuristic; it also joins some unrelated words."""
-    if a == b:
-        return True
-    shared = shared_prefix(a, b)
-    return shared >= max(MIN_SHARED_PREFIX, min(len(a), len(b)) - 3)
+def extractive_model_name(matching: str, relevance: str = "v1") -> str:
+    name = EXTRACTIVE_MODEL_NAME if matching == "exact" else EXTRACTIVE_PREFIX_MODEL_NAME
+    return name if relevance == "v1" else f"{name}-relevance-v2"
 
 
 class ExtractiveDemoChatModel(BaseChatModel):
@@ -55,6 +46,9 @@ class ExtractiveDemoChatModel(BaseChatModel):
     # "exact": a question word counts only when the sentence has the same word (v1, published
     # results); "prefix": also when it has another form of it (see words_match).
     matching: Literal["exact", "prefix"] = "exact"
+    # "v1": every question word counts (published results); "v2": title words do not count, so
+    # a sentence must cover half of what the question asks about beyond the document's name.
+    relevance: Literal["v1", "v2"] = "v1"
 
     @property
     def _llm_type(self) -> str:
@@ -66,6 +60,7 @@ class ExtractiveDemoChatModel(BaseChatModel):
             "min_overlap": self.min_overlap,
             "max_sentences": self.max_sentences,
             "matching": self.matching,
+            "relevance": self.relevance,
         }
 
     def _generate(
@@ -79,13 +74,27 @@ class ExtractiveDemoChatModel(BaseChatModel):
         question_match = _QUESTION_RE.search(prompt)
         question = question_match.group(1) if question_match else ""
         sources = _SOURCE_RE.findall(prompt)
-        answer = self.compose(question, sources)
-        name = EXTRACTIVE_MODEL_NAME if self.matching == "exact" else EXTRACTIVE_PREFIX_MODEL_NAME
+        titles = [html.unescape(title) for title in _SOURCE_TITLE_RE.findall(prompt)]
+        answer = self.compose(question, sources, titles)
+        name = extractive_model_name(self.matching, self.relevance)
         message = AIMessage(content=answer, response_metadata={"model_name": name})
         return ChatResult(generations=[ChatGeneration(message=message)])
 
-    def compose(self, question: str, sources: list[tuple[str, str]]) -> str:
+    def compose(
+        self, question: str, sources: list[tuple[str, str]], titles: list[str] | None = None
+    ) -> str:
         question_tokens = set(content_tokens(question))
+        if self.relevance == "v2" and question_tokens and sources:
+            relevance = question_relevance(question, titles or [], [body for _, body in sources])
+            if relevance.unmatched:
+                missing = ", ".join(f'"{word}"' for word in relevance.unmatched)
+                return (
+                    f"{ABSTAIN_MARKER}: The sources do not mention {missing}, which the question "
+                    "asks about."
+                )
+            # Scored on every question word except title words; the generic words left out
+            # above only decide whether the passages mention what is asked.
+            question_tokens = set(relevance.scored) or question_tokens
         if not question_tokens or not sources:
             return f"{ABSTAIN_MARKER}: No relevant sources were provided for this question."
 

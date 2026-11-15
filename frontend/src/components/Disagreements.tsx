@@ -5,10 +5,17 @@ import { EvidenceQuote } from "./ClaimCheck";
 /** What one side states: its values, or whether it says something is (not) required. */
 function statedValue(statement: ConflictStatementOut): string {
   if (statement.values.length > 0) return statement.values.join(", ");
+  if (statement.requirement) return `"${statement.requirement}"`;
   if (statement.denies_requirement) return "not required";
   if (statement.affirms_requirement) return "required";
   return "no value stated";
 }
+
+const KIND_TEXT: Record<ConflictOut["kind"], string> = {
+  conflict: "Sources disagree",
+  different_dates: "Different values for different dates",
+  different_versions: "Two versions of the same document differ",
+};
 
 /** Retrieved passages that disagree. Both sides are shown; nothing is resolved. */
 export function Disagreements({ conflicts, onCite }: { conflicts: ConflictOut[]; onCite: (label: string) => void }) {
@@ -17,9 +24,7 @@ export function Disagreements({ conflicts, onCite }: { conflicts: ConflictOut[];
       {conflicts.map((conflict, index) => (
         <div className="disagreement" key={index}>
           <div className="claim-head">
-            <Badge tone="warning">
-              {conflict.kind === "conflict" ? "Sources disagree" : "Different values for different dates"}
-            </Badge>
+            <Badge tone="warning">{KIND_TEXT[conflict.kind]}</Badge>
           </div>
           <p className="small">{conflict.explanation}</p>
           <div className="disagreement-sides">
@@ -35,6 +40,7 @@ export function Disagreements({ conflicts, onCite }: { conflicts: ConflictOut[];
                   onCite={onCite}
                 />
                 <p className="small secondary claim-note">
+                  {statement.edition ? `Version: ${statement.edition} · ` : ""}
                   {`Value: ${statedValue(statement)}`}
                   {statement.dates.length > 0 ? ` · Dates: ${statement.dates.join("; ")}` : ""}
                   {conflict.answer_reports.includes(statement.label) ? " · The answer reports this value." : ""}

@@ -20,8 +20,8 @@ from groundedai.core.errors import GroundedAIError, ProviderTimeout, ProviderUna
 from groundedai.core.net import http_client_options
 from groundedai.generation.extractive import (
     EXTRACTIVE_MODEL_NAME,
-    EXTRACTIVE_PREFIX_MODEL_NAME,
     ExtractiveDemoChatModel,
+    extractive_model_name,
 )
 from groundedai.retrieval.embeddings import configure_hf_offline
 
@@ -51,11 +51,13 @@ def build_generation_provider(settings: Settings) -> GenerationProvider:
     if name == "extractive-demo":
         return GenerationProvider(
             name=name,
-            model=EXTRACTIVE_MODEL_NAME
-            if settings.extractive_matching == "exact"
-            else EXTRACTIVE_PREFIX_MODEL_NAME,
+            model=extractive_model_name(
+                settings.extractive_matching, settings.extractive_relevance
+            ),
             is_llm=False,
-            chat_model=ExtractiveDemoChatModel(matching=settings.extractive_matching),
+            chat_model=ExtractiveDemoChatModel(
+                matching=settings.extractive_matching, relevance=settings.extractive_relevance
+            ),
         )
     if name == "ollama":
         from langchain_ollama import ChatOllama

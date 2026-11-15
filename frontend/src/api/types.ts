@@ -129,6 +129,8 @@ export interface ClaimOut {
   /** claims-v2 only. */
   citation_status?: "correct" | "wrong" | "partly_wrong" | "invalid" | "unconfirmed" | "none" | null;
   invalid_citations?: string[];
+  /** Runs of the claim's words that no retrieved passage states (2026-11-13). */
+  added_details?: string[];
 }
 
 export type EvidenceVerdict = "all_found" | "some_uncertain" | "some_not_found" | "none_found" | "not_applicable";
@@ -172,10 +174,14 @@ export interface ConflictStatementOut {
   /** Absent in recordings made before 2026-10-14's fix. */
   affirms_requirement?: boolean;
   dates: string[];
+  /** disagreement-v3: the document's edition (label and date), for different_versions. */
+  edition?: string | null;
+  /** disagreement-v3: the normative word ("SHALL", "SHOULD NOT"). */
+  requirement?: string | null;
 }
 
 export interface ConflictOut {
-  kind: "conflict" | "different_dates";
+  kind: "conflict" | "different_dates" | "different_versions";
   statements: ConflictStatementOut[];
   explanation: string;
   answer_reports: string[];
@@ -212,6 +218,10 @@ export interface AnswerResponse {
   verification?: VerificationOut | null;
   conflicts?: ConflictOut[];
   unverified_answer?: string | null;
+  /** Lexical question relevance (2026-11-13); absent in older recordings. */
+  relevance?: { method: "lexical"; asked: string[]; unmatched: string[]; answer_coverage: number | null } | null;
+  /** The checks that actually ran on this answer (2026-11-13). */
+  checks_run?: string[];
 }
 
 export interface ComponentStatus {

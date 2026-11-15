@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFESTS = [
     ROOT / "evaluation" / "datasets" / "groundedai-nist-v1" / "manifest.json",
     ROOT / "evaluation" / "datasets" / "groundedai-nist-val-v1" / "manifest.json",
+    ROOT / "evaluation" / "datasets" / "groundedai-nist-val-relevance-v1" / "manifest.json",
     ROOT / "experiments" / "finetune" / "corpus.json",
 ]
 USER_AGENT = "GroundedAI-evaluation/0.1 (dataset download)"

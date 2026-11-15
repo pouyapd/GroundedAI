@@ -149,6 +149,11 @@ class ClaimOut(BaseModel):
     missing_figures: list[str] = Field(description="Figures that no retrieved passage states")
     word_overlap: float
     flags: list[str] = Field(description="instruction_text: the claim repeats an instruction")
+    added_details: list[str] = Field(
+        default_factory=list,
+        description="Runs of the claim's words that no retrieved passage states "
+        "(claim_detail_check)",
+    )
     citation_status: (
         Literal["correct", "wrong", "partly_wrong", "invalid", "unconfirmed", "none"] | None
     ) = Field(
@@ -165,6 +170,20 @@ class ClaimOut(BaseModel):
             "claims-v2: cited labels that are not passages ('S7'), and bracketed references "
             "that name no passage ('[Source A]')"
         ),
+    )
+
+
+class RelevanceOut(BaseModel):
+    """Lexical question relevance: does the evidence mention what the question asks about?"""
+
+    method: Literal["lexical"] = "lexical"
+    asked: list[str] = Field(description="Question words that name what is asked (word keys)")
+    unmatched: list[str] = Field(
+        description="Asked words that no retrieved passage contains: the passages may not "
+        "state what the question asks for"
+    )
+    answer_coverage: float | None = Field(
+        default=None, description="Share of the asked words that the answer itself contains"
     )
 
 
@@ -233,13 +252,23 @@ class ConflictStatementOut(BaseModel):
         description='disagreement-v2: dates that only say when a document was edited ("last '
         'updated")',
     )
+    edition: str | None = Field(
+        default=None,
+        description="disagreement-v3: the document's edition (label and date) for "
+        "different_versions",
+    )
+    requirement: str | None = Field(
+        default=None, description='disagreement-v3: its normative word ("SHALL", "SHOULD NOT")'
+    )
 
 
 class ConflictOut(BaseModel):
-    kind: Literal["conflict", "different_dates"] = Field(
+    kind: Literal["conflict", "different_dates", "different_versions"] = Field(
         description=(
             "conflict: different values with nothing that separates them, or a requirement and "
-            "its denial; different_dates: different values that apply to different dates"
+            "its denial; different_dates: different values that apply to different dates; "
+            "different_versions: two versions of the same document state different values or "
+            "requirements (disagreement-v3)"
         )
     )
     statements: list[ConflictStatementOut]
@@ -292,6 +321,12 @@ class AnswerResponse(BaseModel):
         description="Every factual sentence checked against every retrieved passage",
     )
     verification: VerificationOut | None = None
+    relevance: RelevanceOut | None = None
+    checks_run: list[str] = Field(
+        default_factory=list,
+        description="Checks that ran on this answer: citation_labels, lexical_claims, "
+        "added_details, relevance, disagreement (a semantic or factual check is never implied)",
+    )
     conflicts: list[ConflictOut] = Field(
         default_factory=list,
         description="Retrieved passages that disagree about what was asked (never resolved)",

@@ -45,12 +45,18 @@ def clauses(claim: str) -> list[str]:
 
 
 def rule_verifier(version: str) -> Verifier:
+    """``claims-v1``, ``claims-v2``; ``+detail`` adds the added-detail check."""
     from groundedai.generation.claims import EvidenceSource, check_claims
+
+    base, _, extra = version.partition("+")
+    detail = extra == "detail"
 
     def run(pairs: Sequence[tuple[str, str]]) -> list[str]:
         out = []
         for claim, evidence in pairs:
-            report = check_claims(claim, [EvidenceSource("S1", "Evidence", evidence)], "", version)
+            report = check_claims(
+                claim, [EvidenceSource("S1", "Evidence", evidence)], "", base, detail_check=detail
+            )
             statuses = [c.status for c in report.claims]
             flags = [f for c in report.claims for f in c.flags]
             if not statuses:
