@@ -176,7 +176,7 @@ export function AnswerView({
       <CheckSummary response={response} />
 
       {verification && claims.length > 0 ? (
-        <ClaimCheck claims={claims} verification={verification} onCite={showCite} />
+        <ClaimCheck claims={claims} verification={verification} onCite={showCite} meaning={response.meaning} />
       ) : null}
 
       {response.sentences.length > 0 ? (

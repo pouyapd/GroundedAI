@@ -7,6 +7,8 @@ import { ApiError, LiveApi, toApiError, type Api } from "../api/client";
 import { StaticDemoApi } from "../api/demo";
 import type { AnswerResponse, DocumentOut, QueryRequest } from "../api/types";
 import { PAGE_MODEL } from "./gpu";
+import { checkMeaning } from "../nli/check";
+import { NliModel } from "./nliModel";
 import { PageModel } from "./pageModel";
 import type { PreparedQuery, WireResponse, WorkerMessage, WorkerRequest } from "./protocol";
 
@@ -77,6 +79,18 @@ function toResponse(wire: WireResponse): Response {
 export class BrowserApi implements Api {
   readonly mode = "browser" as const;
   readonly pageModel = new PageModel();
+  /** The optional meaning check; it runs on every answer once loaded and switched on. */
+  readonly nli = new NliModel();
+  private meaningOn = false;
+
+  get meaningCheck(): boolean {
+    return this.meaningOn;
+  }
+
+  /** Switch the meaning check on or off (it must be loaded to run). */
+  setMeaningCheck(on: boolean) {
+    this.meaningOn = on;
+  }
   private runtime: RuntimeLike;
   private live: LiveApi;
   private readonly recorded: StaticDemoApi;
@@ -96,6 +110,10 @@ export class BrowserApi implements Api {
     this.live = this.liveApi();
     this.seeded = this.seed();
     this.seeded.catch(() => undefined); // reported through the runtime state; API calls rethrow
+    if (window.location.hash === "#nli-bench") {
+      // Used by scripts/bench_meaning_check.py to measure the meaning check in a real browser.
+      (window as Window & { __groundedaiNli?: NliModel }).__groundedaiNli = this.nli;
+    }
   }
 
   /** Resolves when the runtime has started and the sample PDFs are indexed. */
@@ -199,6 +217,21 @@ export class BrowserApi implements Api {
   }
 
   async query(request: QueryRequest): Promise<AnswerResponse> {
+    return this.withMeaning(await this.answerQuery(request));
+  }
+
+  /** Adds the meaning check when it is loaded and on; a failure leaves the answer as it was. */
+  private async withMeaning(answer: AnswerResponse): Promise<AnswerResponse> {
+    if (!this.meaningOn || !this.nli.loaded) return answer;
+    try {
+      return await checkMeaning(answer, this.nli.classify, this.nli);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      return { ...answer, warnings: [...answer.warnings, `The meaning check did not run (${detail}).`] };
+    }
+  }
+
+  private async answerQuery(request: QueryRequest): Promise<AnswerResponse> {
     const live = await this.ready();
     if (this.generator !== "webllm") return live.query(request);
     const started = performance.now();

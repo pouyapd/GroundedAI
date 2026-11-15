@@ -43,6 +43,11 @@ def build(method: str):
         return nli_verifier(name)
     if kind == "ft":
         return finetuned_verifier(name)
+    if kind == "onnx":  # onnx:<model dir>, an ONNX file in <dir>/onnx/model_quantized.onnx
+        from verifier_lib import OnnxClassifier
+
+        onnx_file = Path(name) / "onnx" / "model_quantized.onnx"
+        return nli_verifier(name, OnnxClassifier(str(onnx_file), name, threads=4))
     raise SystemExit(f"unknown method {method}")
 
 

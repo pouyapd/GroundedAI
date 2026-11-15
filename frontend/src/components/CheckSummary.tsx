@@ -66,11 +66,24 @@ export function checkRows(response: AnswerResponse): Row[] {
       detail: "Lexical: a passage can mention every asked word and still be about something else.",
     });
   }
-  rows.push({
-    property: "Meaning (entailment)",
-    result: "not checked in this answer",
-    detail: "No semantic verifier ran; nothing here says that the statements mean what the sources mean.",
-  });
+  const meaning = response.meaning;
+  if (answered && meaning && ran.has("meaning_nli")) {
+    const count = (kind: string) => meaning.claims.filter((claim) => claim.meaning === kind).length;
+    const contradicted = count("contradicted");
+    rows.push({
+      property: "Meaning (entailment)",
+      result:
+        `${count("entailed")} of ${meaning.claims.length} statements entailed by a passage` +
+        (contradicted > 0 ? `; ${contradicted} appear contradicted` : ""),
+      detail: `${meaning.model}, ${meaning.backend.toUpperCase()} in this tab, ${meaning.pairs} comparisons in ${meaning.total_ms} ms. An NLI model's judgement, not proof.`,
+    });
+  } else {
+    rows.push({
+      property: "Meaning (entailment)",
+      result: "not checked in this answer",
+      detail: "No semantic verifier ran; nothing here says that the statements mean what the sources mean.",
+    });
+  }
   rows.push({
     property: "Answer correctness",
     result: "not assessed",

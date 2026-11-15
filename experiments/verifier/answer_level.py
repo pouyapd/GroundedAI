@@ -50,6 +50,23 @@ def value(text: str) -> Any:
     return text
 
 
+def nearest_premises(
+    statement: str, premises: list[tuple[str, str]], keep: int
+) -> list[tuple[str, str]]:
+    """The ``keep`` premises that share the most content words with the statement (all when
+    ``keep`` is 0); ties keep document order."""
+    if keep <= 0 or len(premises) <= keep:
+        return premises
+    from groundedai.core.text import content_tokens
+
+    words = set(content_tokens(statement))
+    scored = sorted(
+        range(len(premises)),
+        key=lambda i: -len(words & set(content_tokens(premises[i][1]))),
+    )
+    return [premises[i] for i in sorted(scored[:keep])]
+
+
 def rates(rows: list[dict[str, Any]], key: str) -> dict[str, Any]:
     wrong = [r for r in rows if not r["correct"]]
     right = [r for r in rows if r["correct"]]
@@ -72,6 +89,17 @@ def main() -> int:
     parser.add_argument("--dataset", type=Path, required=True)
     parser.add_argument("--model", default="cross-encoder/nli-deberta-v3-xsmall")
     parser.add_argument("--premise", choices=["passage", "window"], default="passage")
+    parser.add_argument(
+        "--max-windows",
+        type=int,
+        default=0,
+        help="window premises: keep only the N windows that share the most words with each "
+        "statement (0 = all windows; the browser verifier uses 6)",
+    )
+    parser.add_argument(
+        "--onnx", type=Path, help="run this ONNX model directory (onnx/model_quantized.onnx)"
+    )
+    parser.add_argument("--set", action="append", default=[], metavar="NAME=VALUE")
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
 
@@ -91,7 +119,12 @@ def main() -> int:
     from groundedai.services.qa_service import QAService
 
     report = json.loads(args.report.read_text(encoding="utf-8"))
-    values = {k: value(str(v)) for k, v in report["settings_overrides"].items()}
+    # The report's recorded settings, then its overrides, then --set (settings that older
+    # reports did not record must be given with --set).
+    recorded = {k: v for k, v in report.get("settings", {}).items() if k in Settings.model_fields}
+    values = {k: value(str(v)) for k, v in recorded.items()}
+    values.update({k: value(str(v)) for k, v in report["settings_overrides"].items()})
+    values.update({k: value(v) for k, v in (item.split("=", 1) for item in args.set)})
     workdir = Path(tempfile.mkdtemp(prefix="answer-level-"))
     settings = Settings(_env_file=None, data_dir=workdir, rate_limit_enabled=False, **values)
     dataset = load_dataset(args.dataset)
@@ -111,7 +144,14 @@ def main() -> int:
         MetricsRegistry(),
         record_events=False,
     )
-    classifier = CrossEncoderClassifier(args.model, max_length=512)
+    if args.onnx:
+        from verifier_lib import OnnxClassifier
+
+        classifier: Any = OnnxClassifier(
+            str(args.onnx / "onnx" / "model_quantized.onnx"), str(args.onnx), max_length=512
+        )
+    else:
+        classifier = CrossEncoderClassifier(args.model, max_length=512)
     questions = {q.id: q for q in dataset.questions}
     rows: list[dict[str, Any]] = []
     skipped = {"abstained_or_error": 0, "not_scored": 0, "passages_differ": 0}
@@ -148,14 +188,22 @@ def main() -> int:
             sentences = split_sentences(text) or [text]
             premises.extend((source.label, one) for one in sentences)
             premises.extend((source.label, f"{a} {b}") for a, b in itertools.pairwise(sentences))
-        pairs = [(s, premise) for s in statements for _, premise in premises]
+        chosen = [
+            nearest_premises(statement, premises, args.max_windows) for statement in statements
+        ]
+        pairs = [
+            (s, premise) for s, own in zip(statements, chosen, strict=True) for _, premise in own
+        ]
         probs = classifier.probabilities(pairs) if pairs else []
         labels = []
         detail = []
+        offset = 0
         for i, statement in enumerate(statements):
-            per_premise = probs[i * len(premises) : (i + 1) * len(premises)]
+            own = chosen[i]
+            per_premise = probs[offset : offset + len(own)]
+            offset += len(own)
             by_source: dict[str, list[str]] = {}
-            for (label, _), p in zip(premises, per_premise, strict=True):
+            for (label, _), p in zip(own, per_premise, strict=True):
                 by_source.setdefault(label, []).append(max(p, key=p.__getitem__))
             tops = [
                 "entailment"
@@ -187,6 +235,10 @@ def main() -> int:
                 "nli_contradicted": labels.count("contradiction"),
                 "lexical_pass": bool(statements) and found == len(statements),
                 "nli_pass": bool(statements) and labels.count("entailment") == len(statements),
+                "combined_pass": bool(statements)
+                and found == len(statements)
+                and labels.count("entailment") == len(statements),
+                "pairs": len(pairs),
                 "detail": detail,
             }
         )
@@ -196,10 +248,14 @@ def main() -> int:
         "settings_overrides": report["settings_overrides"],
         "nli_model": args.model,
         "premise": args.premise,
+        "max_windows": args.max_windows,
+        "onnx": str(args.onnx) if args.onnx else None,
         "seconds": round(time.perf_counter() - started, 1),
         "skipped": skipped,
         "lexical_all_found": rates(rows, "lexical_pass"),
         "nli_all_entailed": rates(rows, "nli_pass"),
+        "lexical_and_nli": rates(rows, "combined_pass"),
+        "pairs_per_answer": round(sum(r["pairs"] for r in rows) / len(rows), 1) if rows else None,
         "rows": rows,
     }
     qa.close()
@@ -208,6 +264,7 @@ def main() -> int:
     print(out["report"], "skipped", skipped)
     print(" lexical", out["lexical_all_found"])
     print(" nli    ", out["nli_all_entailed"])
+    print(" both   ", out["lexical_and_nli"], "pairs/answer", out["pairs_per_answer"])
     return 0
 
 
