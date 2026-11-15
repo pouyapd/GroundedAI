@@ -52,12 +52,17 @@ The demo site redistributes unmodified copies of these wheels, pinned with their
 | httpx2, httpx2-jsfetch, pypdf, python-dotenv, starlette, uuid-utils, websockets | BSD-3-Clause |
 | opentelemetry-api, python-multipart, requests-toolbelt, tenacity | Apache-2.0 |
 | @mlc-ai/web-llm (WebLLM) | Apache-2.0 |
+| onnxruntime-web (ONNX Runtime Web, including its WebAssembly file) | MIT |
+| @huggingface/tokenizers | Apache-2.0 |
 
 Loaded by the visitor's browser from their publishers, not redistributed by this project:
 Pyodide and its packages (MPL-2.0 for Pyodide; each package keeps its licence) from the
 jsDelivr CDN, and, only when the visitor chooses it, `mlc-ai/Qwen2.5-1.5B-Instruct-q4f16_1-MLC`
 (Qwen2.5-1.5B-Instruct converted by the MLC project; Apache-2.0) from Hugging Face with its
-WebGPU library from the MLC project.
+WebGPU library from the MLC project; and, only when the visitor switches on the meaning check,
+`Xenova/nli-deberta-v3-xsmall` at a pinned revision (cross-encoder/nli-deberta-v3-xsmall,
+Apache-2.0, converted to ONNX and quantized to int8 by the transformers.js project) from Hugging
+Face.
 
 Container images referenced by `Dockerfile` and `docker-compose.yml` (python, node,
 pgvector/pgvector, ollama/ollama) are pulled from their publishers and keep their own licences.

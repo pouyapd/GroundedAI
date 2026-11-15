@@ -107,6 +107,7 @@ def main() -> int:
             peak_rss[0] = max(peak_rss[0], psutil.Process().memory_info().rss)
         except ImportError:
             pass
+
     optimizer = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=args.lr)
     updates = args.epochs * max(1, len(train) // args.accumulate)
     scheduler = get_linear_schedule_with_warmup(optimizer, max(1, int(0.05 * updates)), updates)

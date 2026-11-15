@@ -1,0 +1,18 @@
+{
+  "what": "The three NIST test PDFs indexed with text clean-up v1 (groundedai ingest), then re-indexed with v2 (groundedai reindex), compared with a fresh v2 ingestion of the same files",
+  "date": "2026-11-15",
+  "code": "main 0eb3eb5",
+  "machine": "Intel Core i7-1255U, 16 GB RAM, mains power, SQLite, hashing embedder",
+  "ingest_v1_seconds": 13.9,
+  "dry_run": "3 of 3 ready document(s) were indexed with older settings. text clean-up: v1 -> v2 (3)",
+  "reindex": [
+    {"title": "Artificial Intelligence Risk Management Framework (AI RMF 1.0)", "chunks_before": 172, "chunks_after": 173},
+    {"title": "Digital Identity Guidelines: Authentication and Authenticator Management (SP 800-63B-4)", "chunks_before": 468, "chunks_after": 448},
+    {"title": "Digital Identity Guidelines: Authentication and Lifecycle Management (SP 800-63B, 2017)", "chunks_before": 367, "chunks_after": 306}
+  ],
+  "reindex_seconds": 13.0,
+  "reindexed": 3, "failed": 0, "skipped": 0,
+  "second_run": "0 of 3 ready document(s) were indexed with older settings.",
+  "settings_switched_back_to_v1": "3 of 3 ready document(s) were indexed with older settings. text clean-up: v2 -> v1 (3)",
+  "compared_with_fresh_v2_ingestion": {"chunks": 927, "fresh_chunks": 927, "full_text_rows": 927, "fresh_full_text_rows": 927, "rows_identical": true, "compared_columns": ["id", "document_id", "chunk_index", "text_sha256", "page_start", "page_end", "page_breaks", "embedding"]}
+}

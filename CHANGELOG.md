@@ -2,6 +2,36 @@
 
 ## Unreleased
 
+### Reliability round 3 (November 2026)
+
+Full write-up: `docs/RELIABILITY_V3.md`; reports in `evaluation/reports/reliability-v3/`.
+
+- **Changed defaults:**
+  - `GROUNDEDAI_CONFLICT_CHECK=disagreement-v3`: two editions of one document are compared, and differences are reported as `different_versions` with both quotes, editions and pages; GroundedAI does not decide which edition applies.
+  - `GROUNDEDAI_EXTRACTIVE_RELEVANCE=v2`: the extractive generator refuses when an asked word appears in no retrieved passage, and names the word.
+  - `GROUNDEDAI_CLAIM_DETAIL_CHECK=v1`: statements that add two or more consecutive words found in no passage are partial.
+  - The old behaviour stays available with `disagreement-v1`, `v1` and `off`.
+- **Added:** every answer reports `relevance` and `checks_run`. The UI lists the checks that ran as separate rows: retrieval, citation labels, lexical match, added details, relevance, meaning, correctness.
+- **Added (online demo):** an optional meaning check with an NLI model (DeBERTa-v3-xsmall, int8 ONNX, ONNX Runtime Web on WebAssembly), shown next to the lexical check and never merged with it. `scripts/bench_meaning_check.py` measures it in a real browser.
+- **Added:** detection of documents indexed with older settings (text clean-up, chunking, embedding model). Safe bulk re-indexing comes with it:
+  - available through `POST /api/v1/documents/reindex`, the Documents page and `groundedai reindex`;
+  - each document stays searchable and keeps its previous index if re-indexing fails;
+  - ids are kept.
+- **Fixed:** re-ingesting a document that had been indexed before deleted its stored file when the current settings found no text in it.
+- **Added:** validation data written before the checks: `groundedai-versions-v1` (fictional editions) and `groundedai-nist-val-relevance-v1`.
+- **Added scripts:**
+  - `scripts/eval_disagreement.py`;
+  - `scripts/compare_rag_reports.py` (paired bootstrap);
+  - `scripts/evaluate_conflict_cases.py --check`;
+  - `train_lora.py --max-steps/--smoke`.
+- **Measured, protected test set:**
+  - version changes found: 0 of 4 (unchanged);
+  - unanswerable questions refused by the extractive generator: 4 of 6 (from 1);
+  - extractive correct answers: .625 (from .725) and false refusals: 10 (from 3);
+  - test claims: NLI macro-F1 .716, against .388 for the lexical default;
+  - the added-detail rule did not help on the test claims.
+- **Not completed:** LoRA training (about 3.7 hours per epoch on the CPU; smoke test only).
+
 ### Real-document evaluation and experiments (November 2026)
 
 Full write-up: `docs/RESEARCH_EVALUATION.md`.

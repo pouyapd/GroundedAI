@@ -57,6 +57,9 @@ already sent by the UI and honoured by `/api/v1/query`. That path had no API tes
 | "Ask again with …" notice | A, B | tests: appears after a settings change and re-asks with the new settings |
 | Theme | A, B | test: cycles system → light → dark and sets `data-theme`; browser in both builds |
 | Documents: upload, list, chunks, re-ingest, delete | A; C in the demo | existing API and end-to-end tests; browser, live: upload of a text file → Ready → Chunks shows the text → Hide → Re-ingest → Ready → Delete (asks "Delete … and its chunks?", list goes from 15 to 14). Demo: upload form and row actions hidden, banner explains why (test) |
+| Documents: "Re-index N documents" (shown when documents were indexed with older settings), progress, last-run summary, per-row "Indexed with older settings" note (2026-11-15) | A; hidden in the static demo | `reindex.test.tsx` (notice, button, progress, failures, hidden for servers without the endpoint and when read-only); API, CLI and PostgreSQL tests; `groundedai reindex` on three real PDFs |
+| Online demo: "Meaning check with an NLI model" (2026-11-15) | browser demo only | `meaning.test.tsx` (load progress, retry after a failed download, switching off stops the worker, results per statement and in the summary); live: switched on, ferry question shows "entailed by S1" and the summary row (`scripts/bench_meaning_check.py`, screenshot in `docs/images/demo-checks-meaning.png`) |
+| "Checks that ran on this answer" (2026-11-14) | A, B | `checks.test.tsx`; live: every row present |
 | Evaluation: report selector, Show table / Show chart | A, B | existing tests; browser in both builds |
 | Evaluation: "Evaluate this instance" | A; C in the demo | shown only against a live server |
 | Operations: Refresh and 15 s auto-refresh | A; C in the demo | Refresh hidden in the demo (test); the snapshot banner explains it |

@@ -6,8 +6,10 @@ Each case is a question and 2-3 passages from different documents, given to the 
 as retrieved passages would be. No retrieval and no language model are involved. The case file
 must match the SHA-256 recorded in the dataset manifest; the script refuses to run otherwise.
 
-Both checks are scored: ``disagreement-v1`` (current) and ``figures-v1`` (published on
-2026-10-13, which has no notion of dates). A case counts as
+Two checks are scored: the disagreement check chosen with ``--check`` (``disagreement-v1`` by
+default, as in the published report; ``disagreement-v3`` also gets each document's edition from
+its title and passage, as the application does) and ``figures-v1`` (published on 2026-10-13,
+which has no notion of dates). A case counts as
 
 * **found** when a disagreement between the two expected passages is reported,
 * **classified** when, in addition, its kind is right (``conflict`` or ``different_dates``),
@@ -32,6 +34,7 @@ from groundedai.evaluation.environment import code_version  # noqa: E402
 from groundedai.generation.conflicts import find_figure_conflicts  # noqa: E402
 from groundedai.generation.context import assemble_context  # noqa: E402
 from groundedai.generation.disagreement import find_disagreements  # noqa: E402
+from groundedai.generation.versions import edition_of  # noqa: E402
 from groundedai.retrieval.types import ChunkScores, RetrievedChunk  # noqa: E402
 
 DATASET = REPO_ROOT / "evaluation" / "datasets" / "groundedai-conflicts-v1"
@@ -67,10 +70,16 @@ def _context(case: dict[str, Any]) -> Any:
     return assemble_context(chunks, max_chars=6000)
 
 
-def _score_case(case: dict[str, Any]) -> dict[str, Any]:
+def _score_case(case: dict[str, Any], check: str = "disagreement-v1") -> dict[str, Any]:
     context = _context(case)
     expected_pair = sorted(case.get("expected_pair", []))
-    current = find_disagreements(case["question"], context.sources)
+    editions = None
+    if check == "disagreement-v3":
+        editions = {
+            passage["doc"]: edition_of(passage["doc"], passage["title"], passage["text"])
+            for passage in case["passages"]
+        }
+    current = find_disagreements(case["question"], context.sources, check, editions)  # type: ignore[arg-type]
     published = find_figure_conflicts(case["question"], context.sources)
     current_found = [{"kind": item.kind, "labels": sorted(item.labels)} for item in current]
     published_found = [sorted((item.label_a, item.label_b)) for item in published]
@@ -80,7 +89,7 @@ def _score_case(case: dict[str, Any]) -> dict[str, Any]:
         "class": case["class"],
         "question": case["question"],
         "expected_pair": expected_pair or None,
-        "disagreement_v1": current_found,
+        check.replace("-", "_"): current_found,
         "figures_v1": published_found,
     }
     if case["class"] in EXPECTED_KIND:
@@ -137,12 +146,12 @@ def _markdown(report: dict[str, Any]) -> str:
         f"{summary['disagreement_cases']}) | Kind also right | False alarms (of "
         f"{summary['no_disagreement_cases']}) |",
         "|---|---|---|---|",
-        f"| disagreement-v1 (current) | {summary['found']} | {summary['classified']} | "
+        f"| {report['check']} | {summary['found']} | {summary['classified']} | "
         f"{summary['false_alarms']} |",
         f"| figures-v1 (published 2026-10-13) | {summary['figures_v1_found']} | – | "
         f"{summary['figures_v1_false_alarms']} |",
         "",
-        "| Class | Cases | disagreement-v1 | figures-v1 |",
+        f"| Class | Cases | {report['check']} | figures-v1 |",
         "|---|---|---|---|",
     ]
     for name, item in summary["by_class"].items():
@@ -157,11 +166,12 @@ def _markdown(report: dict[str, Any]) -> str:
         "",
         "## Cases",
         "",
-        "| Case | Class | disagreement-v1 | figures-v1 |",
+        f"| Case | Class | {report['check']} | figures-v1 |",
         "|---|---|---|---|",
     ]
+    key = report["check"].replace("-", "_")
     for row in report["cases"]:
-        current = ", ".join(f"{d['kind']} {'/'.join(d['labels'])}" for d in row["disagreement_v1"])
+        current = ", ".join(f"{d['kind']} {'/'.join(d['labels'])}" for d in row[key])
         published = ", ".join("/".join(pair) for pair in row["figures_v1"])
         lines.append(f"| {row['id']} | {row['class']} | {current or '–'} | {published or '–'} |")
     lines += ["", "## Limitations", ""] + [f"- {text}" for text in report["limitations"]]
@@ -182,13 +192,20 @@ def main() -> int:
     parser.add_argument(
         "--out", type=Path, default=REPO_ROOT / "evaluation" / "reports" / "conflicts"
     )
+    parser.add_argument(
+        "--check",
+        choices=["disagreement-v1", "disagreement-v2", "disagreement-v3"],
+        default="disagreement-v1",
+    )
     args = parser.parse_args()
     manifest, cases = _load_cases()
-    results = [_score_case(case) for case in cases]
+    results = [_score_case(case, args.check) for case in cases]
     generated = datetime.now(UTC)
     version = code_version()
     report = {
-        "report_id": f"conflict-cases-{generated:%Y%m%dT%H%M%SZ}",
+        "report_id": f"conflict-cases-{generated:%Y%m%dT%H%M%SZ}"
+        + ("" if args.check == "disagreement-v1" else f"-{args.check}"),
+        "check": args.check,
         "kind": "conflict_cases",
         "title": "Disagreement check on the held-out cases (groundedai-conflicts-v1)",
         "generated_at": generated.isoformat(timespec="seconds"),

@@ -1,0 +1,52 @@
+{
+  "url": "https://pouyapd.github.io/GroundedAI/",
+  "checks": [
+    {
+      "check": "two editions reported as different versions",
+      "ok": true,
+      "detail": "How quickly are reported leaks attended?"
+    },
+    {
+      "check": "checks table row: Retrieval",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "checks table row: Citation labels",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "checks table row: Lexical match",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "checks table row: Question relevance",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "checks table row: Meaning (entailment)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "checks table row: Answer correctness",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "meaning shown as not checked when off",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "refusal names the missing words",
+      "ok": true,
+      "detail": "Answer\nNot enough evidence\n\nThe searched documents do not contain enough evidence to answer this question. (The sources do not mention \"borrow\", \"item\", \"member\", which the question asks about.)\n\nHybrid retrieval \u00b7 1 of up to 5 passages used\nDemo generator: extractive sentence selection, not an LLM\nretrieval 7 ms\ngeneration 5 ms\ntotal 32 ms\nChecks that ran on this answer\nRetrieved but not cited (1"
+    }
+  ],
+  "version_question": "How quickly are reported leaks attended?",
+  "checks_table": "Retrieval\t5 passages retrieved\nRanked by word and vector search; retrieval does not show that a passage answers the question.\n\nCitation labels\tevery label names a provided source\nChecks that each [S#] exists, not that the passage supports the sentence.\n\nLexical match\t2 of 2 statements matched retrieved text\nWords and figures are compared, not meaning.\n\nAdded details\tnone found\nTwo or more consecutive words of a statement that appear in no retrieved passage.\n\nQuestion relevance\tevery asked word appears in a retrieved passage\nLexical: a passage can mention every asked word and still be about something else.\n\nMeaning (entailment)\tnot checked in this answer\nNo semantic verifier ran; nothing here says that the statements mean what the sources mean.\n\nAnswer correctness\tnot assessed\nIt needs a reference answer; the Evaluation page reports it for the evaluation questions."
+}

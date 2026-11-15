@@ -1,0 +1,559 @@
+{
+ "kind": "disagreement-eval",
+ "dataset": {
+  "name": "groundedai-versions-v1",
+  "fingerprint": "8622531c5545d390"
+ },
+ "split": "validation",
+ "settings_overrides": {
+  "conflict_check": "disagreement-v3"
+ },
+ "conflict_check": "disagreement-v3",
+ "generated_at": "2026-11-13T19:56:22+0100",
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "ac",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "numpy": "2.5.4",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "7080889f4128",
+   "uncommitted_changes": true
+  }
+ },
+ "code": {
+  "commit": "7080889f4128",
+  "uncommitted_changes": true
+ },
+ "summary": {
+  "questions": 24,
+  "positives": 7,
+  "negatives": 17,
+  "true_positives": 6,
+  "false_negatives": 1,
+  "wrong_reports_on_positives": 0,
+  "false_positives": 0,
+  "precision": 1.0,
+  "recall": 0.8571,
+  "false_positive_rate": 0.0
+ },
+ "rows": [
+  {
+   "id": "a01",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "question": "How much does a residents' permit cost?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "ashby-2023",
+      "ashby-2021"
+     ],
+     "pages": [
+      2,
+      2
+     ],
+     "values": [
+      [
+       "GBP 110"
+      ],
+      [
+       "GBP 85"
+      ]
+     ],
+     "quotes": [
+      "2 Prices A residents' permit costs GBP 110 per year.",
+      "2 Prices A residents' permit costs GBP 85 per year."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "a02",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement",
+    "unit"
+   ],
+   "question": "How long is a residents' permit valid?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "a03",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "question": "How many visitor permits can a household buy per year?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "ashby-2023",
+      "ashby-2021"
+     ],
+     "pages": [
+      4,
+      4
+     ],
+     "values": [
+      [
+       "30 visitor"
+      ],
+      [
+       "50 visitor"
+      ]
+     ],
+     "quotes": [
+      "4 Visitors Each household can buy up to 30 visitor permits per year.",
+      "4 Visitors Each household can buy up to 50 visitor permits per year."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "a04",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement",
+    "modal"
+   ],
+   "question": "What do applicants have to provide?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "a05",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "question": "How much is the penalty charge notice?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "a06",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "question": "What discount do fully electric vehicles get?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "a07",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "question": "How much does a second permit for the same household cost?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "a08",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "question": "How long is a visitor permit valid?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "c01",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "question": "What is the minimum password length?",
+   "expected": "versions",
+   "outcome": "FN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "c02",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value",
+    "acronym",
+    "word-form",
+    "unit"
+   ],
+   "question": "After how much inactivity must AL2 users be reauthenticated?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "corvane-a",
+      "corvane-b"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "30 minutes"
+      ],
+      [
+       "1 hour"
+      ]
+     ],
+     "quotes": [
+      "At AL2, users SHALL be reauthenticated after 30 minutes of inactivity.",
+      "At AL2, reauthentication SHALL occur after 1 hour of inactivity."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "c03",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value",
+    "acronym",
+    "word-form"
+   ],
+   "question": "How often must AL2 sessions be reauthenticated regardless of activity?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "corvane-a",
+      "corvane-b"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "once",
+       "every 8 hours"
+      ],
+      [
+       "12 hours"
+      ]
+     ],
+     "quotes": [
+      "At AL2, sessions SHALL be reauthenticated at least once every 8 hours, regardless of activity.",
+      "At AL2, the overall session timeout SHALL be no more than 12 hours, after which reauthentication is required."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "c04",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "modal"
+   ],
+   "question": "May administrators share accounts?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "corvane-b",
+      "corvane-a"
+     ],
+     "pages": [
+      4,
+      4
+     ],
+     "values": [
+      [],
+      []
+     ],
+     "quotes": [
+      "4 Administrators Administrators SHALL NOT share accounts.",
+      "4 Administrators Administrators SHOULD NOT share accounts."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "c05",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "question": "After how many failed attempts is an account locked?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "c06",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "question": "How often is administrator access reviewed?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "c07",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:versions",
+    "value",
+    "acronym",
+    "context"
+   ],
+   "question": "What is the inactivity timeout at AL1?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "corvane-b",
+      "corvane-a"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "4 hours"
+      ],
+      [
+       "2 hours"
+      ]
+     ],
+     "quotes": [
+      "3 Sessions At AL1, the inactivity timeout SHALL be no more than 4 hours.",
+      "3 Sessions At AL1, users SHALL be reauthenticated after 2 hours of inactivity."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "c08",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "question": "How long do exceptions to the standard last?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r09",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "question": "How much does a residents' permit cost for a motorcycle?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r10",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "question": "How many visitor permits can a business buy?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r11",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "question": "What is the minimum password length at AL3?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "r12",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "question": "How long are audit logs kept under the access standard?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "r13",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "paraphrase"
+   ],
+   "question": "Who approves exceptions to the access control standard?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r14",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "paraphrase"
+   ],
+   "question": "What happens to an account after five wrong sign-in attempts?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r15",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "multi-part"
+   ],
+   "question": "How much is a residents' permit and how long is it valid?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r16",
+   "split": "validation",
+   "tags": [
+    "split:validation",
+    "expect-conflict:none",
+    "relevance",
+    "out-of-scope"
+   ],
+   "question": "How do I bake sourdough bread?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  }
+ ]
+}

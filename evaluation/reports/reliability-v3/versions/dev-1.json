@@ -1,0 +1,673 @@
+{
+ "kind": "disagreement-eval",
+ "dataset": {
+  "name": "groundedai-versions-v1",
+  "fingerprint": "8622531c5545d390"
+ },
+ "split": "dev",
+ "settings_overrides": {
+  "conflict_check": "disagreement-v3"
+ },
+ "conflict_check": "disagreement-v3",
+ "generated_at": "2026-11-13T19:48:07+0100",
+ "environment": {
+  "os": "Windows 11",
+  "python": "3.12.7",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "logical_cpus": 12,
+  "ram_gb": 15.6,
+  "gpu_used": false,
+  "power_source": "battery",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.6.9",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "numpy": "2.5.4",
+   "sqlalchemy": "2.1.4",
+   "fastapi": "0.143.0"
+  },
+  "code": {
+   "commit": "7080889f4128",
+   "uncommitted_changes": true
+  }
+ },
+ "code": {
+  "commit": "7080889f4128",
+  "uncommitted_changes": true
+ },
+ "summary": {
+  "questions": 28,
+  "positives": 11,
+  "negatives": 17,
+  "true_positives": 8,
+  "false_negatives": 3,
+  "wrong_reports_on_positives": 0,
+  "false_positives": 0,
+  "precision": 1.0,
+  "recall": 0.7273,
+  "false_positive_rate": 0.0
+ },
+ "rows": [
+  {
+   "id": "k01",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "question": "How quickly are reported leaks attended?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "kestrel-2024",
+      "kestrel-2019"
+     ],
+     "pages": [
+      2,
+      2
+     ],
+     "values": [
+      [
+       "2 hours"
+      ],
+      [
+       "4 hours"
+      ]
+     ],
+     "quotes": [
+      "2 Leaks and supply problems We SHALL attend reported leaks within 2 hours of the first report, day or night.",
+      "2 Leaks and supply problems We SHALL attend reported leaks within 4 hours of the first report, day or night."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "k02",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value",
+    "number-word"
+   ],
+   "question": "How often are meters read?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "kestrel-2019",
+      "kestrel-2024"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "every 6 months"
+      ],
+      [
+       "every three months"
+      ]
+     ],
+     "quotes": [
+      "3 Meters and bills Meters are read every 6 months.",
+      "3 Meters and bills Meters are read every three months."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "k03",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value",
+    "terminology"
+   ],
+   "question": "How much is the reconnection fee?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "kestrel-2019",
+      "kestrel-2024"
+     ],
+     "pages": [
+      3,
+      3
+     ],
+     "values": [
+      [
+       "GBP 45"
+      ],
+      [
+       "GBP 60"
+      ]
+     ],
+     "quotes": [
+      "The reconnection fee is GBP 45 when a supply has been disconnected at the customer's request.",
+      "A reconnection charge of GBP 60 applies when a supply has been disconnected at the customer's request."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "k04",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "modal"
+   ],
+   "question": "Do field staff have to show photo identification before entering a property?",
+   "expected": "versions",
+   "outcome": "FN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "k05",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement",
+    "number-word"
+   ],
+   "question": "How quickly are written complaints answered?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "k06",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement",
+    "unit"
+   ],
+   "question": "How fast does the emergency helpline answer calls?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "k07",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value",
+    "terminology"
+   ],
+   "question": "How much notice is given before a planned outage?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "kestrel-2019",
+      "kestrel-2024"
+     ],
+     "pages": [
+      2,
+      2
+     ],
+     "values": [
+      [
+       "48 hours"
+      ],
+      [
+       "72 hours"
+      ]
+     ],
+     "quotes": [
+      "Customers are given at least 48 hours notice of a service interruption for planned work on the mains.",
+      "Customers are given at least 72 hours notice of a planned outage."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "k08",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "question": "How often do business customers receive a water quality report?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "k09",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "question": "When is bottled water delivered during an unplanned interruption?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "k10",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "question": "How much is paid to a customer when an appointment is missed?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "kestrel-2019",
+      "kestrel-2024"
+     ],
+     "pages": [
+      4,
+      4
+     ],
+     "values": [
+      [
+       "GBP 20"
+      ],
+      [
+       "GBP 30"
+      ]
+     ],
+     "quotes": [
+      "If we miss an appointment without 24 hours notice, the customer receives a payment of GBP 20.",
+      "If we miss an appointment without 24 hours notice, the customer receives a payment of GBP 30."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n01",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "question": "How many items can members borrow at a time?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "northgate-v3",
+      "northgate-v2"
+     ],
+     "pages": [
+      2,
+      2
+     ],
+     "values": [
+      [
+       "2 Borrowing",
+       "15 items"
+      ],
+      [
+       "2 Borrowing",
+       "10 items"
+      ]
+     ],
+     "quotes": [
+      "2 Borrowing Members can borrow up to 15 items at a time.",
+      "2 Borrowing Members can borrow up to 10 items at a time."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n02",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement",
+    "unit"
+   ],
+   "question": "How long is the loan period for books?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n03",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value",
+    "number-word"
+   ],
+   "question": "How many times can a loan be renewed?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "northgate-v3",
+      "northgate-v2"
+     ],
+     "pages": [
+      2,
+      2
+     ],
+     "values": [
+      [
+       "three times"
+      ],
+      [
+       "twice"
+      ]
+     ],
+     "quotes": [
+      "Members MAY renew a loan three times, unless another member has reserved the item.",
+      "Members MAY renew a loan twice, unless another member has reserved the item."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n04",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "value"
+   ],
+   "question": "How much is the late fee for an overdue adult book?",
+   "expected": "versions",
+   "outcome": "FN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n05",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement",
+    "unit"
+   ],
+   "question": "How long are reserved items held?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n06",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "modal"
+   ],
+   "question": "Must borrowers return damaged items to the desk?",
+   "expected": "versions",
+   "outcome": "FN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n07",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "one-version"
+   ],
+   "question": "How long can study rooms be booked?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n08",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:versions",
+    "range"
+   ],
+   "question": "What are the library's opening hours on weekdays?",
+   "expected": "versions",
+   "outcome": "TP",
+   "reports": [
+    {
+     "kind": "different_versions",
+     "documents": [
+      "northgate-v2",
+      "northgate-v3"
+     ],
+     "pages": [
+      5,
+      5
+     ],
+     "values": [
+      [
+       "09:00–19:00",
+       "10:00–16:00"
+      ],
+      [
+       "09:00–20:00",
+       "10:00–16:00"
+      ]
+     ],
+     "quotes": [
+      "5 Opening hours The library opens from 09:00 to 19:00 on weekdays and from 10:00 to 16:00 on Saturdays.",
+      "5 Opening hours The library opens from 09:00 to 20:00 on weekdays and from 10:00 to 16:00 on Saturdays."
+     ],
+     "two_documents_in_scope": true,
+     "expected_values_found": true
+    }
+   ],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n09",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "agreement"
+   ],
+   "question": "Do children's books have late fees?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "n10",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "other-organisation"
+   ],
+   "question": "How many items can members borrow at Orchard Lane Library?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r01",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "question": "How much is the late fee for e-books at Northgate Library?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "r02",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "question": "How long does Kestrel Valley Water take to repair a burst main?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  },
+  {
+   "id": "r03",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "question": "What is the water hardness in the Kestrel Valley supply area?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r04",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "related-words"
+   ],
+   "question": "What happens to a library card when a member moves away?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r05",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "paraphrase"
+   ],
+   "question": "When does the library open on Saturdays?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r06",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "paraphrase"
+   ],
+   "question": "What does a customer get if Kestrel Valley Water misses an appointment?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r07",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "multi-part"
+   ],
+   "question": "How many items can members borrow and for how long?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "answered"
+  },
+  {
+   "id": "r08",
+   "split": "dev",
+   "tags": [
+    "split:dev",
+    "expect-conflict:none",
+    "relevance",
+    "out-of-scope"
+   ],
+   "question": "What is the capital of France?",
+   "expected": "none",
+   "outcome": "TN",
+   "reports": [],
+   "answer_status": "insufficient_evidence"
+  }
+ ]
+}

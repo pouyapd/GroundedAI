@@ -34,4 +34,7 @@ unanswerable questions that share words with the document (`related-words`) or a
 detail the evidence does not state ("... and includes a free hot meal on board").
 
 The `dev` split was used while building the checks; the `validation` split was scored only after
-they were fixed.
+they were fixed. One later change (matching word forms when the statements of two editions are
+aligned) was made after the first validation score had been seen, so only that first score
+(4 of 7 version differences found, no false alarm) is a held-out result; see
+`docs/RELIABILITY_V3.md`.
