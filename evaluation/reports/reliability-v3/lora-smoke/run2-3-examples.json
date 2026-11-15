@@ -1,0 +1,58 @@
+{
+ "base": "Qwen/Qwen2.5-0.5B-Instruct",
+ "train_examples": 257,
+ "val_examples": 2,
+ "trainable_parameters": 8798208,
+ "total_parameters": 502830976,
+ "args": {
+  "base": "Qwen/Qwen2.5-0.5B-Instruct",
+  "train": "data\\sft_train_balanced.jsonl",
+  "val": "data\\sft_val.jsonl",
+  "out": "(a local scratch folder; nothing but this log was saved)",
+  "epochs": "1",
+  "lr": "0.0002",
+  "accumulate": "8",
+  "max_length": "1792",
+  "rank": "16",
+  "seed": "13",
+  "threads": "8",
+  "max_steps": "3",
+  "val_limit": "2",
+  "smoke": "True"
+ },
+ "epochs": [
+  {
+   "epoch": 1,
+   "examples": 3,
+   "seconds": 138.9,
+   "seconds_per_example": [
+    50.76,
+    41.37,
+    46.75
+   ],
+   "tokens_per_example": [
+    1226,
+    1069,
+    1162
+   ],
+   "train_loss_per_example": [
+    1.8717,
+    0.3765,
+    0.4854
+   ],
+   "mean_train_loss": 0.9112,
+   "val_loss": 0.9964
+  }
+ ],
+ "val_loss_before": 0.9964,
+ "smoke_test": true,
+ "peak_rss_mb": 8026,
+ "environment": {
+  "python": "3.12.7",
+  "torch": "2.10.0+cpu",
+  "transformers": "5.19.0",
+  "peft": "0.21.2",
+  "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+  "threads": 8
+ }
+}
