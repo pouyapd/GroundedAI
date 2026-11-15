@@ -31,7 +31,9 @@ schema at `/openapi.json` when the server runs.
 | GET | `/api/v1/documents?offset&limit&status` | List documents, newest first | 200 |
 | GET | `/api/v1/documents/{id}` | Metadata and ingestion status | 200 |
 | GET | `/api/v1/documents/{id}/chunks?offset&limit` | Indexed chunks with page ranges | 200 |
-| POST | `/api/v1/documents/{id}/reingest` | Process again (after a failure or configuration change); 409 with `details.reason = "source_missing"` when the file is no longer stored | 202 |
+| POST | `/api/v1/documents/{id}/reingest` | Process again from the start (after a failure or configuration change); a failure leaves the document `failed`; 409 with `details.reason = "source_missing"` when the file is no longer stored | 202 |
+| GET | `/api/v1/documents/reindex` | Ready documents indexed with older settings (`outdated`, what differs, how many lack their file) and the last bulk job | 200 |
+| POST | `/api/v1/documents/reindex` | Re-index every outdated document that has its file, one at a time in the background (or return the running job). Each stays `ready` and searchable with its previous chunks until the new ones are written in one transaction; one that fails keeps its previous index | 202 |
 | DELETE | `/api/v1/documents/{id}` | Delete document, chunks and stored file | 204 |
 | POST | `/api/v1/query` | Grounded answer with sources, citation check and timings | 200 |
 | POST | `/api/v1/retrieve` | Retrieval only, with component scores and timings | 200 |

@@ -8,6 +8,7 @@ import type {
   OperationalMetrics,
   Page,
   QueryRequest,
+  ReindexStatus,
   Report,
   ReportListItem,
   RetrievalMode,
@@ -165,6 +166,12 @@ export class StaticDemoApi implements Api {
     throw new ApiError(400, "demo_read_only", READ_ONLY);
   }
   async reingestDocument(): Promise<DocumentOut> {
+    throw new ApiError(400, "demo_read_only", READ_ONLY);
+  }
+  async reindexStatus(): Promise<ReindexStatus> {
+    return { ready: 0, current: 0, outdated: 0, outdated_without_source: 0, differences: [], job: null };
+  }
+  async startReindex(): Promise<ReindexStatus> {
     throw new ApiError(400, "demo_read_only", READ_ONLY);
   }
   /**

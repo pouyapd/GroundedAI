@@ -3,12 +3,20 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
 DOCUMENT_ID_PATTERN = r"^doc_[0-9a-f]{20}$"
 DocumentId = Annotated[str, StringConstraints(pattern=DOCUMENT_ID_PATTERN)]
+
+
+class IndexDifferenceOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    setting: str = Field(description="e.g. 'text clean-up', 'chunk size', 'embedding model'")
+    indexed: str = Field(description="The value the document was indexed with")
+    current: str = Field(description="The value the current settings use")
 
 
 class DocumentOut(BaseModel):
@@ -36,6 +44,11 @@ class DocumentOut(BaseModel):
         description="Whether the original file is still stored, so re-ingestion is possible. "
         "False after a file that could not be read was discarded.",
     )
+    index_differences: list[IndexDifferenceOut] | None = Field(
+        default=None,
+        description="For a ready document: the recorded index settings that differ from the "
+        "current ones (empty when it is current). Null for documents that are not ready.",
+    )
 
 
 class DocumentList(BaseModel):
@@ -62,3 +75,49 @@ class ChunkList(BaseModel):
     total: int
     offset: int
     limit: int
+
+
+class DifferenceCountOut(IndexDifferenceOut):
+    documents: int
+
+
+class ReindexOutcomeOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    document_id: str
+    title: str
+    result: Literal["reindexed", "current", "skipped", "failed"]
+    detail: str
+    code: str | None = None
+
+
+class ReindexJobOut(BaseModel):
+    id: str
+    state: Literal["running", "finished"]
+    started_at: datetime
+    finished_at: datetime | None = None
+    total: int
+    done: int
+    reindexed: int
+    already_current: int
+    skipped: list[ReindexOutcomeOut]
+    failed: list[ReindexOutcomeOut] = Field(
+        description="Documents whose re-indexing failed; each keeps its previous index."
+    )
+    processing_id: str | None = None
+    processing_title: str | None = None
+
+
+class ReindexStatus(BaseModel):
+    """Ready documents indexed with older settings, and the bulk re-indexing job."""
+
+    ready: int
+    current: int
+    outdated: int
+    outdated_without_source: int = Field(
+        description="Outdated documents whose original file is not stored (upload them again)."
+    )
+    differences: list[DifferenceCountOut]
+    job: ReindexJobOut | None = Field(
+        default=None, description="The running job, or the last one since the server started."
+    )

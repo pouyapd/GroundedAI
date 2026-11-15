@@ -212,6 +212,12 @@ export class BrowserApi implements Api {
   async reingestDocument(documentId: string) {
     return (await this.ready()).reingestDocument(documentId);
   }
+  async reindexStatus() {
+    return (await this.ready()).reindexStatus();
+  }
+  async startReindex() {
+    return (await this.ready()).startReindex();
+  }
   async metrics() {
     return (await this.ready()).metrics();
   }

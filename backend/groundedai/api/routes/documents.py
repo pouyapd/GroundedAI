@@ -20,16 +20,22 @@ from fastapi import (
 from groundedai.api.deps import ServicesDep, rate_limit, require_api_key
 from groundedai.core.errors import NotFound
 from groundedai.persistence.db import session_scope
-from groundedai.persistence.models import DocumentRow
+from groundedai.persistence.models import DocumentRow, DocumentStatus
 from groundedai.persistence.repositories import ChunkRepository, DocumentRepository
 from groundedai.schemas.documents import (
     DOCUMENT_ID_PATTERN,
     ChunkList,
     ChunkOut,
+    DifferenceCountOut,
     DocumentList,
     DocumentOut,
+    IndexDifferenceOut,
+    ReindexJobOut,
+    ReindexOutcomeOut,
+    ReindexStatus,
 )
 from groundedai.services.container import Services
+from groundedai.services.reindex_service import ReindexJob
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +56,42 @@ _ERRORS: dict[int | str, dict[str, Any]] = {
 def _document_out(services: Services, row: DocumentRow) -> DocumentOut:
     out = DocumentOut.model_validate(row)
     out.source_stored = services.ingestion.source_stored(row)
+    if row.status == DocumentStatus.READY:
+        out.index_differences = [
+            IndexDifferenceOut.model_validate(difference)
+            for difference in services.ingestion.index_differences(row)
+        ]
     return out
+
+
+def _job_out(job: ReindexJob) -> ReindexJobOut:
+    return ReindexJobOut(
+        id=job.id,
+        state=job.state,
+        started_at=job.started_at,
+        finished_at=job.finished_at,
+        total=job.total,
+        done=job.done,
+        reindexed=job.reindexed,
+        already_current=job.already_current,
+        skipped=[ReindexOutcomeOut.model_validate(item) for item in job.skipped],
+        failed=[ReindexOutcomeOut.model_validate(item) for item in job.failed],
+        processing_id=job.processing_id,
+        processing_title=job.processing_title,
+    )
+
+
+def _reindex_status(services: Services) -> ReindexStatus:
+    summary = services.reindex.summary()
+    job = services.reindex.job
+    return ReindexStatus(
+        ready=summary.ready,
+        current=summary.current,
+        outdated=summary.outdated,
+        outdated_without_source=summary.outdated_without_source,
+        differences=[DifferenceCountOut.model_validate(item) for item in summary.differences],
+        job=_job_out(job) if job else None,
+    )
 
 
 def _process_in_background(services: Services, document_id: str) -> None:
@@ -94,6 +135,34 @@ def list_documents(
         rows, total = DocumentRepository(session).page(offset=offset, limit=limit, status=status)
         items = [_document_out(services, row) for row in rows]
     return DocumentList(items=items, total=total, offset=offset, limit=limit)
+
+
+@router.get(
+    "/reindex",
+    response_model=ReindexStatus,
+    summary="Documents indexed with older settings, and the bulk re-indexing job",
+)
+def reindex_status(services: ServicesDep) -> ReindexStatus:
+    return _reindex_status(services)
+
+
+@router.post(
+    "/reindex",
+    status_code=202,
+    response_model=ReindexStatus,
+    summary="Re-index every ready document indexed with older settings",
+    description="Starts one background job (or returns the running one). Each document stays "
+    "searchable with its previous chunks until its new chunks are written in one transaction; "
+    "a document whose re-indexing fails keeps its previous index. Running it again only "
+    "touches documents that are still outdated.",
+    responses={429: _ERRORS[429]},
+    dependencies=[Depends(rate_limit("upload"))],
+)
+def start_reindex(services: ServicesDep, background: BackgroundTasks) -> ReindexStatus:
+    job, started = services.reindex.start()
+    if started and job is not None:
+        background.add_task(services.reindex.run, job)
+    return _reindex_status(services)
 
 
 @router.get(
