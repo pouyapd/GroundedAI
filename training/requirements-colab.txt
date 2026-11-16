@@ -1,0 +1,7 @@
+# Training and evaluation libraries for notebooks/finetuning/GroundedAI_LoRA_Colab.ipynb.
+# PyTorch with CUDA comes with the Colab runtime and is not pinned here. These versions were
+# used for the local CPU tests of training/finetune_lora.py and evaluate_finetuned.py.
+transformers==5.19.0
+peft==0.21.2
+accelerate==1.10.1
+psutil>=5.9
