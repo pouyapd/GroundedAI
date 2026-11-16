@@ -39,8 +39,8 @@ jobs:
         run: |
           ruff check groundedai tests
           ruff format --check groundedai tests
-          ruff check --config pyproject.toml ../scripts ../tools ../evaluation/scripts
-          ruff format --config pyproject.toml --check ../scripts ../tools ../evaluation/scripts
+          ruff check --config pyproject.toml ../scripts ../tools ../evaluation/scripts ../training
+          ruff format --config pyproject.toml --check ../scripts ../tools ../evaluation/scripts ../training
       - name: Type check
         run: mypy
       - name: Tests (SQLite, deterministic providers, offline)

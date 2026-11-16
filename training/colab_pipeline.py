@@ -628,7 +628,7 @@ def merge_check() -> dict[str, Any]:
 
 
 # --------------------------------------------------------------------------- archive
-ARCHIVE_SKIP = ("checkpoints", "smoke/checkpoints")
+ARCHIVE_SKIP = ("checkpoints", "smoke/checkpoints", "smoke/adapter", "smoke/tokenizer")
 
 
 def make_archive(run: Path, target: Path) -> list[str]:

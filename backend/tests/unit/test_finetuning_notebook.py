@@ -287,6 +287,7 @@ def test_the_archive_has_results_but_no_checkpoints(tmp_path: Path) -> None:
         "checkpoints/checkpoint-20/optimizer.pt",
         "smoke/checkpoints/checkpoint-3/optimizer.pt",
         "smoke/smoke_result.json",
+        "smoke/adapter/adapter_model.safetensors",
     ):
         (run / name).parent.mkdir(parents=True, exist_ok=True)
         (run / name).write_text("x", encoding="utf-8")
@@ -298,6 +299,9 @@ def test_the_archive_has_results_but_no_checkpoints(tmp_path: Path) -> None:
     assert "reports/test-base.json" in names
     assert "smoke/smoke_result.json" in names
     assert not any("checkpoints" in name for name in names)
+    assert (
+        "smoke/adapter/adapter_model.safetensors" not in names
+    )  # the smoke test's throwaway adapter
 
 
 def test_estimated_steps() -> None:
