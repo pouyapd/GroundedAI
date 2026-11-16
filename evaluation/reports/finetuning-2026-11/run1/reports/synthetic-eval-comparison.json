@@ -1,0 +1,112 @@
+{
+  "old": {
+    "file": "synthetic-eval-base.json",
+    "label": "base"
+  },
+  "new": {
+    "file": "synthetic-eval-lora.json",
+    "label": "lora"
+  },
+  "bootstrap": {
+    "samples": 5000,
+    "seed": 13,
+    "interval": "95% percentile, paired"
+  },
+  "questions_compared": 236,
+  "left_out": [],
+  "measures": {
+    "correct (should answer)": {
+      "n": 166,
+      "old_mean": 0.9096,
+      "new_mean": 0.8855,
+      "gained": 14,
+      "lost": 18,
+      "mean_diff": -0.0241,
+      "ci95_low": -0.0904,
+      "ci95_high": 0.0422,
+      "distinguishable": false
+    },
+    "false refusal (should answer)": {
+      "n": 166,
+      "old_mean": 0.0542,
+      "new_mean": 0.1145,
+      "gained": 18,
+      "lost": 8,
+      "mean_diff": 0.0602,
+      "ci95_low": 0.0,
+      "ci95_high": 0.1205,
+      "distinguishable": false
+    },
+    "refused (should refuse)": {
+      "n": 62,
+      "old_mean": 0.2419,
+      "new_mean": 0.9194,
+      "gained": 42,
+      "lost": 0,
+      "mean_diff": 0.6774,
+      "ci95_low": 0.5645,
+      "ci95_high": 0.7903,
+      "distinguishable": true
+    },
+    "recall@5": {
+      "n": 174,
+      "old_mean": 1.0,
+      "new_mean": 1.0,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    },
+    "mrr@10": {
+      "n": 174,
+      "old_mean": 0.8707,
+      "new_mean": 0.8707,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    }
+  },
+  "changed_answers": {
+    "gained": [
+      "fe013",
+      "fe014",
+      "fe031",
+      "fe032",
+      "fe047",
+      "fe110",
+      "fe138",
+      "fe144",
+      "fe153",
+      "fe226",
+      "fe227",
+      "fe230",
+      "fe233",
+      "fe234"
+    ],
+    "lost": [
+      "fe020",
+      "fe021",
+      "fe036",
+      "fe041",
+      "fe072",
+      "fe073",
+      "fe078",
+      "fe088",
+      "fe114",
+      "fe118",
+      "fe148",
+      "fe160",
+      "fe171",
+      "fe175",
+      "fe176",
+      "fe177",
+      "fe191",
+      "fe202"
+    ]
+  }
+}

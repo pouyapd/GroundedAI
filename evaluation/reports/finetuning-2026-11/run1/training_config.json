@@ -1,0 +1,48 @@
+{
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "precision": "fp16 base, fp32 LoRA weights, fp16 autocast with loss scaling",
+  "gradient_checkpointing": true,
+  "batch_size": 1,
+  "gradient_accumulation": 8,
+  "learning_rate": 0.0001,
+  "schedule": "linear, warm-up 0.05",
+  "epochs": 2.0,
+  "max_steps": -1,
+  "estimated_optimizer_steps": 180,
+  "eval_and_save_every_steps": [
+    20,
+    20
+  ],
+  "selection": "lowest validation loss (load_best_model_at_end)",
+  "seed": 13,
+  "trainable_parameters": 18464768,
+  "total_parameters": 1562179072,
+  "max_length": 2048,
+  "length_trials": [
+    {
+      "max_length": 2048,
+      "longest_example": 2010,
+      "fits": true
+    }
+  ],
+  "train_examples": 713,
+  "train_left_out_too_long": 0,
+  "validation_examples": 269,
+  "validation_left_out_too_long": 0,
+  "train_file": "training/data/train.jsonl",
+  "validation_file": "training/data/validation.jsonl"
+}

@@ -1,0 +1,16 @@
+{
+  "max_length": 2048,
+  "length_trials": [
+    {
+      "max_length": 2048,
+      "longest_example": 2010,
+      "fits": true
+    }
+  ],
+  "train_examples": 713,
+  "train_left_out_too_long": 0,
+  "validation_examples": 269,
+  "validation_left_out_too_long": 0,
+  "train_file": "training/data/train.jsonl",
+  "validation_file": "training/data/validation.jsonl"
+}

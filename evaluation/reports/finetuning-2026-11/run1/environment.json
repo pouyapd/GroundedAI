@@ -1,0 +1,8 @@
+{
+  "python": "3.13.16",
+  "torch": "2.14.1+cu130",
+  "transformers": "5.19.0",
+  "peft": "0.21.2",
+  "accelerate": "1.10.1",
+  "groundedai_commit": "c077c48"
+}

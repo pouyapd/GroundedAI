@@ -263,6 +263,10 @@ and that NIST text is already well covered by bge-small's general training.
 
 ### Experiment C: LoRA fine-tuning of the answer model (not completed)
 
+> **Update (2026-11-17):** a later run with Qwen2.5-1.5B-Instruct on a free Colab T4 was
+> completed; see [FINETUNING.md](FINETUNING.md#results-run1-2026-11-16). The text below
+> describes the round-2 attempt as it was.
+
 **Status: not run to completion. There are no results for this experiment.** The data and the
 training code are complete. Training was started once and stopped after about 25 minutes, before
 the first epoch ended, because the only available machine (a laptop CPU, no GPU) was needed for

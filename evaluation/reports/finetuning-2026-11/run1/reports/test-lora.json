@@ -1,0 +1,4144 @@
+{
+ "kind": "rag-eval",
+ "rag_eval_version": 1,
+ "dataset": {
+  "name": "groundedai-nist-v1",
+  "fingerprint": "2dc116de6369941f",
+  "questions": 53
+ },
+ "summary": {
+  "questions": 53,
+  "retrieval": {
+   "recall@1": {
+    "mean": 0.6705,
+    "n": 44,
+    "ci95": [
+     0.5455,
+     0.7955
+    ]
+   },
+   "precision@1": {
+    "mean": 0.7273,
+    "n": 44,
+    "ci95": [
+     0.5909,
+     0.8409
+    ]
+   },
+   "recall@3": {
+    "mean": 0.8182,
+    "n": 44,
+    "ci95": [
+     0.7045,
+     0.9205
+    ]
+   },
+   "precision@3": {
+    "mean": 0.3182,
+    "n": 44,
+    "ci95": [
+     0.2652,
+     0.3712
+    ]
+   },
+   "recall@5": {
+    "mean": 0.8636,
+    "n": 44,
+    "ci95": [
+     0.7727,
+     0.9545
+    ]
+   },
+   "precision@5": {
+    "mean": 0.2,
+    "n": 44,
+    "ci95": [
+     0.1727,
+     0.2273
+    ]
+   },
+   "recall@10": {
+    "mean": 0.9091,
+    "n": 44,
+    "ci95": [
+     0.8295,
+     0.9773
+    ]
+   },
+   "precision@10": {
+    "mean": 0.1068,
+    "n": 44,
+    "ci95": [
+     0.0955,
+     0.1205
+    ]
+   },
+   "mrr@10": {
+    "mean": 0.7917,
+    "n": 44,
+    "ci95": [
+     0.6894,
+     0.892
+    ]
+   },
+   "ndcg@10": {
+    "mean": 0.79,
+    "n": 44,
+    "ci95": [
+     0.6929,
+     0.8753
+    ]
+   }
+  },
+  "answers": {
+   "answerable": 40,
+   "correct": {
+    "mean": 0.575,
+    "n": 40,
+    "ci95": [
+     0.425,
+     0.725
+    ]
+   },
+   "completeness": {
+    "mean": 0.5875,
+    "n": 40,
+    "ci95": [
+     0.425,
+     0.7378
+    ]
+   },
+   "false_refusals": 8,
+   "invalid_output": 0,
+   "errors": 0
+  },
+  "abstention": {
+   "should_refuse": 6,
+   "refused": 6,
+   "precision": 0.3333,
+   "recall": 1.0,
+   "predicted_abstentions": 18
+  },
+  "ambiguous": {
+   "questions": 3,
+   "refused": 2,
+   "answered": 1
+  },
+  "citations": {
+   "precision": {
+    "mean": 0.7941,
+    "n": 34,
+    "ci95": [
+     0.6471,
+     0.9118
+    ]
+   },
+   "recall": {
+    "mean": 0.75,
+    "n": 34,
+    "ci95": [
+     0.6029,
+     0.8824
+    ]
+   },
+   "answers_with_invalid_labels": 0,
+   "answers_without_valid_label": 0
+  },
+  "claims_lexical_check": {
+   "statements": 39,
+   "found_share": 0.9744,
+   "unsupported_share": 0.0256,
+   "partial_share": 0.0
+  },
+  "quotes": {
+   "total": 39,
+   "verbatim_share": 1.0,
+   "page_correct_share": 1.0,
+   "pages_unknown": 0
+  },
+  "conflicts": {
+   "questions": 4,
+   "reported_by_application": 0,
+   "any_disagreement_note": 0,
+   "stated_in_answer": 0,
+   "both_values_in_answer": 0
+  },
+  "false_conflict_reports": 0,
+  "latency_ms": {
+   "total_median": 2199.1,
+   "generation_median": 2133.5,
+   "retrieval_median": 6.5,
+   "total_p90": 3742.3
+  }
+ },
+ "by_category": {
+  "ambiguous": {
+   "questions": 3,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": 0.0,
+    "recall": null,
+    "predicted_abstentions": 2
+   },
+   "ambiguous": {
+    "questions": 3,
+    "refused": 2,
+    "answered": 1
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 1,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 1454.7,
+    "generation_median": 1411.4,
+    "retrieval_median": 5.9,
+    "total_p90": 2128.4
+   }
+  },
+  "conflicting": {
+   "questions": 4,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.25,
+     "n": 4,
+     "ci95": [
+      0.0,
+      0.5
+     ]
+    },
+    "precision@1": {
+     "mean": 0.5,
+     "n": 4,
+     "ci95": [
+      0.0,
+      1.0
+     ]
+    },
+    "recall@3": {
+     "mean": 0.75,
+     "n": 4,
+     "ci95": [
+      0.25,
+      1.0
+     ]
+    },
+    "precision@3": {
+     "mean": 0.5,
+     "n": 4,
+     "ci95": [
+      0.1667,
+      0.6667
+     ]
+    },
+    "recall@5": {
+     "mean": 0.75,
+     "n": 4,
+     "ci95": [
+      0.25,
+      1.0
+     ]
+    },
+    "precision@5": {
+     "mean": 0.3,
+     "n": 4,
+     "ci95": [
+      0.1,
+      0.4
+     ]
+    },
+    "recall@10": {
+     "mean": 1.0,
+     "n": 4,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.2,
+     "n": 4,
+     "ci95": [
+      0.2,
+      0.2
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.6667,
+     "n": 4,
+     "ci95": [
+      0.3333,
+      1.0
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.6918,
+     "n": 4,
+     "ci95": [
+      0.4227,
+      0.9234
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": 0.0,
+    "recall": null,
+    "predicted_abstentions": 2
+   },
+   "citations": {
+    "precision": {
+     "mean": 1.0,
+     "n": 2,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "recall": {
+     "mean": 0.5,
+     "n": 2,
+     "ci95": [
+      0.5,
+      0.5
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 2,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "conflicts": {
+    "questions": 4,
+    "reported_by_application": 0,
+    "any_disagreement_note": 0,
+    "stated_in_answer": 0,
+    "both_values_in_answer": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 1804.6,
+    "generation_median": 1713.8,
+    "retrieval_median": 10.7,
+    "total_p90": 2679.9
+   }
+  },
+  "factual": {
+   "questions": 36,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.7222,
+     "n": 36,
+     "ci95": [
+      0.5556,
+      0.8611
+     ]
+    },
+    "precision@1": {
+     "mean": 0.7222,
+     "n": 36,
+     "ci95": [
+      0.5556,
+      0.8611
+     ]
+    },
+    "recall@3": {
+     "mean": 0.8333,
+     "n": 36,
+     "ci95": [
+      0.6944,
+      0.9444
+     ]
+    },
+    "precision@3": {
+     "mean": 0.287,
+     "n": 36,
+     "ci95": [
+      0.2407,
+      0.3333
+     ]
+    },
+    "recall@5": {
+     "mean": 0.8889,
+     "n": 36,
+     "ci95": [
+      0.7778,
+      0.9722
+     ]
+    },
+    "precision@5": {
+     "mean": 0.1833,
+     "n": 36,
+     "ci95": [
+      0.1556,
+      0.2056
+     ]
+    },
+    "recall@10": {
+     "mean": 0.9167,
+     "n": 36,
+     "ci95": [
+      0.8056,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.0944,
+     "n": 36,
+     "ci95": [
+      0.0833,
+      0.1028
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.7824,
+     "n": 36,
+     "ci95": [
+      0.6528,
+      0.8981
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.7991,
+     "n": 36,
+     "ci95": [
+      0.6796,
+      0.8993
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 36,
+    "correct": {
+     "mean": 0.6111,
+     "n": 36,
+     "ci95": [
+      0.4444,
+      0.7778
+     ]
+    },
+    "completeness": {
+     "mean": 0.6111,
+     "n": 36,
+     "ci95": [
+      0.4444,
+      0.7778
+     ]
+    },
+    "false_refusals": 7,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": 0.0,
+    "recall": null,
+    "predicted_abstentions": 7
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.7586,
+     "n": 29,
+     "ci95": [
+      0.5862,
+      0.8966
+     ]
+    },
+    "recall": {
+     "mean": 0.7586,
+     "n": 29,
+     "ci95": [
+      0.5862,
+      0.8966
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 31,
+    "found_share": 0.9677,
+    "unsupported_share": 0.0323,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 31,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 2337.5,
+    "generation_median": 2285.5,
+    "retrieval_median": 6.5,
+    "total_p90": 3728.8
+   }
+  },
+  "multi_chunk": {
+   "questions": 4,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.625,
+     "n": 4,
+     "ci95": [
+      0.5,
+      0.875
+     ]
+    },
+    "precision@1": {
+     "mean": 1.0,
+     "n": 4,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "recall@3": {
+     "mean": 0.75,
+     "n": 4,
+     "ci95": [
+      0.5,
+      1.0
+     ]
+    },
+    "precision@3": {
+     "mean": 0.4167,
+     "n": 4,
+     "ci95": [
+      0.3333,
+      0.5833
+     ]
+    },
+    "recall@5": {
+     "mean": 0.75,
+     "n": 4,
+     "ci95": [
+      0.5,
+      1.0
+     ]
+    },
+    "precision@5": {
+     "mean": 0.25,
+     "n": 4,
+     "ci95": [
+      0.2,
+      0.35
+     ]
+    },
+    "recall@10": {
+     "mean": 0.75,
+     "n": 4,
+     "ci95": [
+      0.5,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.125,
+     "n": 4,
+     "ci95": [
+      0.1,
+      0.175
+     ]
+    },
+    "mrr@10": {
+     "mean": 1.0,
+     "n": 4,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.8066,
+     "n": 4,
+     "ci95": [
+      0.6131,
+      1.0
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 4,
+    "correct": {
+     "mean": 0.25,
+     "n": 4,
+     "ci95": [
+      0.0,
+      0.75
+     ]
+    },
+    "completeness": {
+     "mean": 0.375,
+     "n": 4,
+     "ci95": [
+      0.0,
+      0.75
+     ]
+    },
+    "false_refusals": 1,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": 0.0,
+    "recall": null,
+    "predicted_abstentions": 1
+   },
+   "citations": {
+    "precision": {
+     "mean": 1.0,
+     "n": 3,
+     "ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "recall": {
+     "mean": 0.8333,
+     "n": 3,
+     "ci95": [
+      0.5,
+      1.0
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 5,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 5,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 3380.4,
+    "generation_median": 3325.9,
+    "retrieval_median": 6.1,
+    "total_p90": 5761.9
+   }
+  },
+  "out_of_scope": {
+   "questions": 1,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 1,
+    "refused": 1,
+    "precision": 1.0,
+    "recall": 1.0,
+    "predicted_abstentions": 1
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 0,
+    "found_share": null,
+    "unsupported_share": null,
+    "partial_share": null
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim_share": null,
+    "page_correct_share": null,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 1410.1,
+    "generation_median": 1358.2,
+    "retrieval_median": 9.3,
+    "total_p90": 1410.1
+   }
+  },
+  "unanswerable": {
+   "questions": 5,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 5,
+    "refused": 5,
+    "precision": 1.0,
+    "recall": 1.0,
+    "predicted_abstentions": 5
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 0,
+    "found_share": null,
+    "unsupported_share": null,
+    "partial_share": null
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim_share": null,
+    "page_correct_share": null,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 1686.9,
+    "generation_median": 1641.6,
+    "retrieval_median": 5.8,
+    "total_p90": 1982.2
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "t01",
+   "category": "factual",
+   "tags": [
+    "direct"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Memorized secrets SHALL be at least 8 characters in length if chosen by the subscriber [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.246,
+    "generation": 2458.403,
+    "total": 2529.12
+   },
+   "model_output": "Memorized secrets SHALL be at least 8 characters in length if chosen by the subscriber [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.833
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t02",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Memorized secrets chosen randomly by the CSP or verifier SHALL be at least 6 characters in length and MAY be entirely numeric [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.516,
+    "generation": 2462.056,
+    "total": 2521.34
+   },
+   "model_output": "Memorized secrets chosen randomly by the CSP or verifier SHALL be at least 6 characters in length and MAY be entirely numeric [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t03",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Verifiers SHOULD permit subscriber-chosen memorized secrets at least 64 characters in length [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 7.371,
+    "generation": 1972.073,
+    "total": 2049.065
+   },
+   "model_output": "Verifiers SHOULD permit subscriber-chosen memorized secrets at least 64 characters in length [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "maximum"
+    ],
+    "answer_coverage": 0.875
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t04",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "At AAL1, reauthentication of the subscriber SHOULD be repeated at least once per 30 days during an extended usage session, regardless of user activity [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 5.922,
+    "generation": 3633.723,
+    "total": 3706.412
+   },
+   "model_output": "At AAL1, reauthentication of the subscriber SHOULD be repeated at least once per 30 days during an extended usage session, regardless of user activity [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t05",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.951,
+    "generation": 2878.41,
+    "total": 2950.288
+   },
+   "model_output": "At AAL2, authentication of the subscriber SHALL be repeated at least once per 12 hours during an extended usage session, regardless of user activity [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t06",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 30 minutes or longer [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.11,
+    "generation": 2167.752,
+    "total": 2223.591
+   },
+   "model_output": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 30 minutes or longer [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.8
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t07",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.3562071871080222
+   },
+   "status": "answered",
+   "answer": "Reauthentication 30 days [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 6.251,
+    "generation": 1087.312,
+    "total": 1144.836
+   },
+   "model_output": "Reauthentication 30 days [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.2
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t08",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "In all cases, the authentication SHALL be considered invalid if not completed within 10 minutes [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.385,
+    "generation": 1937.803,
+    "total": 1990.297
+   },
+   "model_output": "In all cases, the authentication SHALL be considered invalid if not completed within 10 minutes [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.75
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t09",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Unless otherwise specified in the description of a given authenticator, the verifier SHALL limit consecutive failed authentication attempts on a single account to no more than 100 [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 7.034,
+    "generation": 3444.295,
+    "total": 3522.22
+   },
+   "model_output": "Unless otherwise specified in the description of a given authenticator, the verifier SHALL limit consecutive failed authentication attempts on a single account to no more than 100 [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t10",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Verifiers SHOULD NOT require memorized secrets to be changed arbitrarily (e.g., periodically) [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 9.979,
+    "generation": 2133.467,
+    "total": 2232.391
+   },
+   "model_output": "Verifiers SHOULD NOT require memorized secrets to be changed arbitrarily (e.g., periodically) [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t11",
+   "category": "factual",
+   "tags": [
+    "numeric",
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "This salt value, if used, SHALL be generated by an approved random bit generator [SP 800-90Ar1] and provide at least the minimum security strength specified in the latest revision of SP 800-131A (112 bits as of the date of this publication) [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.493,
+    "generation": 5441.414,
+    "total": 5498.2
+   },
+   "model_output": "This salt value, if used, SHALL be generated by an approved random bit generator [SP 800-90Ar1] and provide at least the minimum security strength specified in the latest revision of SP 800-131A (112 bits as of the date of this publication) [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.833
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t12",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "Publication Date(s) June 2017 (includes updates as of 03-02-2020) [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 5.113,
+    "generation": 2704.547,
+    "total": 2764.306
+   },
+   "model_output": "Publication Date(s) June 2017 (includes updates as of 03-02-2020) [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "month",
+     "year"
+    ],
+    "answer_coverage": 0.2
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t13",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Confirmation codes sent by means other than physical mail SHALL be valid for a maximum of 10 minutes [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.163,
+    "generation": 2766.332,
+    "total": 2845.443
+   },
+   "model_output": "Confirmation codes sent by means other than physical mail SHALL be valid for a maximum of 10 minutes [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t14",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Actions do not constitute a checklist, nor are they necessarily an ordered set of steps [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 6.83,
+    "generation": 1812.421,
+    "total": 1881.854
+   },
+   "model_output": "Actions do not constitute a checklist, nor are they necessarily an ordered set of steps [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t15",
+   "category": "factual",
+   "tags": [
+    "entity",
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.517,
+    "generation": 1392.548,
+    "total": 1434.866
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t16",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5
+   },
+   "status": "answered",
+   "answer": "Valid & Reliable is a necessary condition of trustworthiness and is shown as the base for other trustworthiness characteristics [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.051,
+    "generation": 2332.725,
+    "total": 2383.508
+   },
+   "model_output": "Valid & Reliable is a necessary condition of trustworthiness and is shown as the base for other trustworthiness characteristics [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t17",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "A review with formal input from the AI community is expected to take place no later than 2028 [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.583,
+    "generation": 2238.277,
+    "total": 2291.488
+   },
+   "model_output": "A review with formal input from the AI community is expected to take place no later than 2028 [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t18",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Residual risk \u2013 defined as risk remaining after risk treatment (Source: ISO GUIDE 73) \u2013 directly impacts end users or affected individuals and communities [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.752,
+    "generation": 3155.46,
+    "total": 3227.285
+   },
+   "model_output": "Residual risk \u2013 defined as risk remaining after risk treatment (Source: ISO GUIDE 73) \u2013 directly impacts end users or affected individuals and communities [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t19",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "AI systems are inherently socio-technical in nature, meaning they are influenced by societal dynamics and human behavior [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 7.322,
+    "generation": 2445.177,
+    "total": 2535.976
+   },
+   "model_output": "AI systems are inherently socio-technical in nature, meaning they are influenced by societal dynamics and human behavior [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t20",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "However users integrate the functions, the process [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.454,
+    "generation": 1275.088,
+    "total": 1335.279
+   },
+   "model_output": "However users integrate the functions, the process [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.333
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t21",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.419,
+    "generation": 3117.094,
+    "total": 3167.7
+   },
+   "model_output": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t22",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.5
+   },
+   "status": "answered",
+   "answer": "The AI actors in this dimension comprise a separate AI RMF audience who informs the primary audience [S2].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 5.927,
+    "generation": 1986.95,
+    "total": 2043.999
+   },
+   "model_output": "The AI actors in this dimension comprise a separate AI RMF audience who informs the primary audience [S2].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.2
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t23",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6131471927654584
+   },
+   "status": "answered",
+   "answer": "Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 8.825,
+    "generation": 3036.801,
+    "total": 3117.313
+   },
+   "model_output": "Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t24",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 12.355,
+    "generation": 3667.144,
+    "total": 3751.254
+   },
+   "model_output": "Verifiers and CSPs MAY allow passwords that are only used as part of multi-factor authentication processes to be shorter but SHALL require them to be a minimum of eight characters in length [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t25",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 6.525,
+    "generation": 1388.587,
+    "total": 1436.623
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t26",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 6.641,
+    "generation": 1357.17,
+    "total": 1399.056
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "longest"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t27",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 7.238,
+    "generation": 1368.194,
+    "total": 1410.045
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t28",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "\u2022 21 days when sent to a postal address within the contiguous United States SHALL include at least six decimal digits (or equivalent) from an approved random bit generator, as described in Sec. 3.2.12 [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.962,
+    "generation": 4135.529,
+    "total": 4260.388
+   },
+   "model_output": "\u2022 21 days when sent to a postal address within the contiguous United States SHALL include at least six decimal digits (or equivalent) from an approved random bit generator, as described in Sec. 3.2.12 [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 1
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.7
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t29",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Verifiers SHALL allow the use of password managers and autofill functionality [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 10.796,
+    "generation": 1993.047,
+    "total": 2097.155
+   },
+   "model_output": "Verifiers SHALL allow the use of password managers and autofill functionality [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t30",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.43067655807339306
+   },
+   "status": "answered",
+   "answer": "Publication History Approved by the NIST Editorial Review Board on 2025-05-30 [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 9.743,
+    "generation": 2415.314,
+    "total": 2508.211
+   },
+   "model_output": "Publication History Approved by the NIST Editorial Review Board on 2025-05-30 [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.333
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t31",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage",
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Reauthentication of a session that has not yet reached its time limit MAY require only a memorized secret or a biometric in conjunction with the still-valid session secret [S1]. When a biometric factor is used in authentication at AAL3, the verifier SHALL make a determination that the biometric sensor and subsequent processing meet the performance requirements stated in Section 5.2.3 [S2].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 6.166,
+    "generation": 6358.248,
+    "total": 6450.257
+   },
+   "model_output": "Reauthentication of a session that has not yet reached its time limit MAY require only a memorized secret or a biometric in conjunction with the still-valid session secret [S1]. When a biometric factor is used in authentication at AAL3, the verifier SHALL make a determination that the biometric sensor and subsequent processing meet the performance requirements stated in Section 5.2.3 [S2].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1",
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.8
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t32",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage",
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 0.5,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 0.5,
+    "precision@5": 0.2,
+    "recall@10": 0.5,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6131471927654584
+   },
+   "status": "answered",
+   "answer": "At AAL3, the overall timeout for reauthentication SHALL be no more than 12 hours [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.5,
+   "timings_ms": {
+    "retrieval": 7.894,
+    "generation": 2528.539,
+    "total": 2604.976
+   },
+   "model_output": "At AAL3, the overall timeout for reauthentication SHALL be no more than 12 hours [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "differ"
+    ],
+    "answer_coverage": 0.5
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t33",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "An AI RMF Current Profile indicates how AI is currently being managed and the related risks in terms of current outcomes [S1]. A Target Profile indicates the outcomes needed to achieve the desired or target AI risk management goals [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 6.085,
+    "generation": 4123.346,
+    "total": 4155.816
+   },
+   "model_output": "An AI RMF Current Profile indicates how AI is currently being managed and the related risks in terms of current outcomes [S1]. A Target Profile indicates the outcomes needed to achieve the desired or target AI risk management goals [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t34",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage",
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 0.5,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 0.5,
+    "precision@5": 0.2,
+    "recall@10": 0.5,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.6131471927654584
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.512,
+    "generation": 1395.4,
+    "total": 1441.652
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "kind"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t35",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 5.849,
+    "generation": 1405.605,
+    "total": 1439.167
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "fine",
+     "maximum"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t36",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state how much NIST charges for AI RMF certification.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 4.741,
+    "generation": 2049.673,
+    "total": 2083.468
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state how much NIST charges for AI RMF certification.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "certification"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t37",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 7.112,
+    "generation": 1378.19,
+    "total": 1420.882
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t38",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 5.625,
+    "generation": 1641.637,
+    "total": 1686.914
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "accuracy",
+     "minimum",
+     "model"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t39",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 7.474,
+    "generation": 1764.411,
+    "total": 1830.347
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t40",
+   "category": "out_of_scope",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "sp800-63b-2017",
+    "ai-rmf-1.0",
+    "sp800-63b4-2025"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 9.292,
+    "generation": 1358.189,
+    "total": 1410.113
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "italy"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t41",
+   "category": "ambiguous",
+   "tags": [
+    "ambiguous"
+   ],
+   "expected_behavior": "answer_or_clarify",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "status": "answered",
+   "answer": "The session SHALL be terminated (i.e., logged out) when either of these time limits is reached [S3].",
+   "abstained": false,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 5.902,
+    "generation": 2237.347,
+    "total": 2296.851
+   },
+   "model_output": "The session SHALL be terminated (i.e., logged out) when either of these time limits is reached [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S3"
+    ],
+    "invalid": []
+   },
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t42",
+   "category": "ambiguous",
+   "tags": [
+    "ambiguous"
+   ],
+   "expected_behavior": "answer_or_clarify",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 6.448,
+    "generation": 1378.411,
+    "total": 1425.088
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t43",
+   "category": "ambiguous",
+   "tags": [
+    "ambiguous"
+   ],
+   "expected_behavior": "answer_or_clarify",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 3.984,
+    "generation": 1411.357,
+    "total": 1454.675
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t44",
+   "category": "conflicting",
+   "tags": [
+    "conflict"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "sp800-63b-2017",
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 0.16666666666666666,
+    "ndcg@10": 0.3084274278260313
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 11.934,
+    "generation": 1398.191,
+    "total": 1452.11
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t45",
+   "category": "conflicting",
+   "tags": [
+    "conflict",
+    "numeric"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "sp800-63b-2017",
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6934264036172708
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 9.054,
+    "generation": 1360.006,
+    "total": 1404.89
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t46",
+   "category": "conflicting",
+   "tags": [
+    "conflict",
+    "numeric"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "sp800-63b-2017",
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 30 minutes or longer [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.5,
+   "timings_ms": {
+    "retrieval": 9.554,
+    "generation": 2830.278,
+    "total": 2903.919
+   },
+   "model_output": "Reauthentication of the subscriber SHALL be repeated following any period of inactivity lasting 30 minutes or longer [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.5
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t47",
+   "category": "conflicting",
+   "tags": [
+    "conflict",
+    "terminology"
+   ],
+   "expected_behavior": "flag_conflict",
+   "scope": [
+    "sp800-63b-2017",
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.5,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.6666666666666666,
+    "recall@5": 1.0,
+    "precision@5": 0.4,
+    "recall@10": 1.0,
+    "precision@10": 0.2,
+    "mrr@10": 1.0,
+    "ndcg@10": 0.7653606369886217
+   },
+   "status": "answered",
+   "answer": "However, verifiers SHALL force a change if there is evidence that the authenticator has been compromised [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 20.639,
+    "generation": 2029.431,
+    "total": 2157.169
+   },
+   "model_output": "However, verifiers SHALL force a change if there is evidence that the authenticator has been compromised [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 0.5,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.333
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t48",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t01"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "Password length has been found to be a primary factor in characterizing password strength [Strength] [Composition]. Passwords that are too short yield to brute force attacks as [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 7.319,
+    "generation": 3052.437,
+    "total": 3108.777
+   },
+   "model_output": "Password length has been found to be a primary factor in characterizing password strength [Strength] [Composition]. Passwords that are too short yield to brute force attacks as [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 2,
+    "found": 2,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 2,
+    "verbatim": 2,
+    "pages_known": 2,
+    "pages_correct": 2
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "pick"
+    ],
+    "answer_coverage": 0.333
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t49",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t05"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The session SHALL be terminated (i.e., logged out) when either of these time limits is reached [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 6.158,
+    "generation": 2133.869,
+    "total": 2199.106
+   },
+   "model_output": "The session SHALL be terminated (i.e., logged out) when either of these time limits is reached [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "long"
+    ],
+    "answer_coverage": 0.2
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t50",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t14"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.43067655807339306
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 6.072,
+    "generation": 1315.831,
+    "total": 1349.999
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t51",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t09"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b-2017"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 5.817,
+    "generation": 1473.172,
+    "total": 1528.891
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "login",
+     "try",
+     "wrong"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t52",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t21"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-rmf-1.0"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 8.571,
+    "generation": 3700.834,
+    "total": 3785.424
+   },
+   "model_output": "Comments on the AI RMF Playbook may be sent via email to AIframework@nist.gov at any time and will be reviewed and integrated on a semi-annual basis [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.667
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "t53",
+   "category": "factual",
+   "tags": [
+    "paraphrase:t23"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "sp800-63b4-2025"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.3333333333333333,
+    "ndcg@10": 0.3065735963827292
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 7.3,
+    "generation": 1421.538,
+    "total": 1471.37
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  }
+ ],
+ "label": "lora",
+ "generated_at": "2026-11-16T19:27:43+0000",
+ "generator": "transformers-local",
+ "model": {
+  "base": "Qwen/Qwen2.5-1.5B-Instruct",
+  "adapter": "/content/groundedai-lora/run1/adapter",
+  "merged": false,
+  "adapter_loaded": true,
+  "load_seconds": 7.6,
+  "device": "cuda",
+  "dtype": "float16"
+ },
+ "decoding": {
+  "do_sample": false,
+  "max_new_tokens": 384,
+  "chat_template": "the tokenizer's"
+ },
+ "settings": {
+  "text_cleanup": "v2",
+  "retrieval_mode": "hybrid",
+  "top_k": 5,
+  "prompt_version": "answer-v2",
+  "claim_check": "claims-v1",
+  "claim_detail_check": "off",
+  "conflict_check": "disagreement-v3",
+  "extractive_relevance": "v2",
+  "embedding_provider": "hashing",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "chunk_size": 800,
+  "chunk_overlap": 120
+ },
+ "extra": {
+  "format_valid": 53,
+  "format_checked": 53,
+  "answers_with_added_details": 0,
+  "added_detail_claims": 0,
+  "answered": 35,
+  "mean_answer_coverage_of_asked_words": 0.7254,
+  "by_kind": {
+   "ambiguous": {
+    "questions": 3,
+    "correct": null,
+    "should_answer": 0,
+    "refused": 2,
+    "should_refuse": 0,
+    "refused_correctly": null
+   },
+   "conflicting": {
+    "questions": 4,
+    "correct": 0,
+    "should_answer": 4,
+    "refused": 2,
+    "should_refuse": 0,
+    "refused_correctly": null
+   },
+   "factual": {
+    "questions": 36,
+    "correct": 22,
+    "should_answer": 36,
+    "refused": 7,
+    "should_refuse": 0,
+    "refused_correctly": null
+   },
+   "multi_chunk": {
+    "questions": 4,
+    "correct": 1,
+    "should_answer": 4,
+    "refused": 1,
+    "should_refuse": 0,
+    "refused_correctly": null
+   },
+   "out_of_scope": {
+    "questions": 1,
+    "correct": null,
+    "should_answer": 0,
+    "refused": 1,
+    "should_refuse": 1,
+    "refused_correctly": 1
+   },
+   "unanswerable": {
+    "questions": 5,
+    "correct": null,
+    "should_answer": 0,
+    "refused": 5,
+    "should_refuse": 5,
+    "refused_correctly": 5
+   }
+  }
+ },
+ "cost": {
+  "seconds": 140.5,
+  "generated_tokens": 1387
+ },
+ "environment": {
+  "os": "Linux 6.6.159+",
+  "python": "3.13.16",
+  "cpu": "Intel(R) Xeon(R) CPU @ 2.00GHz",
+  "logical_cpus": 2,
+  "ram_gb": 12.7,
+  "gpu_used": false,
+  "power_source": "unknown",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.7.4",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "sentence-transformers": "5.7.0",
+   "transformers": "5.19.0",
+   "torch": "2.14.1+cu130",
+   "numpy": "2.4.6",
+   "sqlalchemy": "2.1.7",
+   "fastapi": "0.163.1"
+  },
+  "code": {
+   "commit": "c077c4813142",
+   "uncommitted_changes": false
+  }
+ },
+ "code": {
+  "commit": "c077c4813142",
+  "uncommitted_changes": false
+ }
+}

@@ -1,0 +1,83 @@
+{
+  "old": {
+    "file": "nist-val-relevance-base.json",
+    "label": "base"
+  },
+  "new": {
+    "file": "nist-val-relevance-lora.json",
+    "label": "lora"
+  },
+  "bootstrap": {
+    "samples": 5000,
+    "seed": 13,
+    "interval": "95% percentile, paired"
+  },
+  "questions_compared": 14,
+  "left_out": [],
+  "measures": {
+    "correct (should answer)": {
+      "n": 7,
+      "old_mean": 0.7143,
+      "new_mean": 0.1429,
+      "gained": 0,
+      "lost": 4,
+      "mean_diff": -0.5714,
+      "ci95_low": -0.8571,
+      "ci95_high": -0.1429,
+      "distinguishable": true
+    },
+    "false refusal (should answer)": {
+      "n": 7,
+      "old_mean": 0.0,
+      "new_mean": 0.7143,
+      "gained": 5,
+      "lost": 0,
+      "mean_diff": 0.7143,
+      "ci95_low": 0.2857,
+      "ci95_high": 1.0,
+      "distinguishable": true
+    },
+    "refused (should refuse)": {
+      "n": 7,
+      "old_mean": 0.7143,
+      "new_mean": 1.0,
+      "gained": 2,
+      "lost": 0,
+      "mean_diff": 0.2857,
+      "ci95_low": 0.0,
+      "ci95_high": 0.5714,
+      "distinguishable": false
+    },
+    "recall@5": {
+      "n": 7,
+      "old_mean": 0.4286,
+      "new_mean": 0.4286,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    },
+    "mrr@10": {
+      "n": 7,
+      "old_mean": 0.3585,
+      "new_mean": 0.3585,
+      "gained": 0,
+      "lost": 0,
+      "mean_diff": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "distinguishable": false
+    }
+  },
+  "changed_answers": {
+    "gained": [],
+    "lost": [
+      "nv05",
+      "nv08",
+      "nv10",
+      "nv11"
+    ]
+  }
+}

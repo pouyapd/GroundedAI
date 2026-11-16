@@ -70,8 +70,8 @@ WebLLM, ONNX Runtime Web, pytest, Playwright, Docker, GitHub Actions.
 | | |
 |---|---|
 | **Implemented and tested** | upload checks and PDF extraction with pages; hybrid retrieval (BM25 + vectors, RRF); three generators; citation-label check; lexical claim check with exact quotes; optional added-detail flag (off by default); question-relevance check and refusal (extractive); disagreement check across documents and editions; safe bulk re-indexing; browser demo with an optional in-page language model and an optional NLI meaning check |
-| **Evaluated** | synthetic sets (development, 56-question evaluation, 30 held-out conflict cases); real NIST PDFs (53 test questions, 108 hand-written test claims, validation and fictional-edition sets), each change compared with the previous defaults ([round 3](docs/RELIABILITY_V3.md), [round 2](docs/RESEARCH_EVALUATION.md)) |
-| **Incomplete** | LoRA fine-tuning of Qwen2.5-1.5B: data, training and evaluation code and a [Colab notebook](https://colab.research.google.com/github/pouyapd/GroundedAI/blob/main/notebooks/finetuning/GroundedAI_LoRA_Colab.ipynb) are ready and tested on a CPU; the GPU run has not been done ([docs/FINETUNING.md](docs/FINETUNING.md)); the meaning check is not part of the server API |
+| **Evaluated** | synthetic sets (development, 56-question evaluation, 30 held-out conflict cases); real NIST PDFs (53 test questions, 108 hand-written test claims, validation and fictional-edition sets), each change compared with the previous defaults ([round 3](docs/RELIABILITY_V3.md), [round 2](docs/RESEARCH_EVALUATION.md)); LoRA fine-tuning of Qwen2.5-1.5B-Instruct on a free Colab T4, base against adapter ([results](#lora-fine-tuning-of-the-answer-model-november-2026)): format and refusals improved, correctness on real PDFs fell, so the adapter is not used |
+| **Incomplete** | the meaning check is not part of the server API |
 | **Known weaknesses** | real version changes between two NIST editions are still missed (0 of 4); the extractive relevance check refuses too many answerable test questions (10 of 40); small, single-author datasets ([all limitations](#limitations)) |
 
 ## Live demo
@@ -259,7 +259,7 @@ commit, test sets run once after the defaults were fixed; details in
 |---|---|
 | A. PDF text clean-up and word-form matching (now the default) | More correct extractive answers (.600 to .725; the interval excludes zero). Retrieval gain small, interval touches zero. No clear change for the language model. |
 | B. Fine-tuned embeddings (bge-small, 242 model-written training questions) | No measurable gain: hybrid Recall@5 -.011 (CI -.080 to +.057) against the base model; dense +.057 (CI -.045 to +.170). |
-| C. LoRA fine-tuning of a small answer model | **Not completed** (no GPU). Smoke-tested on the CPU: 52 s per example, about 3.7 hours per epoch; no training result. |
+| C. LoRA fine-tuning of a small answer model | Not completed in round 2 (no GPU). Done later on a free Colab T4: see [LoRA fine-tuning](#lora-fine-tuning-of-the-answer-model-november-2026) below. |
 | D. Claim verifier on 108 hand-written claims (macro-F1, four labels) | Lexical check .409; pretrained NLI model (zero-shot) .723; the same model fine-tuned on rule-made pairs .740 (difference +.016, CI -.081 to +.120: not reliable). |
 | D on whole answers | For the language model, the NLI check flagged 7 and 5 of 9 wrong answers (lexical check: 4 and 1) and 6 and 5 of about 30 correct ones (lexical: 2 and 5). For the extractive generator it flags no more than the lexical check: those wrong answers are real sentences that do not answer the question. |
 | Deployment of the verifier | ONNX int8: 83 MB (PyTorch 270 MB), 17-19 ms per claim on the CPU (PyTorch 59-60 ms); 4 and 9 of 108 labels change. Round 3 runs the int8 model of the same base in the browser. |
@@ -274,6 +274,41 @@ commit, test sets run once after the defaults were fixed; details in
   `GROUNDEDAI_TEXT_CLEANUP=v1` and `GROUNDEDAI_EXTRACTIVE_MATCHING=exact` for the old
   behaviour. Documents indexed earlier are listed as indexed with older settings and can be
   re-indexed safely (Documents page, `POST /api/v1/documents/reindex` or `groundedai reindex`).
+
+### LoRA fine-tuning of the answer model (November 2026)
+
+Qwen2.5-1.5B-Instruct was fine-tuned with LoRA (rank 16, alpha 32, all attention and MLP
+projections, 18.5 M trainable parameters) on 713 examples in GroundedAI's own prompt format.
+Targets answer from the retrieved passages with `[S#]` citations or refuse with
+`INSUFFICIENT_EVIDENCE`. The run used a free Google Colab Tesla T4: fp16 base weights, 2
+epochs, 180 optimizer steps, 40 minutes, 13.2 GB peak GPU memory. Validation loss fell from .150
+to .064. The base model and the adapter were then run through the same evaluation code with the
+same retrieval, prompt, checks and greedy decoding; the protected test set was run once at the
+end.
+
+| Protected NIST test set (53 questions) | Base model | With the adapter |
+|---|---|---|
+| Correct answers (40 answerable) | **34** | **23** (paired −.275, CI −.425 to −.150) |
+| False refusals | 1 | 8 |
+| Refused, of 6 that should be refused | 5 | 6 |
+| Replies in the application's citation or refusal format | 27 of 53 | 53 of 53 |
+| Answers with no valid source label | 24 of 46 | 0 of 35 |
+
+- **What improved:** the format. Every reply followed it, and on held-out fictional documents
+  the questions that should be refused were refused 57 of 62 times instead of 15.
+- **What got worse:** answers on real documents. Correct answers fell from 14 to 6 of 15 on
+  NIST validation and from 5 to 1 of 7 on NIST relevance validation. On the fictional documents
+  correctness did not change measurably (.910 → .886, CI includes zero).
+- **Retrieval was the same** in both runs, so the change comes from the model. Most new refusals
+  had the evidence among the passages. The likely causes are in the training data: many refusal
+  examples that differ only subtly from answer examples, and answer targets that are always one
+  copied sentence. These are hypotheses, not tested causes.
+- **Decision:** the adapter is not used. The base model stays the default because the adapter
+  did not keep answer correctness.
+
+Full write-up, the hypotheses and every figure:
+[docs/FINETUNING.md](docs/FINETUNING.md#results-run1-2026-11-16). The raw reports are in
+[evaluation/reports/finetuning-2026-11/run1/](evaluation/reports/finetuning-2026-11/run1/).
 
 ## Limitations
 
@@ -302,8 +337,10 @@ commit, test sets run once after the defaults were fixed; details in
 - **The defaults have known costs.** Text clean-up drops a table column header that repeats at
   the top of pages, and on pages whose lines all sit at the page edges it can remove everything
   (re-indexing then keeps the old index). The optional added-detail flag (off by default) marks some correct paraphrases.
-- **Research results with limits.** The LoRA fine-tuning of the answer model was not completed
-  (no GPU; smoke test only). The meaning check's browser numbers come from one laptop.
+- **Research results with limits.** The LoRA-fine-tuned answer model is not used: it followed
+  the format and refused reliably but answered fewer real-document questions correctly (one
+  run, one seed, 40 answerable test questions). The meaning check's browser numbers come from
+  one laptop.
 - **No OCR, tables or images;** text processing is English-focused. A quote's page is the
   page on which it starts.
 
@@ -320,9 +357,11 @@ Research directions, in order of expected value:
    step.
 3. **The meaning check on the server.** The NLI check works in the browser; offering it through
    the API (and choosing when it may change an answer's status) needs its own evaluation.
-4. **Run the LoRA experiment** on a free Colab GPU with the prepared notebook
-   ([docs/FINETUNING.md](docs/FINETUNING.md)), against the base model with the same retrieval,
-   prompt and decoding.
+4. **A second LoRA run with different training data.** Use fewer refusal examples that are
+   hard to tell apart from answers, add answer targets that need paraphrase, several sentences or
+   lists, and choose the checkpoint on NIST validation correctness instead of loss
+   ([hypotheses](docs/FINETUNING.md#why-correctness-fell-hypotheses)). The final comparison
+   would then need a new, unused test set.
 5. **A larger real-document benchmark** with several publishers, a second annotator and
    agreement figures, and more local models (for example Mistral 7B through the existing Ollama
    provider) under the same settings and scoring.

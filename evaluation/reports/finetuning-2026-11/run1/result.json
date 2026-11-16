@@ -1,0 +1,13 @@
+{
+  "finished": true,
+  "resumed_from": null,
+  "global_steps": 180,
+  "best_checkpoint": "checkpoint-180",
+  "best_validation_loss": 0.06404640525579453,
+  "final_validation_loss": 0.06404640525579453,
+  "first_validation_loss": 0.14959804713726044,
+  "train_loss": 0.08540779310795996,
+  "train_runtime_s": 2415.5,
+  "wall_time_s": 2524.3,
+  "peak_gpu_memory_gb": 13.15
+}
