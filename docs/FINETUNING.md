@@ -1,8 +1,8 @@
 # LoRA fine-tuning of the answer model
 
-**Status: prepared and tested on a CPU; the GPU training run has not been done yet.** Nothing in
-this document claims that fine-tuning helps. The results section is filled in only from a real
-run.
+**Status: the notebook runs end to end on a CPU in test mode (including a restart and a damaged
+checkpoint); the GPU training run with Qwen2.5-1.5B has not been done yet.** Nothing in this
+document claims that fine-tuning helps. The results section is filled in only from a real run.
 
 ## What and why
 
@@ -19,17 +19,47 @@ correctness.
 
 1. Open the notebook in Colab:
    <https://colab.research.google.com/github/pouyapd/GroundedAI/blob/main/notebooks/finetuning/GroundedAI_LoRA_Colab.ipynb>
-2. *Runtime → Change runtime type → T4 GPU* (the free GPU). Do not buy Colab Pro or compute
-   units; if no GPU is offered, try later.
-3. *Runtime → Run all*. Allow Google Drive access when asked (checkpoints and results go to
-   `MyDrive/groundedai-lora/run1/`).
-4. If the runtime disconnects, open the notebook again and *Run all* with the same `RUN_NAME`:
-   training continues from the last checkpoint and finished evaluations are not repeated.
-5. At the end, download `groundedai-lora-results.zip` (reports, logs, adapter) from the Files
-   panel, or take the folder from Drive.
+2. *Runtime → Change runtime type →* a free GPU (for example T4) *→ Save*. Do not buy Colab Pro
+   or compute units; if no GPU is offered, try later.
+3. *Runtime → Run all*. Nothing has to be edited, and no Google Drive permission is asked for.
+4. When the last cell has finished, download `/content/groundedai-lora-results.zip`. The download
+   starts by itself in most browsers; otherwise use the *Files* panel (left), find the file under
+   `/content`, and choose *Download* in its menu.
 
-The first cell prints the GPU, its memory, CUDA and PyTorch versions, RAM and disk, and stops the
-notebook when there is no GPU.
+What the steps do:
+
+| Step | What happens | Stops the notebook when |
+|---|---|---|
+| 1. Settings and code | the settings (written out in the cell), then a clone of the repository into `/content/GroundedAI` with `subprocess` and explicit arguments (an existing clone is updated to the latest `main`; an unusable folder is moved aside); the commit is printed; the settings are saved to `/content/groundedai-lora/settings.json` | cloning fails or a needed file is missing |
+| 2. Libraries and compatibility check | stops at once without a GPU; installs the pinned Transformers, PEFT and Accelerate with PyTorch held at its installed version; removes torchao when it is older than PEFT accepts (Colab had torchao 0.10.0; GroundedAI does not use torchao); installs GroundedAI; then, in a fresh process, creates LoRA layers on a tiny model and runs a forward and backward pass | any install fails, PyTorch would change, or the check fails |
+| 3. Training data | checks the training files against their SHA-256 hashes | a file differs |
+| 4. Smoke test | eight stages with PASS or FAIL: model loading, LoRA creation, forward and backward pass, three optimizer steps, validation loss, saving the adapter, loading it on a fresh base model, generating with it | any stage fails (the full error is shown) |
+| 5. Training | prints the plan (GPU, data, sequence length, estimated optimizer steps, folder, fresh or resumed), then trains | the smoke test has not passed |
+| 6. Validation | base and fine-tuned model on the three validation sets, with paired comparisons | |
+| 7. Protected test set | base and fine-tuned model once | |
+| 8. Merge check and archive | merged model against the adapter; the results archive | |
+
+**Restarts.** No cell uses a variable from another cell: step 1 writes the settings to a file,
+and every later cell imports `training/colab_pipeline.py` again and reads them. Heavy work runs
+in separate Python processes, so removing torchao does not need a kernel restart. After a kernel
+restart, *Run all* again: step 1 updates the clone, step 2 checks the libraries again, training
+continues from the newest *complete* checkpoint (an incomplete one, for example cut off while
+saving, is renamed `incomplete-checkpoint-…` and skipped), a finished training run is not
+repeated, and finished evaluation reports are not run again (reports are written to a
+`.partial` file and renamed when complete). A run folder keeps the training settings it started
+with; other settings need a new `run_name`.
+
+**Storage.** By default everything is under `/content/groundedai-lora/run1/` on the runtime's
+disk. It survives a kernel restart but **not the end of the runtime** (a disconnect, an idle
+timeout, *Disconnect and delete runtime*); download the archive before closing. With
+`"use_drive": True` in step 1 the run folder is in `MyDrive/groundedai-lora/` instead; if Drive
+cannot be mounted (for example "credential propagation was unsuccessful"), the notebook says so
+and continues with local storage.
+
+The notebook is generated by `training/build_notebook.py`; `backend/tests/unit/test_finetuning_notebook.py`
+checks that it is up to date, that no cell has shell lines or unfilled placeholders, that no cell
+uses a variable it does not define, that the settings are the experiment's, and the recovery
+logic.
 
 ## Data (`training/prepare_dataset.py` → `training/data/`)
 
@@ -114,20 +144,40 @@ Order: validation sets first (held-out fictional organisations, `groundedai-nist
 `groundedai-nist-val-relevance-v1`); the protected test set `groundedai-nist-v1` once at the end,
 after the adapter is final. Model selection uses only the validation loss.
 
-## Tests done so far (CPU, no GPU)
+## Tests done so far (no GPU)
+
+**Problems found in Colab and how they were fixed (2026-11-16).** A first Colab session on a
+Tesla T4 (Python 3.13.16, PyTorch 2.14.1+cu130, PEFT 0.21.2, torchao 0.10.0) showed three
+failures:
+
+| Failure | Cause | Fix |
+|---|---|---|
+| `fatal: repository '{REPO}' does not exist` after a runtime restart, then missing files | the clone was a shell line (`!git clone {REPO} …`) that needed a variable from an earlier cell; after a restart the placeholder stayed literal | step 1 defines the URL, branch and paths itself and clones with `subprocess` and explicit arguments; no cell has shell lines or uses another cell's variables (tested) |
+| `ImportError: Found an incompatible version of torchao … 0.10.0` when the LoRA layers were created | Colab has torchao 0.10.0 installed; PEFT 0.21 refuses torchao older than 0.16 whenever it is installed, even though GroundedAI does not use it | step 2 removes a torchao older than 0.16 before anything imports PEFT, checks it is gone, and proves LoRA creation works in a fresh process; training runs in its own process, so no restart is needed |
+| `MessageError: credential propagation was unsuccessful` from the Drive mount | the mount ran by default | Drive is off by default; when switched on and it fails, the notebook continues with local storage |
+
+**Reproduced and tested on this laptop** (CPU only; a Python 3.13.5 environment with the same
+PyTorch 2.14.1 (CPU build), Transformers 5.19.0, PEFT 0.21.2, Accelerate 1.10.1 and torchao
+0.10.0 as Colab):
 
 | Check | Result |
 |---|---|
-| `prepare_dataset.py` | 713 / 269 examples, 236 held-out evaluation questions; the evaluation set loads as a GroundedAI dataset; a second build gave identical files (same SHA-256) |
-| `finetune_lora.py --smoke` with Qwen2.5-0.5B on the CPU (the 1.5B model is not downloaded on this machine) | 3 optimizer steps, validation loss recorded, adapter and tokenizer saved (570 s) |
-| the same command again | resumed from the checkpoint (`"resumed": true`) |
-| `evaluate_finetuned.py` with the 0.5B model on 3 held-out questions: base, base + adapter, merged adapter | all three ran through the pipeline with every measure; the adapter loaded with PEFT; the merged model gave the same reply as the adapter on 3 of 3 |
-| `finetune_lora.py --report-hardware` | prints the report; on this laptop: no GPU |
+| LoRA creation with torchao 0.10.0 installed | the same `ImportError` as in Colab |
+| `training/check_environment.py` before the fix | `"ok": false` with that error |
+| the whole notebook, *Run all* from a clean kernel (`nbclient`), test mode: Qwen2.5-0.5B on the CPU, 2 training steps, 2 questions per evaluation | all 8 steps ran. Step 1: the real repository was cloned. Step 2: torchao removed, PyTorch unchanged (2.14.1), GroundedAI installed, LoRA creation and a forward and backward pass passed. Step 3: hashes verified. Step 4: all 8 smoke stages PASS. Step 5: trained, validation loss 1.099 → 0.990. Steps 6–8: see the next row (the first run stopped in step 6 on a bug, now fixed: a comparison with no question of one kind divided by zero) |
+| the whole notebook again in a new kernel, after deleting the finished adapter and `result.json` and adding a damaged `checkpoint-3` | all 8 steps finished (15.6 min). The clone was updated in place; the damaged checkpoint was renamed `incomplete-checkpoint-3-…`; training resumed from `checkpoint-2`; the validation and test evaluations and comparisons ran; the merge check ran; the archive was written (checkpoints left out) |
+| step 1 alone with a non-git folder in place of the clone, then again | the folder was moved aside and the repository cloned; the second time the clone was updated in place |
+| `backend/tests/unit/test_finetuning_notebook.py` (26 tests, also in CI) | the notebook matches `training/build_notebook.py`; no shell lines or unfilled placeholders (the old notebook had 11 shell lines); no cell uses a variable it does not define; the settings are the experiment's; every needed file exists; data hashes; settings saved and re-read, missing step 1, unknown settings, Drive fallback, a run keeping its settings, torchao decisions, newest complete checkpoint, damaged trainer state, finished-run detection, smoke result required for the same model, partial reports, archive contents |
+| `prepare_dataset.py` twice | identical files (same SHA-256) |
 
-The GPU path (fp16, the automatic sequence length, the 1.5B model) has not run anywhere yet;
-the first notebook run will be its first test.
+When training resumes from the very last checkpoint of a run, the Trainer (Transformers 5.19)
+runs one more step; its learning rate is 0 at that point of the linear schedule, so the weights
+and the validation loss do not change (0.99026 before and after in the test above).
 
-These show that the code runs. They are not training results.
+**Not tested anywhere yet: the GPU path.** fp16 training, the automatic sequence length on a
+real GPU, Qwen2.5-1.5B itself, and the run times have only been exercised in the Colab session
+that failed at LoRA creation. The first complete notebook run on a free Colab GPU is their first
+test. These CPU tests show that the code and the notebook work; they are not training results.
 
 ## Results
 

@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import tempfile
 import time
@@ -291,9 +292,11 @@ def main() -> int:
         code=code_version(),
     )
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(
+    partial = args.out.with_name(args.out.name + ".partial")  # never a half-written report
+    partial.write_text(
         json.dumps(report, indent=1, default=str) + "\n", encoding="utf-8", newline="\n"
     )
+    os.replace(partial, args.out)
     summary = report["summary"]
     print(
         json.dumps(

@@ -32,6 +32,8 @@ def _rows(path: Path) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
 
 
 def _paired(old: list[float], new: list[float]) -> dict[str, Any]:
+    if not old:  # no question of this kind (for example in a limited run)
+        return {"n": 0, "old_mean": None, "new_mean": None, "gained": 0, "lost": 0}
     result: dict[str, Any] = {
         "n": len(old),
         "old_mean": round(sum(old) / len(old), 4),
