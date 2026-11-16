@@ -1,0 +1,103 @@
+{
+  "seed": 20261116,
+  "dropped": {
+    "synthetic-train": {
+      "answer": 2
+    },
+    "synthetic-validation": {},
+    "nist-train": {
+      "nist_answer": 69,
+      "nist_other_document": 5
+    },
+    "nist-validation": {
+      "nist_answer": 5
+    }
+  },
+  "sha256": {
+    "train.jsonl": "26c274390ae764b7c642a41e05dd4111f976f8d66d78d58be8a0fdcd73b4fba4",
+    "validation.jsonl": "3e34775d47ebe3a75e5ab9ba71e3e83111ac15c8a014396d224c015e09b29435"
+  },
+  "counts": {
+    "train": {
+      "irrelevant": 30,
+      "nist_answer": 173,
+      "insufficient": 51,
+      "detail_bait": 30,
+      "unanswerable": 45,
+      "answer": 246,
+      "nist_other_document": 77,
+      "partial": 25,
+      "multi": 30,
+      "conflict": 6
+    },
+    "validation": {
+      "partial": 10,
+      "answer": 124,
+      "insufficient": 26,
+      "multi": 16,
+      "detail_bait": 16,
+      "nist_answer": 24,
+      "nist_other_document": 9,
+      "irrelevant": 16,
+      "unanswerable": 20,
+      "conflict": 8
+    }
+  },
+  "totals": {
+    "train": 713,
+    "validation": 269
+  },
+  "organisations": {
+    "train": [
+      "Amberleigh Ferries",
+      "Ashcombe Ridge Ferries",
+      "Bramblecote Council",
+      "Calloway Council",
+      "Cindermoor Fitness",
+      "Corrindale Library",
+      "Dunmore College",
+      "Eastwold Ferries",
+      "Elsworth Water",
+      "Emberley Water",
+      "Glenbrook Council",
+      "Heathfold Ferries",
+      "Hollinford Water",
+      "Juniper Point Council",
+      "Merrowdale College",
+      "Netherby Council",
+      "Oakhaven Library",
+      "Pembury Ferries",
+      "Redwick Fitness",
+      "Rosedown College",
+      "Sablewood Water",
+      "Saltmere Fitness",
+      "Stonecroft Library",
+      "Tamberly Fitness",
+      "Tollbrook Library",
+      "Upton Vale Fitness",
+      "Vexhall College",
+      "Wexcombe College",
+      "Willowmere Water",
+      "Yarrowby Library"
+    ],
+    "validation": [
+      "Bellhaven Ferries",
+      "Dovecote College",
+      "Fairwyn Museum",
+      "Fernhollow Museum",
+      "Foxhollow College",
+      "Greyhallow Fitness",
+      "Halverton Health Centre",
+      "Ivymere Council",
+      "Kingsmere Water",
+      "Lindenfield Council",
+      "Marlowe Water",
+      "Northcliff Ferries",
+      "Orrinton Library",
+      "Pinewold Health Centre",
+      "Thornbury Fitness",
+      "Westerleigh Library"
+    ]
+  },
+  "eval_questions": 236
+}

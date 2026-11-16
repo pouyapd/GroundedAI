@@ -74,3 +74,8 @@ experiments/finetune/corpus/
 experiments/finetune/data/
 experiments/finetune/runs/
 experiments/deploy/runs/
+
+# LoRA training: the prepared data is committed; outputs (weights, checkpoints) stay out of Git
+!training/data/
+training/runs/
+**/adapter_model.safetensors

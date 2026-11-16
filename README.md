@@ -71,7 +71,7 @@ WebLLM, ONNX Runtime Web, pytest, Playwright, Docker, GitHub Actions.
 |---|---|
 | **Implemented and tested** | upload checks and PDF extraction with pages; hybrid retrieval (BM25 + vectors, RRF); three generators; citation-label check; lexical claim check with exact quotes; optional added-detail flag (off by default); question-relevance check and refusal (extractive); disagreement check across documents and editions; safe bulk re-indexing; browser demo with an optional in-page language model and an optional NLI meaning check |
 | **Evaluated** | synthetic sets (development, 56-question evaluation, 30 held-out conflict cases); real NIST PDFs (53 test questions, 108 hand-written test claims, validation and fictional-edition sets), each change compared with the previous defaults ([round 3](docs/RELIABILITY_V3.md), [round 2](docs/RESEARCH_EVALUATION.md)) |
-| **Incomplete** | LoRA fine-tuning of the answer model: prepared and smoke-tested, not trained (no GPU); the meaning check is not part of the server API |
+| **Incomplete** | LoRA fine-tuning of Qwen2.5-1.5B: data, training and evaluation code and a [Colab notebook](https://colab.research.google.com/github/pouyapd/GroundedAI/blob/main/notebooks/finetuning/GroundedAI_LoRA_Colab.ipynb) are ready and tested on a CPU; the GPU run has not been done ([docs/FINETUNING.md](docs/FINETUNING.md)); the meaning check is not part of the server API |
 | **Known weaknesses** | real version changes between two NIST editions are still missed (0 of 4); the extractive relevance check refuses too many answerable test questions (10 of 40); small, single-author datasets ([all limitations](#limitations)) |
 
 ## Live demo
@@ -320,8 +320,9 @@ Research directions, in order of expected value:
    step.
 3. **The meaning check on the server.** The NLI check works in the browser; offering it through
    the API (and choosing when it may change an answer's status) needs its own evaluation.
-4. **Run the prepared LoRA experiment** on a GPU (data, configuration and commands are in
-   [`experiments/`](experiments/README.md)), against the base model on the same test set.
+4. **Run the LoRA experiment** on a free Colab GPU with the prepared notebook
+   ([docs/FINETUNING.md](docs/FINETUNING.md)), against the base model with the same retrieval,
+   prompt and decoding.
 5. **A larger real-document benchmark** with several publishers, a second annotator and
    agreement figures, and more local models (for example Mistral 7B through the existing Ollama
    provider) under the same settings and scoring.
