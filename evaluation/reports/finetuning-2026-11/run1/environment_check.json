@@ -1,0 +1,21 @@
+{
+  "python": "3.13.16",
+  "torch": "2.14.1+cu130",
+  "transformers": "5.19.0",
+  "peft": "0.21.2",
+  "accelerate": "1.10.1",
+  "torchao": null,
+  "groundedai": "0.1.0",
+  "cuda_available": true,
+  "cuda_version": "13.0",
+  "gpu": "Tesla T4",
+  "gpu_memory_gb": 14.6,
+  "compute_capability": "7.5",
+  "bf16_supported": true,
+  "ram_gb": 12.7,
+  "disk_free_gb": 112.4,
+  "lora_layers_created": true,
+  "forward_backward": true,
+  "precision_tested": "fp16 base, fp32 LoRA, fp16 autocast",
+  "ok": true
+}

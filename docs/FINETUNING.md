@@ -1,8 +1,33 @@
 # LoRA fine-tuning of the answer model
 
-**Status: the notebook runs end to end on a CPU in test mode (including a restart and a damaged
-checkpoint); the GPU training run with Qwen2.5-1.5B has not been done yet.** Nothing in this
-document claims that fine-tuning helps. The results section is filled in only from a real run.
+**Status: completed (run1, 2026-11-16, free Google Colab Tesla T4). The adapter is not used by
+the application: it made the answers' format reliable and refused every question it should
+refuse, but it answered far fewer answerable NIST questions correctly (protected test set: 34 →
+23 of 40).** The application's default model is unchanged. [Results](#results-run1-2026-11-16)
+are taken from the run's own JSON reports, committed unchanged in
+[`evaluation/reports/finetuning-2026-11/run1/`](../evaluation/reports/finetuning-2026-11/run1/)
+with a SHA-256 manifest; `backend/tests/unit/test_finetuning_results.py` checks the figures
+quoted here against them.
+
+**In brief**
+
+| | Base Qwen2.5-1.5B-Instruct | With the LoRA adapter |
+|---|---|---|
+| Protected NIST test set: correct answers (40 answerable) | **34** (.850) | **23** (.575); paired −.275, 95% CI −.425 to −.150 |
+| — false refusals (40 answerable) | 1 | 8 |
+| — refused when it should (6) | 5 | 6 |
+| — replies in the application's format, every label valid (53) | 27 | 53 |
+| — answers with no valid source label | 24 of 46 answers | 0 of 35 answers |
+| NIST validation: correct (15 answerable) | 14 | 6 |
+| NIST relevance validation: correct (7 answerable) | 5 | 1 |
+| Held-out fictional organisations: correct (166 answerable) | 151 (.910) | 147 (.886); not distinguishable |
+| — refused when it should (62) | 15 | 57 |
+| Retrieval (Recall@5, MRR@10), every set | same | same (identical index and passages) |
+
+Fine-tuning taught the output format and abstention, but it also taught the model to abstain or
+to copy one sentence where the real NIST questions needed an answer. The likely causes are in the
+training data (see [Why correctness fell](#why-correctness-fell-hypotheses)); they are
+hypotheses, not proven.
 
 ## What and why
 
@@ -93,8 +118,10 @@ Kinds of example (counts from `training/data/dataset_report.json`):
 
 Quality control:
 
-* targets are built only from retrieved passages, and an example is dropped when the passage with
-  the answer was not retrieved (71 NIST and 2 fictional training examples, 5 NIST validation);
+* targets are built only from retrieved passages, and an example is dropped when no retrieved
+  sentence contains the answer (69 NIST and 2 fictional training examples, 5 NIST validation; 5
+  more NIST "other document" examples were dropped because the other document also contained
+  the answer);
 * questions name the organisation, and all training documents share one index, so retrieved
   passages include other organisations' documents with other values (to be ignored);
 * fictional names were checked against every dataset, document and test in the repository (three
@@ -109,8 +136,10 @@ longest 2,010 in training; median 1,177, longest 1,648 in validation.
 
 Limitations: the fictional documents are short and regular, and the targets copy one sentence,
 so the model is taught a format more than a skill; the NIST questions were written by a small
-model and some are odd; the abstention share (about 30% of training examples, more with partial
-answers) is a choice, not a measured optimum.
+model and some are odd; the abstention share (203 of 713 training targets, 28.5%, are pure
+abstentions; 258, 36.2%, contain the abstention marker, counting partial and detail-bait
+answers) is a choice, not a measured optimum. The run's results suggest that these choices
+matter (see [Why correctness fell](#why-correctness-fell-hypotheses)).
 
 ## Training (`training/finetune_lora.py`)
 
@@ -144,7 +173,7 @@ Order: validation sets first (held-out fictional organisations, `groundedai-nist
 `groundedai-nist-val-relevance-v1`); the protected test set `groundedai-nist-v1` once at the end,
 after the adapter is final. Model selection uses only the validation loss.
 
-## Tests done so far (no GPU)
+## Tests before the GPU run (CPU)
 
 **Problems found in Colab and how they were fixed (2026-11-16).** A first Colab session on a
 Tesla T4 (Python 3.13.16, PyTorch 2.14.1+cu130, PEFT 0.21.2, torchao 0.10.0) showed three
@@ -174,21 +203,222 @@ When training resumes from the very last checkpoint of a run, the Trainer (Trans
 runs one more step; its learning rate is 0 at that point of the linear schedule, so the weights
 and the validation loss do not change (0.99026 before and after in the test above).
 
-**Not tested anywhere yet: the GPU path.** fp16 training, the automatic sequence length on a
-real GPU, Qwen2.5-1.5B itself, and the run times have only been exercised in the Colab session
-that failed at LoRA creation. The first complete notebook run on a free Colab GPU is their first
-test. These CPU tests show that the code and the notebook work; they are not training results.
+These CPU tests showed that the code and the notebook work; they are not training results. The
+GPU path (fp16 training, the automatic sequence length, Qwen2.5-1.5B itself) was first exercised
+in run1 below, which ran the notebook from the merged `main` (commit `c077c48`) without changes.
 
-## Results
+## Results (run1, 2026-11-16)
 
-Not available yet: the GPU run has not been done.
+All figures come from the files in
+[`evaluation/reports/finetuning-2026-11/run1/`](../evaluation/reports/finetuning-2026-11/run1/),
+copied unchanged from the Colab run folder. `MANIFEST.json` lists the SHA-256 of every file of
+that folder, including the files that are not in Git (adapter weights, tokenizer). One file was
+not in the folder received: `reports/nist-val-base.json`, the base model's per-question report on
+`groundedai-nist-val-v1`. Its aggregate figures survive in `reports/nist-val-comparison.json`,
+which the notebook computed from it in Colab, so the NIST validation comparison below is complete
+but the base model's individual answers on that set cannot be inspected.
+
+### Hardware and environment
+
+| | |
+|---|---|
+| GPU | NVIDIA Tesla T4, 14.6 GB (compute capability 7.5), free Colab tier |
+| peak GPU memory during training | 13.15 GB |
+| host | 2 vCPUs (Intel Xeon 2.00 GHz), 12.7 GB RAM |
+| software | Python 3.13.16, PyTorch 2.14.1+cu130 (CUDA 13.0), Transformers 5.19.0, PEFT 0.21.2, Accelerate 1.10.1; torchao removed by step 2 (`environment_check.json`: `"torchao": null`, LoRA creation and a forward and backward pass passed) |
+| code | GroundedAI `c077c4813142ffcf722ba7ddf166d39fd20e1aac` (no uncommitted changes, recorded in every report) |
+
+### Smoke test (on the T4, before training)
+
+All eight stages passed with Qwen2.5-1.5B-Instruct in fp16 on the GPU (`smoke/smoke_result.json`):
+
+| Stage | Result |
+|---|---|
+| 1. model loading | PASS, 35.8 s |
+| 2. LoRA adapter creation | PASS, 18,464,768 trainable parameters |
+| 3. forward and backward pass | PASS, loss 0.794 |
+| 4. three optimizer steps | PASS, training loss 1.953 |
+| 5. validation loss | PASS, 1.941 |
+| 6. adapter saving | PASS |
+| 7. adapter loading on a fresh base model | PASS, 392 LoRA tensors, largest difference 0 |
+| 8. generation with the adapter | PASS |
+
+### Training
+
+| | |
+|---|---|
+| base model | Qwen/Qwen2.5-1.5B-Instruct (1,562,179,072 parameters) |
+| LoRA | rank 16, alpha 32, dropout 0.05 on q, k, v, o, gate, up and down projections; 18,464,768 trainable parameters (1.18%) |
+| precision | fp16 base weights, fp32 LoRA weights, fp16 autocast with loss scaling |
+| batch | 1, gradients accumulated over 8 examples, gradient checkpointing |
+| optimiser | AdamW, learning rate 1e-4, linear schedule with 5% warm-up |
+| sequence length | 2048 (the first size tried; the longest example has 2,010 tokens, so no example was left out) |
+| data | 713 training and 269 validation examples (hashes checked by the notebook) |
+| steps | 180 optimizer steps = 2 complete epochs (90 per epoch); fresh run, not resumed |
+| time | 2,415.5 s (40.3 min) in the Trainer, including the nine validation-loss evaluations (about 92 s each); 2,524.3 s (42.1 min) for the whole training script, including model loading and saving |
+| seed | 13 |
+
+Validation loss (269 examples, every 20 steps; `loss_history.json`):
+
+| step | 20 | 40 | 60 | 80 | 100 | 120 | 140 | 160 | 180 |
+|---|---|---|---|---|---|---|---|---|---|
+| validation loss | .150 | .105 | .091 | .078 | .071 | .080 | .068 | .066 | **.064** |
+
+The training loss fell from 0.818 (first 5 steps) to about 0.02 at the end (mean over the run
+0.085). The lowest validation loss was at the last step, so `checkpoint-180` became the adapter.
+Model selection used only this validation loss, as fixed before the run.
+
+Saved: `adapter/adapter_model.safetensors` (73,911,112 bytes, SHA-256
+`7af02566c8625b206cfd453300fc50925effe5ac59cbcbfc53cad17d4cf80a21`) with `adapter_config.json`
+(PEFT 0.21.2, `r=16`, `lora_alpha=32`), the tokenizer, and the records listed above. The weights
+are not in Git and are not published anywhere; anyone can reproduce them with the notebook
+(same data hashes, seed and library versions; GPU kernels can still make the weights differ
+slightly between runs).
+
+### Evaluation setup
+
+The base model and the adapter were evaluated with the same code
+(`training/evaluate_finetuned.py`), index, retrieval (hybrid BM25 + hashing embedder, top 5),
+prompt (`answer-v2`), checks (`claims-v1`, `disagreement-v3`) and decoding (greedy, at most 384
+new tokens, fp16 on the T4). Only the weights differ. "Correct" means that the answer contains
+every key fact (`key_fact_recall` = 1); a refusal is never correct. Differences are paired
+bootstrap 95% intervals over questions (5,000 resamples, seed 13); "distinguishable" means the
+interval excludes zero.
+
+Order: the three validation sets, then the protected test set `groundedai-nist-v1` once with the
+final adapter, then the merge check. No setting was changed after any of these runs, and the
+protected test results are not used to choose anything.
+
+These base-model figures were measured with Transformers in fp16. Earlier figures for
+qwen2.5:1.5b in the README (for example .775 correct on the test set) come from Ollama's 4-bit
+build on a laptop CPU, a different setup; they are not compared with these.
+
+### Protected NIST test set (53 questions, run once)
+
+| | Base | LoRA | Paired difference |
+|---|---|---|---|
+| correct answers (40 answerable) | 34 (.850) | 23 (.575) | −.275, CI −.425 to −.150 (11 lost, 0 gained) |
+| false refusals (40 answerable) | 1 | 8 | +.175, CI +.050 to +.325 |
+| refused, of 6 that should be refused | 5 | 6 | +.167, CI 0 to +.500 (not distinguishable) |
+| all refusals (precision of refusing) | 7 (.714 should be refused) | 18 (.333 should be refused) | |
+| ambiguous questions (3): refused | 1 | 2 | |
+| conflicting-version questions (4): correct | 0 | 0 | |
+| replies in the application's format (53) | 27 | 53 | |
+| answers given | 46 | 35 | |
+| answers with no valid source label | 24 of 46 | 0 of 35 | |
+| statements found in the passages by the lexical check | 99 of 109 (.908) | 38 of 39 (.974) | |
+| quotes verbatim and on the right page | all | all | |
+| retrieval Recall@5 / MRR@10 (44 questions with evidence) | .864 / .792 | .864 / .792 | 0 / 0 |
+| median time per question (T4) | 2.18 s | 2.20 s | |
+| generated tokens, all 53 questions | 3,534 | 1,387 | |
+
+By kind of question: factual 32 → 22 correct of 36 (refused 1 → 7), multi-chunk 2 → 1 of 4.
+
+"Replies in the application's format" (`format_valid`) counts every reply: an answer whose
+sentence-level citations all name a provided passage and which has at least one, or a refusal
+in the `INSUFFICIENT_EVIDENCE` format. The base model often wrote citations the application does
+not read, such as "According to Source S1" or "[Source S1]".
+
+**Citation precision and recall are not comparable between the two columns as plain numbers.**
+They are averaged over different answers:
+
+| | Base | LoRA |
+|---|---|---|
+| citation precision (cited passages that hold the evidence) | .414 over **21** answers (those with at least one valid label and known evidence) | .794 over **34** answers |
+| citation recall (evidence passages that were cited) | .302 over **43** answers (answers with no valid label count as 0) | .750 over **34** answers |
+
+The adapter's figures are higher partly because the base model's 24 unlabelled answers count as
+zero recall, and partly because the adapter answered 11 fewer questions, refusing some that the
+base model answered with poor citations. They show that the adapter's labels are usable, not
+that its answers are better.
+
+### Validation sets
+
+| | Base | LoRA | Paired difference |
+|---|---|---|---|
+| **NIST validation** (`groundedai-nist-val-v1`, 18 questions): correct of 15 | 14 | 6 | −.533, CI −.800 to −.200 (9 lost, 1 gained) |
+| — false refusals of 15 | 0 | 5 | +.333, CI +.133 to +.600 |
+| — refused, of 3 that should be | 2 | 3 | not distinguishable |
+| **NIST relevance validation** (`groundedai-nist-val-relevance-v1`, 14 questions): correct of 7 | 5 | 1 | −.571, CI −.857 to −.143 (4 lost) |
+| — false refusals of 7 | 0 | 5 | +.714, CI +.286 to +1.000 |
+| — refused, of 7 that should be | 5 | 7 | not distinguishable |
+| — replies in the application's format (14) | 7 | 14 | |
+| **Held-out fictional organisations** (`synthetic-eval`, 236 questions): correct of 166 | 151 (.910) | 147 (.886) | −.024, CI −.090 to +.042 (14 gained, 18 lost; not distinguishable) |
+| — false refusals of 166 | 9 | 19 | +.060, CI 0 to +.121 (not distinguishable) |
+| — refused, of 62 that should be | 15 | 57 | +.677, CI +.565 to +.790 |
+| — replies in the application's format (236) | 94 | 236 | |
+| — answers with no valid source label | 127 of 212 answers | 0 of 158 answers | |
+| Retrieval Recall@5 / MRR@10 | identical in every set | | 0 |
+
+The 62 fictional questions that should be refused are of three kinds: unanswerable (base 2,
+LoRA 15 of 20 refused), insufficient (5 → 26 of 26) and irrelevant (8 → 16 of 16). Other kinds:
+detail bait 8 → 15 of 16 correct, partial 7 → 9 of 10, multi 15 → 12 of 16, single answers
+121 → 111 of 124, conflicts 3 → 0 of 8.
+
+### Merge check
+
+The adapter merged into the base weights (`merge_and_unload`, fp16) gave the same reply as the
+unmerged adapter on 20 of 20 fictional validation questions (`reports/merge-check.json`). A
+merged model could therefore replace the adapter in a deployment without changing answers on
+that sample.
+
+### Conclusion
+
+LoRA fine-tuning on GroundedAI's prompt format made the format and abstention reliable: every
+reply followed the application's format, no answer lacked a valid source label, and the
+fictional questions that should be refused were refused in 57 of 62 cases instead of 15. It did
+not preserve correctness on real documents: on the NIST validation sets and on the protected
+test set the adapter answered many fewer questions correctly, mostly by refusing questions whose
+evidence had been retrieved or by copying a sentence that does not answer the question. On the
+held-out fictional organisations, correctness did not change measurably. Because the application
+needs correct answers first, **the adapter is not used**, and the base model stays the default.
+
+### Why correctness fell (hypotheses)
+
+These are explanations consistent with the data, not tested causes; testing them needs new
+training runs judged on validation data (the protected test set has now been used for this
+adapter and must not guide the next one).
+
+1. **The adapter refuses when the evidence was there.** Retrieval is identical between the two
+   models, and the passages with the evidence were retrieved for most of the new refusals: 6 of
+   the 8 test false refusals, 4 of the 5 in NIST validation, and 2 of the 5 in NIST relevance
+   validation had Recall@5 = 1. The refusals come from the model, not from retrieval.
+2. **The NIST training data teaches a weak cue for refusing.** 77 of the 250 NIST training
+   examples (31%) are refusals of a NIST question asked over passages from *another* NIST
+   publication. These passages use the same vocabulary as the right ones, so what separates
+   "answer" from "refuse" is subtle. 52 question texts occur with both targets and 23 only as a
+   refusal. The model may have learned that NIST-style passages without an exact match mean
+   "refuse".
+3. **Answer targets were kept only when the answer was a verbatim substring of one retrieved
+   sentence.** 69 of the 242 NIST training questions (28.5%) were dropped because no single
+   retrieved sentence contained the reference answer word for word. The model never saw an
+   answer target built from paraphrased evidence, from several sentences, or from a list, which
+   is what many test and validation questions need (for example "the four functions of the AI
+   RMF Core"). It may treat such evidence as insufficient.
+4. **Targets are single copied sentences.** 170 of the 173 NIST answer targets have one
+   citation, and the fictional answers are short (median 60 characters). The adapter's test
+   answers are about half as long as the base model's (median 122 against 260 characters; 1,387
+   against 3,534 generated tokens). 5 of the 11 lost test answers are one copied sentence that
+   misses the key fact. For t20 (which function most users start with) the adapter replied with
+   the fragment "However users integrate the functions, the process [S1]."; for t22 (whose
+   definition of AI actors the framework uses; key fact "OECD") it copied a sentence about one
+   group of AI actors.
+5. **The validation loss could not show the problem.** 236 of the 269 validation examples are
+   fictional and templated, and the loss falls smoothly (.150 → .064). Choosing the checkpoint by
+   loss therefore rewarded the format, not correct answers on real documents. The NIST validation
+   sets showed the drop in correctness before the test set was run.
+
+What would test these hypotheses: fewer and harder-to-confuse refusal examples; answer targets
+that need paraphrase, several sentences or lists (kept by a check on key facts instead of a
+verbatim match); checkpoints chosen on NIST validation correctness and false refusals instead of
+loss; then a new, previously unused NIST test set for the final comparison.
 
 ## Browser deployment (WebLLM)
 
-Not done. The demo runs an MLC 4-bit build of Qwen2.5-1.5B. The fine-tuned model has the same
-architecture, so the merged weights could in principle be converted with MLC LLM
-(`mlc_llm convert_weight … --quantization q4f16_1`, `mlc_llm gen_config …`) and loaded by WebLLM
-with the existing Qwen2.5-1.5B WebGPU library. This needs the MLC LLM package, a host for the
-converted weights (for example a Hugging Face model repository, which needs an account) and a
-change to the demo's model list. Until that has been done and tested in the deployed demo, the
-current model stays the only one there.
+Not done, and not planned for this adapter, because it lowered correctness. The demo keeps its
+MLC 4-bit build of the base Qwen2.5-1.5B-Instruct; the server keeps its generators unchanged.
+A future adapter with the same architecture could be merged (the merge check above passed),
+converted with MLC LLM (`mlc_llm convert_weight … --quantization q4f16_1`, `mlc_llm gen_config …`)
+and loaded by WebLLM with the existing Qwen2.5-1.5B WebGPU library. That would need the
+MLC LLM package, a host for the converted weights and a change to the demo's model list, and it
+should only follow an adapter that keeps correctness on validation data.

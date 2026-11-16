@@ -352,6 +352,10 @@ question type are in the table in D; the cost is the higher false-refusal count 
 
 **Status: blocked by hardware. No model was trained and no result is claimed.**
 
+> **Update (2026-11-17):** the experiment was later run on a free Colab T4 with
+> Qwen2.5-1.5B-Instruct; see [FINETUNING.md](FINETUNING.md#results-run1-2026-11-16). This
+> section describes round 3 as it was.
+
 The machine has no GPU. A bounded smoke test was run instead, to check that the training script
 works and to measure what a full run would cost (`--max-steps 8 --smoke`, a new option that saves
 only a log; `experiments/finetune/train_lora.py`):

@@ -1,0 +1,186 @@
+{
+ "run": "run1",
+ "description": "LoRA fine-tuning of Qwen/Qwen2.5-1.5B-Instruct on a free Google Colab Tesla T4, 2026-11-16, GroundedAI commit c077c4813142ffcf722ba7ddf166d39fd20e1aac. Hashes of every file of the run folder as received; files with in_repository=false (adapter weights, tokenizer, the PEFT model-card template) are not in Git.",
+ "not_received": [
+  {
+   "path": "reports/nist-val-base.json",
+   "note": "the base model's per-question report on groundedai-nist-val-v1 was not in the folder received; its aggregate numbers are in reports/nist-val-comparison.json, computed from it in Colab"
+  }
+ ],
+ "files": [
+  {
+   "path": "adapter/adapter_config.json",
+   "bytes": 1182,
+   "sha256": "ec336a40b6a87c3ecc56a2f8568f8e34b0afea67784dee42f35c3fa6613ffd20",
+   "in_repository": true
+  },
+  {
+   "path": "adapter/adapter_model.safetensors",
+   "bytes": 73911112,
+   "sha256": "7af02566c8625b206cfd453300fc50925effe5ac59cbcbfc53cad17d4cf80a21",
+   "in_repository": false
+  },
+  {
+   "path": "adapter/README.md",
+   "bytes": 5206,
+   "sha256": "b0057ecdd9582cb395bb022ffde8ffdd42f45dd8ee311c1c9547c8c1fe4b35bb",
+   "in_repository": false
+  },
+  {
+   "path": "data_report.json",
+   "bytes": 363,
+   "sha256": "8d2a4bc50eb3ae4ea205664e48c724a2943f38967cc093a4edec4c19ed954f04",
+   "in_repository": true
+  },
+  {
+   "path": "environment.json",
+   "bytes": 161,
+   "sha256": "d8ec21bbb4a5c39727b7c30e06c51110e70ac45c4237e69e09d90c511f2304df",
+   "in_repository": true
+  },
+  {
+   "path": "environment_check.json",
+   "bytes": 503,
+   "sha256": "3c9ecf8ae875399851631236f3eeb16b2b5571157b6d6631d1cc9f964711d9c3",
+   "in_repository": true
+  },
+  {
+   "path": "groundedai_commits.json",
+   "bytes": 104,
+   "sha256": "287cd9ab556b8b60ec0b72d23b6956e7d6b59d621a65c9be1104f1cb5365d6e3",
+   "in_repository": true
+  },
+  {
+   "path": "hardware.json",
+   "bytes": 418,
+   "sha256": "6357ff0df48cd6a79ab2e562dd8595a43b096ca8cbed0334d1ee10ee38e610a2",
+   "in_repository": true
+  },
+  {
+   "path": "loss_history.json",
+   "bytes": 7752,
+   "sha256": "1326557a0ccd37a6761c32b2361b4b630cd48eca9c0e9fef14c85817d4255973",
+   "in_repository": true
+  },
+  {
+   "path": "reports/merge-check-lora-merged.json",
+   "bytes": 39769,
+   "sha256": "0968585a40c7e0238b71b46dbbad68c5ec6d39e96473665174c40fcd8a95f323",
+   "in_repository": true
+  },
+  {
+   "path": "reports/merge-check.json",
+   "bytes": 48,
+   "sha256": "f2548f40dfb86daf28c46459d9734c437ec27253dd3f2bfe016247233a43fe8b",
+   "in_repository": true
+  },
+  {
+   "path": "reports/nist-val-comparison.json",
+   "bytes": 1710,
+   "sha256": "36dfdec3d8aeff7fd3ebcf4cea7cc90c371456e3faae8de55753010d94b30039",
+   "in_repository": true
+  },
+  {
+   "path": "reports/nist-val-lora.json",
+   "bytes": 34187,
+   "sha256": "fc4b77276983dac8f2df99213b498c3be615906d28ab5ec2112d872353695da7",
+   "in_repository": true
+  },
+  {
+   "path": "reports/nist-val-relevance-base.json",
+   "bytes": 32313,
+   "sha256": "1ffbdb40f62010e3739a1aca39b9068b1c5f85f1e64ad7c008aa3c5f9ea48817",
+   "in_repository": true
+  },
+  {
+   "path": "reports/nist-val-relevance-comparison.json",
+   "bytes": 1660,
+   "sha256": "d03d23b7303c95bb5d604d89c19e6b7a74a1a258af807ce1573fa9e10ed4b387",
+   "in_repository": true
+  },
+  {
+   "path": "reports/nist-val-relevance-lora.json",
+   "bytes": 25978,
+   "sha256": "e94985a86619fc80c63c6bb1335c83d1cf26675bd9f5344d5f5f4d15debf92e6",
+   "in_repository": true
+  },
+  {
+   "path": "reports/synthetic-eval-base.json",
+   "bytes": 347800,
+   "sha256": "7f8bf5d6ca2b7564a47e5c7616ecc525982fc1bfe601dafd55e41bd059119407",
+   "in_repository": true
+  },
+  {
+   "path": "reports/synthetic-eval-comparison.json",
+   "bytes": 2097,
+   "sha256": "7276e431d7a99ce85434dca1c29dc7a23c6a4279aee4e64209bc7f6fbf5a9fba",
+   "in_repository": true
+  },
+  {
+   "path": "reports/synthetic-eval-lora.json",
+   "bytes": 320153,
+   "sha256": "a16ad0e6031604ea5cd6db9089b17b262f8417130d14901dc9a6392a72cf866d",
+   "in_repository": true
+  },
+  {
+   "path": "reports/test-base.json",
+   "bytes": 111217,
+   "sha256": "f844495756b258abe2bd98883c1f19ff39bd4eab072868ae03dbd0f4bb6ed72b",
+   "in_repository": true
+  },
+  {
+   "path": "reports/test-comparison.json",
+   "bytes": 1712,
+   "sha256": "1fa661ed5eeab4e621d0dee76de295e86648b3ca5f906c48e7a410cdbde60489",
+   "in_repository": true
+  },
+  {
+   "path": "reports/test-lora.json",
+   "bytes": 88512,
+   "sha256": "0caca8c540d3df9ba9d0d67e9e1056ace2f15ad80b73a807e82efc3d2d14b8f1",
+   "in_repository": true
+  },
+  {
+   "path": "result.json",
+   "bytes": 374,
+   "sha256": "7f558439faa4781c98cc14a6d14c4cfa41b6a6ecfcb7549277f6a86c4951b92f",
+   "in_repository": true
+  },
+  {
+   "path": "run_settings.json",
+   "bytes": 209,
+   "sha256": "60964165c0513a95a06a0b430cd98ed8666dee405d7f3b357798495ba317f9c2",
+   "in_repository": true
+  },
+  {
+   "path": "smoke/smoke_result.json",
+   "bytes": 1607,
+   "sha256": "a634d8ce2f35b7bd959bf1f40e4a7354c6f171482e96ab576a89ca9f517ec659",
+   "in_repository": true
+  },
+  {
+   "path": "tokenizer/chat_template.jinja",
+   "bytes": 2507,
+   "sha256": "cd8e9439f0570856fd70470bf8889ebd8b5d1107207f67a5efb46e342330527f",
+   "in_repository": false
+  },
+  {
+   "path": "tokenizer/tokenizer.json",
+   "bytes": 11421892,
+   "sha256": "3fd169731d2cbde95e10bf356d66d5997fd885dd8dbb6fb4684da3f23b2585d8",
+   "in_repository": false
+  },
+  {
+   "path": "tokenizer/tokenizer_config.json",
+   "bytes": 694,
+   "sha256": "04b1682c59acbd057f4c9072297faa73d56fc9de053094c659cdb4c464f58f86",
+   "in_repository": false
+  },
+  {
+   "path": "training_config.json",
+   "bytes": 1131,
+   "sha256": "f6f1a88217d8e9bb07318d86a2e9465ee2eac28b537dfee03209488e356556d7",
+   "in_repository": true
+  }
+ ]
+}

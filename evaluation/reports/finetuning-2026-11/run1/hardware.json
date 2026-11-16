@@ -1,0 +1,15 @@
+{
+  "python": "3.13.16",
+  "torch": "2.14.1+cu130",
+  "cuda_available": true,
+  "cuda_version": "13.0",
+  "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+  "gpu": "Tesla T4",
+  "gpu_memory_gb": 14.6,
+  "compute_capability": "7.5",
+  "bf16_supported": true,
+  "ram_gb": 12.7,
+  "ram_available_gb": 10.9,
+  "disk_free_gb": 109.1,
+  "verdict": "suitable: fp16 LoRA on Qwen2.5-1.5B with sequences up to 2048 tokens"
+}

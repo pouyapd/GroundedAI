@@ -1,0 +1,1661 @@
+{
+ "kind": "rag-eval",
+ "rag_eval_version": 1,
+ "dataset": {
+  "name": "groundedai-nist-val-v1",
+  "fingerprint": "377d90156fdcc888",
+  "questions": 18
+ },
+ "summary": {
+  "questions": 18,
+  "retrieval": {
+   "recall@1": {
+    "mean": 0.6,
+    "n": 15,
+    "ci95": [
+     0.3333,
+     0.8667
+    ]
+   },
+   "precision@1": {
+    "mean": 0.6,
+    "n": 15,
+    "ci95": [
+     0.3333,
+     0.8667
+    ]
+   },
+   "recall@3": {
+    "mean": 0.8,
+    "n": 15,
+    "ci95": [
+     0.6,
+     1.0
+    ]
+   },
+   "precision@3": {
+    "mean": 0.2667,
+    "n": 15,
+    "ci95": [
+     0.2,
+     0.3333
+    ]
+   },
+   "recall@5": {
+    "mean": 0.8667,
+    "n": 15,
+    "ci95": [
+     0.6667,
+     1.0
+    ]
+   },
+   "precision@5": {
+    "mean": 0.1733,
+    "n": 15,
+    "ci95": [
+     0.1333,
+     0.2
+    ]
+   },
+   "recall@10": {
+    "mean": 0.8667,
+    "n": 15,
+    "ci95": [
+     0.6667,
+     1.0
+    ]
+   },
+   "precision@10": {
+    "mean": 0.0867,
+    "n": 15,
+    "ci95": [
+     0.0667,
+     0.1
+    ]
+   },
+   "mrr@10": {
+    "mean": 0.7167,
+    "n": 15,
+    "ci95": [
+     0.5333,
+     0.9
+    ]
+   },
+   "ndcg@10": {
+    "mean": 0.7549,
+    "n": 15,
+    "ci95": [
+     0.5682,
+     0.9128
+    ]
+   }
+  },
+  "answers": {
+   "answerable": 15,
+   "correct": {
+    "mean": 0.4,
+    "n": 15,
+    "ci95": [
+     0.1333,
+     0.6667
+    ]
+   },
+   "completeness": {
+    "mean": 0.4,
+    "n": 15,
+    "ci95": [
+     0.1333,
+     0.6667
+    ]
+   },
+   "false_refusals": 5,
+   "invalid_output": 0,
+   "errors": 0
+  },
+  "abstention": {
+   "should_refuse": 3,
+   "refused": 3,
+   "precision": 0.375,
+   "recall": 1.0,
+   "predicted_abstentions": 8
+  },
+  "citations": {
+   "precision": {
+    "mean": 0.6,
+    "n": 10,
+    "ci95": [
+     0.3,
+     0.9
+    ]
+   },
+   "recall": {
+    "mean": 0.6,
+    "n": 10,
+    "ci95": [
+     0.3,
+     0.9
+    ]
+   },
+   "answers_with_invalid_labels": 0,
+   "answers_without_valid_label": 0
+  },
+  "claims_lexical_check": {
+   "statements": 10,
+   "found_share": 0.9,
+   "unsupported_share": 0.1,
+   "partial_share": 0.0
+  },
+  "quotes": {
+   "total": 10,
+   "verbatim_share": 1.0,
+   "page_correct_share": 1.0,
+   "pages_unknown": 0
+  },
+  "false_conflict_reports": 0,
+  "latency_ms": {
+   "total_median": 1703.0,
+   "generation_median": 1632.2,
+   "retrieval_median": 5.2,
+   "total_p90": 4280.3
+  }
+ },
+ "by_category": {
+  "factual": {
+   "questions": 14,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.6429,
+     "n": 14,
+     "ci95": [
+      0.4286,
+      0.8571
+     ]
+    },
+    "precision@1": {
+     "mean": 0.6429,
+     "n": 14,
+     "ci95": [
+      0.4286,
+      0.8571
+     ]
+    },
+    "recall@3": {
+     "mean": 0.8571,
+     "n": 14,
+     "ci95": [
+      0.6429,
+      1.0
+     ]
+    },
+    "precision@3": {
+     "mean": 0.2857,
+     "n": 14,
+     "ci95": [
+      0.2143,
+      0.3333
+     ]
+    },
+    "recall@5": {
+     "mean": 0.9286,
+     "n": 14,
+     "ci95": [
+      0.7857,
+      1.0
+     ]
+    },
+    "precision@5": {
+     "mean": 0.1857,
+     "n": 14,
+     "ci95": [
+      0.1571,
+      0.2
+     ]
+    },
+    "recall@10": {
+     "mean": 0.9286,
+     "n": 14,
+     "ci95": [
+      0.7857,
+      1.0
+     ]
+    },
+    "precision@10": {
+     "mean": 0.0929,
+     "n": 14,
+     "ci95": [
+      0.0786,
+      0.1
+     ]
+    },
+    "mrr@10": {
+     "mean": 0.7679,
+     "n": 14,
+     "ci95": [
+      0.5893,
+      0.9286
+     ]
+    },
+    "ndcg@10": {
+     "mean": 0.8088,
+     "n": 14,
+     "ci95": [
+      0.6439,
+      0.9473
+     ]
+    }
+   },
+   "answers": {
+    "answerable": 14,
+    "correct": {
+     "mean": 0.4286,
+     "n": 14,
+     "ci95": [
+      0.1429,
+      0.7143
+     ]
+    },
+    "completeness": {
+     "mean": 0.4286,
+     "n": 14,
+     "ci95": [
+      0.1429,
+      0.7143
+     ]
+    },
+    "false_refusals": 5,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": 0.0,
+    "recall": null,
+    "predicted_abstentions": 5
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.6667,
+     "n": 9,
+     "ci95": [
+      0.3333,
+      0.8889
+     ]
+    },
+    "recall": {
+     "mean": 0.6667,
+     "n": 9,
+     "ci95": [
+      0.3333,
+      0.8889
+     ]
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 9,
+    "found_share": 0.8889,
+    "unsupported_share": 0.1111,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 9,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 2047.9,
+    "generation_median": 1994.1,
+    "retrieval_median": 5.2,
+    "total_p90": 4855.4
+   }
+  },
+  "multi_chunk": {
+   "questions": 1,
+   "retrieval": {
+    "recall@1": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@1": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall@3": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@3": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall@5": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@5": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "precision@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "mrr@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "ndcg@10": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    }
+   },
+   "answers": {
+    "answerable": 1,
+    "correct": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 0,
+    "refused": 0,
+    "precision": null,
+    "recall": null,
+    "predicted_abstentions": 0
+   },
+   "citations": {
+    "precision": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "recall": {
+     "mean": 0.0,
+     "n": 1,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 1,
+    "found_share": 1.0,
+    "unsupported_share": 0.0,
+    "partial_share": 0.0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim_share": 1.0,
+    "page_correct_share": 1.0,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 1656.0,
+    "generation_median": 1596.9,
+    "retrieval_median": 4.4,
+    "total_p90": 1656.0
+   }
+  },
+  "unanswerable": {
+   "questions": 3,
+   "answers": {
+    "answerable": 0,
+    "correct": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "completeness": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "false_refusals": 0,
+    "invalid_output": 0,
+    "errors": 0
+   },
+   "abstention": {
+    "should_refuse": 3,
+    "refused": 3,
+    "precision": 1.0,
+    "recall": 1.0,
+    "predicted_abstentions": 3
+   },
+   "citations": {
+    "precision": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "recall": {
+     "mean": null,
+     "n": 0,
+     "ci95": null
+    },
+    "answers_with_invalid_labels": 0,
+    "answers_without_valid_label": 0
+   },
+   "claims_lexical_check": {
+    "statements": 0,
+    "found_share": null,
+    "unsupported_share": null,
+    "partial_share": null
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim_share": null,
+    "page_correct_share": null,
+    "pages_unknown": 0
+   },
+   "false_conflict_reports": 0,
+   "latency_ms": {
+    "total_median": 1464.1,
+    "generation_median": 1415.2,
+    "retrieval_median": 5.8,
+    "total_p90": 1692.7
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "v01",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "July 2024 [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.856,
+    "generation": 1475.786,
+    "total": 1517.453
+   },
+   "model_output": "July 2024 [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 1
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v02",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 5.498,
+    "generation": 1360.626,
+    "total": 1404.979
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v03",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden\u2019s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence [S1].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.984,
+    "generation": 5216.128,
+    "total": 5286.782
+   },
+   "model_output": "This document is a cross-sectoral profile of and companion resource for the AI Risk Management Framework (AI RMF 1.0) for Generative AI,1 pursuant to President Biden\u2019s Executive Order (EO) 14110 on Safe, Secure, and Trustworthy Artificial Intelligence [S1].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.667
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v04",
+   "category": "factual",
+   "tags": [
+    "numeric",
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The foundation model subcategory of \u201cdual-use foundation models\u201d is defined by EO 14110 as \u201can AI model that is trained on broad data; generally uses self-supervision; contains at least tens of billions of parameters; is applicable across a wide range of contexts\u201d [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 7.964,
+    "generation": 5400.069,
+    "total": 5491.48
+   },
+   "model_output": "The foundation model subcategory of \u201cdual-use foundation models\u201d is defined by EO 14110 as \u201can AI model that is trained on broad data; generally uses self-supervision; contains at least tens of billions of parameters; is applicable across a wide range of contexts\u201d [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v05",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.765,
+    "generation": 1354.272,
+    "total": 1391.485
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v06",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 5.341,
+    "generation": 1386.359,
+    "total": 1419.654
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v07",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "The following primary considerations were derived as overarching themes from the GAI PWG consultation process [S2].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 5.484,
+    "generation": 1963.574,
+    "total": 2015.196
+   },
+   "model_output": "The following primary considerations were derived as overarching themes from the GAI PWG consultation process [S2].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.5
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v08",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "Training a single transformer LLM can emit as much carbon as 300 roundtrip flights between San Francisco and New York [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 5.495,
+    "generation": 2865.284,
+    "total": 2938.583
+   },
+   "model_output": "Training a single transformer LLM can emit as much carbon as 300 roundtrip flights between San Francisco and New York [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.75
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v09",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 8.787,
+    "generation": 1667.405,
+    "total": 1749.891
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "annual",
+     "budget"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v10",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 5.803,
+    "generation": 1364.808,
+    "total": 1403.111
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "scor"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v11",
+   "category": "factual",
+   "tags": [
+    "entity"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "answered",
+   "answer": "We have termed these four principles as explanation, meaningful, explanation accuracy, and knowledge limits, respectively [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.532,
+    "generation": 2024.529,
+    "total": 2080.584
+   },
+   "model_output": "We have termed these four principles as explanation, meaningful, explanation accuracy, and knowledge limits, respectively [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v12",
+   "category": "factual",
+   "tags": [
+    "date"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "This publication is available free of charge from: https://doi.org/10.6028/NIST.IR.8312 September 2021 [S1].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.209,
+    "generation": 3352.103,
+    "total": 3412.099
+   },
+   "model_output": "This publication is available free of charge from: https://doi.org/10.6028/NIST.IR.8312 September 2021 [S1].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S1"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.5
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v13",
+   "category": "factual",
+   "tags": [
+    "numeric"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "answered",
+   "answer": "NISTIR 8312 National Institute of Standards and Technology Interagency or Internal Report 8312, 43 pages (September 2021) [S2].",
+   "abstained": false,
+   "key_fact_recall": 1.0,
+   "timings_ms": {
+    "retrieval": 4.33,
+    "generation": 3772.04,
+    "total": 3848.981
+   },
+   "model_output": "NISTIR 8312 National Institute of Standards and Technology Interagency or Internal Report 8312, 43 pages (September 2021) [S2].",
+   "correct": true,
+   "citations": {
+    "valid": [
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 1.0,
+   "citation_recall": 1.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 1.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v14",
+   "category": "factual",
+   "tags": [
+    "terminology"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.25,
+    "ndcg@10": 0.43067655807339306
+   },
+   "status": "answered",
+   "answer": "Together, the Explanation and Meaningful principles only call for a system to produce explanations that are intelligible to the intended audience [S2].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 6.891,
+    "generation": 2718.369,
+    "total": 2779.294
+   },
+   "model_output": "Together, the Explanation and Meaningful principles only call for a system to produce explanations that are intelligible to the intended audience [S2].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S2"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.5
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v15",
+   "category": "unanswerable",
+   "tags": [
+    "missing"
+   ],
+   "expected_behavior": "abstain",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": null,
+   "timings_ms": {
+    "retrieval": 4.845,
+    "generation": 1415.198,
+    "total": 1464.104
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [
+     "library"
+    ],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v16",
+   "category": "multi_chunk",
+   "tags": [
+    "multi-passage"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 0.0,
+    "precision@3": 0.0,
+    "recall@5": 0.0,
+    "precision@5": 0.0,
+    "recall@10": 0.0,
+    "precision@10": 0.0,
+    "mrr@10": 0.0,
+    "ndcg@10": 0.0
+   },
+   "status": "answered",
+   "answer": "Given these considerations, this principle allows for flexibility in explanation accuracy metrics [S3].",
+   "abstained": false,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.445,
+    "generation": 1596.906,
+    "total": 1656.017
+   },
+   "model_output": "Given these considerations, this principle allows for flexibility in explanation accuracy metrics [S3].",
+   "correct": false,
+   "citations": {
+    "valid": [
+     "S3"
+    ],
+    "invalid": []
+   },
+   "citation_precision": 0.0,
+   "citation_recall": 0.0,
+   "claims": {
+    "total": 1,
+    "found": 1,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 1,
+    "verbatim": 1,
+    "pages_known": 1,
+    "pages_correct": 1
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": 0.0
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v17",
+   "category": "factual",
+   "tags": [
+    "paraphrase:v11"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ir-8312-xai"
+   ],
+   "retrieval": {
+    "recall@1": 0.0,
+    "precision@1": 0.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 0.5,
+    "ndcg@10": 0.6309297535714575
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 5.838,
+    "generation": 1476.729,
+    "total": 1540.262
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  },
+  {
+   "question_id": "v18",
+   "category": "factual",
+   "tags": [
+    "paraphrase:v02"
+   ],
+   "expected_behavior": "answer",
+   "scope": [
+    "ai-600-1-genai"
+   ],
+   "retrieval": {
+    "recall@1": 1.0,
+    "precision@1": 1.0,
+    "recall@3": 1.0,
+    "precision@3": 0.3333333333333333,
+    "recall@5": 1.0,
+    "precision@5": 0.2,
+    "recall@10": 1.0,
+    "precision@10": 0.1,
+    "mrr@10": 1.0,
+    "ndcg@10": 1.0
+   },
+   "status": "insufficient_evidence",
+   "answer": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "abstained": true,
+   "key_fact_recall": 0.0,
+   "timings_ms": {
+    "retrieval": 4.441,
+    "generation": 1400.565,
+    "total": 1437.272
+   },
+   "model_output": "INSUFFICIENT_EVIDENCE: The sources do not state this.",
+   "correct": false,
+   "citations": {
+    "valid": [],
+    "invalid": []
+   },
+   "claims": {
+    "total": 0,
+    "found": 0,
+    "partial": 0,
+    "unsupported": 0
+   },
+   "quotes": {
+    "total": 0,
+    "verbatim": 0,
+    "pages_known": 0,
+    "pages_correct": 0
+   },
+   "conflict_reported": false,
+   "conflict_any": false,
+   "answer_states_conflict": false,
+   "relevance": {
+    "unmatched": [],
+    "answer_coverage": null
+   },
+   "added_detail_claims": 0,
+   "format_valid": true
+  }
+ ],
+ "label": "lora",
+ "generated_at": "2026-11-16T19:19:12+0000",
+ "generator": "transformers-local",
+ "model": {
+  "base": "Qwen/Qwen2.5-1.5B-Instruct",
+  "adapter": "/content/groundedai-lora/run1/adapter",
+  "merged": false,
+  "adapter_loaded": true,
+  "load_seconds": 6.4,
+  "device": "cuda",
+  "dtype": "float16"
+ },
+ "decoding": {
+  "do_sample": false,
+  "max_new_tokens": 384,
+  "chat_template": "the tokenizer's"
+ },
+ "settings": {
+  "text_cleanup": "v2",
+  "retrieval_mode": "hybrid",
+  "top_k": 5,
+  "prompt_version": "answer-v2",
+  "claim_check": "claims-v1",
+  "claim_detail_check": "off",
+  "conflict_check": "disagreement-v3",
+  "extractive_relevance": "v2",
+  "embedding_provider": "hashing",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "chunk_size": 800,
+  "chunk_overlap": 120
+ },
+ "extra": {
+  "format_valid": 18,
+  "format_checked": 18,
+  "answers_with_added_details": 0,
+  "added_detail_claims": 0,
+  "answered": 10,
+  "mean_answer_coverage_of_asked_words": 0.4917,
+  "by_kind": {
+   "factual": {
+    "questions": 14,
+    "correct": 6,
+    "should_answer": 14,
+    "refused": 5,
+    "should_refuse": 0,
+    "refused_correctly": null
+   },
+   "multi_chunk": {
+    "questions": 1,
+    "correct": 0,
+    "should_answer": 1,
+    "refused": 0,
+    "should_refuse": 0,
+    "refused_correctly": null
+   },
+   "unanswerable": {
+    "questions": 3,
+    "correct": null,
+    "should_answer": 0,
+    "refused": 3,
+    "should_refuse": 3,
+    "refused_correctly": 3
+   }
+  }
+ },
+ "cost": {
+  "seconds": 49.7,
+  "generated_tokens": 466
+ },
+ "environment": {
+  "os": "Linux 6.6.159+",
+  "python": "3.13.16",
+  "cpu": "Intel(R) Xeon(R) CPU @ 2.00GHz",
+  "logical_cpus": 2,
+  "ram_gb": 12.7,
+  "gpu_used": false,
+  "power_source": "unknown",
+  "packages": {
+   "groundedai": "0.1.0",
+   "langchain-core": "1.7.4",
+   "langchain-text-splitters": "1.1.3",
+   "langchain-ollama": "1.1.0",
+   "sentence-transformers": "5.7.0",
+   "transformers": "5.19.0",
+   "torch": "2.14.1+cu130",
+   "numpy": "2.4.6",
+   "sqlalchemy": "2.1.7",
+   "fastapi": "0.163.1"
+  },
+  "code": {
+   "commit": "c077c4813142",
+   "uncommitted_changes": false
+  }
+ },
+ "code": {
+  "commit": "c077c4813142",
+  "uncommitted_changes": false
+ }
+}

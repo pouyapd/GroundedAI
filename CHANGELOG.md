@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### LoRA fine-tuning results (2026-11-17)
+
+- **Documented:** the first complete LoRA run (Qwen2.5-1.5B-Instruct, rank 16, free Colab Tesla
+  T4, 180 steps, 40 min) in `docs/FINETUNING.md`; the run's JSON records and reports in
+  `evaluation/reports/finetuning-2026-11/run1/` with a SHA-256 manifest (weights not committed).
+- **Result:** the adapter followed the application's format in every reply (protected test set:
+  53 of 53, base 27) and refused all 6 questions it should refuse (base 5), but answered fewer
+  questions correctly (34 → 23 of 40; paired −.275, CI −.425 to −.150), with the same drop on both
+  NIST validation sets. **The adapter is not used;** the application's models and code are
+  unchanged.
+- **Added:** `docs/PORTFOLIO_SUMMARY.md`; `backend/tests/unit/test_finetuning_results.py` checks
+  the committed reports against the manifest and the figures quoted in the documentation.
+
 ### Added-detail rule made optional (2026-11-15)
 
 - **Changed default:** `GROUNDEDAI_CLAIM_DETAIL_CHECK` is now `off` by default; `on` (or `v1`)
