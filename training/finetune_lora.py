@@ -1,8 +1,8 @@
 """LoRA fine-tuning of GroundedAI's answer model (Qwen2.5-1.5B-Instruct by default).
 
     python training/finetune_lora.py --report-hardware
-    python training/finetune_lora.py --out runs/smoke --smoke                 # a few steps
-    python training/finetune_lora.py --out /content/drive/MyDrive/groundedai-lora/run1
+    python training/finetune_lora.py --out runs/smoke --smoke     # staged check, PASS/FAIL
+    python training/finetune_lora.py --out /content/groundedai-lora/run1
 
 Data: `training/data/train.jsonl` and `validation.jsonl` (made by `prepare_dataset.py`): the
 exact chat messages GroundedAI sends and a target reply. The loss is on the reply tokens only.
@@ -14,24 +14,35 @@ the longest example at 2048, 1536 and 1024 tokens (one forward and backward pass
 the largest that fits in GPU memory; examples longer than the chosen length are left out and
 counted. On the CPU it uses fp32 (for testing the script, not for training).
 
-Resuming: checkpoints go to ``<out>/checkpoints``; when the script starts and finds one, it
-continues from the latest. The best checkpoint by validation loss is kept as the result.
+Resuming: checkpoints go to ``<out>/checkpoints`` every ``--save-steps`` steps. On start the
+newest *valid* checkpoint (trainer state, optimizer, scheduler and adapter weights present) is
+resumed; newer incomplete ones are renamed ``incomplete-checkpoint-…`` so they are never used. A
+run that already finished (``result.json`` and ``adapter/``) is not trained again. The weights
+of the checkpoint with the lowest validation loss are the result.
 
-Saved in ``<out>``: ``adapter/`` (LoRA weights and adapter_config.json), ``tokenizer/``,
-``training_config.json``, ``environment.json``, ``hardware.json``, ``loss_history.json``,
-``data_report.json`` and ``result.json``.
+Saved in ``<out>``: ``adapter/`` (LoRA weights and adapter_config.json) and ``tokenizer/``, both
+written only after training succeeded (first to ``*.partial``, then moved), and
+``training_config.json``, ``environment.json``, ``hardware.json``, ``data_report.json``,
+``loss_history.json`` and, last, ``result.json``.
+
+``--smoke`` checks eight stages in order and prints PASS or FAIL for each (with the full error):
+model loading, LoRA creation, a forward and backward pass, three optimizer steps, the validation
+loss, saving the adapter, loading it again on a fresh base model, and generating with it. Prompts
+are cut to 512 tokens. The result is in ``<out>/smoke_result.json``; the exit code is 1 on failure.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import platform
 import random
 import shutil
 import sys
 import time
+import traceback
 from pathlib import Path
 from typing import Any
 
@@ -227,8 +238,73 @@ def choose_length(
     raise SystemExit(f"no sequence length fits in GPU memory: {tried}; try a smaller --base")
 
 
+# ---------------------------------------------------------------------- checkpoints
+CHECKPOINT_FILES = ("trainer_state.json", "optimizer.pt", "scheduler.pt")
+ADAPTER_WEIGHTS = ("adapter_model.safetensors", "adapter_model.bin")
+
+
+def checkpoint_valid(path: Path) -> bool:
+    """A checkpoint the Trainer can resume from: state, optimizer, scheduler and adapter weights,
+    and a trainer_state.json that parses."""
+    if not all((path / name).is_file() for name in CHECKPOINT_FILES):
+        return False
+    if not any((path / name).is_file() for name in ADAPTER_WEIGHTS):
+        return False
+    try:
+        json.loads((path / "trainer_state.json").read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return False
+    return True
+
+
+def latest_valid_checkpoint(checkpoints: Path) -> Path | None:
+    """The newest valid ``checkpoint-N``; newer incomplete ones are moved aside (renamed
+    ``incomplete-checkpoint-N-<time>``) so that the Trainer never picks them up."""
+    if not checkpoints.is_dir():
+        return None
+    found = []
+    for path in checkpoints.iterdir():
+        if path.is_dir() and path.name.startswith("checkpoint-"):
+            try:
+                found.append((int(path.name.split("-", 1)[1]), path))
+            except ValueError:
+                continue
+    for _step, path in sorted(found, reverse=True):
+        if checkpoint_valid(path):
+            return path
+        aside = path.with_name(f"incomplete-{path.name}-{int(time.time())}")
+        path.rename(aside)
+        print(f"moved an incomplete checkpoint aside: {aside.name}", flush=True)
+    return None
+
+
+def run_complete(out: Path) -> bool:
+    if not (out / "adapter" / "adapter_config.json").is_file():
+        return False
+    try:
+        return bool(json.loads((out / "result.json").read_text(encoding="utf-8")).get("finished"))
+    except (OSError, json.JSONDecodeError):
+        return False
+
+
+def save_adapter(model: Any, tokenizer: Any, out: Path) -> None:
+    """Write adapter and tokenizer next to their final place, then move them in."""
+    for name, save in (
+        ("adapter", model.save_pretrained),
+        ("tokenizer", tokenizer.save_pretrained),
+    ):
+        partial = out / f"{name}.partial"
+        if partial.exists():
+            shutil.rmtree(partial)
+        save(partial)
+        final = out / name
+        if final.exists():
+            shutil.rmtree(final)
+        partial.rename(final)
+
+
 # ---------------------------------------------------------------------------------- main
-def main() -> int:
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--report-hardware", action="store_true", help="print the report and stop")
     parser.add_argument("--base", default=DEFAULT_BASE)
@@ -251,74 +327,18 @@ def main() -> int:
     )
     parser.add_argument("--seed", type=int, default=13)
     parser.add_argument("--no-checkpointing", action="store_true", help="no gradient checkpointing")
-    parser.add_argument(
-        "--smoke", action="store_true", help="3 optimizer steps at 512 tokens (prompts cut)"
-    )
-    args = parser.parse_args()
+    parser.add_argument("--smoke", action="store_true", help="staged check: 3 steps at 512 tokens")
+    return parser.parse_args()
 
-    hardware = hardware_report()
-    print(json.dumps(hardware, indent=2), flush=True)
-    if args.report_hardware:
-        return 0
-    if args.out is None:
-        parser.error("--out is required")
 
-    import torch
-    from transformers import Trainer, TrainingArguments, set_seed
+def relative(path: Path) -> str:
+    return str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
 
-    random.seed(args.seed)
-    set_seed(args.seed)
-    gpu = torch.cuda.is_available()
-    out: Path = args.out
-    out.mkdir(parents=True, exist_ok=True)
-    started = time.perf_counter()
-    model, tokenizer = load_model(
-        args.base, args.rank, args.alpha, args.dropout, gpu, gpu and not args.no_checkpointing
-    )
-    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    total = sum(p.numel() for p in model.parameters())
 
-    train_rows, val_rows = load(args.train), load(args.validation)
-    if args.validation_limit:
-        val_rows = val_rows[: args.validation_limit]
-    length_trials: list[dict[str, Any]] = []
-    if args.smoke:
-        max_length, truncate = 512, True
-        args.max_steps, args.eval_steps, args.save_steps = 3, 3, 3
-        train_rows, val_rows = train_rows[:24], val_rows[:4]
-    elif args.max_length == "auto":
-        # On the CPU nothing is tried: 2048 covers every example (only for testing the script).
-        max_length, length_trials = (
-            choose_length(model, tokenizer, train_rows) if gpu else (2048, [])
-        )
-        truncate = False
-    else:
-        max_length, truncate = int(args.max_length), False
-    train = [
-        e for e in (encode(tokenizer, r, max_length, truncate) for r in train_rows) if e is not None
-    ]
-    val = [
-        e for e in (encode(tokenizer, r, max_length, truncate) for r in val_rows) if e is not None
-    ]
-    data_report = {
-        "max_length": max_length,
-        "truncated_prompts": truncate,
-        "length_trials": length_trials,
-        "train_examples": len(train),
-        "train_left_out_too_long": len(train_rows) - len(train),
-        "validation_examples": len(val),
-        "validation_left_out_too_long": len(val_rows) - len(val),
-        "train_file": str(args.train.relative_to(ROOT))
-        if args.train.is_relative_to(ROOT)
-        else str(args.train),
-        "validation_file": str(args.validation.relative_to(ROOT))
-        if args.validation.is_relative_to(ROOT)
-        else str(args.validation),
-    }
-    print(json.dumps(data_report, indent=2), flush=True)
+def training_arguments(args: argparse.Namespace, checkpoints: Path, gpu: bool) -> Any:
+    from transformers import TrainingArguments
 
-    checkpoints = out / "checkpoints"
-    training_args = TrainingArguments(
+    return TrainingArguments(
         output_dir=str(checkpoints),
         per_device_train_batch_size=1,
         per_device_eval_batch_size=1,
@@ -345,9 +365,300 @@ def main() -> int:
         report_to=[],
         dataloader_num_workers=0,
         remove_unused_columns=False,
-        gradient_checkpointing=False,  # set on the model above (with use_reentrant=False)
+        gradient_checkpointing=False,  # set on the model (with use_reentrant=False)
         use_cpu=not gpu,
     )
+
+
+def smoke(args: argparse.Namespace, out: Path) -> int:
+    """Each stage of training on a few examples, PASS or FAIL, in order; stops at a failure."""
+    import torch
+    from transformers import Trainer
+
+    gpu = torch.cuda.is_available()
+    stages: list[dict[str, Any]] = []
+    state: dict[str, Any] = {}
+
+    def stage(name: str, action: Any) -> bool:
+        started = time.perf_counter()
+        try:
+            detail = action()
+            stages.append(
+                {
+                    "stage": name,
+                    "passed": True,
+                    "seconds": round(time.perf_counter() - started, 1),
+                    "detail": detail,
+                }
+            )
+            print(f"PASS  {name}  {detail or ''}", flush=True)
+            return True
+        except Exception as exc:  # noqa: BLE001 - reported with its traceback, then stop
+            stages.append(
+                {
+                    "stage": name,
+                    "passed": False,
+                    "error": f"{type(exc).__name__}: {exc}",
+                    "traceback": traceback.format_exc(),
+                }
+            )
+            print(f"FAIL  {name}\n{traceback.format_exc()}", flush=True)
+            return False
+
+    def load_base() -> str:
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
+        state["tokenizer"] = AutoTokenizer.from_pretrained(args.base)
+        if state["tokenizer"].pad_token is None:
+            state["tokenizer"].pad_token = state["tokenizer"].eos_token
+        model = AutoModelForCausalLM.from_pretrained(
+            args.base, dtype=torch.float16 if gpu else torch.float32
+        )
+        state["model"] = model.to("cuda") if gpu else model
+        return f"{args.base} on {'GPU, fp16' if gpu else 'CPU, fp32'}"
+
+    def add_lora() -> str:
+        from peft import LoraConfig, get_peft_model
+
+        model = state["model"]
+        if gpu and not args.no_checkpointing:
+            model.gradient_checkpointing_enable(
+                gradient_checkpointing_kwargs={"use_reentrant": False}
+            )
+            model.enable_input_require_grads()
+            model.config.use_cache = False
+        config = LoraConfig(
+            r=args.rank,
+            lora_alpha=args.alpha,
+            lora_dropout=args.dropout,
+            task_type="CAUSAL_LM",
+            target_modules=TARGET_MODULES,
+        )
+        model = get_peft_model(model, config)
+        for parameter in model.parameters():
+            if parameter.requires_grad:
+                parameter.data = parameter.data.float()
+        state["model"] = model
+        trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        return f"{trainable:,} trainable parameters"
+
+    rows = load(args.train)[: 3 * args.accumulate]
+    val_rows = load(args.validation)[:4]
+
+    def forward_backward() -> str:
+        example = encode(state["tokenizer"], rows[0], 512, True)
+        assert example is not None
+        batch = {
+            k: v.to(state["model"].device)
+            for k, v in Collator(state["tokenizer"].pad_token_id)([example]).items()
+        }
+        with torch.autocast("cuda", dtype=torch.float16, enabled=gpu):
+            loss = state["model"](**batch).loss
+        loss.backward()
+        grads = [p.grad for p in state["model"].parameters() if p.requires_grad]
+        if not all(g is not None and torch.isfinite(g).all() for g in grads):
+            raise RuntimeError("missing or non-finite gradients")
+        state["model"].zero_grad(set_to_none=True)
+        return f"loss {loss.item():.3f}"
+
+    def optimizer_steps() -> str:
+        train = [
+            e for e in (encode(state["tokenizer"], r, 512, True) for r in rows) if e is not None
+        ]
+        val = [
+            e for e in (encode(state["tokenizer"], r, 512, True) for r in val_rows) if e is not None
+        ]
+        args.max_steps, args.eval_steps, args.save_steps = 3, 3, 3
+        trainer = Trainer(
+            model=state["model"],
+            args=training_arguments(args, out / "checkpoints", gpu),
+            train_dataset=train,
+            eval_dataset=val,
+            data_collator=Collator(state["tokenizer"].pad_token_id),
+        )
+        result = trainer.train()
+        state["trainer"] = trainer
+        if trainer.state.global_step != 3:
+            raise RuntimeError(f"{trainer.state.global_step} optimizer steps instead of 3")
+        return f"3 optimizer steps, training loss {result.training_loss:.3f}"
+
+    def validation_loss() -> str:
+        value = state["trainer"].evaluate()["eval_loss"]
+        if not math.isfinite(value):
+            raise RuntimeError(f"validation loss {value}")
+        state["eval_loss"] = value
+        return f"validation loss {value:.3f}"
+
+    def save() -> str:
+        save_adapter(state["model"], state["tokenizer"], out)
+        files = sorted(p.name for p in (out / "adapter").iterdir())
+        if "adapter_config.json" not in files or not any(name in files for name in ADAPTER_WEIGHTS):
+            raise RuntimeError(f"adapter files missing: {files}")
+        return ", ".join(files)
+
+    def reload_adapter() -> str:
+        from peft import PeftModel
+        from transformers import AutoModelForCausalLM
+
+        saved = {
+            name: p.detach().float().cpu()
+            for name, p in state["model"].named_parameters()
+            if "lora_" in name
+        }
+        del state["trainer"], state["model"]
+        if gpu:
+            torch.cuda.empty_cache()
+        base = AutoModelForCausalLM.from_pretrained(
+            args.base, dtype=torch.float16 if gpu else torch.float32
+        )
+        base = base.to("cuda") if gpu else base
+        loaded = PeftModel.from_pretrained(base, str(out / "adapter")).eval()
+        reloaded = {
+            name: p.detach().float().cpu()
+            for name, p in loaded.named_parameters()
+            if "lora_" in name
+        }
+        if len(reloaded) != len(saved):
+            raise RuntimeError(f"{len(reloaded)} LoRA tensors loaded, {len(saved)} saved")
+        worst = max((saved[name] - reloaded[name]).abs().max().item() for name in saved)
+        if worst > 1e-3:
+            raise RuntimeError(f"loaded LoRA weights differ from the saved ones by {worst}")
+        state["model"] = loaded
+        return f"{len(reloaded)} LoRA tensors loaded; largest difference {worst:.2e}"
+
+    def inference() -> str:
+        tokenizer = state["tokenizer"]
+        prompt = tokenizer.apply_chat_template(
+            val_rows[0]["messages"], tokenize=False, add_generation_prompt=True
+        )
+        inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=False).to(
+            state["model"].device
+        )
+        with torch.no_grad():
+            output = state["model"].generate(**inputs, max_new_tokens=48, do_sample=False)
+        text = tokenizer.decode(
+            output[0][inputs["input_ids"].shape[1] :], skip_special_tokens=True
+        ).strip()
+        if not text:
+            raise RuntimeError("empty reply")
+        return repr(text[:120])
+
+    steps = [
+        ("1. model loading", load_base),
+        ("2. LoRA adapter creation", add_lora),
+        ("3. forward and backward pass", forward_backward),
+        ("4. three optimizer steps", optimizer_steps),
+        ("5. validation loss", validation_loss),
+        ("6. adapter saving", save),
+        ("7. adapter loading", reload_adapter),
+        ("8. inference with the adapter", inference),
+    ]
+    for name, action in steps:
+        if not stage(name, action):
+            break
+    passed = len(stages) == len(steps) and all(s["passed"] for s in stages)
+    result = {
+        "passed": passed,
+        "base_model": args.base,
+        "device": "cuda" if gpu else "cpu",
+        "stages": stages,
+        "environment": environment(),
+    }
+    (out / "smoke_result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    print("\nSMOKE TEST " + ("PASSED" if passed else "FAILED"), flush=True)
+    for item in stages:
+        print(f"  {'PASS' if item['passed'] else 'FAIL'}  {item['stage']}")
+    for name, _ in steps[len(stages) :]:
+        print(f"  ----  {name} (not run)")
+    return 0 if passed else 1
+
+
+def main() -> int:
+    args = parse_args()
+    hardware = hardware_report()
+    print(json.dumps(hardware, indent=2), flush=True)
+    if args.report_hardware:
+        return 0
+    if args.out is None:
+        raise SystemExit("--out is required")
+    out: Path = args.out
+    out.mkdir(parents=True, exist_ok=True)
+
+    import torch
+    from transformers import Trainer, set_seed
+
+    random.seed(args.seed)
+    set_seed(args.seed)
+    if args.smoke:
+        return smoke(args, out)
+    if run_complete(out):
+        print(
+            f"Training in {out} is already complete; nothing is overwritten. Use another --out to train again."
+        )
+        return 0
+
+    gpu = torch.cuda.is_available()
+    started = time.perf_counter()
+    model, tokenizer = load_model(
+        args.base, args.rank, args.alpha, args.dropout, gpu, gpu and not args.no_checkpointing
+    )
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    total = sum(p.numel() for p in model.parameters())
+
+    train_rows, val_rows = load(args.train), load(args.validation)
+    if args.validation_limit:
+        val_rows = val_rows[: args.validation_limit]
+    length_trials: list[dict[str, Any]] = []
+    if args.max_length == "auto":
+        # On the CPU nothing is tried: 2048 covers every example (only for testing the script).
+        max_length, length_trials = (
+            choose_length(model, tokenizer, train_rows) if gpu else (2048, [])
+        )
+    else:
+        max_length = int(args.max_length)
+    train = [
+        e for e in (encode(tokenizer, r, max_length, False) for r in train_rows) if e is not None
+    ]
+    val = [e for e in (encode(tokenizer, r, max_length, False) for r in val_rows) if e is not None]
+    data_report = {
+        "max_length": max_length,
+        "length_trials": length_trials,
+        "train_examples": len(train),
+        "train_left_out_too_long": len(train_rows) - len(train),
+        "validation_examples": len(val),
+        "validation_left_out_too_long": len(val_rows) - len(val),
+        "train_file": relative(args.train),
+        "validation_file": relative(args.validation),
+    }
+    checkpoints = out / "checkpoints"
+    resume_from = latest_valid_checkpoint(checkpoints)
+    steps = (
+        args.max_steps
+        if args.max_steps > 0
+        else math.ceil(len(train) / args.accumulate) * math.ceil(args.epochs)
+    )
+    print("\nTRAINING PLAN", flush=True)
+    for key, value in (
+        (
+            "GPU",
+            f"{hardware.get('gpu')} ({hardware.get('gpu_memory_gb')} GB)" if gpu else "none (CPU)",
+        ),
+        ("base model", args.base),
+        (
+            "training examples",
+            f"{len(train)} ({len(train_rows) - len(train)} left out as too long)",
+        ),
+        ("validation examples", f"{len(val)} ({len(val_rows) - len(val)} left out as too long)"),
+        ("sequence length", f"{max_length} tokens {length_trials or ''}"),
+        (
+            "optimizer steps (estimate)",
+            f"{steps} ({args.accumulate} examples each, {args.epochs} epochs)",
+        ),
+        ("output directory", str(out)),
+        ("start", f"resumed from {resume_from.name}" if resume_from else "fresh"),
+    ):
+        print(f"  {key:28s} {value}", flush=True)
+
     config = {
         "base_model": args.base,
         "lora": {
@@ -366,10 +677,10 @@ def main() -> int:
         "schedule": f"linear, warm-up {args.warmup_ratio}",
         "epochs": args.epochs,
         "max_steps": args.max_steps,
+        "estimated_optimizer_steps": steps,
         "eval_and_save_every_steps": [args.eval_steps, args.save_steps],
         "selection": "lowest validation loss (load_best_model_at_end)",
         "seed": args.seed,
-        "smoke_test": args.smoke,
         "trainable_parameters": trainable,
         "total_parameters": total,
         **data_report,
@@ -379,32 +690,25 @@ def main() -> int:
         json.dumps(environment(), indent=2) + "\n", encoding="utf-8"
     )
     (out / "hardware.json").write_text(json.dumps(hardware, indent=2) + "\n", encoding="utf-8")
+    (out / "data_report.json").write_text(
+        json.dumps(data_report, indent=2) + "\n", encoding="utf-8"
+    )
 
     trainer = Trainer(
         model=model,
-        args=training_args,
+        args=training_arguments(args, checkpoints, gpu),
         train_dataset=train,
         eval_dataset=val,
         data_collator=Collator(tokenizer.pad_token_id),
     )
-    resume = checkpoints.is_dir() and any(
-        p.name.startswith("checkpoint-") for p in checkpoints.iterdir()
-    )
-    print(
-        f"{'resuming from the latest checkpoint' if resume else 'starting'}: {len(train)} "
-        f"examples, trainable {trainable:,} of {total:,} parameters",
-        flush=True,
-    )
-    result = trainer.train(resume_from_checkpoint=True if resume else None)
+    result = trainer.train(resume_from_checkpoint=str(resume_from) if resume_from else None)
     final_eval = trainer.evaluate()
-    model.save_pretrained(out / "adapter")
-    tokenizer.save_pretrained(out / "tokenizer")
     history = trainer.state.log_history
     (out / "loss_history.json").write_text(json.dumps(history, indent=1) + "\n", encoding="utf-8")
-    peak = round(torch.cuda.max_memory_allocated() / 2**30, 2) if gpu else None
+    save_adapter(model, tokenizer, out)  # the best checkpoint's weights (load_best_model_at_end)
     summary = {
         "finished": True,
-        "resumed": resume,
+        "resumed_from": resume_from.name if resume_from else None,
         "global_steps": trainer.state.global_step,
         "best_checkpoint": trainer.state.best_model_checkpoint
         and Path(trainer.state.best_model_checkpoint).name,
@@ -414,12 +718,9 @@ def main() -> int:
         "train_loss": result.training_loss,
         "train_runtime_s": round(result.metrics.get("train_runtime", 0.0), 1),
         "wall_time_s": round(time.perf_counter() - started, 1),
-        "peak_gpu_memory_gb": peak,
+        "peak_gpu_memory_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2) if gpu else None,
     }
-    (out / "result.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-    (out / "data_report.json").write_text(
-        json.dumps(data_report, indent=2) + "\n", encoding="utf-8"
-    )
+    (out / "result.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")  # last
     print(json.dumps(summary, indent=2), flush=True)
     return 0
 
