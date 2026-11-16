@@ -123,7 +123,7 @@ def run(cmd: list[str], *, cwd: Path | None = None, quiet: bool = False) -> None
     tail: list[str] = []
     assert process.stdout is not None  # noqa: S101 - set by stdout=PIPE
     for chunk in iter(lambda: process.stdout.read(512), ""):  # type: ignore[union-attr]
-        tail = (tail + [chunk])[-16:]
+        tail = [*tail, chunk][-16:]
         if not quiet:
             sys.stdout.write(chunk)
             sys.stdout.flush()
@@ -141,7 +141,11 @@ def sha256(path: Path) -> str:
 
 def git_commit() -> str:
     return subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=repo_dir(), capture_output=True, text=True, check=True
+        ["git", "rev-parse", "HEAD"],  # noqa: S607 - git from PATH, as in the notebook
+        cwd=repo_dir(),
+        capture_output=True,
+        text=True,
+        check=True,
     ).stdout.strip()
 
 
@@ -169,7 +173,7 @@ def mount_drive() -> Path | None:
         target = Path("/content/drive/MyDrive/groundedai-lora")
         target.mkdir(parents=True, exist_ok=True)
         return target
-    except Exception as exc:  # noqa: BLE001 - any failure means: use local storage
+    except Exception as exc:
         print(f"Google Drive could not be used ({type(exc).__name__}: {exc}).")
         print("Continuing with local storage; it is lost when the Colab runtime ends.")
         return None
@@ -210,7 +214,17 @@ def configure(user: dict[str, Any] | None = None) -> dict[str, Any]:
     return settings
 
 
-RUN_KEYS = ("base_model", "epochs", "learning_rate", "lora_rank", "lora_alpha", "lora_dropout", "accumulate", "seed", "test_mode")
+RUN_KEYS = (
+    "base_model",
+    "epochs",
+    "learning_rate",
+    "lora_rank",
+    "lora_alpha",
+    "lora_dropout",
+    "accumulate",
+    "seed",
+    "test_mode",
+)
 
 
 def check_run_settings(settings: dict[str, Any]) -> None:
@@ -261,7 +275,8 @@ def note_commit(settings: dict[str, Any]) -> None:
     commit = git_commit() if (repo_dir() / ".git").exists() else "unknown"
     if commits and commits[-1]["commit"] != commit:
         print(
-            f"Note: this run started with commit {commits[0]['commit']}; it continues with {commit}."
+            f"Note: this run started with commit {commits[0]['commit']}; "
+            f"it continues with {commit}."
         )
     commits.append({"commit": commit, "time": time.strftime("%Y-%m-%dT%H:%M:%S")})
     path.write_text(json.dumps(commits, indent=2) + "\n", encoding="utf-8")
@@ -355,12 +370,14 @@ def hardware(require_gpu: bool = True) -> dict[str, Any]:
         print(f"{key:20s} {report.get(key)}")
     if require_gpu and not report.get("cuda_available") and not settings.get("test_mode"):
         raise SystemExit(
-            "No GPU in this runtime: Runtime -> Change runtime type -> T4 GPU, then Run all. Nothing was trained."
+            "No GPU in this runtime: Runtime -> Change runtime type -> T4 GPU, then Run all. "
+            "Nothing was trained."
         )
     memory = report.get("gpu_memory_gb") or 0
     if report.get("cuda_available") and memory < 10:
         print(
-            f"Warning: {memory} GB of GPU memory is little for {settings['base_model']}; the length check in training decides."
+            f"Warning: {memory} GB of GPU memory is little for {settings['base_model']}; "
+            "the length check in training decides."
         )
     return report
 
@@ -462,7 +479,8 @@ def train() -> dict[str, Any]:
     out = run_dir(settings)
     if not smoke_passed(settings):
         raise SystemExit(
-            "The smoke test has not passed in this run folder; run step 4 first. Training was not started."
+            "The smoke test has not passed in this run folder; run step 4 first. "
+            "Training was not started."
         )
     if training_complete(out):
         print(
@@ -542,7 +560,8 @@ def compare(name: str, settings: dict[str, Any]) -> dict[str, Any]:
     measures = json.loads(out.read_text(encoding="utf-8"))["measures"]
     for measure, values in measures.items():
         print(
-            f"  {measure:32s} base {values['old_mean']}  lora {values['new_mean']}  diff {values.get('mean_diff')} [{values.get('ci95_low')}, {values.get('ci95_high')}]"
+            f"  {measure:32s} base {values['old_mean']}  lora {values['new_mean']}  "
+            f"diff {values.get('mean_diff')} [{values.get('ci95_low')}, {values.get('ci95_high')}]"
         )
     return measures
 
@@ -637,15 +656,16 @@ def archive() -> Path:
     size = target.stat().st_size / 2**20
     print(f"{target} ({size:.1f} MB, {len(names)} files; checkpoints are not included)")
     print(
-        "Download it: open the Files panel on the left, find groundedai-lora-results.zip under /content, "
+        "Download it: open the Files panel on the left, find groundedai-lora-results.zip "
+        "under /content, "
     )
     print("then the three-dot menu -> Download. It is deleted when the runtime ends.")
     try:
         from google.colab import files  # type: ignore[import-not-found]
 
         files.download(str(target))
-    except Exception:  # noqa: BLE001 - outside Colab, or the browser blocked it
-        pass
+    except Exception as exc:
+        print(f"(automatic download not started: {type(exc).__name__})")
     return target
 
 

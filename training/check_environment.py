@@ -105,7 +105,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         report = check()
-    except Exception as exc:  # noqa: BLE001 - reported, then exit 1
+    except Exception as exc:
         report = {
             "ok": False,
             "error": f"{type(exc).__name__}: {exc}",

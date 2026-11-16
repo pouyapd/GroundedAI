@@ -393,7 +393,7 @@ def smoke(args: argparse.Namespace, out: Path) -> int:
             )
             print(f"PASS  {name}  {detail or ''}", flush=True)
             return True
-        except Exception as exc:  # noqa: BLE001 - reported with its traceback, then stop
+        except Exception as exc:
             stages.append(
                 {
                     "stage": name,
@@ -447,7 +447,8 @@ def smoke(args: argparse.Namespace, out: Path) -> int:
 
     def forward_backward() -> str:
         example = encode(state["tokenizer"], rows[0], 512, True)
-        assert example is not None
+        if example is None:
+            raise RuntimeError("the first training example could not be encoded")
         batch = {
             k: v.to(state["model"].device)
             for k, v in Collator(state["tokenizer"].pad_token_id)([example]).items()
@@ -593,7 +594,8 @@ def main() -> int:
         return smoke(args, out)
     if run_complete(out):
         print(
-            f"Training in {out} is already complete; nothing is overwritten. Use another --out to train again."
+            f"Training in {out} is already complete; nothing is overwritten. "
+            "Use another --out to train again."
         )
         return 0
 

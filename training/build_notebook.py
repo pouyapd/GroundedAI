@@ -1,3 +1,4 @@
+# ruff: noqa: E501 - the long lines are notebook cell text, kept readable as it appears in Colab
 """Write notebooks/finetuning/GroundedAI_LoRA_Colab.ipynb from this file.
 
     python training/build_notebook.py          # write
@@ -29,7 +30,7 @@ import colab_pipeline as pipeline
 importlib.reload(pipeline)
 """
 
-SETUP = '''# Step 1: settings and code. Everything later cells need is created here; running it again is safe.
+SETUP = """# Step 1: settings and code. Everything later cells need is created here; running it again is safe.
 import importlib, os, shutil, subprocess, sys, time
 
 SETTINGS = {
@@ -92,7 +93,7 @@ import colab_pipeline as pipeline
 importlib.reload(pipeline)
 pipeline.verify_repository()
 pipeline.configure(SETTINGS)
-'''
+"""
 
 STEPS = [
     (
@@ -102,7 +103,10 @@ STEPS = [
         "process to prove that it works. No restart is needed.",
         "pipeline.require_gpu()\npipeline.prepare_environment()\npipeline.hardware(require_gpu=True)",
     ),
-    ("## 3. Training data\n\nChecks the files against the hashes in `dataset_report.json`.", "pipeline.verify_data()"),
+    (
+        "## 3. Training data\n\nChecks the files against the hashes in `dataset_report.json`.",
+        "pipeline.verify_data()",
+    ),
     (
         "## 4. Smoke test\n\nEight stages, each PASS or FAIL: model loading, LoRA creation, a forward "
         "and backward pass, three optimizer steps, the validation loss, saving the adapter, loading "
@@ -122,12 +126,14 @@ STEPS = [
         "pipeline.evaluate_validation()",
     ),
     (
-        "## 7. Protected test set (once)\n\n`groundedai-nist-v1` was not used for training or for any "
+        "## 7. Protected test set (once)\n\n"
+        "`groundedai-nist-v1` was not used for training or for any "
         "choice. It runs once per run folder; finished reports are not run again.",
         "pipeline.evaluate_test()",
     ),
     (
-        "## 8. Merge check and results archive\n\nThe merged model must answer like the adapter. The "
+        "## 8. Merge check and results archive\n\n"
+        "The merged model must answer like the adapter. The "
         "archive `/content/groundedai-lora-results.zip` holds the adapter, tokenizer, logs and "
         "reports (not the checkpoints).",
         "pipeline.merge_check()\npipeline.archive()",
@@ -176,11 +182,25 @@ def build() -> dict:
     cells = [
         {"cell_type": "markdown", "metadata": {}, "source": lines(INTRO)},
         {"cell_type": "markdown", "metadata": {}, "source": lines("## 1. Settings and code")},
-        {"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [], "source": lines(SETUP)},
+        {
+            "cell_type": "code",
+            "metadata": {},
+            "execution_count": None,
+            "outputs": [],
+            "source": lines(SETUP),
+        },
     ]
     for markdown, call in STEPS:
         cells.append({"cell_type": "markdown", "metadata": {}, "source": lines(markdown)})
-        cells.append({"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [], "source": lines(PREAMBLE + call + "\n")})
+        cells.append(
+            {
+                "cell_type": "code",
+                "metadata": {},
+                "execution_count": None,
+                "outputs": [],
+                "source": lines(PREAMBLE + call + "\n"),
+            }
+        )
     cells.append({"cell_type": "markdown", "metadata": {}, "source": lines(OUTRO)})
     return {
         "cells": cells,
