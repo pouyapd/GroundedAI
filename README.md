@@ -441,6 +441,7 @@ python scripts/e2e_demo.py         # the online demo in a browser (see docs/ONLI
 The default suite is offline: SQLite, deterministic providers and a fake Ollama HTTP server.
 No model, key or network is needed.
 
+- **Latest CI on `main` (2026-11-16, commit `33ad95b`, [run 43980548263](https://github.com/pouyapd/GroundedAI/actions/runs/43980548263)):** all 8 jobs passed; backend 596 tests passed and 8 skipped on Python 3.12 and on 3.13, 8 PostgreSQL + pgvector tests, 103 front-end tests.
 - **Research and live-demo check (2026-11-13):** the recorded CI run passed all 8 jobs; backend, PostgreSQL, front-end, security, Docker and browser-demo checks are detailed in [docs/TESTING.md](docs/TESTING.md). The deployed demo passed 16 of 16 browser checks, and 19 of 19 with the in-page model. The live test also checked 22 questions on three real PDFs and verified all 64 displayed quotes against their stated pages ([full report](docs/RESEARCH_EVALUATION.md#live-demo-after-deployment-2026-11-13)).
 - **Earlier full run (2026-10-19):**
   - backend: 487 tests passed, plus 7 PostgreSQL tests run separately against a local
