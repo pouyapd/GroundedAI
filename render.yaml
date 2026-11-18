@@ -1,0 +1,43 @@
+# Render Blueprint for the GroundedAI API (reference configuration).
+#
+# The live service https://groundedai-api-jyza.onrender.com was created in the Render dashboard
+# with exactly these settings; this file records them as code. A new Blueprint created from this
+# file makes a separate service with its own URL. See docs/DEPLOYMENT.md, section 5.
+#
+# The database is not created here: it is a free Neon PostgreSQL project (pgvector available on
+# every plan). Secrets are marked sync: false, so Render asks for them and never stores them in
+# this repository.
+
+services:
+  - type: web
+    name: groundedai-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: GROUNDEDAI_ENV
+        value: production
+      # at least 24 characters; required by GROUNDEDAI_ENV=production
+      - key: GROUNDEDAI_API_KEY
+        sync: false
+      # postgresql+psycopg://USER:PASSWORD@HOST/DB?sslmode=require (Neon direct endpoint)
+      - key: GROUNDEDAI_DATABASE_URL
+        sync: false
+      # the service's own URL, because the web UI is served from the same origin
+      - key: GROUNDEDAI_CORS_ORIGINS
+        sync: false
+      # smaller limits than the defaults for a 512 MB, 0.1 CPU free instance
+      - key: GROUNDEDAI_MAX_UPLOAD_BYTES
+        value: "5242880"
+      - key: GROUNDEDAI_MAX_PDF_PAGES
+        value: "100"
+      - key: GROUNDEDAI_MAX_CONCURRENT_GENERATIONS
+        value: "1"
+      - key: GROUNDEDAI_RATE_LIMIT_UPLOAD_PER_MINUTE
+        value: "5"

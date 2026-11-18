@@ -1,7 +1,9 @@
 # Deployment
 
-GroundedAI runs well locally. Local deployment is the reliable mode; the online demo is a
-static replay. See `docs/DEPLOYMENT_STATUS.md` for what has actually been deployed.
+GroundedAI has four deployment targets: local (SQLite), Docker Compose (PostgreSQL +
+pgvector), the in-browser demo on GitHub Pages, and the API on Render's free tier with a free
+Neon PostgreSQL database. See `docs/DEPLOYMENT_STATUS.md` for what has actually been deployed
+and verified.
 
 ## 1. Local, no Docker (SQLite)
 
@@ -104,32 +106,101 @@ production. Before exposing it:
 - [ ] A model sized for the hardware; `GROUNDEDAI_MAX_CONCURRENT_GENERATIONS` tuned to the CPU/GPU
 - [ ] Read `docs/SECURITY.md`, especially the limits of prompt-injection handling and the lack of per-user permissions
 
-## 4. Static online demo (GitHub Pages)
+## 4. Online demo in the browser (GitHub Pages)
 
-The static demo is the React app built with `VITE_DEMO_MODE=true`. It has no backend: it
-replays answers that were recorded from a real local run (`frontend/public/demo/answers.json`)
-and shows the published benchmark reports. It is clearly labelled as a recording and never
-performs inference.
+The online demo at https://pouyapd.github.io/GroundedAI/ is the real application running in
+the visitor's browser: the Python package runs in Pyodide (WebAssembly), with an optional
+Qwen2.5-1.5B-Instruct base model through WebLLM and an optional NLI model through ONNX Runtime
+Web. There is no server behind it. How it works, and how to build it, is in
+[ONLINE_DEMO.md](ONLINE_DEMO.md).
 
-Refresh the recorded data and build locally:
+`.github/workflows/pages.yml` builds, checks and deploys it on pushes to `main` that touch
+`frontend/`, `backend/groundedai/`, `examples/` or the demo scripts, and checks the deployed URL
+in a browser afterwards. The demo does not call the cloud API of section 5.
 
-```bash
-python scripts/export_demo_data.py         # records answers from a local run
-cd frontend && npm run build:demo          # output in frontend/dist
-npm run preview                            # check it at http://localhost:4173
+## 5. Cloud API (Render free tier + Neon PostgreSQL)
+
+Live since 2026-11-18:
+
+- Service: https://groundedai-api-jyza.onrender.com (web UI and API from one container)
+- API documentation: https://groundedai-api-jyza.onrender.com/docs
+- Health and readiness: `/health`, `/ready` (database, migrations, pgvector dimension)
+
+```mermaid
+flowchart LR
+  C["Client: browser UI or curl (X-API-Key)"] -- HTTPS --> R["Render free web service (Frankfurt): Docker image from ./Dockerfile, entrypoint runs groundedai migrate, then Uvicorn"]
+  R -- "TLS, sslmode=require" --> N[("Neon free PostgreSQL 18 + pgvector 0.8 (Frankfurt)")]
 ```
 
-Publish with GitHub Pages:
+### Why Render and Neon
 
-1. Push the repository to GitHub (public repository for free Pages).
-2. Repository settings → Pages → Source: **GitHub Actions**.
-3. The workflow `.github/workflows/pages.yml` builds and deploys on pushes to `main` that touch
-   `frontend/`, or manually from the Actions tab.
+Checked on 2026-11-17 against the providers' own pages:
 
-The demo uses relative asset paths, so it works under `https://<user>.github.io/<repo>/`.
+| Need | Render free web service | Neon free PostgreSQL |
+|---|---|---|
+| Cost | $0; 750 instance hours per workspace and month | $0; no expiry stated |
+| Size | 512 MB RAM, 0.1 CPU; no persistent disk | 1 GB storage per project; 100 CU-hours per month |
+| Idle behaviour | sleeps after 15 minutes without traffic; waking takes about a minute | compute suspends after 5 minutes; resumes on the next connection |
+| Fit | builds the existing Dockerfile unchanged | pgvector is available on every plan |
 
-## 5. Backend hosting (optional)
+Render's own free PostgreSQL was not used: it is deleted 30 days after creation. Supabase's
+free plan (500 MB, pauses inactive projects) and Koyeb's free instance were the alternatives.
 
-No free backend host is assumed. If you host the API elsewhere, use the Docker image, an external
-PostgreSQL with pgvector, the production checklist above, and a model that fits the host's memory.
-Free tiers that sleep when idle or limit memory to 512 MB are not suitable for local LLM inference.
+### Configuration
+
+Set in the Render dashboard (Environment; the values of secrets are never in the repository).
+[`render.yaml`](../render.yaml) records the same settings as a Blueprint.
+
+| Variable | Value on the live service | Why |
+|---|---|---|
+| `GROUNDEDAI_ENV` | `production` | refuses to start without an API key, rejects wildcard CORS |
+| `GROUNDEDAI_API_KEY` | secret, 48 random characters | every `/api/v1` endpoint except health, readiness and system status needs `X-API-Key` |
+| `GROUNDEDAI_DATABASE_URL` | secret: Neon's direct (not pooled) endpoint, `postgresql+psycopg://…?sslmode=require` | migrations and psycopg prepared statements work without a pooler |
+| `GROUNDEDAI_CORS_ORIGINS` | `https://groundedai-api-jyza.onrender.com` | the UI is served from the same origin; other origins are refused |
+| `GROUNDEDAI_MAX_UPLOAD_BYTES`, `GROUNDEDAI_MAX_PDF_PAGES` | 5 MB, 100 pages | protect a 512 MB instance |
+| `GROUNDEDAI_MAX_CONCURRENT_GENERATIONS`, `GROUNDEDAI_RATE_LIMIT_UPLOAD_PER_MINUTE` | 1, 5 | one 0.1 CPU core |
+| `PORT` | `8000` | the port the image's Uvicorn listens on |
+
+Everything else uses the defaults: the hashing embedder (no model download) and the extractive
+generator, which is not a language model. No model runs on this server; there is not enough
+memory for one.
+
+### Deploy it yourself
+
+1. Neon: create a free project (choose a region close to the web service), open **Connect**,
+   switch **Connection pooling** off and copy the connection string. Change the scheme to
+   `postgresql+psycopg://`.
+2. Render: **New → Web Service**, choose the repository, runtime **Docker**, instance type
+   **Free** (the form preselects a paid type), the same region, health check path `/health`,
+   and the variables above. Generate the key locally, for example
+   `python -c "import secrets; print(secrets.token_urlsafe(36))"`.
+3. Deploy. The image's entrypoint runs `groundedai migrate` (which also creates the `vector`
+   extension) before Uvicorn starts. `/ready` then reports `postgresql`, the migration head and
+   the vector dimension.
+4. Check the deployment end to end:
+   `GROUNDEDAI_API_KEY=... python scripts/check_cloud_deployment.py https://<service>.onrender.com`
+
+### Data and uploads
+
+- Documents, chunks, embeddings and query events are stored in Neon. Question text is not
+  logged (`GROUNDEDAI_LOG_QUERY_TEXT` is off by default).
+- Uploaded originals are written to the container's disk, which Render deletes on every
+  restart, redeploy and spin-down; they are not kept. The indexed text stays in the database.
+  Re-indexing (`POST /api/v1/documents/reindex`) needs the originals, so after a restart a
+  document has to be uploaded again before it can be re-indexed.
+- Uploads are checked before indexing: file type by content (a non-PDF named `.pdf` gets 415),
+  size (413 above 5 MB), page count and extracted text length.
+
+### Limits of the free tier
+
+- **Cold start.** After 15 minutes without traffic the service sleeps; the next request takes
+  about a minute. Neon's first query after 5 idle minutes adds a short delay. The engine uses
+  `pool_pre_ping`, so connections dropped while the database was suspended are replaced.
+- **No metrics, shell or persistent disk** on Render's free plan; logs are available in the
+  dashboard.
+- **750 instance hours per month** for the whole Render workspace; when they run out, free
+  services are suspended until the next month.
+- **Small instance.** 512 MB and 0.1 CPU: no local language model, no sentence-transformers
+  embeddings, no NLI meaning check on the server (that check runs only in the browser demo).
+- This is a portfolio deployment, not an operated production service: one instance, no backups
+  beyond Neon's defaults, no monitoring or alerting.
