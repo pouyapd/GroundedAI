@@ -56,6 +56,7 @@ WebLLM, ONNX Runtime Web, pytest, Playwright, Docker, GitHub Actions.
 <p align="center">
   <a href="#status">Status</a> ·
   <a href="#live-demo">Live demo</a> ·
+  <a href="#cloud-api">Cloud API</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#how-a-question-is-answered">Pipeline</a> ·
   <a href="#results">Results</a> ·
@@ -71,6 +72,7 @@ WebLLM, ONNX Runtime Web, pytest, Playwright, Docker, GitHub Actions.
 |---|---|
 | **Implemented and tested** | upload checks and PDF extraction with pages; hybrid retrieval (BM25 + vectors, RRF); three generators; citation-label check; lexical claim check with exact quotes; optional added-detail flag (off by default); question-relevance check and refusal (extractive); disagreement check across documents and editions; safe bulk re-indexing; browser demo with an optional in-page language model and an optional NLI meaning check |
 | **Evaluated** | synthetic sets (development, 56-question evaluation, 30 held-out conflict cases); real NIST PDFs (53 test questions, 108 hand-written test claims, validation and fictional-edition sets), each change compared with the previous defaults ([round 3](docs/RELIABILITY_V3.md), [round 2](docs/RESEARCH_EVALUATION.md)); LoRA fine-tuning of Qwen2.5-1.5B-Instruct on a free Colab T4, base against adapter ([results](#lora-fine-tuning-of-the-answer-model-november-2026)): format and refusals improved, correctness on real PDFs fell, so the adapter is not used |
+| **Deployed** | the browser demo on GitHub Pages ([live](https://pouyapd.github.io/GroundedAI/)); the API on Render's free tier with a free Neon PostgreSQL + pgvector database ([cloud API](#cloud-api)), key-protected, checked end to end on the live URL |
 | **Incomplete** | the meaning check is not part of the server API |
 | **Known weaknesses** | real version changes between two NIST editions are still missed (0 of 4); the extractive relevance check refuses too many answerable test questions (10 of 40); small, single-author datasets ([all limitations](#limitations)) |
 
@@ -92,6 +94,35 @@ WebLLM, ONNX Runtime Web, pytest, Playwright, Docker, GitHub Actions.
 - **Limits.** The first load takes about 15–60 s. The demo uses a hashing embedder (word
   overlap, not meaning); data stays in the tab and is gone after a reload. Details:
   [docs/ONLINE_DEMO.md](docs/ONLINE_DEMO.md).
+
+## Cloud API
+
+**[groundedai-api-jyza.onrender.com](https://groundedai-api-jyza.onrender.com)** ·
+**[API documentation](https://groundedai-api-jyza.onrender.com/docs)** ·
+[`/health`](https://groundedai-api-jyza.onrender.com/health) ·
+[`/ready`](https://groundedai-api-jyza.onrender.com/ready)
+
+The same FastAPI application and web UI also run as a server: the repository's Dockerfile on a
+free Render web service, with a free Neon PostgreSQL database that has pgvector (both in
+Frankfurt). The container runs the database migrations before it starts; `/ready` reports the
+database, the migration head and the vector column.
+
+- **Protected.** The service runs with `GROUNDEDAI_ENV=production`: document, question,
+  evaluation and metrics endpoints need an `X-API-Key` (available on request); `/docs`, `/health` and
+  `/ready` are public. CORS allows only the service's own origin; uploads are limited to 5 MB
+  and 100 pages and checked by content. Secrets are set in Render, never in the repository.
+- **Verified on the live URL** with [`scripts/check_cloud_deployment.py`](scripts/check_cloud_deployment.py):
+  19 of 19 checks (auth refusals, upload validation, two PDFs uploaded and indexed into
+  PostgreSQL, answers with the quoted page), again after a redeploy.
+- **Free-tier limits.** The service sleeps after 15 minutes without traffic, and the first
+  request then takes about a minute. 512 MB and 0.1 CPU: the server uses the extractive
+  generator and the hashing embedder; no language model runs on it. The optional Qwen model and
+  the NLI meaning check exist only in the browser demo. Uploaded originals are not kept: the
+  container disk is reset on every restart, while the indexed text stays in the database.
+
+Configuration, provider choice and how to deploy your own copy:
+[docs/DEPLOYMENT.md, section 5](docs/DEPLOYMENT.md#5-cloud-api-render-free-tier--neon-postgresql)
+and [`render.yaml`](render.yaml).
 
 ## How answers are checked
 

@@ -1,6 +1,6 @@
 # Deployment status
 
-Last updated: 2026-11-15.
+Last updated: 2026-11-18.
 
 The first Pages build (run 39317852549) failed: `frontend/.env.browser`, which selects the
 browser build, was excluded by `.gitignore`, so CI built the ordinary UI. It is now tracked,
@@ -16,7 +16,7 @@ and CI runs the demo's browser check on every pull request.
 | Local LLM through Ollama | **Working (2026-10-19)** | Ollama 0.14.2 with `qwen2.5:1.5b`: API, browser journey, development set and the 56-question evaluation |
 | GitHub repository | **Public since 2026-10-19** | [`pouyapd/GroundedAI`](https://github.com/pouyapd/GroundedAI); PRs #1 to #15 merged into `main` with merge commits (no history rewritten) |
 | GitHub Actions (CI) | **Passing** | 8 jobs, including the demo in a browser and the dependency audit: run 43761266292 on `main` at `0eb3eb5` (2026-11-15) |
-| Backend hosting | **Not deployed** | No server is needed for the demo; a hosted backend would need a paid or account-based host ([DEPLOYMENT.md](DEPLOYMENT.md)) |
+| Cloud API (Render free web service + Neon free PostgreSQL) | **Live: https://groundedai-api-jyza.onrender.com** ([API docs](https://groundedai-api-jyza.onrender.com/docs)) | Deployed 2026-11-18 from `main` (`aabb946`) with the unchanged Dockerfile, region Frankfurt for both. The entrypoint migrated the Neon database (`/ready`: `postgresql`, migrations `current=0002 head=0002`, `vector(384)`, pgvector 0.8.7 on PostgreSQL 18.7). `scripts/check_cloud_deployment.py` on the live URL: 19 of 19 (no key and a wrong key refused with 401, a non-PDF named .pdf 415, a 5 MB+ upload 413, both sample PDFs uploaded and indexed, "14 euros" quoted from page 2, the wrong document refused, "12 items"); the same checks passed again after a redeploy, with the documents still in Neon. Before deploying, the 8 PostgreSQL tests passed against a temporary Neon database (deleted afterwards). Logs checked: no errors, no connection string, key or question text. Free-tier limits: [DEPLOYMENT.md section 5](DEPLOYMENT.md#5-cloud-api-render-free-tier--neon-postgresql) |
 
 ### CI results
 
